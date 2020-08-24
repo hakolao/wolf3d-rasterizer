@@ -14,6 +14,9 @@
 
 static int		resize_callback(void *data, SDL_Event *event)
 {
+	t_window_info	*window_info;
+	t_wolf3d 		*app;
+
 	if (event->type == SDL_WINDOWEVENT &&
 		(event->window.event == SDL_WINDOWEVENT_RESIZED ||
 		 event->window.event == SDL_WINDOWEVENT_MINIMIZED ||
@@ -21,11 +24,11 @@ static int		resize_callback(void *data, SDL_Event *event)
 		 event->window.event == SDL_WINDOWEVENT_SHOWN ||
 		 event->window.event == SDL_WINDOWEVENT_HIDDEN))
 		{
-		t_window_info *window_info = (t_window_info*)data;
+		window_info = (t_window_info*)data;
 		if (event->window.windowID == window_info->window_id)
 		{
-			t_wolf3d *app = (t_wolf3d*)(window_info->parent);
-			app->resized = true;
+			app = (t_wolf3d*)(window_info->parent);
+			app->main_window->resized = true;
 			if (event->window.event == SDL_WINDOWEVENT_HIDDEN)
 				window_info->is_hidden = true;
 			else if (event->window.event == SDL_WINDOWEVENT_SHOWN)
@@ -35,13 +38,24 @@ static int		resize_callback(void *data, SDL_Event *event)
 	return 0;
 }
 
-void			window_init(t_wolf3d *app)
+void			main_window_init(t_wolf3d *app)
 {
-	app->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
+	app->main_window = (t_window*)malloc(sizeof(*(app->main_window)));
+	app->main_window->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
-	error_check(app->window == NULL, SDL_GetError());
-	app->window_info.window_id = SDL_GetWindowID(app->window);
-	app->window_info.parent = app;
-	app->window_info.is_hidden = false;
-	SDL_AddEventWatch(resize_callback, &app->window_info);
+	error_check(app->main_window->window == NULL, SDL_GetError());
+	app->main_window->renderer = SDL_CreateRenderer(app->main_window->window,
+													-1,
+													SDL_RENDERER_SOFTWARE);
+	error_check(app->main_window->renderer == NULL, SDL_GetError());
+	app->main_window->frame = SDL_CreateTexture(app->main_window->renderer,
+												SDL_PIXELFORMAT_RGBA8888,
+												SDL_TEXTUREACCESS_STREAMING,
+												WIDTH, HEIGHT);
+	error_check(app->main_window->frame == NULL, SDL_GetError());
+	app->main_window->window_info.window_id =
+		SDL_GetWindowID(app->main_window->window);
+	app->main_window->window_info.parent = app;
+	app->main_window->window_info.is_hidden = false;
+	SDL_AddEventWatch(resize_callback, &app->main_window->window_info);
 }

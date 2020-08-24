@@ -26,19 +26,32 @@
 # define HEIGHT 720
 # define NAME "Wolf3D"
 
+/*
+**	Frame buffer
+*/
+
+# define BYTES_PER_PIXEL 8
+
 typedef struct						s_window_info
 {
-	uint32_t		window_id;
-	bool			is_hidden;
-	void			*parent;
+	uint32_t				window_id;
+	bool					is_hidden;
+	void					*parent;
 }									t_window_info;
+
+typedef struct						s_window
+{
+	SDL_Renderer			*renderer;
+	SDL_Texture				*frame;
+	bool					resized;
+	SDL_Window				*window;
+	t_window_info			window_info;
+}									t_window;
 
 typedef struct						s_wolf3d
 {
-	bool						is_running;
-	bool						resized;
-	SDL_Window					*window;
-	t_window_info				window_info;
+	bool					is_running;
+	t_window				*main_window;
 }									t_wolf3d;
 
 void								wolf3d_run(t_wolf3d *app);
@@ -47,6 +60,7 @@ void								wolf3d_run(t_wolf3d *app);
 ** Draw / Render
 */
 void								draw_frame(t_wolf3d *app);
+int									screen_to_frame_coords(int x, int y);
 
 /*
 ** Utils
@@ -56,6 +70,6 @@ void								error_check(int test, const char *message);
 /*
 ** Window
 */
-void								window_init(t_wolf3d *app);
+void								main_window_init(t_wolf3d *app);
 
 #endif

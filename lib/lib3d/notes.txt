@@ -1,0 +1,8 @@
+Remember to check degenerate triangles i.e. triangles
+that have overlapping vertices and either don't accept them
+or change them to suitable triangles. Triangle-ray intersection
+algorithm will probably return either false or crash if given
+degenerate triangles.
+
+Triangles that are coplanar to the intersecting ray will cause
+a certain determinant to be zero and thus division by zero.

@@ -17,7 +17,7 @@ LIBGMATRIX = ../libgmatrix
 DIR_SRC = ./
 DIR_TESTS = ./tests
 DIR_OBJ = temp
-SOURCES = l3d_triangle.c
+SOURCES = l3d_triangle.c l3d_intersection.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

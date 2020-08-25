@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 16:09:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 17:43:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,15 @@ void								destroy_scene(t_wolf3d *app);
 ** Player
 */
 void								init_player(t_wolf3d *app);
+void								move_player(t_player *player, t_move dir);
 
 /*
 ** Camera
 */
 void								update_camera_view(t_player *player);
 void								init_camera(t_player *player);
+void								camera_transform(t_camera *camera,
+									t_vec4 vertex, t_vec4 res);
 
 /*
 ** Draw / Render

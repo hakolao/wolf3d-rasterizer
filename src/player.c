@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 14:13:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 18:05:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void		apply_movement(t_player *player, t_vec3 new_pos)
 
 void			init_player(t_wolf3d *app)
 {
-	ft_memcpy(&app->player.pos, &(t_vec3){0, 0, 0}, sizeof(t_vec3));
+	ft_memcpy(&app->player.pos, &(t_vec3){0, 0, -60}, sizeof(t_vec3));
 	ft_memcpy(&app->player.forward, &(t_vec3){0, 0, 1}, sizeof(t_vec3));
 	ft_memcpy(&app->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
 	app->player.speed = 0.5f;
@@ -60,12 +60,12 @@ void			move_player(t_player *player, t_move dir)
 	else if (dir == strafe_left)
 	{
 		ml_vector3_cross(player->forward, player->up, sideways);
-		ml_vector3_add(player->pos, add, new_pos);
+		ml_vector3_sub(player->pos, sideways, new_pos);
 	}
 	else if (dir == strafe_right)
 	{
 		ml_vector3_cross(player->forward, player->up, sideways);
-		ml_vector3_sub(player->pos, add, new_pos);
+		ml_vector3_add(player->pos, sideways, new_pos);
 	}
 	apply_movement(player, new_pos);
 }

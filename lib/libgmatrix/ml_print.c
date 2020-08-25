@@ -6,25 +6,26 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:05:25 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 23:43:04 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 17:16:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libgmatrix.h"
+#include <stdio.h>
 
-void		ml_vector4_print(t_vec3 v)
+void		ml_vector4_print(t_vec4 v)
 {
-	ft_printf("Vec4[%f, %f, %f]\n", v[0], v[1], v[2], v[3]);
+	printf("Vec4[%f, %f, %f, %f]\n", v[0], v[1], v[2], v[3]);
 }
 
 void		ml_vector3_print(t_vec3 v)
 {
-	ft_printf("Vec3[%f, %f, %f]\n", v[0], v[1], v[2]);
+	printf("Vec3[%f, %f, %f]\n", v[0], v[1], v[2]);
 }
 
-void		ml_vector4_to_str(t_vec3 v, char *res)
+void		ml_vector4_to_str(t_vec4 v, char *res)
 {
-	ft_sprintf(res, "Vec4[%f, %f, %f]\n", v[0], v[1], v[2], v[3]);
+	ft_sprintf(res, "Vec4[%f, %f, %f, %f]\n", v[0], v[1], v[2], v[3]);
 }
 
 void		ml_vector3_to_str(t_vec3 v, char *res)

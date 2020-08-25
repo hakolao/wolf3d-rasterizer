@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 16:09:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 18:03:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,17 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
+			if (event.type == SDL_KEYDOWN)
+			{
+				if (event.key.keysym.sym == SDLK_w)
+					move_player(&app->player, forward);
+				else if (event.key.keysym.sym == SDLK_s)
+					move_player(&app->player, backward);
+				else if (event.key.keysym.sym == SDLK_a)
+					move_player(&app->player, strafe_left);
+				else if (event.key.keysym.sym == SDLK_d)
+					move_player(&app->player, strafe_right);
+			}
 		}
 		draw_frame(app);
 	}

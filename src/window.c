@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 13:11:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 15:25:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static int		resize_callback(void *data, SDL_Event *event)
 		{
 			app = (t_wolf3d*)(window->parent);
 			app->main_window->resized = true;
+			SDL_GetWindowSize(window->window, &app->main_window->width,
+				&app->main_window->height);
 			if (event->window.event == SDL_WINDOWEVENT_HIDDEN)
 				window->is_hidden = true;
 			else if (event->window.event == SDL_WINDOWEVENT_SHOWN)
@@ -45,6 +47,8 @@ void			main_window_init(t_wolf3d *app)
 		"Window malloc failed");
 	app->main_window->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
+	app->main_window->width = WIDTH;
+	app->main_window->height = HEIGHT;
 	error_check(app->main_window->window == NULL, SDL_GetError());
 	app->main_window->renderer =
 		SDL_CreateRenderer(app->main_window->window, -1, SDL_RENDERER_SOFTWARE);

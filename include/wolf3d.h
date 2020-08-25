@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 14:04:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 15:25:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
+	uint32_t				*frame_buf;
+	int32_t					width;
+	int32_t					height;
+	int32_t					pitch;
 	bool					resized;
 	SDL_Window				*window;
 	uint32_t				window_id;
@@ -92,7 +96,6 @@ void								init_camera(t_player *player);
 ** Draw / Render
 */
 void								draw_frame(t_wolf3d *app);
-int									screen_to_frame_coords(int x, int y);
 
 /*
 ** Utils

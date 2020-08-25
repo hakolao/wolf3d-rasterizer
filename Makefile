@@ -29,7 +29,9 @@ SOURCES = main.c \
 			wolf3d.c \
 			window.c \
 			draw.c \
-			error.c
+			error.c \
+			player.c \
+			camera.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

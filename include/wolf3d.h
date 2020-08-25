@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 12:54:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 14:04:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@
 
 # define BYTES_PER_PIXEL 8
 
+typedef enum						e_move
+{
+	forward,
+	backward,
+	strafe_left,
+	strafe_right
+}									t_move;
+
 typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
@@ -43,13 +51,42 @@ typedef struct						s_window
 	void					*parent;
 }									t_window;
 
+typedef struct						s_camera
+{
+	t_mat4					model;
+	t_mat4					view;
+	t_mat4					projection;
+}									t_camera;
+
+typedef struct						s_player
+{
+	t_vec3					pos;
+	t_vec3					forward;
+	t_vec3					up;
+	float					speed;
+	float					rot_speed;
+	t_camera				camera;
+}									t_player;
+
 typedef struct						s_wolf3d
 {
 	bool					is_running;
 	t_window				*main_window;
+	t_player				player;
 }									t_wolf3d;
 
 void								wolf3d_run(t_wolf3d *app);
+
+/*
+** Player
+*/
+void								init_player(t_wolf3d *app);
+
+/*
+** Camera
+*/
+void								update_camera_view(t_player *player);
+void								init_camera(t_player *player);
 
 /*
 ** Draw / Render

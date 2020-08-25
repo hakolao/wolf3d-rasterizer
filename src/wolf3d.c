@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 15:12:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 16:09:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 static void		wolf3d_init(t_wolf3d *app)
 {
 	init_player(app);
+	init_scene(app);
 }
 
 static void		wolf3d_cleanup(t_wolf3d *app)
 {
+	destroy_scene(app);
 	SDL_DestroyRenderer(app->main_window->renderer);
 	SDL_DestroyWindow(app->main_window->window);
 	// ToDo: Free pixels

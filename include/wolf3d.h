@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 15:25:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 16:09:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,35 @@ typedef struct						s_player
 	t_camera				camera;
 }									t_player;
 
+//ToDo: Object to contain mesh(es) from lib3d
+
+typedef struct						s_object
+{
+	t_vertex				*vertices;
+	uint32_t				vertex_count;
+}									t_object;
+
+typedef struct						s_scene
+{
+	t_object				*objects;
+	uint32_t				object_count;
+}									t_scene;
+
 typedef struct						s_wolf3d
 {
 	bool					is_running;
 	t_window				*main_window;
 	t_player				player;
+	t_scene					scene;
 }									t_wolf3d;
 
 void								wolf3d_run(t_wolf3d *app);
+
+/*
+** Scene
+*/
+void								init_scene(t_wolf3d *app);
+void								destroy_scene(t_wolf3d *app);
 
 /*
 ** Player

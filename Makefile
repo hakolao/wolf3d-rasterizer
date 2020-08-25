@@ -31,7 +31,8 @@ SOURCES = main.c \
 			draw.c \
 			error.c \
 			player.c \
-			camera.c
+			camera.c \
+			scene.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

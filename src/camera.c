@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:32:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 18:00:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 18:39:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void		camera_transform(t_camera *camera, t_vec4 vertex, t_vec4 res)
 	ml_matrix4_mul(camera->model, camera->projection, tmp);
 	ml_matrix4_mul(tmp, camera->view, transform);
 	ml_matrix4_mul_vec4(transform, vertex, res);
+	// Don't divide if behind screen so screen check can be done in drawing
 	if (res[3] > 0)
 	{
 		res[0] /= res[3];

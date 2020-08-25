@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 18:04:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 18:38:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ static void		draw_scene(t_wolf3d *app)
 			// Check it's in front of camera
 			if (screen_pos[2] > 0)
 			{
+				// ToDo: don't do this: scale by 100f & + half screen, do it better :D
 				screen_pos[0] = screen_pos[0] * 100.0f + app->main_window->width / 2;
 				screen_pos[1] = screen_pos[1] * 100.0f + app->main_window->height / 2;
+				// Make sure not outta buffer bounds
 				if (screen_pos[0] > 0 && screen_pos[0] < app->main_window->width &&
 					screen_pos[1] > 0 && screen_pos[1] < app->main_window->height)
 				{

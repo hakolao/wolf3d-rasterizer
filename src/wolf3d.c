@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/24 15:51:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 13:11:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,12 @@ static void		wolf3d_init(t_wolf3d *app)
 
 static void		wolf3d_cleanup(t_wolf3d *app)
 {
-	(void)app;
+	SDL_DestroyRenderer(app->main_window->renderer);
+	SDL_DestroyWindow(app->main_window->window);
+	// ToDo: Free pixels
+	free(app->main_window);
+	IMG_Quit();
+	SDL_Quit();
 }
 
 //test function, removable after use
@@ -51,8 +56,8 @@ void			modify_frame(unsigned int *pixels, int pitch)
 
 void			render_frame(t_wolf3d *app) //testing only
 {
-	unsigned int *pixels;
-	int pitch;
+	unsigned int	*pixels;
+	int				pitch;
 
 	pixels = (unsigned int *)malloc(sizeof(unsigned int) * WIDTH * HEIGHT);
 	SDL_LockTexture(app->main_window->frame, NULL, (void **)&pixels, &pitch);

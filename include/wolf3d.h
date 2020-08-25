@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/24 15:41:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/25 12:54:02 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,15 @@
 
 # define BYTES_PER_PIXEL 8
 
-typedef struct						s_window_info
-{
-	uint32_t				window_id;
-	bool					is_hidden;
-	void					*parent;
-}									t_window_info;
-
 typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
 	bool					resized;
 	SDL_Window				*window;
-	t_window_info			window_info;
+	uint32_t				window_id;
+	bool					is_hidden;
+	void					*parent;
 }									t_window;
 
 typedef struct						s_wolf3d

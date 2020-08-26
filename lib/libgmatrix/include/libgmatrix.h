@@ -47,7 +47,9 @@ float		ml_vector3_mag(t_vec3 v);
 void		ml_vector3_forward(t_vec3 eye, t_vec3 target, t_vec3 res);
 float		ml_vector3_dot(t_vec3 v1, t_vec3 v2);
 void		ml_vector3_cross(t_vec3 v1, t_vec3 v2, t_vec3 res);
+void		ml_vector3_cross_right(t_vec3 v1, t_vec3 v2, t_vec3 res);
 void		ml_vector3_to_vec4(t_vec3 v1, t_vec4 res);
+void		ml_vector3_copy(t_vec3 src, t_vec3 dest);
 
 void		ml_vector4_add(t_vec4 v1, t_vec4 v2, t_vec4 res);
 void		ml_vector4_sub(t_vec4 v1, t_vec4 v2, t_vec4 res);
@@ -56,6 +58,7 @@ void		ml_vector4_normalize(t_vec4 v, t_vec4 res);
 float		ml_vector4_mag(t_vec4 v);
 float		ml_vector4_dot(t_vec4 v1, t_vec4 v2);
 void		ml_vector4_cross(t_vec4 v1, t_vec4 v2, t_vec4 res);
+void		ml_vector4_copy(t_vec4 src, t_vec4 dest);
 
 /*
 ** Matrix

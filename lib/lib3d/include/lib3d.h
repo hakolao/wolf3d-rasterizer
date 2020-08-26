@@ -31,7 +31,7 @@ typedef struct s_is_calc
 typedef struct		s_vertex
 {
 	t_vec4			position;
-	t_vec4			normal;
+	t_vec3			normal;
 	unsigned int	color;
 }					t_vertex;	
 
@@ -42,7 +42,7 @@ typedef struct		s_triangle
 	t_vertex	c;
 	t_vec4		center; //consider if center calculated when mesh loaded
 	//or center calculated when needed
-	t_vec4		normal;
+	t_vec3		normal;
 }					t_triangle;
 
 typedef struct		s_ray

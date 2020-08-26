@@ -17,7 +17,10 @@
 
 # define EPSILON 0.00000001
 
-typedef struct		s_is_calc
+void dummyfunction(void);
+void placeholder(void);
+
+	typedef struct s_is_calc
 {
 	t_vec4		ab;
 	t_vec4		ac;
@@ -59,5 +62,8 @@ typedef struct		s_intersection
 	float			t;
 	float			det;
 }					t_intersection;
+
+bool						intersect_triangle(t_triangle triangle, t_ray ray,
+														t_intersection *is);
 
 #endif

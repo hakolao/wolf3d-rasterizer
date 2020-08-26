@@ -54,8 +54,3 @@ bool			 intersect_triangle(t_triangle triangle, t_ray ray,
 	return (is->u >= 0.0 && is->v >= 0.0 && is->t >= 0.0 &&
 			(is->u+is->v <= 1.0));
 }
-
-void	dummyfunction(void)
-{
-	ft_printf("test\n");
-}

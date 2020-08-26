@@ -15,7 +15,6 @@ NAME = lib3d.a
 LIBFT = ../libft
 LIBGMATRIX = ../libgmatrix
 DIR_SRC = ./
-DIR_TESTS = ./tests
 DIR_OBJ = temp
 SOURCES =	l3d_triangle.c \
 			l3d_intersection.c
@@ -35,8 +34,6 @@ $(DIR_OBJ):
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INCLUDES) -c -o $@ $<
-
-TEST_SRCS =$(wildcard $(DIR_TESTS)/*.c)
 
 clean:
 	@/bin/rm -f $(OBJS)

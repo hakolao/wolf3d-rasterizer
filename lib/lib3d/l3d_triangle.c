@@ -17,8 +17,3 @@ void	placeholder(void)
 	ft_printf("placeholder");
 	return ;
 }
-
-void dummyfunction(void)
-{
-	ft_printf("test\n");
-}

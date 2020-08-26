@@ -60,7 +60,7 @@ void			wolf3d_run(t_wolf3d *app)
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	main_window_init(app);
 	wolf3d_init(app);
-	// t_intersection is;
+	t_intersection is;
 	t_vec3 dir = {0,0,1};
 	t_vec3 origin = {1,1,-1};
 	t_vec4 A = {0,0,0};
@@ -83,9 +83,7 @@ void			wolf3d_run(t_wolf3d *app)
 	triangle.c.position[0] = C[0];
 	triangle.c.position[1] = C[1];
 	triangle.c.position[2] = C[2];
-	// intersect_triangle(triangle, ray, &is);
-	placeholder();
-		// dummyfunction();
+	intersect_triangle(triangle, ray, &is);
 	// ft_printf("%B\n", intersect_triangle(triangle, ray, &is));
 	wolf3d_main_loop(app);
 	wolf3d_cleanup(app);

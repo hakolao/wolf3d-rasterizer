@@ -17,10 +17,7 @@
 
 # define EPSILON 0.00000001
 
-void dummyfunction(void);
-void placeholder(void);
-
-	typedef struct s_is_calc
+typedef struct s_is_calc
 {
 	t_vec4		ab;
 	t_vec4		ac;

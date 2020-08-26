@@ -14,7 +14,7 @@ SDL_FLAGS = -rpath $(LIBSDL2) \
 				-framework SDL2 -F$(LIBSDL2)/ \
 				-framework SDL2_image -F$(LIBSDL2)/ \
 				-framework SDL2_ttf -F$(LIBSDL2)/
-
+LIBS = $(LIBFTFLAGS) $(LIB3DFLAGS) $(LIBGMATRIXFLAGS) $(SDL_FLAGS)
 INCLUDES = -I ./include \
 		-I$(LIBFT)/include \
 		-I$(LIB3D)/include \
@@ -45,7 +45,7 @@ $(NAME): $(OBJS)
 	make -C $(LIB3D)
 	make -C $(LIBGMATRIX)
 	@printf "\033[32;1mCompiling app...\n\033[0m"
-	$(CC) $(FLAGS) $(LIBFTFLAGS) $(LIBGMATRIXFLAGS) $(SDL_FLAGS) -o $@ $^
+	$(CC) $(FLAGS) $(LIBS) -o $@ $^
 	@printf "\033[32;1mDone. Run: ./$(NAME)\n\033[0m"
 
 $(DIR_OBJ):

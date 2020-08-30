@@ -14,10 +14,11 @@
 # define LIB3D_H
 
 # include "libgmatrix.h"
+# include <stdarg.h>
 
 # define EPSILON 0.00000001
 
-typedef struct s_is_calc
+typedef struct s_temp_calc
 {
 	t_vec4		ab;
 	t_vec4		ac;
@@ -26,7 +27,7 @@ typedef struct s_is_calc
 	t_vec3		cross_dir_ax;
 	float		det;
 	float		invdet;
-}					t_is_calc;
+}					t_temp_calc;
 
 typedef struct		s_vertex
 {
@@ -35,12 +36,44 @@ typedef struct		s_vertex
 	unsigned int	color;
 }					t_vertex;	
 
+/*
+**	The box structures are rectangular and consist of points that for the
+**	boundary. The top and bot part refer to the top and bottom rectangles
+**	(or lines in 2d case). The rectangles are read counter-clock-wise order
+**	starting from smallest coordinate. The a,b,c,d indices correspond to a,b,c,d
+**	on the other side.
+*/
+
+typedef struct		s_box3d
+{
+	t_vec3			topa;
+	t_vec3			topb;
+	t_vec3			topc;
+	t_vec3			topd;
+	t_vec3			bota;
+	t_vec3			botb;
+	t_vec3			botc;
+	t_vec3			botd;
+}					t_box3d;
+
+typedef struct		s_box2d
+{
+	t_vec2			topa;
+	t_vec2			topb;
+	t_vec2			bota;
+	t_vec2			botb;
+}					t_box2d;
+
+/*
+**	Triangle structure includes references to its vertices in an array for
+**	Easier iteration. The vertex pointers directly point at the corresponding
+**	vertices in the mesh vertex list.	
+*/
+
 typedef struct		s_triangle
 {
-	t_vertex	a;
-	t_vertex	b;
-	t_vertex	c;
-	t_vec4		center; //consider if center calculated when mesh loaded
+	t_vertex	*vtc[3];
+	t_vec3		center; //consider if center calculated when mesh loaded
 	//or center calculated when needed
 	t_vec3		normal;
 }					t_triangle;
@@ -59,6 +92,30 @@ typedef struct		s_intersection
 	float			t;
 	float			det;
 }					t_intersection;
+
+typedef void *(t_vertex_shader(char *fmt, ...));
+typedef void *(t_fragment_shader(char *fmt, ...));
+
+typedef struct  s_shader
+{
+    t_vertex_shader     *v;
+    t_fragment_shader   *f;
+}               t_shader;
+
+typedef struct		s_mesh
+{
+	t_vertex		**vtc;
+	t_triangle		*triangles;
+	t_vec3			origin;
+	t_box3d			bound_box;
+}					t_mesh;
+
+typedef struct      s_rmesh
+{
+    t_shader        *shader;
+    int				*framebuffer;
+}                   t_rmesh;
+
 
 bool						intersect_triangle(t_triangle triangle, t_ray ray,
 														t_intersection *is);

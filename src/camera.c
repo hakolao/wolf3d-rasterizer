@@ -21,15 +21,21 @@ void		update_camera_view(t_player *player)
 		player->camera.view);
 }
 
-t_camera	*new_camera(t_scene *scene, t_wolf3d *app)
+t_camera	*new_camera(float screen_distance)
 {
 	t_camera	*camera;
 
 	if (!(camera = (t_camera*)malloc(sizeof(t_camera))))
 		return (NULL);
+	ml_vec3_set_all(camera->origin, 0);
+	camera->screen_width = (float)WIDTH * VIEW_SCALE;
+	camera->screen_height = (float)HEIGHT * VIEW_SCALE;
+	camera->screen_dist = screen_distance * VIEW_SCALE;
+	camera->fovx = 2 * (atan(camera->screen_width / (2 * camera->screen_dist)));
+	camera->fovy = 2 * (atan(camera->screen_height /
+						(2 * camera->screen_dist)));
+	ml_set_orientation_base(camera->orientation, VEC_FORWARD, VEC_LEFT, VEC_UP);
 	return (camera);
-	(void)scene;
-	(void)app;
 }
 
 void		init_camera(t_player *player)

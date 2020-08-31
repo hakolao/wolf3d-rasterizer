@@ -24,8 +24,26 @@
 
 # define WIDTH 1280
 # define HEIGHT 720
+
+/*
+**	The view scale will scale the camera and raycasting in relation to the
+**	world and objects. So that bigger scale will effectively scale the "world"
+**	smaller in the camera view without affecting the actual world.
+*/
+
+# define VIEW_SCALE 1
 # define FPS 60
 # define NAME "Wolf3D"
+
+/*
+**	The vector convention is a right handed coordinate system where up axis 
+**	is z (2), left axis is y (1), forward axis is x (0). The numbers are for
+**	easier referencing in t_vec3 structs.
+*/
+
+# define VEC_UP 2
+# define VEC_LEFT 1
+# define VEC_FORWARD 0
 
 /*
 **	Frame buffer
@@ -56,10 +74,25 @@ typedef struct						s_window
 	void					*parent;
 }									t_window;
 
+/*
+**	Camera screen distance is the distance of the
+**	virtual, screen through which the rays are projected,
+**	from the camera in world units. The virtual screen dimensions
+**	and the screen distance determine the field of view and vice versa.
+*/
+
 typedef struct						s_camera
 {
-	t_mat4					model;
+	t_vec3					origin;
+	t_vec3					orientation[3];
+	Uint16					screen_width;
+	Uint16					screen_height;
+	float					fovx;
+	float					fovy;
+	float					screen_dist;
+
 	t_mat4					view;
+	t_mat4					model;
 	t_mat4					projection;
 }									t_camera;
 
@@ -174,7 +207,7 @@ void								move_player(t_player *player, t_move dir);
 ** Camera
 */
 
-t_camera							*new_camera(t_scene *scene, t_wolf3d *app);
+t_camera							*new_camera(float screen_distance);
 void								update_camera_view(t_player *player);
 void								init_camera(t_player *player);
 void								camera_transform(t_camera *camera,

@@ -12,37 +12,48 @@
 
 #include "wolf3d.h"
 
-void		init_scene(t_wolf3d *app)
+t_scene		*new_scene(t_wolf3d *app, t_scenedata *data)
 {
-	size_t	y;
-	size_t	x;
-	size_t	i;
+	t_scene		*scene;
 
-	error_check((app->scene.objects =
-		malloc(sizeof(*app->scene.objects) * 1)) == NULL,
-		"Failed to malloc objects");
-	app->scene.object_count = 1;
-	error_check((app->scene.objects[0].vertices =
-		malloc(sizeof(*app->scene.objects[0].vertices) * 100)) == NULL,
-		"Failed to malloc objects");
-	app->scene.objects[0].vertex_count = 100;
-	y = -1;
-	i = 0;
-	while (++y < 10)
-	{
-		x = -1;
-		while (++x < 10)
-		{
-			ft_memcpy(&app->scene.objects[0].vertices[i].position,
-				&(t_vec4){(float)x, (float)y, -5.0, 1.0}, sizeof(t_vec4));
-			app->scene.objects[0].vertices[i].color = 0xff0000ff;
-			i++;
-		}
-	}
+	scene = (t_scene*)malloc(sizeof(t_scene)); //error checks
+	create_object_triangle(scene, app);
+	scene->main_camera = new_camera(scene, app);
+	(void)data;
+	return (scene);
+	//--------------------------------------------------------------------------
+	// size_t	y;
+	// size_t	x;
+	// size_t	i;
+
+	// error_check((app->active_scene.objects =
+	// 	malloc(sizeof(*app->active_scene.objects) * 1)) == NULL,
+	// 	"Failed to malloc objects");
+	// app->active_scene.object_count = 1;
+	// error_check((app->active_scene.objects[0].vertices =
+	// 	malloc(sizeof(*app->active_scene.objects[0].vertices) * 100)) == NULL,
+	// 	"Failed to malloc objects");
+	// app->active_scene.objects[0].vertex_count = 100;
+	// y = -1;
+	// i = 0;
+	// while (++y < 10)
+	// {
+	// 	x = -1;
+	// 	while (++x < 10)
+	// 	{
+	// 		ft_memcpy(&app->active_scene.objects[0].vertices[i].position,
+	// 			&(t_vec4){(float)x, (float)y, -5.0, 1.0}, sizeof(t_vec4));
+	// 		app->active_scene.objects[0].vertices[i].color = 0xff0000ff;
+	// 		i++;
+	// 	}
+	// }
+	//--------------------------------------------------------------------------
 }
 
 void		destroy_scene(t_wolf3d *app)
 {
-	free(app->scene.objects->vertices);
-	free(app->scene.objects);
+	// free(app->active_scene.objects->vertices);
+	//free(app->active_scene->objects);
+	(void)app;
+	return ;
 }

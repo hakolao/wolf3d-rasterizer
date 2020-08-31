@@ -17,15 +17,15 @@ static void		view_matrix(t_vec3 axes[3], t_vec3 eye, t_mat4 res)
 {
 	res[0][0] = axes[0][0];
 	res[0][1] = axes[1][0];
-	res[0][2] =-axes[2][0];
+	res[0][2] = -axes[2][0];
 	res[1][0] = axes[0][1];
 	res[1][1] = axes[1][1];
-	res[1][2] =-axes[2][1];
+	res[1][2] = -axes[2][1];
 	res[2][0] = axes[0][2];
 	res[2][1] = axes[1][2];
-	res[2][2] =-axes[2][2];
-	res[3][0] =-ml_vector3_dot(axes[0], eye);
-	res[3][1] =-ml_vector3_dot(axes[1], eye);
+	res[2][2] = -axes[2][2];
+	res[3][0] = -ml_vector3_dot(axes[0], eye);
+	res[3][1] = -ml_vector3_dot(axes[1], eye);
 	res[3][2] = ml_vector3_dot(axes[2], eye);
 	res[0][3] = 0.0f;
 	res[1][3] = 0.0f;

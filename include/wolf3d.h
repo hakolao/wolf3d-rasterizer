@@ -24,6 +24,7 @@
 
 # define WIDTH 1280
 # define HEIGHT 720
+# define FPS 60
 # define NAME "Wolf3D"
 
 /*
@@ -74,43 +75,106 @@ typedef struct						s_player
 
 //ToDo: Object to contain mesh(es) from lib3d
 
+/*
+**	Structs and typedefs used in rendering
+*/
+
+typedef void *(t_vertex_shader(char *fmt, ...));
+typedef void *(t_fragment_shader(char *fmt, ...));
+
+typedef struct						s_shader
+{
+	t_vertex_shader			*v;
+	t_fragment_shader		*f;
+}									t_shader;
+
+typedef struct						s_mesh
+{
+	t_vertex				**vtc;
+	int						vtx_count;
+	t_triangle				*triangles;
+	int						triangle_count;
+	t_vec3					origin;
+	t_vec3					orientation[3];
+	t_box3d					bound_box;
+	t_shader				shader;
+	struct s_object			*parent_object;
+}									t_mesh;
+
 typedef struct						s_object
 {
-	t_vertex				*vertices;
-	uint32_t				vertex_count;
+	t_mesh					*mesh;
+	t_vec3					origin;
+	t_vec3					orientation[3];
+	t_vec3					parent_origin;
+	t_vec3					parent_orientation[3];
+	struct s_scene			*parent_scene;
 }									t_object;
+
+/*
+**	Typedefs related to app and scene management
+*/
+
+typedef struct						s_scenedata
+{
+	int						level;
+	//add here all the date needed to create a scene
+	//for example fetch the map and included
+	//objects. This will be passed to new_scene()
+	//that will interpret the data and create the scene
+}									t_scenedata;
 
 typedef struct						s_scene
 {
-	t_object				*objects;
+	t_object				**objects;
 	uint32_t				object_count;
+	t_camera				*main_camera;
 }									t_scene;
 
 typedef struct						s_wolf3d
 {
+	int						starting_tick;
 	bool					is_running;
 	t_window				*main_window;
 	t_player				player;
-	t_scene					scene;
+	t_scene					*active_scene;
 }									t_wolf3d;
 
+/*
+**	Function declarations
+*/
+
 void								wolf3d_run(t_wolf3d *app);
+void								*init_app(t_wolf3d *app);
+void								cap_framerate(Uint32 starting_tick);
 
 /*
 ** Scene
 */
-void								init_scene(t_wolf3d *app);
+
+t_scene								*new_scene(t_wolf3d *app,
+												t_scenedata *data);
 void								destroy_scene(t_wolf3d *app);
+
+/*
+** Objects
+*/
+
+t_object							*create_object_triangle(t_scene *scene,
+															t_wolf3d *app);
 
 /*
 ** Player
 */
+
 void								init_player(t_wolf3d *app);
 void								move_player(t_player *player, t_move dir);
 
 /*
 ** Camera
 */
+
+t_camera							*new_camera(t_scene *scene, t_wolf3d *app);
 void								update_camera_view(t_player *player);
 void								init_camera(t_player *player);
 void								camera_transform(t_camera *camera,
@@ -119,16 +183,21 @@ void								camera_transform(t_camera *camera,
 /*
 ** Draw / Render
 */
+
 void								draw_frame(t_wolf3d *app);
+bool								render_mesh(t_mesh *mesh,
+												t_camera *camera);
 
 /*
 ** Utils
 */
+
 void								error_check(int test, const char *message);
 
 /*
 ** Window
 */
+
 void								main_window_init(t_wolf3d *app);
 
 #endif

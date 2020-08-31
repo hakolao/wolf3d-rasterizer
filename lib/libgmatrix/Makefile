@@ -41,7 +41,8 @@ SOURCES = ml_matrix4_id.c \
 			ml_vector4_mul.c \
 			ml_vector4_normalize.c \
 			ml_vector4_sub.c \
-			ml_vector_copy.c
+			ml_vector_copy.c \
+			ml_vec_set.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

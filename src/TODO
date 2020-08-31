@@ -1,0 +1,11 @@
+Add return types to init functions and create error checks for them if they fail
+e.x.
+void *init_player(t_wolf3d *app)
+{
+	if (fail to init)
+	   return NULL;
+	else
+		return (app);
+}
+
+When reorganizing functions into files change appropriate functions to static

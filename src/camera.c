@@ -21,6 +21,17 @@ void		update_camera_view(t_player *player)
 		player->camera.view);
 }
 
+t_camera	*new_camera(t_scene *scene, t_wolf3d *app)
+{
+	t_camera	*camera;
+
+	if (!(camera = (t_camera*)malloc(sizeof(t_camera))))
+		return (NULL);
+	return (camera);
+	(void)scene;
+	(void)app;
+}
+
 void		init_camera(t_player *player)
 {
 	ml_matrix4_id(player->camera.model);

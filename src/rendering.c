@@ -20,16 +20,16 @@
 
 #include "wolf3d.h"
 
-t_rmesh		*create_renderable_mesh(t_mesh *mesh, t_shader *shader,
+t_mesh		*create_renderable_mesh(t_mesh *mesh, t_shader *shader,
 									int *framebuffer)
 //framebuffer input here questionable?
 {
-	t_rmesh *rmesh;
+	t_mesh *mesh;
 
-	return (rmesh);
+	return (mesh);
 }
 
-bool		render_triangle(t_triangle *triangle, t_rmesh *rmesh, t_camera *camera)
+bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 {
 	t_intersection		intsec;
 	int					color;
@@ -39,25 +39,25 @@ bool		render_triangle(t_triangle *triangle, t_rmesh *rmesh, t_camera *camera)
 	{
 	   triangle_intersection(triangle, ray, intsec);
 	   //find a way to get uv data in fragment shader
-	   rmesh->shader->f(triangle, calculate_baryocoords(intsec), color);
+	   mesh->shader->f(triangle, calculate_baryocoords(intsec), color);
 	   //find a way to get framebuffer data in and or out of this function
-	   rmesh->framebuffer[x,y] = color;
+	   mesh->framebuffer[x,y] = color;
 	}
 	return (true);
 }
 
-bool		render_mesh(t_rmesh *rmesh, t_camera *camera)
+bool		render_mesh(t_mesh *mesh, t_camera *camera)
 {
-	for (vertex in triangle in rmesh)
-	{
+	//for (vertex in triangle in mesh)
+	//{
 		//can't actually modify original vertex data
 		//figure out if create temporary copy of all vertices
 		//or some other way
-		rmesh->shader->v(vertex, rmesh, camera);
-	}
+	((*mesh).shader)->v(vertex, mesh, camera);
+	//}
 	while (triangles)
 	{
-		render_triangle(triangles[i], rmesh, camera);
+		render_triangle(triangles[i], mesh, camera);
 	}
 	return (true);
 }

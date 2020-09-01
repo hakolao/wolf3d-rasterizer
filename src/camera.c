@@ -24,20 +24,25 @@ void			update_camera_view(t_player *player)
 static t_ray	*precompute_rays(t_camera *camera)
 {
 	t_ray	*rays;
-	int		i;
-	int		size;
+	Uint32	i;
+	Uint32	size;
 	t_vec3	dir;
 
-	i = -1;
-	size = camera->screen_width *camera->screen_height;
+	i = 0;
+	size = camera->screen_width * camera->screen_height;
+	ft_printf("width: %d\n", camera->screen_width);
+	ft_printf("height: %d\n", camera->screen_height);
+	ft_printf("size: %d\n", size);
 	if (!(rays = (t_ray *)malloc(sizeof(t_ray) * size)))
 		return (NULL);
-	while (++i < size)
+	while (i < size)
 	{
 		dir[0] = camera->screen_dist;
 		dir[1] = -1 * (camera->screen_width + 1) / 2 + i % (int)camera->screen_width;
 		dir[2] = (camera->screen_height - 1) / 2 - floorf(i / camera->screen_width);
+		ml_vector3_normalize(dir, dir);
 		rays[i] = new_ray(camera->origin, dir);
+		i++;
 	}
 	camera->raycount = size;
 	return (rays);

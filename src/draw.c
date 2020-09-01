@@ -55,11 +55,11 @@ void		render_scene(t_wolf3d *app, t_scene *scene)
 	t_vertex	vtxb;
 	t_vertex	vtxc;
 	t_vec3		pos;
-	ml_vec3_set(pos, scene->main_camera->screen_dist, 200, 200);
+	ml_vec3_set(pos, scene->main_camera->screen_dist, WIDTH / 2, HEIGHT / 2);
 	ml_vector3_copy(vtxa.position, pos);
-	ml_vec3_set(pos, scene->main_camera->screen_dist, -200, -200);
+	ml_vec3_set(pos, scene->main_camera->screen_dist, WIDTH / 2 - 50, HEIGHT / 2 - 50);
 	ml_vector3_copy(vtxb.position, pos);
-	ml_vec3_set(pos, scene->main_camera->screen_dist, 100, 100);
+	ml_vec3_set(pos, scene->main_camera->screen_dist, WIDTH / 2 + 50, HEIGHT / 2 + 50);
 	ml_vector3_copy(vtxc.position, pos);
 	t_triangle *triangle;
 	triangle = (t_triangle*)malloc(sizeof(t_triangle));
@@ -67,8 +67,8 @@ void		render_scene(t_wolf3d *app, t_scene *scene)
 	triangle->vtc[1] = (t_vertex*)malloc(sizeof(t_vertex));
 	triangle->vtc[2] = (t_vertex*)malloc(sizeof(t_vertex));
 	ml_vector3_copy(vtxa.position, triangle->vtc[0]->position);
-	ml_vector3_copy(vtxb.position, triangle->vtc[1]->position);
-	ml_vector3_copy(vtxc.position, triangle->vtc[2]->position);
+	ml_vector3_copy(vtxc.position, triangle->vtc[1]->position);
+	ml_vector3_copy(vtxb.position, triangle->vtc[2]->position);
 	render_triangle(triangle, NULL, scene->main_camera);
 	copy_frame(app->main_window->framebuffer, scene->main_camera->framebuffer,
 				app);
@@ -138,14 +138,15 @@ void		render_background(t_wolf3d *app)
 void			draw_frame(t_wolf3d *app)
 {
 	(void)app;
-	SDL_LockTexture(app->main_window->frame, NULL,
-		(void**)&app->main_window->framebuffer,
-		&app->main_window->pitch);
+	// SDL_LockTexture(app->main_window->frame, NULL,
+	// 	(void**)&app->main_window->framebuffer,
+	// 	&app->main_window->pitch);
 	// render_background(app);
 
 	update_frame(app);
-
-	SDL_UnlockTexture(app->main_window->frame);
+	SDL_UpdateTexture(app->main_window->frame, NULL,
+						app->main_window->framebuffer, WIDTH * sizeof(Uint32));
+	// SDL_UnlockTexture(app->main_window->frame);
 	SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
 		NULL, NULL);
 	SDL_RenderPresent(app->main_window->renderer);

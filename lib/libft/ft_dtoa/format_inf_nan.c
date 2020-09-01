@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa_longl_base.c                               :+:      :+:    :+:   */
+/*   format_inf_nan.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 15:35:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/03/13 15:43:03 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/27 13:29:41 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/30 21:30:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_dtoa.h"
 
-char				*ft_itoa_longl_base(long long int nb, long long int base)
+uint32_t		format_inf_nan(char *buf, uint64_t mantissa)
 {
-	return (ft_itoa_intmax_base(nb, base));
-}
+	uint32_t	print_len;
 
-char				*ft_itoa_longl_u_base(unsigned long long int nb,
-					unsigned long long int base)
-{
-	return (ft_itoa_uintmax_base(nb, base));
+	print_len = 3;
+	if (mantissa == 0)
+		ft_memcpy(buf, "inf", print_len);
+	else
+		ft_memcpy(buf, "nan", print_len);
+	buf[print_len] = '\0';
+	return (print_len);
 }

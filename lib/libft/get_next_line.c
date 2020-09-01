@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.helsinki.fi>      +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 16:05:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/01/20 16:03:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/24 20:16:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int		ret_new_line(char **remainder, char **line, int ret)
 
 	if (ret < 0)
 		return (-1);
-	else if (ret == FALSE && (*remainder == NULL || (*remainder)[0] == '\0'))
+	else if (ret == false && (*remainder == NULL || (*remainder)[0] == '\0'))
 		return (0);
 	len = 0;
 	while ((*remainder)[len] != '\0' && (*remainder)[len] != '\n')

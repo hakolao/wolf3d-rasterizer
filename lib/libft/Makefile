@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/15 14:43:04 by ohakola           #+#    #+#              #
-#    Updated: 2020/08/24 14:58:32 by ohakola          ###   ########.fr        #
+#    Updated: 2020/09/01 18:08:28 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,9 +52,6 @@ SOURCES = ft_atoi.c \
 		ft_putnbr.c \
 		ft_putnbr_fd.c \
 		ft_itoa_base.c \
-		ft_itoa_long_base.c \
-		ft_itoa_longl_base.c \
-		ft_itoa_intmax_base.c \
 		ft_itoa.c \
 		ft_putendl.c \
 		ft_putendl_fd.c \
@@ -93,23 +90,42 @@ SOURCES = ft_atoi.c \
 		ft_pixel_foreach.c \
 		ft_sort_int_tab.c \
 		ft_pow.c \
-		ft_ftoa.c \
 		ft_match.c \
 		ft_strrev.c \
 		ft_capitalize.c \
 		ft_bzero.c \
+		ft_round.c \
 		ft_printf/ft_printf.c \
 		ft_printf/parse.c \
 		ft_printf/parse_specs.c \
 		ft_printf/parse_sub_specs.c \
-		ft_printf/parse_numbers.c \
+		ft_printf/parse_int.c \
+		ft_printf/parse_float.c \
 		ft_printf/parse_utils.c \
 		ft_printf/string_utils.c \
 		ft_printf/format.c \
 		ft_printf/format_precision.c \
 		ft_printf/format_padding.c \
 		ft_printf/format_utils.c \
-		ft_printf/validate.c
+		ft_printf/validate.c \
+		ft_dtoa/ft_dtoa.c \
+		ft_dtoa/ft_dtoa_ld.c \
+		ft_dtoa/format_normal.c \
+		ft_dtoa/format_inf_nan.c \
+		ft_dtoa/format_scientific.c \
+		ft_dtoa/format_scientific_utils.c \
+		ft_dtoa/math_utils.c \
+		ft_dtoa/dragon4.c \
+		ft_dtoa/dragon4_output.c \
+		ft_dtoa/dragon4_values.c \
+		ft_dtoa/big_int_add.c \
+		ft_dtoa/big_int_divide.c \
+		ft_dtoa/big_int_get_set.c \
+		ft_dtoa/big_int_mul.c \
+		ft_dtoa/big_int_mul_modif.c \
+		ft_dtoa/big_int_pow.c \
+		ft_dtoa/big_int_shift.c \
+		ft_dtoa/big_int_utils.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
@@ -124,6 +140,7 @@ $(NAME): $(OBJS)
 $(DIR_OBJ):
 	@mkdir -p temp
 	@mkdir -p temp/ft_printf
+	@mkdir -p temp/ft_dtoa
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INC) -c -o $@ $<

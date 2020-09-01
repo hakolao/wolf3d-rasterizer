@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.helsinki.fi>      +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 13:56:04 by ohakola           #+#    #+#             */
-/*   Updated: 2020/01/20 16:03:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/24 22:17:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 /*
 ** The ft_bzero() function writes n zeroed bytes to the string s.
-** If n is zero, bzero() does nothing.
+** If n is zero, ft_bzero() does nothing.
 */
 
 void	ft_bzero(void *s, size_t n)
 {
 	char	*cpy;
 
-	if (n == FALSE)
+	if (n == false)
 		return ;
 	cpy = s;
 	while (n--)

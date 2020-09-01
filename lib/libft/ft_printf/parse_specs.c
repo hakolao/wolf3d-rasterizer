@@ -6,11 +6,15 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 16:07:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/06/25 15:57:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/31 20:12:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+/*
+** Parses char * variables handling also the special null case
+*/
 
 static char				*parse_string(t_printf *data)
 {
@@ -28,6 +32,10 @@ static char				*parse_string(t_printf *data)
 	return (res);
 }
 
+/*
+** Parses char variables
+*/
+
 static char				*parse_char(t_printf *data)
 {
 	char	*res;
@@ -38,6 +46,11 @@ static char				*parse_char(t_printf *data)
 	data->var_len = 1;
 	return (res);
 }
+
+/*
+** Parses variable and based on t_printf *data mapped by parse_sub_specifiers
+** outputs varialble to char *res to be later copied to buffer.
+*/
 
 static char				*parse_variable(t_printf *data)
 {
@@ -58,12 +71,19 @@ static char				*parse_variable(t_printf *data)
 		return (handle_formatting(data, parse_char(data)));
 	else if (data->c == '%' && (data->var_len = 1))
 		return (handle_formatting(data, ft_strdup("%")));
-	if (!(res = ft_strnew(1)))
-		return (NULL);
-	res[0] = data->c;
+	else if (data->c == 'n' && !(data->var_len = 0))
+	{
+		va_arg(data->variables, unsigned);
+		return ((res = ft_strnew(1)));
+	}
 	data->var_len++;
-	return (res);
+	return ((res = ft_strdup(&data->c)));
 }
+
+/*
+** Parses spec from fmt, based on that parses variable input and outputs
+** result to data->buffer.
+*/
 
 int						parse_spec_variable_pair(t_printf *data, char *fmt)
 {
@@ -73,12 +93,12 @@ int						parse_spec_variable_pair(t_printf *data, char *fmt)
 	data->spec = fmt;
 	if (!(variable = parse_variable(data)) ||
 		!(data->buffer = extend_str(data->buffer, data->len, data->var_len)))
-		return (FALSE);
+		return (false);
 	i = -1;
 	while (++i < data->var_len)
 		data->buffer[data->len + i] = variable[i];
 	data->len += data->var_len;
 	data->buffer[data->len] = '\0';
 	ft_strdel(&variable);
-	return (TRUE);
+	return (true);
 }

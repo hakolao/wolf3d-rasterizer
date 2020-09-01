@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:07:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/24 15:07:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/01 18:07:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef struct		s_intersection
 	float			det;
 }					t_intersection;
 
-bool						triangle_intersection(t_triangle *triangle,
+t_bool						triangle_intersection(t_triangle *triangle,
 													t_ray ray,
 													t_intersection *is);
 t_ray						new_ray(t_vec3 origin, t_vec3 direction);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:23:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 20:47:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/01 18:11:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void all_tests() {
 }
 
 int main(void) {
-	bool				success;
+	t_bool				success;
 	int					failures;
 	int					i;
 

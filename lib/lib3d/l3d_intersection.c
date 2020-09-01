@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_intersection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: veilo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:28:46 by veilo             #+#    #+#             */
-/*   Updated: 2020/08/25 16:28:46 by veilo            ###   ########.fr       */
+/*   Updated: 2020/09/01 18:08:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_ray			new_ray(t_vec3 origin, t_vec3 direction)
 **	There is a check in place for zero but it might not be foolproof.
 */
 
-bool			 triangle_intersection(t_triangle *triangle, t_ray ray,
+t_bool			 triangle_intersection(t_triangle *triangle, t_ray ray,
 									t_intersection *is)
 {
 	t_temp_calc temp_calc;

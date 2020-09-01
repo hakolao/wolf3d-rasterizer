@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.helsinki.fi>      +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 17:25:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/01/20 16:03:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/24 20:16:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t slen)
 	src = (char *)haystack;
 	find = (char *)needle;
 	needle_len = ft_strlen(needle);
-	if (needle_len == FALSE)
+	if (needle_len == false)
 		return (char *)(src);
 	if (needle_len > slen)
 		return ((char *)NULL);
 	while (slen >= needle_len && *src)
 	{
-		if (ft_strncmp(src, find, needle_len) == FALSE)
+		if (ft_strncmp(src, find, needle_len) == false)
 			return ((char *)src);
 		src++;
 		slen--;

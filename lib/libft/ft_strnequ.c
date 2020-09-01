@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnequ.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.helsinki.fi>      +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/22 20:16:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/01/20 16:03:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/24 20:16:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,5 @@ int		ft_strnequ(char const *s1, char const *s2, size_t n)
 {
 	if (!s1 || !s2)
 		return (0);
-	return (ft_strncmp(s1, s2, n) == FALSE ? 1 : 0);
+	return (ft_strncmp(s1, s2, n) == false ? 1 : 0);
 }

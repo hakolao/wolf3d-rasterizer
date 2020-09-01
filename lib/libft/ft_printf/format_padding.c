@@ -6,11 +6,15 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 13:50:42 by ohakola           #+#    #+#             */
-/*   Updated: 2020/03/27 20:13:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/31 20:42:28 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+/*
+** Pads string with zeros or spaces based on flag settings in data.
+*/
 
 static void				*pad_string(t_printf *data, char *res, int start)
 {
@@ -24,6 +28,10 @@ static void				*pad_string(t_printf *data, char *res, int start)
 		res = add_chars_to_str_begin(res, start, data->width, ' ');
 	return (res);
 }
+
+/*
+** Formats extra padding around float based on given width needs.
+*/
 
 char					*handle_float_padding(t_printf *data, char *res)
 {
@@ -43,6 +51,10 @@ char					*handle_float_padding(t_printf *data, char *res)
 	return (res);
 }
 
+/*
+** Formats extra padding around string based on given width needs.
+*/
+
 char					*handle_string_padding(t_printf *data, char *res)
 {
 	int		len;
@@ -56,6 +68,10 @@ char					*handle_string_padding(t_printf *data, char *res)
 	pad_string(data, res, len);
 	return (res);
 }
+
+/*
+** Formats extra padding around int based on given width needs.
+*/
 
 char					*handle_int_padding(t_printf *data, char *res)
 {
@@ -77,6 +93,10 @@ char					*handle_int_padding(t_printf *data, char *res)
 	}
 	return (res);
 }
+
+/*
+** Formats extra padding around char based on given width needs.
+*/
 
 char					*handle_char_padding(t_printf *data, char *res)
 {

@@ -29,7 +29,7 @@
 // 	return (mesh);
 // }
 
-bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
+t_bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 {
 	int is;
 
@@ -78,7 +78,7 @@ bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 	return (true);
 }
 
-// bool		render_mesh(t_mesh *mesh, t_camera *camera)
+// t_bool		render_mesh(t_mesh *mesh, t_camera *camera)
 // {
 // 	//for (vertex in triangle in mesh)
 // 	//{

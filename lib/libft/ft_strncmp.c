@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.helsinki.fi>      +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 16:11:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/01/20 16:03:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/08/24 20:16:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	if (n == FALSE)
+	if (n == false)
 		return (0);
 	while (n > 0)
 	{

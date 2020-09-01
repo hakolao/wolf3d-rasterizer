@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 17:43:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/01 18:06:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ typedef struct						s_window
 	int32_t					width;
 	int32_t					height;
 	int32_t					pitch;
-	bool					resized;
+	t_bool					resized;
 	SDL_Window				*window;
 	uint32_t				window_id;
-	bool					is_hidden;
+	t_bool					is_hidden;
 	void					*parent;
 }									t_window;
 
@@ -172,7 +172,7 @@ typedef struct						s_scene
 typedef struct						s_wolf3d
 {
 	int						starting_tick;
-	bool					is_running;
+	t_bool					is_running;
 	t_window				*main_window;
 	t_player				player;
 	t_scene					*active_scene;
@@ -224,9 +224,9 @@ void								camera_transform(t_camera *camera,
 */
 
 void								draw_frame(t_wolf3d *app);
-bool								render_mesh(t_mesh *mesh,
+t_bool								render_mesh(t_mesh *mesh,
 												t_camera *camera);
-bool								render_triangle(t_triangle *triangle,
+t_bool								render_triangle(t_triangle *triangle,
 													t_mesh *mesh,
 													t_camera *camera);
 int									screen_to_frame_coords(t_scene *scene,

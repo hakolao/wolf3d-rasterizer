@@ -6,15 +6,19 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 13:50:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/06/25 17:02:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/01 16:58:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
+/*
+** Handles zerox (#) flag formatting for o, xX.
+*/
+
 static char				*handle_zerox(t_printf *data, char *res)
 {
-	if (data->c == 'o')
+	if (data->c == 'o' || data->c == 'O')
 	{
 		if (res[0] == '0')
 			return (res);
@@ -28,15 +32,12 @@ static char				*handle_zerox(t_printf *data, char *res)
 		res = add_str_to_beg(res, "0x", data->var_len, 2);
 		data->var_len += 2;
 	}
-	else if (data->c == 'f' && data->precision == 0)
-	{
-		if (!(res = extend_str(res, data->var_len, 1)))
-			return (NULL);
-		res[data->var_len] = '.';
-		data->var_len += 1;
-	}
 	return (res);
 }
+
+/*
+** Handles precision formatting for ints.
+*/
 
 char					*handle_int_precision(t_printf *data, char *res)
 {
@@ -47,7 +48,7 @@ char					*handle_int_precision(t_printf *data, char *res)
 	len = data->var_len;
 	if (data->has_precision && data->precision > 0)
 	{
-		data->pad_zeros = FALSE;
+		data->pad_zeros = false;
 		new_var_len = data->is_negative || data->show_sign ?
 				data->precision + 1 : data->precision;
 		if (new_var_len > len)
@@ -62,6 +63,11 @@ char					*handle_int_precision(t_printf *data, char *res)
 	}
 	return (res);
 }
+
+/*
+** Handles precision changes for numbers (ints mostly, but also floats and p)
+** and all the special cases by given flag data.
+*/
 
 char					*handle_number_precision(t_printf *data, char *res)
 {
@@ -86,6 +92,11 @@ char					*handle_number_precision(t_printf *data, char *res)
 		ft_capitalize(res);
 	return (res);
 }
+
+/*
+** Shortens variable length data if precision has been set to limit string
+** length.
+*/
 
 char					*handle_string_precision(t_printf *data, char *res)
 {

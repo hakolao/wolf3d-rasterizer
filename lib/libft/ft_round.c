@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa_long_base.c                                :+:      :+:    :+:   */
+/*   ft_round.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 15:31:31 by ohakola           #+#    #+#             */
-/*   Updated: 2020/03/13 15:42:57 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/18 23:26:36 by ohakola           #+#    #+#             */
+/*   Updated: 2020/08/19 13:36:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char				*ft_itoa_long_base(long int nb, long int base)
+double		ft_ceil(double num)
 {
-	return (ft_itoa_intmax_base(nb, base));
+	long long int		int_part;
+	double				fraction;
+	t_float_dissector	fd;
+
+	if (num == 0)
+		return (num);
+	fd.f = num;
+	int_part = (long long int)num;
+	fraction = num - int_part;
+	return (fd.b.sign ? int_part : int_part + 1);
 }
 
-char				*ft_itoa_long_u_base(unsigned long int nb,
-					unsigned long int base)
+double		ft_floor(double num)
 {
-	return (ft_itoa_uintmax_base(nb, base));
+	t_float_dissector	fd;
+
+	fd.f = num;
+	return (!fd.b.sign ? (long long int)num : (long long int)num - 1);
 }

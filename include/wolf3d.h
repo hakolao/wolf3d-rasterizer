@@ -63,7 +63,7 @@ typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
-	uint32_t				*frame_buf;
+	uint32_t				*framebuffer;
 	int32_t					width;
 	int32_t					height;
 	int32_t					pitch;
@@ -90,6 +90,10 @@ typedef struct						s_camera
 	float					fovx;
 	float					fovy;
 	float					screen_dist;
+	t_ray					*rays;
+	int						raycount;
+	Uint32					*framebuffer;
+	struct s_scene			*parent_scene;
 
 	t_mat4					view;
 	t_mat4					model;
@@ -162,6 +166,7 @@ typedef struct						s_scene
 	t_object				**objects;
 	uint32_t				object_count;
 	t_camera				*main_camera;
+	t_window				*main_window;
 }									t_scene;
 
 typedef struct						s_wolf3d
@@ -207,7 +212,8 @@ void								move_player(t_player *player, t_move dir);
 ** Camera
 */
 
-t_camera							*new_camera(float screen_distance);
+t_camera							*new_camera(t_scene *scene,
+												float screen_distance);
 void								update_camera_view(t_player *player);
 void								init_camera(t_player *player);
 void								camera_transform(t_camera *camera,
@@ -220,6 +226,11 @@ void								camera_transform(t_camera *camera,
 void								draw_frame(t_wolf3d *app);
 bool								render_mesh(t_mesh *mesh,
 												t_camera *camera);
+bool								render_triangle(t_triangle *triangle,
+													t_mesh *mesh,
+													t_camera *camera);
+int									screen_to_frame_coords(t_scene *scene,
+															int x, int y);
 
 /*
 ** Utils

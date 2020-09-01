@@ -17,9 +17,13 @@ t_scene		*new_scene(t_wolf3d *app, t_scenedata *data)
 	t_scene		*scene;
 
 	scene = (t_scene*)malloc(sizeof(t_scene)); //error checks
-	create_object_triangle(scene, app);
-	scene->main_camera = new_camera(WIDTH);
+	// create_object_triangle(scene, app);
+	scene->main_window = app->main_window;
+	app->active_scene = scene;
+	scene->main_camera = new_camera(app->active_scene, WIDTH);
+	
 	(void)data;
+	(void)app;
 	return (scene);
 	//--------------------------------------------------------------------------
 	// size_t	y;

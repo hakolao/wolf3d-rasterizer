@@ -34,18 +34,18 @@ t_ray			new_ray(t_vec3 origin, t_vec3 direction)
 **	There is a check in place for zero but it might not be foolproof.
 */
 
-bool			 intersect_triangle(t_triangle triangle, t_ray ray,
+bool			 triangle_intersection(t_triangle *triangle, t_ray ray,
 									t_intersection *is)
 {
 	t_temp_calc temp_calc;
 	ml_vector3_normalize(ray.dir, ray.dir);
-	ml_vector4_sub(((triangle.vtc)[1])->position, ((triangle.vtc)[0])->position, temp_calc.ab);
-	ml_vector4_sub(((triangle.vtc)[2])->position, ((triangle.vtc)[0])->position, temp_calc.ac);
-	ml_vector3_sub(ray.origin, ((triangle.vtc)[0])->position, temp_calc.ax);
-	temp_calc.det = -1 * ml_vector3_dot(ray.dir, triangle.normal);
+	ml_vector4_sub(((triangle->vtc)[1])->position, ((triangle->vtc)[0])->position, temp_calc.ab);
+	ml_vector4_sub(((triangle->vtc)[2])->position, ((triangle->vtc)[0])->position, temp_calc.ac);
+	ml_vector3_sub(ray.origin, ((triangle->vtc)[0])->position, temp_calc.ax);
+	temp_calc.det = -1 * ml_vector3_dot(ray.dir, triangle->normal);
 	ml_vector3_cross(ray.dir, temp_calc.ax, temp_calc.cross_dir_ax);
 	ml_vector3_mul(temp_calc.cross_dir_ax, -1.0, temp_calc.cross_dir_ax);
-	ml_vector3_copy(triangle.normal, temp_calc.normal);
+	ml_vector3_copy(triangle->normal, temp_calc.normal);
 	if (temp_calc.det < EPSILON && temp_calc.det > -EPSILON)
 		return (false);
 	temp_calc.invdet = 1.0 / temp_calc.det;

@@ -15,5 +15,6 @@
 void		*init_app(t_wolf3d *app)
 {
 	app->starting_tick = SDL_GetTicks();
+	main_window_init(app);
 	return (NULL);
 }

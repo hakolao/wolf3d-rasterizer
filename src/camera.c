@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-void		update_camera_view(t_player *player)
+void			update_camera_view(t_player *player)
 {
 	t_vec3	center;
 
@@ -21,7 +21,29 @@ void		update_camera_view(t_player *player)
 		player->camera.view);
 }
 
-t_camera	*new_camera(float screen_distance)
+static t_ray	*precompute_rays(t_camera *camera)
+{
+	t_ray	*rays;
+	int		i;
+	int		size;
+	t_vec3	dir;
+
+	i = -1;
+	size = camera->screen_width *camera->screen_height;
+	if (!(rays = (t_ray *)malloc(sizeof(t_ray) * size)))
+		return (NULL);
+	while (++i < size)
+	{
+		dir[0] = camera->screen_dist;
+		dir[1] = -1 * (camera->screen_width + 1) / 2 + i % (int)camera->screen_width;
+		dir[2] = (camera->screen_height - 1) / 2 - floorf(i / camera->screen_width);
+		rays[i] = new_ray(camera->origin, dir);
+	}
+	camera->raycount = size;
+	return (rays);
+}
+
+t_camera		*new_camera(t_scene *scene, float screen_distance)
 {
 	t_camera	*camera;
 
@@ -35,10 +57,14 @@ t_camera	*new_camera(float screen_distance)
 	camera->fovy = 2 * (atan(camera->screen_height /
 						(2 * camera->screen_dist)));
 	ml_set_orientation_base(camera->orientation, VEC_FORWARD, VEC_LEFT, VEC_UP);
+	camera->raycount = 0;
+	camera->rays = precompute_rays(camera);
+	camera->framebuffer = scene->main_window->framebuffer;
+	camera->parent_scene = scene; 
 	return (camera);
 }
 
-void		init_camera(t_player *player)
+void			init_camera(t_player *player)
 {
 	ml_matrix4_id(player->camera.model);
 	update_camera_view(player);
@@ -48,7 +74,7 @@ void		init_camera(t_player *player)
 	player->camera.projection[1][1] *= -1;
 }
 
-void		camera_transform(t_camera *camera, t_vec4 vertex, t_vec4 res)
+void			camera_transform(t_camera *camera, t_vec4 vertex, t_vec4 res)
 {
 	t_mat4	tmp;
 	t_mat4	transform;

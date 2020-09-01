@@ -93,7 +93,9 @@ typedef struct		s_intersection
 	float			det;
 }					t_intersection;
 
-bool						intersect_triangle(t_triangle triangle, t_ray ray,
-														t_intersection *is);
+bool						triangle_intersection(t_triangle *triangle,
+													t_ray ray,
+													t_intersection *is);
+t_ray						new_ray(t_vec3 origin, t_vec3 direction);
 
 #endif

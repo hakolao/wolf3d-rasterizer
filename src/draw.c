@@ -17,12 +17,12 @@
 ** ToDo: Consider dynamic width
 */
 
-int		screen_to_frame_coords(t_window *window, int x, int y)
+int		screen_to_frame_coords(t_scene *scene, int x, int y)
 {
-	return (y * window->width + x);
+	return (y * scene->main_window->width + x);
 }
 
-static void		render_object(t_object *object, t_wolf3d *app)
+void		render_object(t_object *object, t_wolf3d *app)
 {
 	int		i;
 	t_mesh	*mesh;
@@ -35,16 +35,49 @@ static void		render_object(t_object *object, t_wolf3d *app)
 	(void)app;
 }
 
+void	copy_frame(Uint32 *dst, Uint32 *src, t_wolf3d *app)
+{
+	int		i;
+
+	i = -1;
+	while (++i < app->main_window->width * app->main_window->height)
+	{
+		dst[i] = src[i];
+	}
+}
 
 void		render_scene(t_wolf3d *app, t_scene *scene)
 {
 	Uint32		i;
 
 	i = -1;
-	while (i++ < scene->object_count)
-	{
-		render_object(scene->objects[i], app);
-	}
+	t_vertex	vtxa;
+	t_vertex	vtxb;
+	t_vertex	vtxc;
+	t_vec3		pos;
+	ml_vec3_set(pos, scene->main_camera->screen_dist, 200, 200);
+	ml_vector3_copy(vtxa.position, pos);
+	ml_vec3_set(pos, scene->main_camera->screen_dist, -200, -200);
+	ml_vector3_copy(vtxb.position, pos);
+	ml_vec3_set(pos, scene->main_camera->screen_dist, 100, 100);
+	ml_vector3_copy(vtxc.position, pos);
+	t_triangle *triangle;
+	triangle = (t_triangle*)malloc(sizeof(t_triangle));
+	triangle->vtc[0] = (t_vertex*)malloc(sizeof(t_vertex));
+	triangle->vtc[1] = (t_vertex*)malloc(sizeof(t_vertex));
+	triangle->vtc[2] = (t_vertex*)malloc(sizeof(t_vertex));
+	ml_vector3_copy(vtxa.position, triangle->vtc[0]->position);
+	ml_vector3_copy(vtxb.position, triangle->vtc[1]->position);
+	ml_vector3_copy(vtxc.position, triangle->vtc[2]->position);
+	render_triangle(triangle, NULL, scene->main_camera);
+	copy_frame(app->main_window->framebuffer, scene->main_camera->framebuffer,
+				app);
+	(void)app;
+	(void)scene;
+	// while (i++ < scene->object_count)
+	// {
+	// 	render_object(scene->objects[i], app);
+	// }
 	//RENDER UI
 
 	// size_t	i;
@@ -97,23 +130,23 @@ void		render_background(t_wolf3d *app)
 	{
 		x = -1;
 		while (++x < app->main_window->width)
-			app->main_window->frame_buf[
-				screen_to_frame_coords(app->main_window, x, y)] = color;
+			app->main_window->framebuffer[
+				screen_to_frame_coords(app->active_scene, x, y)] = color;
 	}
 }
 
 void			draw_frame(t_wolf3d *app)
 {
 	(void)app;
-	// SDL_LockTexture(app->main_window->frame, NULL,
-	// 	(void**)&app->main_window->frame_buf,
-	// 	&app->main_window->pitch);
-	// // render_background(app);
+	SDL_LockTexture(app->main_window->frame, NULL,
+		(void**)&app->main_window->framebuffer,
+		&app->main_window->pitch);
+	// render_background(app);
 
-	// // update_frame(app);
+	update_frame(app);
 
-	// SDL_UnlockTexture(app->main_window->frame);
-	// SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
-	// 	NULL, NULL);
-	// SDL_RenderPresent(app->main_window->renderer);
+	SDL_UnlockTexture(app->main_window->frame);
+	SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
+		NULL, NULL);
+	SDL_RenderPresent(app->main_window->renderer);
 }

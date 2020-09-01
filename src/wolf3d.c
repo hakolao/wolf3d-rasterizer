@@ -17,6 +17,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 	SDL_Event event;
 	app->is_running = true;
 	while (app->is_running) {
+		Uint32 tick = SDL_GetTicks();
 		app->starting_tick = SDL_GetTicks();
 		while (SDL_PollEvent(&event))\
 		{
@@ -35,8 +36,10 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 		// 			move_player(&app->player, strafe_right);
 		// 	}
 		}
-		// draw_frame(app);
+		draw_frame(app);
 		// cap_framerate(app->starting_tick);
+		ft_printf("time between frames: %d seconds or %d ms\n",
+				  (SDL_GetTicks() - tick) / 1000, SDL_GetTicks() - tick);
 	}
 }
 

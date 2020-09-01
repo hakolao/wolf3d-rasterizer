@@ -43,7 +43,7 @@ static int		resize_callback(void *data, SDL_Event *event)
 void			main_window_init(t_wolf3d *app)
 {
 	error_check((app->main_window =
-		(t_window*)malloc(sizeof(*(app->main_window)))) == NULL,
+		(t_window*)malloc(sizeof(t_window))) == NULL,
 		"Window malloc failed");
 	app->main_window->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
@@ -59,5 +59,12 @@ void			main_window_init(t_wolf3d *app)
 	app->main_window->window_id = SDL_GetWindowID(app->main_window->window);
 	app->main_window->parent = app;
 	app->main_window->is_hidden = false;
+	//this malloc needs to take into account window resize, either malloc
+	//for the largest resolution possible or realloc every time window is resized
+	// error_check((app->main_window->framebuffer =
+	// 				 (Uint32*)malloc(sizeof(Uint32) * WIDTH * HEIGHT)) == NULL,
+	// 			"Framebuffer malloc failed");
+	app->main_window->framebuffer =
+						 (Uint32*)malloc(sizeof(Uint32) * WIDTH * HEIGHT);
 	SDL_AddEventWatch(resize_callback, app->main_window);
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 15:25:08 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 14:01:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,8 @@ void			main_window_init(t_wolf3d *app)
 	app->main_window->window_id = SDL_GetWindowID(app->main_window->window);
 	app->main_window->parent = app;
 	app->main_window->is_hidden = false;
-	//this malloc needs to take into account window resize, either malloc
-	//for the largest resolution possible or realloc every time window is resized
-	// error_check((app->main_window->framebuffer =
-	// 				 (Uint32*)malloc(sizeof(Uint32) * WIDTH * HEIGHT)) == NULL,
-	// 			"Framebuffer malloc failed");
-	app->main_window->framebuffer =
-						 (Uint32*)malloc(sizeof(Uint32) * WIDTH * HEIGHT);
+	error_check(!(app->main_window->framebuffer = malloc(sizeof(uint32_t) *
+		app->main_window->width * app->main_window->height)),
+		"Failed to malloc framebuffer");
 	SDL_AddEventWatch(resize_callback, app->main_window);
 }

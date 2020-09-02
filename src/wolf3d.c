@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 18:03:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 14:05:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,17 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 	SDL_Event event;
 	app->is_running = true;
 	while (app->is_running) {
-		Uint32 tick = SDL_GetTicks();
+		// Uint32 tick = SDL_GetTicks();
 		app->starting_tick = SDL_GetTicks();
 		while (SDL_PollEvent(&event))\
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
-		// 	if (event.type == SDL_KEYDOWN)
-		// 	{
-		// 		if (event.key.keysym.sym == SDLK_w)
-		// 			move_player(&app->player, forward);
-		// 		else if (event.key.keysym.sym == SDLK_s)
-		// 			move_player(&app->player, backward);
-		// 		else if (event.key.keysym.sym == SDLK_a)
-		// 			move_player(&app->player, strafe_left);
-		// 		else if (event.key.keysym.sym == SDLK_d)
-		// 			move_player(&app->player, strafe_right);
-		// 	}
 		}
 		draw_frame(app);
-		// cap_framerate(app->starting_tick);
-		ft_printf("time between frames: %d seconds or %d ms\n",
-				  (SDL_GetTicks() - tick) / 1000, SDL_GetTicks() - tick);
+		// ft_printf("time between frames: %d seconds or %d ms\n",
+		// 		  (SDL_GetTicks() - tick) / 1000, SDL_GetTicks() - tick);
 	}
 }
 
@@ -57,11 +45,7 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 	destroy_scene(app);
 	SDL_DestroyRenderer(app->main_window->renderer);
 	SDL_DestroyWindow(app->main_window->window);
-	// ToDo: Free pixels
 	free(app->main_window);
-	//free objects
-	//free camera
-	//free scene
 	IMG_Quit();
 	SDL_Quit();
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 18:38:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 14:09:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 /*
 **	Converts pixel position from screen coordinates to frame buffer index
-** ToDo: Consider dynamic width
 */
 
 int		screen_to_frame_coords(t_scene *scene, int x, int y)
@@ -33,17 +32,6 @@ void		render_object(t_object *object, t_wolf3d *app)
 	i = -1;
 	// render_mesh()
 	(void)app;
-}
-
-void	copy_frame(Uint32 *dst, Uint32 *src, t_wolf3d *app)
-{
-	int		i;
-
-	i = -1;
-	while (++i < app->main_window->width * app->main_window->height)
-	{
-		dst[i] = src[i];
-	}
 }
 
 void		render_scene(t_wolf3d *app, t_scene *scene)
@@ -70,46 +58,8 @@ void		render_scene(t_wolf3d *app, t_scene *scene)
 	ml_vector3_copy(vtxb.position, triangle->vtc[1]->position);
 	ml_vector3_copy(vtxc.position, triangle->vtc[2]->position);
 	render_triangle(triangle, NULL, scene->main_camera);
-	copy_frame(app->main_window->framebuffer, scene->main_camera->framebuffer,
-				app);
-	(void)app;
-	(void)scene;
-	// while (i++ < scene->object_count)
-	// {
-	// 	render_object(scene->objects[i], app);
-	// }
-	//RENDER UI
-
-	// size_t	i;
-	// size_t	j;
-	// t_vec4	screen_pos;
-
-	// i = -1;
-	// ft_memset(&screen_pos, 0, sizeof(t_vec4));
-	// while (++i < app->active_scene.object_count)
-	// {
-	// 	j = -1;
-	// 	while (++j < app->active_scene.objects[i].vertex_count)
-	// 	{
-	// 		camera_transform(&app->player.camera,
-	// 			app->active_scene.objects[i].vertices[j].position, screen_pos);
-	// 		// Check it's in front of camera
-	// 		if (screen_pos[2] > 0)
-	// 		{
-	// 			// ToDo: don't do this: scale by 100f & + half screen, do it better :D
-	// 			screen_pos[0] = screen_pos[0] * 100.0f + app->main_window->width / 2;
-	// 			screen_pos[1] = screen_pos[1] * 100.0f + app->main_window->height / 2;
-	// 			// Make sure not outta buffer bounds
-	// 			if (screen_pos[0] > 0 && screen_pos[0] < app->main_window->width &&
-	// 				screen_pos[1] > 0 && screen_pos[1] < app->main_window->height)
-	// 			{
-	// 				app->main_window->frame_buf[
-	// 					screen_to_frame_coords(app->main_window, screen_pos[0],
-	// 					screen_pos[1])] = app->active_scene.objects[i].vertices[j].color;
-	// 			}	
-	// 		}
-	// 	}
-	// }
+	ft_memcpy(app->main_window->framebuffer, scene->main_camera->framebuffer,
+		app->main_window->width * app->main_window->height);
 	return ;
 }
 
@@ -118,33 +68,17 @@ void		update_frame(t_wolf3d *app)
 	render_scene(app, app->active_scene);
 }
 
-void		render_background(t_wolf3d *app)
-{
-	int32_t		y;
-	int32_t		x;
-	uint32_t	color;
-
-	color = 0x0;
-	y = -1;
-	while (++y < app->main_window->height)
-	{
-		x = -1;
-		while (++x < app->main_window->width)
-			app->main_window->framebuffer[
-				screen_to_frame_coords(app->active_scene, x, y)] = color;
-	}
-}
-
 void			draw_frame(t_wolf3d *app)
 {
-	(void)app;
+	if (app->main_window->resized)
+	{
+		// Do what must be done after resize using app->main_window->width & height
+		app->main_window->resized = false;
+	}
 	SDL_LockTexture(app->main_window->frame, NULL,
 		(void**)&app->main_window->framebuffer,
 		&app->main_window->pitch);
-	// render_background(app);
-
 	update_frame(app);
-
 	SDL_UnlockTexture(app->main_window->frame);
 	SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
 		NULL, NULL);

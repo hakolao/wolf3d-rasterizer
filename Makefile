@@ -35,7 +35,8 @@ SOURCES = main.c \
 			scene.c \
 			framerate.c \
 			object.c \
-			render.c
+			render.c \
+			ui.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

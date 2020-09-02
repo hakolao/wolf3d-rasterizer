@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 15:04:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 16:57:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void		render_object(t_object *object, t_wolf3d *app)
 	(void)app;
 }
 
-void		render_scene(t_wolf3d *app, t_scene *scene)
+void		render_scene(t_scene *scene)
 {
 	Uint32		i;
 
@@ -51,14 +51,13 @@ void		render_scene(t_wolf3d *app, t_scene *scene)
 	triangle.vtc[1] = &vtxb;
 	triangle.vtc[2] = &vtxc;
 	render_triangle(&triangle, NULL, scene->main_camera);
-	ft_memcpy(app->main_window->framebuffer, scene->main_camera->framebuffer,
-		sizeof(uint32_t) * app->main_window->width * app->main_window->height);
 	return ;
 }
 
-void		update_frame(t_wolf3d *app)
+void		update_frame_buffer(t_wolf3d *app)
 {
-	render_scene(app, app->active_scene);
+	render_scene(app->active_scene);
+	render_scene_ui(app->active_scene);
 }
 
 void		draw_frame(t_wolf3d *app)
@@ -71,7 +70,7 @@ void		draw_frame(t_wolf3d *app)
 	SDL_LockTexture(app->main_window->frame, NULL,
 		(void**)&app->main_window->framebuffer,
 		&app->main_window->pitch);
-	update_frame(app);
+	update_frame_buffer(app);
 	SDL_UnlockTexture(app->main_window->frame);
 	SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
 		NULL, NULL);

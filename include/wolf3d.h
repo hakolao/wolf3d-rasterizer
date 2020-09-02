@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/01 18:06:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 14:35:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ typedef struct						s_scenedata
 	//for example fetch the map and included
 	//objects. This will be passed to new_scene()
 	//that will interpret the data and create the scene
-}									t_scenedata;
+}									t_scene_data;
 
 typedef struct						s_scene
 {
@@ -171,7 +171,7 @@ typedef struct						s_scene
 
 typedef struct						s_wolf3d
 {
-	int						starting_tick;
+	int						start_time;
 	t_bool					is_running;
 	t_window				*main_window;
 	t_player				player;
@@ -183,15 +183,14 @@ typedef struct						s_wolf3d
 */
 
 void								wolf3d_run(t_wolf3d *app);
-void								*init_app(t_wolf3d *app);
-void								cap_framerate(Uint32 starting_tick);
+void								cap_framerate(uint32_t start_time);
 
 /*
 ** Scene
 */
 
 t_scene								*new_scene(t_wolf3d *app,
-												t_scenedata *data);
+												t_scene_data *data);
 void								destroy_scene(t_wolf3d *app);
 
 /*

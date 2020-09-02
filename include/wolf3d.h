@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 14:35:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 15:16:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,14 @@ typedef struct						s_camera
 {
 	t_vec3					origin;
 	t_vec3					orientation[3];
-	Uint16					screen_width;
-	Uint16					screen_height;
+	uint16_t				screen_width;
+	uint16_t				screen_height;
 	float					fovx;
 	float					fovy;
 	float					screen_dist;
 	t_ray					*rays;
 	int						raycount;
-	Uint32					*framebuffer;
+	uint32_t				*framebuffer;
 	struct s_scene			*parent_scene;
 
 	t_mat4					view;

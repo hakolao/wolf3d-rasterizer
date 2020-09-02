@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:32:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 13:53:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 15:51:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,32 @@ void			update_camera_view(t_player *player)
 static t_ray	*precompute_rays(t_camera *camera)
 {
 	t_ray	*rays;
-	int		i;
+	int		x;
+	int		y;
 	int		size;
 	t_vec3	dir;
 
-	i = -1;
+	y = -1;
 	size = camera->screen_width *camera->screen_height;
 	if (!(rays = (t_ray *)malloc(sizeof(t_ray) * size)))
 		return (NULL);
-	while (++i < size)
+	while (++y < camera->screen_height)
 	{
-		dir[0] = camera->screen_dist;
-		dir[1] = -1 * (camera->screen_width + 1) / 2 + i % (int)camera->screen_width;
-		dir[2] = (camera->screen_height - 1) / 2 - floorf(i / camera->screen_width);
-		rays[i] = new_ray(camera->origin, dir);
+		x = -1;
+		while (++x < camera->screen_width)
+		{
+			dir[0] = camera->screen_dist;
+			dir[1] = -x + (int)camera->screen_width / 2.0;
+			dir[2] = -y + (int)camera->screen_height / 2.0;
+			rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
+		}
 	}
+	ml_vector3_print(rays[0].origin);
+	ml_vector3_print(rays[0].dir);
+	ml_vector3_print(rays[camera->screen_width -1].origin);
+	ml_vector3_print(rays[camera->screen_width -1].dir);
+	ml_vector3_print(rays[camera->screen_width * camera->screen_height -1].origin);
+	ml_vector3_print(rays[camera->screen_width * camera->screen_height -1].dir);
 	camera->raycount = size;
 	return (rays);
 }
@@ -50,8 +61,8 @@ t_camera		*new_camera(t_scene *scene, float screen_distance)
 	if (!(camera = (t_camera*)malloc(sizeof(t_camera))))
 		return (NULL);
 	ml_vec3_set_all(camera->origin, 0);
-	camera->screen_width = (float)WIDTH * VIEW_SCALE;
-	camera->screen_height = (float)HEIGHT * VIEW_SCALE;
+	camera->screen_width = WIDTH * VIEW_SCALE;
+	camera->screen_height = HEIGHT * VIEW_SCALE;
 	camera->screen_dist = screen_distance * VIEW_SCALE;
 	camera->fovx = 2 * (atan(camera->screen_width / (2 * camera->screen_dist)));
 	camera->fovy = 2 * (atan(camera->screen_height /

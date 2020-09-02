@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 14:05:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 14:14:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 
 void		wolf3d_init(t_wolf3d *app)
 {
-	// (void)app;
 	init_app(app);
 	app->active_scene = new_scene(app, NULL);
 	init_player(app);

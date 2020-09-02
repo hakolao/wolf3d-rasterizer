@@ -40,8 +40,8 @@ t_bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 	(void)mesh;
 	color = 0xffffffff;
 	i = -1;
-	ft_printf("count: %d\nwidth: %d\nheight: %d\n", camera->raycount,
-				(int)camera->screen_width, (int)camera->screen_height);
+	// ft_printf("count: %d\nwidth: %d\nheight: %d\n", camera->raycount,
+	// 			(int)camera->screen_width, (int)camera->screen_height);
 	//project mesh bounding box on screen
 	//decide later if bounding boxes for each triangle are needed for performance
 	while (++i < camera->raycount)
@@ -55,8 +55,8 @@ t_bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 			// ft_printf("is: %d\n", is);
 			// ft_printf("x: %d\n", -1 * camera->rays[i].dir[1]);
 			// ft_printf("y: %d\n", -1 * camera->rays[i].dir[2]);
-			ft_printf("x: %d\n", -1 * camera->rays[i].dir[1] + WIDTH / 2);
-			ft_printf("y: %d\n", -1 * camera->rays[i].dir[2] + HEIGHT / 2);
+			// ft_printf("x: %d\n", -1 * (int)camera->rays[i].dir[1] + WIDTH / 2);
+			// ft_printf("y: %d\n", -1 * (int)camera->rays[i].dir[2] + HEIGHT / 2);
 		}
 		//find a way to get uv data in fragment shader
 		//mesh->shader->f(triangle, calculate_baryocoords(intsec), color);

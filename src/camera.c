@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:32:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:45:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 17:08:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static t_ray	*precompute_rays(t_camera *camera)
 			dir[2] = -y + (int)camera->screen_height / 2.0;
 			// ml_vector3_normalize(dir, dir);
 			rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
-			ml_vector3_print(rays[y * camera->screen_width + x].dir);
 		}
 	}
 	camera->raycount = size;

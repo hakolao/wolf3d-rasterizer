@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:52:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 17:07:49 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
-# define WIDTH 1280 / 4
-# define HEIGHT 720 / 4
+# define WIDTH 1280
+# define HEIGHT 720
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the

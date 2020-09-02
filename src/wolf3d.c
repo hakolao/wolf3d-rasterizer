@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:54:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 18:19:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
 		}
-		// draw_frame(app);
+		draw_frame(app);
 		// ft_printf("time between frames: %d seconds or %d ms\n",
 		// 		  (SDL_GetTicks() - tick) / 1000, SDL_GetTicks() - tick);
 		cap_framerate(tick);
@@ -47,6 +47,8 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 	SDL_DestroyRenderer(app->main_window->renderer);
 	SDL_DestroyWindow(app->main_window->window);
 	free(app->main_window);
+	TTF_CloseFont(app->main_window->font);
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -54,6 +56,7 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 void			wolf3d_run(t_wolf3d *app)
 {
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
+	error_check(TTF_Init() == -1, TTF_GetError());
 	main_window_init(app);
 	wolf3d_init(app);
 	wolf3d_main_loop(app);

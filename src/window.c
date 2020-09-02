@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 14:01:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 18:43:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void			main_window_init(t_wolf3d *app)
 		SDL_CreateRenderer(app->main_window->window, -1, SDL_RENDERER_SOFTWARE);
 	error_check(app->main_window->renderer == NULL, SDL_GetError());
 	app->main_window->frame = SDL_CreateTexture(app->main_window->renderer,
-		SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
+		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
 	error_check(app->main_window->frame == NULL, SDL_GetError());
 	app->main_window->window_id = SDL_GetWindowID(app->main_window->window);
 	app->main_window->parent = app;
@@ -63,4 +63,5 @@ void			main_window_init(t_wolf3d *app)
 		app->main_window->width * app->main_window->height)),
 		"Failed to malloc framebuffer");
 	SDL_AddEventWatch(resize_callback, app->main_window);
+	app->main_window->font = NULL;
 }

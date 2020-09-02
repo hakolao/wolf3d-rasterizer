@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 17:07:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 19:06:24 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,17 @@
 
 # include <SDL.h>
 # include <SDL_image.h>
+# include <SDL_ttf.h>
 # include "libft.h"
 # include "libgmatrix.h"
 # include "lib3d.h"
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
+
+# define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
+# define GAME_FONT "assets/pixelated.ttf"
+# define FONT_SIZE 28
 
 # define WIDTH 1280
 # define HEIGHT 720
@@ -71,6 +76,7 @@ typedef struct						s_window
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
 	uint32_t				*framebuffer;
+	TTF_Font				*font;
 	int32_t					width;
 	int32_t					height;
 	int32_t					pitch;
@@ -233,7 +239,7 @@ t_bool								render_triangle(t_triangle *triangle,
 													t_camera *camera);
 int									screen_to_frame_coords(t_scene *scene,
 															int x, int y);
-void								render_scene_ui(t_scene *scene);
+void								render_ui(t_wolf3d *app);
 
 /*
 ** Utils

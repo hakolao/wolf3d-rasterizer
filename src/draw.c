@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:57:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 17:54:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void		render_scene(t_scene *scene)
 void		update_frame_buffer(t_wolf3d *app)
 {
 	render_scene(app->active_scene);
-	render_scene_ui(app->active_scene);
+	render_ui(app);
 }
 
 void		draw_frame(t_wolf3d *app)

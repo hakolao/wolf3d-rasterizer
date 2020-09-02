@@ -68,28 +68,11 @@ void		draw_frame(t_wolf3d *app)
 		// Do what must be done after resize using app->main_window->width & height
 		app->main_window->resized = false;
 	}
-<<<<<<< HEAD
-}
-
-void			draw_frame(t_wolf3d *app)
-{
-	(void)app;
-	// SDL_LockTexture(app->main_window->frame, NULL,
-	// 	(void**)&app->main_window->framebuffer,
-	// 	&app->main_window->pitch);
-	// render_background(app);
-
-	update_frame(app);
-	SDL_UpdateTexture(app->main_window->frame, NULL,
-						app->main_window->framebuffer, WIDTH * sizeof(Uint32));
-	// SDL_UnlockTexture(app->main_window->frame);
-=======
 	SDL_LockTexture(app->main_window->frame, NULL,
 		(void**)&app->main_window->framebuffer,
 		&app->main_window->pitch);
 	update_frame(app);
 	SDL_UnlockTexture(app->main_window->frame);
->>>>>>> 4df5a50bf2f6eccab93ef7471d4d5c86be359721
 	SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
 		NULL, NULL);
 	SDL_RenderPresent(app->main_window->renderer);

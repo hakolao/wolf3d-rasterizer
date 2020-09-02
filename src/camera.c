@@ -44,12 +44,6 @@ static t_ray	*precompute_rays(t_camera *camera)
 			rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
 		}
 	}
-	ml_vector3_print(rays[0].origin);
-	ml_vector3_print(rays[0].dir);
-	ml_vector3_print(rays[camera->screen_width -1].origin);
-	ml_vector3_print(rays[camera->screen_width -1].dir);
-	ml_vector3_print(rays[camera->screen_width * camera->screen_height -1].origin);
-	ml_vector3_print(rays[camera->screen_width * camera->screen_height -1].dir);
 	camera->raycount = size;
 	return (rays);
 }

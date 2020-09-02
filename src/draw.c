@@ -44,9 +44,9 @@ void		render_scene(t_wolf3d *app, t_scene *scene)
 	t_vertex	vtxc;
 	t_triangle	triangle;
 
-	ml_vector3_copy((t_vec3){scene->main_camera->screen_dist, 200, 200}, vtxa.position);
-	ml_vector3_copy((t_vec3){scene->main_camera->screen_dist, -200, -200}, vtxb.position);
-	ml_vector3_copy((t_vec3){scene->main_camera->screen_dist, 100, 100}, vtxc.position);
+	ml_vector3_copy((t_vec3){scene->main_camera->screen_dist, 50, 50}, vtxa.position);
+	ml_vector3_copy((t_vec3){scene->main_camera->screen_dist, -50, -50}, vtxb.position);
+	ml_vector3_copy((t_vec3){scene->main_camera->screen_dist, 25, 25}, vtxc.position);
 	triangle.vtc[0] = &vtxa;
 	triangle.vtc[1] = &vtxb;
 	triangle.vtc[2] = &vtxc;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 18:05:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 16:50:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,16 @@ static void		apply_movement(t_player *player, t_vec3 new_pos)
 {
 
 	ft_memcpy(&player->pos, new_pos, sizeof(t_vec3));
-	update_camera_view(player);
+	// ToDo: Update world view based on player movement
 }
 
 
-void			init_player(t_wolf3d *app)
+void			init_player(t_scene *scene)
 {
-	ft_memcpy(&app->player.pos, &(t_vec3){0, 0, -60}, sizeof(t_vec3));
-	ft_memcpy(&app->player.forward, &(t_vec3){0, 0, 1}, sizeof(t_vec3));
-	ft_memcpy(&app->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
-	app->player.speed = 0.5f;
-	init_camera(&app->player);
+	ft_memcpy(&scene->player.pos, &(t_vec3){0, 0, -60}, sizeof(t_vec3));
+	ft_memcpy(&scene->player.forward, &(t_vec3){0, 0, 1}, sizeof(t_vec3));
+	ft_memcpy(&scene->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
+	scene->player.speed = 0.5f;
 }
 
 void			rotate_player(t_player *player, float angle, t_vec3 axes)
@@ -38,7 +37,7 @@ void			rotate_player(t_player *player, float angle, t_vec3 axes)
 	ml_matrix4_rotation(axes[0], axes[1], axes[2], rotation);
 	ml_matrix4_mul_vec3(rotation, player->forward, new_direction);
 	ft_memcpy(&player->forward, new_direction, sizeof(t_vec3));
-	update_camera_view(player);
+	//ToDo: Update camera & world
 }
 
 void			move_player(t_player *player, t_move dir)

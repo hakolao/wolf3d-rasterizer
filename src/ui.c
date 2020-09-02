@@ -1,32 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scene.c                                            :+:      :+:    :+:   */
+/*   ui.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:53:56 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/02 16:50:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-t_scene		*new_scene(t_wolf3d *app, t_scene_data *data)
-{
-	t_scene		*scene;
-
-	error_check(!(scene = (t_scene*)malloc(sizeof(t_scene))),
-		"Failed to malloc scene");
-	scene->main_window = app->main_window;
-	app->active_scene = scene;
-	scene->main_camera = new_camera(app->active_scene, app->main_window->width);
-	(void)data;
-	return (scene);
-}
-
-void		destroy_scene(t_scene *scene)
+void		render_scene_ui(t_scene *scene)
 {
 	(void)scene;
-	return ;
 }

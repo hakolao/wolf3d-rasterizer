@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 14:44:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/02 16:54:26 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,12 @@ void		wolf3d_init(t_wolf3d *app)
 {
 	app->start_time = SDL_GetTicks();
 	app->active_scene = new_scene(app, NULL);
-	init_player(app);
-	
+	init_player(app->active_scene);
 }
 
 static void		wolf3d_cleanup(t_wolf3d *app)
 {
-	destroy_scene(app);
+	destroy_scene(app->active_scene);
 	SDL_DestroyRenderer(app->main_window->renderer);
 	SDL_DestroyWindow(app->main_window->window);
 	free(app->main_window);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 19:30:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 19:35:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 	data.scene_id = scene_id;
 	if (scene_id == scene_id_main_menu)
 	{
-		data.level = 0;
 		data.menu_options[0] = "Start Game";
 		data.menu_options[1] = "Load Game";
 		data.menu_options[2] = "Quit";
@@ -28,7 +27,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 	}
 	else if (scene_id == scene_id_main_game)
 	{
-		data.level = 1;
+		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
 	}

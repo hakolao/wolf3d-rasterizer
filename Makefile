@@ -37,7 +37,9 @@ SOURCES = main.c \
 			object.c \
 			render.c \
 			ui.c \
-			color_utils.c
+			color_utils.c \
+			text.c \
+			surface.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

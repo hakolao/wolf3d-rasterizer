@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 14:06:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 14:51:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
 # define GAME_FONT "assets/pixelated.ttf"
-# define FONT_SIZE 28
+# define FONT_SIZE 15
 
 # define WIDTH 1280
 # define HEIGHT 720
@@ -98,8 +98,8 @@ typedef struct						s_camera
 {
 	t_vec3					origin;
 	t_vec3					orientation[3];
-	uint16_t				screen_width;
-	uint16_t				screen_height;
+	uint32_t				screen_width;
+	uint32_t				screen_height;
 	float					fovx;
 	float					fovy;
 	float					screen_dist;
@@ -259,6 +259,7 @@ void								error_check(int test, const char *message);
 */
 
 void								main_window_init(t_wolf3d *app);
+void								recreate_frame(t_wolf3d *app);
 
 /*
 ** Color utils

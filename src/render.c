@@ -49,8 +49,8 @@ t_bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 		if (triangle_intersection(triangle, camera->rays[i], &intsec))
 		{
 			camera->framebuffer[screen_to_frame_coords(camera->parent_scene,
-													   -1 * (camera->rays[i].dir[1]) + WIDTH / 2,
-													   -1 * (camera->rays[i].dir[2]) + HEIGHT / 2)] = color;
+				-1 * (camera->rays[i].dir[1]) + camera->screen_width / 2,
+				-1 * (camera->rays[i].dir[2]) + camera->screen_height / 2)] = color;
 			is++;
 			// ft_printf("is: %d\n", is);
 			// ft_printf("x: %d\n", -1 * camera->rays[i].dir[1]);
@@ -61,7 +61,7 @@ t_bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 		//find a way to get uv data in fragment shader
 		//mesh->shader->f(triangle, calculate_baryocoords(intsec), color);
 		//find a way to get framebuffer data in and or out of this function
-		
+
 	}
 	is = 0;
 	return (true);

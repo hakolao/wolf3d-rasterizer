@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 18:43:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 14:38:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,16 @@ static int		resize_callback(void *data, SDL_Event *event)
 	return 0;
 }
 
+void			recreate_frame(t_wolf3d *app)
+{
+	if (app->main_window->frame != NULL)
+		SDL_DestroyTexture(app->main_window->frame);
+	app->main_window->frame = SDL_CreateTexture(app->main_window->renderer,
+		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, app->main_window->width,
+		app->main_window->height);
+	error_check(app->main_window->frame == NULL, SDL_GetError());
+}
+
 void			main_window_init(t_wolf3d *app)
 {
 	error_check((app->main_window =
@@ -53,15 +63,13 @@ void			main_window_init(t_wolf3d *app)
 	app->main_window->renderer =
 		SDL_CreateRenderer(app->main_window->window, -1, SDL_RENDERER_SOFTWARE);
 	error_check(app->main_window->renderer == NULL, SDL_GetError());
-	app->main_window->frame = SDL_CreateTexture(app->main_window->renderer,
-		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
-	error_check(app->main_window->frame == NULL, SDL_GetError());
 	app->main_window->window_id = SDL_GetWindowID(app->main_window->window);
 	app->main_window->parent = app;
 	app->main_window->is_hidden = false;
-	error_check(!(app->main_window->framebuffer = malloc(sizeof(uint32_t) *
-		app->main_window->width * app->main_window->height)),
-		"Failed to malloc framebuffer");
+	app->main_window->frame = NULL;
+	app->main_window->framebuffer = NULL;
+	recreate_frame(app);
 	SDL_AddEventWatch(resize_callback, app->main_window);
+	app->main_window->resized = false;
 	app->main_window->font = NULL;
 }

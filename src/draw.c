@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 13:16:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 14:48:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,7 @@ void		render_scene(t_scene *scene)
 
 void		update_frame_buffer(t_wolf3d *app)
 {
-	ft_memset(app->main_window->framebuffer, 0, sizeof(uint32_t) *
-		app->main_window->width * app->main_window->height);
-	render_scene(app->active_scene);
+	// render_scene(app->active_scene);
 	render_ui(app);
 }
 
@@ -66,7 +64,7 @@ void		draw_frame(t_wolf3d *app)
 {
 	if (app->main_window->resized)
 	{
-		// Do what must be done after resize using app->main_window->width & height
+		recreate_frame(app);
 		app->main_window->resized = false;
 	}
 	SDL_LockTexture(app->main_window->frame, NULL,

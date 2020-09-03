@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 14:34:58 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/03 13:13:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 13:25:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,20 @@ void			cap_framerate()
 		SDL_Delay((uint32_t)(time_per_frame - delta_time));
 }
 
-double			sin_time_0_1(float speed)
+float			sin_time(float min, float max, float speed)
 {
-	return ((sin((g_time_since_start / 1000.0) * speed) + 1.0) / 2.0);
+	float	amplitude;
+	float	zero_offset;
+	float	tmp;
+
+	if (min > max)
+	{
+		tmp = min;
+		min = max;
+		max = tmp;
+	}
+	amplitude = (max - min) / 2.0;
+	zero_offset = min + amplitude;
+	return (amplitude * sin((g_time_since_start / 1000.0) * speed) +
+			zero_offset);
 }

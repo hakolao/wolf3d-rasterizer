@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 13:15:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 13:28:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void				render_blinking_text(t_wolf3d *app, const char *text,
 			if (x < app->main_window->width && y < app->main_window->height &&
 				x  >= 0 && y >= 0 && font_pixel == rgba_to_u32(text_color))
 				app->main_window->framebuffer[y * app->main_window->width + x] =
-					color_blend_u32(pixel, font_pixel, sin_time_0_1(4.0));
+					color_blend_u32(pixel, font_pixel, sin_time(0, 1.0, 4.0));
 		}
 	}
 	SDL_FreeSurface(surface);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 14:51:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 16:03:26 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ typedef struct						s_camera
 	float					screen_dist;
 	t_ray					*rays;
 	int						raycount;
-	uint32_t				*framebuffer;
 	t_scene					*parent_scene;
 
 	t_mat4					view;
@@ -165,7 +164,7 @@ struct						s_mesh
 typedef struct						s_scene_data
 {
 	int						level;
-	t_player				player;
+	char					*name;
 	//add here all the date needed to create a scene
 	//for example fetch the map and included
 	//objects. This will be passed to new_scene()
@@ -175,10 +174,10 @@ typedef struct						s_scene_data
 struct s_scene
 {
 	t_object				**objects;
-	t_player				player;
 	uint32_t				object_count;
 	t_camera				*main_camera;
 	t_window				*main_window;
+	char					*name;
 };
 
 typedef struct						s_wolf3d
@@ -188,6 +187,7 @@ typedef struct						s_wolf3d
 	t_scene					*active_scene;
 	uint32_t				time_since_start;
 	uint32_t				delta_time;
+	t_player				player;
 }									t_wolf3d;
 
 /*
@@ -222,15 +222,15 @@ t_object							*create_object_triangle(t_scene *scene,
 ** Player
 */
 
-void								init_player(t_scene *scene);
+void								init_player(t_wolf3d *app);
 void								move_player(t_player *player, t_move dir);
 
 /*
 ** Camera
 */
 
-t_camera							*new_camera(t_scene *scene,
-												float screen_distance);
+t_camera							*new_camera();
+void								update_camera(t_wolf3d *app);
 void								camera_transform(t_camera *camera,
 									t_vec4 vertex, t_vec4 res);
 
@@ -241,11 +241,12 @@ void								camera_transform(t_camera *camera,
 void								draw_frame(t_wolf3d *app);
 t_bool								render_mesh(t_mesh *mesh,
 												t_camera *camera);
-t_bool								render_triangle(t_triangle *triangle,
+t_bool								render_triangle(t_wolf3d *app,
+													t_triangle *triangle,
 													t_mesh *mesh,
 													t_camera *camera);
-int									screen_to_frame_coords(t_scene *scene,
-															int x, int y);
+int									screen_to_frame_coords(uint32_t width,
+									int x, int y);
 void								render_ui(t_wolf3d *app);
 
 /*

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:53:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 15:28:50 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ t_scene		*new_scene(t_wolf3d *app, t_scene_data *data)
 		"Failed to malloc scene");
 	scene->main_window = app->main_window;
 	app->active_scene = scene;
-	scene->main_camera = new_camera(app->active_scene, app->main_window->width);
-	(void)data;
+	scene->name = data->name;
+	scene->main_camera = new_camera();
+	update_camera(app);
 	return (scene);
 }
 

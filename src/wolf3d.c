@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 13:51:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 15:25:26 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 
 void		wolf3d_init(t_wolf3d *app)
 {
-	app->active_scene = new_scene(app, NULL);
-	init_player(app->active_scene);
+	app->active_scene = new_scene(app,
+		&(t_scene_data){.name = "Main menu", .level = 1});
+	init_player(app);
 }
 
 static void		wolf3d_cleanup(t_wolf3d *app)

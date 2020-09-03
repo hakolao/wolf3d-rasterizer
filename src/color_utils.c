@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/03 13:15:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 13:29:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 16:32:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ uint32_t		color_blend_u32(uint32_t color1, uint32_t color2, float ratio)
 	else if ( ratio < 0.f )
 		ratio = 0.f;
 	i_ratio = 1.f - ratio;
+	if (color2 == 0x000000FF)
+		return (color1);
 	sdl_color1 = u32_to_rgba(color1);
 	sdl_color2 = u32_to_rgba(color2);
 	new_color.r = (int)((sdl_color1.r * i_ratio) + (sdl_color2.r * ratio));

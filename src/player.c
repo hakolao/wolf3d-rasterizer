@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:50:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 14:59:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static void		apply_movement(t_player *player, t_vec3 new_pos)
 }
 
 
-void			init_player(t_scene *scene)
+void			init_player(t_wolf3d *app)
 {
-	ft_memcpy(&scene->player.pos, &(t_vec3){0, 0, -60}, sizeof(t_vec3));
-	ft_memcpy(&scene->player.forward, &(t_vec3){0, 0, 1}, sizeof(t_vec3));
-	ft_memcpy(&scene->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
-	scene->player.speed = 0.5f;
+	ft_memcpy(&app->player.pos, &(t_vec3){0, 0, -60}, sizeof(t_vec3));
+	ft_memcpy(&app->player.forward, &(t_vec3){0, 0, 1}, sizeof(t_vec3));
+	ft_memcpy(&app->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
+	app->player.speed = 0.5f;
 }
 
 void			rotate_player(t_player *player, float angle, t_vec3 axes)
@@ -45,7 +45,7 @@ void			move_player(t_player *player, t_move dir)
 	t_vec3	add;
 	t_vec3	new_pos;
 	t_vec3	sideways;
-	
+
 	if (dir == forward)
 	{
 		ml_vector3_mul(player->forward, player->speed, add);

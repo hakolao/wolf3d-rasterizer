@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 16:03:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 19:28:33 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,24 @@ typedef struct						s_mesh t_mesh;
 
 typedef enum						e_move
 {
-	forward,
-	backward,
-	strafe_left,
-	strafe_right
+	move_forward,
+	move_backward,
+	move_strafe_left,
+	move_strafe_right
 }									t_move;
+
+typedef enum						e_scene_id
+{
+	scene_id_main_menu,
+	scene_id_main_game,
+}									t_scene_id;
+
+typedef enum						e_menu_actions
+{
+	menu_action_start_game,
+	menu_action_load_game,
+	menu_action_quit_game
+}									t_menu_actions;
 
 typedef struct						s_window
 {
@@ -164,7 +177,10 @@ struct						s_mesh
 typedef struct						s_scene_data
 {
 	int						level;
-	char					*name;
+	t_scene_id				scene_id;
+	const char				*menu_options[64];
+	uint32_t				menu_option_count;
+	t_camera				*main_camera;
 	//add here all the date needed to create a scene
 	//for example fetch the map and included
 	//objects. This will be passed to new_scene()
@@ -177,7 +193,10 @@ struct s_scene
 	uint32_t				object_count;
 	t_camera				*main_camera;
 	t_window				*main_window;
-	char					*name;
+	const char				*menu_options[64];
+	int32_t					menu_option_count;
+	int32_t					selected_option;
+	t_scene_id				scene_id;
 };
 
 typedef struct						s_wolf3d
@@ -210,6 +229,8 @@ float								sin_time(t_wolf3d *app,
 t_scene								*new_scene(t_wolf3d *app,
 												t_scene_data *data);
 void								destroy_scene(t_scene *scene);
+void								set_active_scene(t_wolf3d *app,
+									t_scene_id to_scene);
 
 /*
 ** Objects
@@ -278,6 +299,13 @@ void								render_text(t_wolf3d *app, const char *text,
 void								render_blinking_text(t_wolf3d *app,
 									const char *text, SDL_Color text_color,
 									int xy[2]);
+void								render_centered_blinking_text(t_wolf3d *app,
+									const char *text, SDL_Color text_color,
+									int xy[2]);
+void								render_centered_text(t_wolf3d *app,
+									const char *text, SDL_Color text_color,
+									int xy[2]);
+uint32_t							get_font_size(t_wolf3d *app);
 
 /*
 ** SDL Surface

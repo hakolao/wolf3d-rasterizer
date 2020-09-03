@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 14:59:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 19:01:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,22 @@ void			move_player(t_player *player, t_move dir)
 	t_vec3	new_pos;
 	t_vec3	sideways;
 
-	if (dir == forward)
+	if (dir == move_forward)
 	{
 		ml_vector3_mul(player->forward, player->speed, add);
 		ml_vector3_add(player->pos, add, new_pos);
 	}
-	else if (dir == backward)
+	else if (dir == move_backward)
 	{
 		ml_vector3_mul(player->forward, player->speed, add);
 		ml_vector3_sub(player->pos, add, new_pos);
 	}
-	else if (dir == strafe_left)
+	else if (dir == move_strafe_left)
 	{
 		ml_vector3_cross(player->forward, player->up, sideways);
 		ml_vector3_sub(player->pos, sideways, new_pos);
 	}
-	else if (dir == strafe_right)
+	else if (dir == move_strafe_right)
 	{
 		ml_vector3_cross(player->forward, player->up, sideways);
 		ml_vector3_add(player->pos, sideways, new_pos);

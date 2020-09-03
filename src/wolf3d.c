@@ -6,13 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 13:08:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 13:51:33 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-uint32_t		g_time_since_start;
 
 static void		wolf3d_main_loop(t_wolf3d *app)
 {
@@ -21,7 +19,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 	app->is_running = true;
 	draw_frame(app);
 	while (app->is_running) {
-		g_time_since_start = SDL_GetTicks();
+		app->time_since_start = SDL_GetTicks();
 		while (SDL_PollEvent(&event))\
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
@@ -29,7 +27,8 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 				app->is_running = false;
 		}
 		draw_frame(app);
-		cap_framerate();
+		app->delta_time = SDL_GetTicks() - app->time_since_start;
+		cap_framerate(app);
 	}
 }
 

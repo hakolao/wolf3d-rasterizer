@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 13:25:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 13:44:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,8 @@ typedef struct						s_wolf3d
 	t_bool					is_running;
 	t_window				*main_window;
 	t_scene					*active_scene;
+	uint32_t				time_since_start;
+	uint32_t				delta_time;
 }									t_wolf3d;
 
 /*
@@ -197,9 +199,9 @@ void								wolf3d_run(t_wolf3d *app);
 /*
 ** Time
 */
-void								cap_framerate();
-uint32_t							time_since_start_ms();
-float								sin_time(float min, float max, float speed);
+void								cap_framerate(t_wolf3d *app);
+float								sin_time(t_wolf3d *app,
+									float min, float max, float speed);
 
 /*
 ** Scene
@@ -265,7 +267,5 @@ uint32_t							rgba_to_u32(SDL_Color color);
 uint32_t							color_blend_u32(uint32_t color1,
 									uint32_t color2, float ratio);
 SDL_Color							u32_to_rgba(uint32_t color);
-
-extern uint32_t						g_time_since_start;
 
 #endif

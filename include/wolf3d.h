@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 19:06:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 13:16:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 # define NAME "Wolf3D"
 
 /*
-**	The vector convention is a right handed coordinate system where up axis 
+**	The vector convention is a right handed coordinate system where up axis
 **	is z (2), left axis is y (1), forward axis is x (0). The numbers are for
 **	easier referencing in t_vec3 structs.
 */
@@ -183,7 +183,6 @@ struct s_scene
 
 typedef struct						s_wolf3d
 {
-	int						start_time;
 	t_bool					is_running;
 	t_window				*main_window;
 	t_scene					*active_scene;
@@ -194,7 +193,13 @@ typedef struct						s_wolf3d
 */
 
 void								wolf3d_run(t_wolf3d *app);
-void								cap_framerate(uint32_t start_time);
+
+/*
+** Time
+*/
+void								cap_framerate();
+uint32_t							time_since_start_ms();
+double								sin_time_0_1(float speed);
 
 /*
 ** Scene
@@ -252,5 +257,15 @@ void								error_check(int test, const char *message);
 */
 
 void								main_window_init(t_wolf3d *app);
+
+/*
+** Color utils
+*/
+uint32_t							rgba_to_u32(SDL_Color color);
+uint32_t							color_blend_u32(uint32_t color1,
+									uint32_t color2, float ratio);
+SDL_Color							u32_to_rgba(uint32_t color);
+
+extern uint32_t						g_time_since_start;
 
 #endif

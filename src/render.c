@@ -49,8 +49,8 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 		{
 			app->main_window->framebuffer[
 				screen_to_frame_coords(app->main_window->width,
-				(int)camera->rays[i].dir[1] + app->main_window->width / 2,
-				(int)camera->rays[i].dir[2] + app->main_window->height / 2)] = color;
+				(int)camera->rays[i].dir[1] + camera->screen_width / 2,
+				(int)camera->rays[i].dir[2] + camera->screen_height / 2)] = color;
 			is++;
 		}
 		//find a way to get uv data in fragment shader

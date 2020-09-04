@@ -38,7 +38,7 @@ t_bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 	int					color;
 	int					i;
 	(void)mesh;
-	color = 0xffffffff;
+	color = 0xffaaffff;
 	i = -1;
 	ft_printf("count: %d\nwidth: %d\nheight: %d\n", camera->raycount,
 				(int)camera->screen_width, (int)camera->screen_height);
@@ -48,15 +48,16 @@ t_bool		render_triangle(t_triangle *triangle, t_mesh *mesh, t_camera *camera)
 	{
 		if (triangle_intersection(triangle, camera->rays[i], &intsec))
 		{
-			camera->framebuffer[screen_to_frame_coords(camera->parent_scene,
-													   -1 * (camera->rays[i].dir[1]) + WIDTH / 2,
-													   -1 * (camera->rays[i].dir[2]) + HEIGHT / 2)] = color;
-			is++;
+			camera->parent_scene->main_window->framebuffer[screen_to_frame_coords(camera->parent_scene,
+																				  -1 * (camera->rays[i].dir[1]) + WIDTH / 2,
+																				  -1 * (camera->rays[i].dir[2]) + HEIGHT / 2)] = color;
+			// is++;
 			// ft_printf("is: %d\n", is);
 			// ft_printf("x: %d\n", -1 * camera->rays[i].dir[1]);
 			// ft_printf("y: %d\n", -1 * camera->rays[i].dir[2]);
-			ft_printf("x: %d\n", -1 * camera->rays[i].dir[1] + WIDTH / 2);
-			ft_printf("y: %d\n", -1 * camera->rays[i].dir[2] + HEIGHT / 2);
+			// ml_vector3_print(camera->rays[i].dir);
+			// ft_printf("x: %f\n", -1 * camera->rays[i].dir[1] + WIDTH / 2);
+			// ft_printf("y: %f\n", -1 * camera->rays[i].dir[2] + HEIGHT / 2);
 		}
 		//find a way to get uv data in fragment shader
 		//mesh->shader->f(triangle, calculate_baryocoords(intsec), color);

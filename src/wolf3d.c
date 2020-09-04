@@ -30,7 +30,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 		// draw_frame(app);
 		// ft_printf("time between frames: %d seconds or %d ms\n",
 		// 		  (SDL_GetTicks() - tick) / 1000, SDL_GetTicks() - tick);
-		cap_framerate(tick);
+		// cap_framerate(tick);
 	}
 }
 

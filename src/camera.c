@@ -22,22 +22,25 @@ static t_ray	*precompute_rays(t_camera *camera)
 
 	y = -1;
 	size = camera->screen_width *camera->screen_height;
-	if (!(rays = (t_ray *)malloc(sizeof(t_ray) * size)))
+	if (!(rays = (t_ray*)malloc(sizeof(t_ray) * size)))
 		return (NULL);
+	camera->mallocsize = sizeof(t_ray) * size;
+	camera->raycount = size;
 	while (++y < camera->screen_height)
 	{
 		x = -1;
 		while (++x < camera->screen_width)
 		{
 			dir[0] = camera->screen_dist;
-			dir[1] = -x + (int)camera->screen_width / 2.0;
-			dir[2] = -y + (int)camera->screen_height / 2.0;
+			dir[1] = (float)(-x + (int)camera->screen_width / 2.0);
+			dir[2] = (float)(-y + (int)camera->screen_height / 2.0);
 			// ml_vector3_normalize(dir, dir);
-			rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
+			ft_printf("setting ray number: %d", y * (int)camera->screen_width + x);
+			ft_printf(" / %d\n", camera->raycount);
+			rays[y * (int)camera->screen_width + x] = new_ray(camera->origin, dir);
 			ml_vector3_print(rays[y * camera->screen_width + x].dir);
 		}
 	}
-	camera->raycount = size;
 	return (rays);
 }
 

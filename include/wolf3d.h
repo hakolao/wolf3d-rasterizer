@@ -79,6 +79,7 @@ typedef struct						s_window
 	uint32_t				window_id;
 	t_bool					is_hidden;
 	void					*parent;
+	uint32_t				framesize;
 }									t_window;
 
 /*
@@ -102,6 +103,7 @@ typedef struct						s_camera
 	uint32_t				*framebuffer;
 	t_scene					*parent_scene;
 
+	uint32_t				mallocsize;
 	t_mat4					view;
 	t_mat4					model;
 	t_mat4					projection;

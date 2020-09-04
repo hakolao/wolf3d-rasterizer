@@ -62,5 +62,7 @@ void			main_window_init(t_wolf3d *app)
 	error_check(!(app->main_window->framebuffer = malloc(sizeof(uint32_t) *
 		app->main_window->width * app->main_window->height)),
 		"Failed to malloc framebuffer");
+	app->main_window->framesize = sizeof(uint32_t) *
+		app->main_window->width * app->main_window->height;
 	SDL_AddEventWatch(resize_callback, app->main_window);
 }

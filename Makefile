@@ -33,10 +33,13 @@ SOURCES = main.c \
 			player.c \
 			camera.c \
 			scene.c \
-			framerate.c \
+			time.c \
 			object.c \
 			render.c \
-			ui.c
+			ui.c \
+			color_utils.c \
+			text.c \
+			surface.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

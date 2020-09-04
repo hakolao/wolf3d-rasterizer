@@ -1,2 +1,5 @@
 .DS_Store
 .vscode
+*.o
+wolf3d
+lib/lib*/*.a

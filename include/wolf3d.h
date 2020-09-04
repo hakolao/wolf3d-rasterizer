@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/02 16:52:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/03 19:28:33 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <SDL.h>
 # include <SDL_image.h>
+# include <SDL_ttf.h>
 # include "libft.h"
 # include "libgmatrix.h"
 # include "lib3d.h"
@@ -22,8 +23,12 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
-# define WIDTH 1280 / 4
-# define HEIGHT 720 / 4
+# define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
+# define GAME_FONT "assets/pixelated.ttf"
+# define FONT_SIZE 15
+
+# define WIDTH 1280
+# define HEIGHT 720
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the
@@ -36,7 +41,7 @@
 # define NAME "Wolf3D"
 
 /*
-**	The vector convention is a right handed coordinate system where up axis 
+**	The vector convention is a right handed coordinate system where up axis
 **	is z (2), left axis is y (1), forward axis is x (0). The numbers are for
 **	easier referencing in t_vec3 structs.
 */
@@ -60,17 +65,31 @@ typedef struct						s_mesh t_mesh;
 
 typedef enum						e_move
 {
-	forward,
-	backward,
-	strafe_left,
-	strafe_right
+	move_forward,
+	move_backward,
+	move_strafe_left,
+	move_strafe_right
 }									t_move;
+
+typedef enum						e_scene_id
+{
+	scene_id_main_menu,
+	scene_id_main_game,
+}									t_scene_id;
+
+typedef enum						e_menu_actions
+{
+	menu_action_start_game,
+	menu_action_load_game,
+	menu_action_quit_game
+}									t_menu_actions;
 
 typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
 	uint32_t				*framebuffer;
+	TTF_Font				*font;
 	int32_t					width;
 	int32_t					height;
 	int32_t					pitch;
@@ -93,14 +112,13 @@ typedef struct						s_camera
 {
 	t_vec3					origin;
 	t_vec3					orientation[3];
-	uint16_t				screen_width;
-	uint16_t				screen_height;
+	uint32_t				screen_width;
+	uint32_t				screen_height;
 	float					fovx;
 	float					fovy;
 	float					screen_dist;
 	t_ray					*rays;
 	int						raycount;
-	uint32_t				*framebuffer;
 	t_scene					*parent_scene;
 
 	uint32_t				mallocsize;
@@ -161,7 +179,10 @@ struct						s_mesh
 typedef struct						s_scene_data
 {
 	int						level;
-	t_player				player;
+	t_scene_id				scene_id;
+	const char				*menu_options[64];
+	uint32_t				menu_option_count;
+	t_camera				*main_camera;
 	//add here all the date needed to create a scene
 	//for example fetch the map and included
 	//objects. This will be passed to new_scene()
@@ -171,18 +192,23 @@ typedef struct						s_scene_data
 struct s_scene
 {
 	t_object				**objects;
-	t_player				player;
 	uint32_t				object_count;
 	t_camera				*main_camera;
 	t_window				*main_window;
+	const char				*menu_options[64];
+	int32_t					menu_option_count;
+	int32_t					selected_option;
+	t_scene_id				scene_id;
 };
 
 typedef struct						s_wolf3d
 {
-	int						start_time;
 	t_bool					is_running;
 	t_window				*main_window;
 	t_scene					*active_scene;
+	uint32_t				time_since_start;
+	uint32_t				delta_time;
+	t_player				player;
 }									t_wolf3d;
 
 /*
@@ -190,7 +216,13 @@ typedef struct						s_wolf3d
 */
 
 void								wolf3d_run(t_wolf3d *app);
-void								cap_framerate(uint32_t start_time);
+
+/*
+** Time
+*/
+void								cap_framerate(t_wolf3d *app);
+float								sin_time(t_wolf3d *app,
+									float min, float max, float speed);
 
 /*
 ** Scene
@@ -199,6 +231,8 @@ void								cap_framerate(uint32_t start_time);
 t_scene								*new_scene(t_wolf3d *app,
 												t_scene_data *data);
 void								destroy_scene(t_scene *scene);
+void								set_active_scene(t_wolf3d *app,
+									t_scene_id to_scene);
 
 /*
 ** Objects
@@ -211,15 +245,15 @@ t_object							*create_object_triangle(t_scene *scene,
 ** Player
 */
 
-void								init_player(t_scene *scene);
+void								init_player(t_wolf3d *app);
 void								move_player(t_player *player, t_move dir);
 
 /*
 ** Camera
 */
 
-t_camera							*new_camera(t_scene *scene,
-												float screen_distance);
+t_camera							*new_camera();
+void								update_camera(t_wolf3d *app);
 void								camera_transform(t_camera *camera,
 									t_vec4 vertex, t_vec4 res);
 
@@ -230,12 +264,13 @@ void								camera_transform(t_camera *camera,
 void								draw_frame(t_wolf3d *app);
 t_bool								render_mesh(t_mesh *mesh,
 												t_camera *camera);
-t_bool								render_triangle(t_triangle *triangle,
+t_bool								render_triangle(t_wolf3d *app,
+													t_triangle *triangle,
 													t_mesh *mesh,
 													t_camera *camera);
-int									screen_to_frame_coords(t_scene *scene,
-															int x, int y);
-void								render_scene_ui(t_scene *scene);
+int									screen_to_frame_coords(uint32_t width,
+									int x, int y);
+void								render_ui(t_wolf3d *app);
 
 /*
 ** Utils
@@ -248,5 +283,39 @@ void								error_check(int test, const char *message);
 */
 
 void								main_window_init(t_wolf3d *app);
+void								recreate_frame(t_wolf3d *app);
+
+/*
+** Color utils
+*/
+uint32_t							rgba_to_u32(SDL_Color color);
+uint32_t							color_blend_u32(uint32_t color1,
+									uint32_t color2, float ratio);
+SDL_Color							u32_to_rgba(uint32_t color);
+
+/*
+** Text
+*/
+void								render_text(t_wolf3d *app, const char *text,
+									SDL_Color text_color, int xy[2]);
+void								render_blinking_text(t_wolf3d *app,
+									const char *text, SDL_Color text_color,
+									int xy[2]);
+void								render_centered_blinking_text(t_wolf3d *app,
+									const char *text, SDL_Color text_color,
+									int xy[2]);
+void								render_centered_text(t_wolf3d *app,
+									const char *text, SDL_Color text_color,
+									int xy[2]);
+uint32_t							get_font_size(t_wolf3d *app);
+
+/*
+** SDL Surface
+*/
+SDL_Surface							*surface_from_font(t_wolf3d *app,
+									const char *text, SDL_Color text_color);
+void								surface_to_framebuffer(t_wolf3d *app,
+									SDL_Surface *surface, float blend_ratio,
+									int xy[2]);
 
 #endif

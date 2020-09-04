@@ -82,6 +82,7 @@ typedef struct		s_ray
 {
 	t_vec3			origin;
 	t_vec3			dir;
+	t_vec3			normalized_dir;
 }					t_ray;
 
 
@@ -94,7 +95,7 @@ typedef struct		s_intersection
 }					t_intersection;
 
 t_bool						triangle_intersection(t_triangle *triangle,
-													t_ray ray,
+													t_ray *ray,
 													t_intersection *is);
 t_ray						new_ray(t_vec3 origin, t_vec3 direction);
 

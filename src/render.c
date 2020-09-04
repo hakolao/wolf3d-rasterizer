@@ -39,25 +39,43 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	int					color;
 	int					i;
 	(void)mesh;
+	t_vec3 normalized_normal;
+	ml_vector3_normalize(triangle->normal, normalized_normal);
+	int red = normalized_normal[0];
+	int blue = normalized_normal[1];
+	int green = normalized_normal[2];
 	color = 0xffaaffff;
+	(void)red;
+	(void)blue;
+	(void)green;
+	// color = (1 & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | (blue & 255);
+	if (triangle->vtc[2]->position[1] > -100.0)
+		color = 0xff00ffff;
 	i = -1;
 	//project mesh bounding box on screen
 	//decide later if bounding boxes for each triangle are needed for performance
 	while (++i < camera->raycount)
 	{
-		if (triangle_intersection(triangle, camera->rays[i], &intsec))
+		if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))
 		{
 			app->main_window->framebuffer[
 				screen_to_frame_coords(app->main_window->width,
 				(int)camera->rays[i].dir[1] + camera->screen_width / 2,
 				(int)camera->rays[i].dir[2] + camera->screen_height / 2)] = color;
 			is++;
+			// ft_printf("i: %d\n", screen_to_frame_coords(app->main_window->width,
+			// 											(int)camera->rays[i].dir[1] + camera->screen_width / 2,
+			// 											(int)camera->rays[i].dir[2] + camera->screen_height / 2));
+			// ft_printf("x: %d\n", (int)camera->rays[i].dir[1]);
+			// ft_printf("y: %d\n", (int)camera->rays[i].dir[2]);
 		}
 		//find a way to get uv data in fragment shader
 		//mesh->shader->f(triangle, calculate_baryocoords(intsec), color);
 		//find a way to get framebuffer data in and or out of this function
-
 	}
+	//ft_printf("is: %d\n", is);
+	// if (is > 0)
+		// ft_printf("intersection: %d\n", is);
 	is = 0;
 	return (true);
 }

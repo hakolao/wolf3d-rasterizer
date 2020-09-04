@@ -76,6 +76,14 @@ fclean: clean
 
 re: fclean all
 
+testrun: #this is only for quicker lib3d debug
+	@make -C $(LIB3D) clean
+	make -C $(LIB3D)
+	@/bin/rm -f $(OBJS)
+	@/bin/rm -rf $(DIR_OBJ)
+	make all
+	./wolf3d
+
 norm: norminette $(DIR_SRC) $(LIBFT) $(LIB3D) $(LIBGMATRIX) ./include
 
 .PHONY: all, $(DIR_OBJ), clean, fclean

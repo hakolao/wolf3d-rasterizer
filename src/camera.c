@@ -34,10 +34,31 @@ static t_ray	*precompute_rays(t_camera *camera)
 			dir[0] = camera->screen_dist;
 			dir[1] = -(float)x + (float)camera->screen_width / 2.0;
 			dir[2] = -(float)y + (float)camera->screen_height / 2.0;
-			// ml_vector3_normalize(dir, dir);
 			rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
+			ml_vector3_normalize(rays[y * camera->screen_width + x].dir,
+							rays[y * camera->screen_width + x].normalized_dir);
 		}
 	}
+	x = 0;//debug only delete after bug found
+	while (x < camera->raycount)
+	{
+		if (rays[x].dir[1] < (float)(-1.0 * camera->screen_width / 2) ||
+			rays[x].dir[2] < (float)(-1.0 * camera->screen_width / 2))
+			
+			{
+				ft_printf("ray out of bounds lower at index: %d\n", x);
+				ft_printf("ray y: %f\n", rays[x].dir[1]);
+				ft_printf("ray z: %f\n", rays[x].dir[2]);
+			}
+		if ( rays[x].dir[2] > (float)(camera->screen_width / 2) ||
+			rays[x].dir[2] > (float)(camera->screen_width / 2))
+			{
+				ft_printf("ray out of bounds higher at index: %d\n", x);
+				ft_printf("ray y: %f\n", rays[x].dir[1]);
+				ft_printf("ray z: %f\n", rays[x].dir[2]);
+			}
+			x++;
+	}/////
 	return (rays);
 }
 

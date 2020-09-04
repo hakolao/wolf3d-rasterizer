@@ -20,5 +20,8 @@ void		ml_vector3_normalize(t_vec3 v, t_vec3 res)
 	i = -1;
 	mag = ml_vector3_mag(v);
 	while (++i < 3)
-		res[i] = v[i] / mag;
+	{
+		if (mag > 0)
+			res[i] = v[i] / mag;
+	}
 }

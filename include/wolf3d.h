@@ -269,7 +269,8 @@ t_bool								render_triangle(t_wolf3d *app,
 													t_mesh *mesh,
 													t_camera *camera);
 int									screen_to_frame_coords(uint32_t width,
-									int x, int y);
+															uint32_t height,
+															int x, int y);
 void								render_ui(t_wolf3d *app);
 
 /*

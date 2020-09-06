@@ -42,7 +42,7 @@ SOURCES = ml_matrix4_id.c \
 			ml_vector4_normalize.c \
 			ml_vector4_sub.c \
 			ml_vector_copy.c \
-			ml_vec_set.c \
+			ml_vector_set.c \
 			ml_set_orientation_base.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))

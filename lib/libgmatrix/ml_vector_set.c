@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ml_vec_set.c                                       :+:      :+:    :+:   */
+/*   ml_vector3_set.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: veilo <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,14 +12,14 @@
 
 #include "libgmatrix.h"
 
-void		ml_vec3_set(t_vec3 vec, float v0, float v1, float v2)
+void		ml_vector3_set(t_vec3 vec, float v0, float v1, float v2)
 {
 	vec[0] = v0;
 	vec[1] = v1;
 	vec[2] = v2;
 }
 
-void		ml_vec3_set_all(t_vec3 vec, float val)
+void		ml_vector3_set_all(t_vec3 vec, float val)
 {
 	int		i;
 
@@ -30,7 +30,7 @@ void		ml_vec3_set_all(t_vec3 vec, float val)
 	}
 }
 
-void		ml_vec4_set_all(t_vec4 vec, float val)
+void		ml_vector4_set_all(t_vec4 vec, float val)
 {
 	int		i;
 

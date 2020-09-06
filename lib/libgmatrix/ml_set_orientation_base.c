@@ -25,9 +25,9 @@ void		ml_set_orientation_base(t_vec3 *vec, int x, int y, int z)
 	t_vec3	vecy;
 	t_vec3	vecz;
 
-	ml_vec3_set(vecx, 1.0, 0.0, 0.0);
-	ml_vec3_set(vecy, 0.0, 1.0, 0.0);
-	ml_vec3_set(vecz, 0.0, 0.0, 1.0);
+	ml_vector3_set(vecx, 1.0, 0.0, 0.0);
+	ml_vector3_set(vecy, 0.0, 1.0, 0.0);
+	ml_vector3_set(vecz, 0.0, 0.0, 1.0);
 	ml_vector3_copy(vecx, vec[x]);
 	ml_vector3_copy(vecy, vec[y]);
 	ml_vector3_copy(vecz, vec[z]);

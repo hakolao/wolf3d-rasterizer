@@ -18,7 +18,7 @@ t_object		*create_object_triangle(t_scene *scene, t_wolf3d *app)
 
 	error_check(!(object = (t_object*)malloc(sizeof(t_object))),
 		"Failed to malloc object");
-	ml_vec3_set_all(object->origin, 0.0);
+	ml_vector3_set_all(object->origin, 0.0);
 
 	(void)app;
 	(void)scene;

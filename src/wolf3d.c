@@ -39,7 +39,6 @@ static void 	main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 static void		wolf3d_main_loop(t_wolf3d *app)
 {
 	SDL_Event	event;
-	int i = 0;
 	app->is_running = true;
 	while (app->is_running)
 	{
@@ -52,12 +51,9 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			if (app->active_scene->scene_id == scene_id_main_menu)
 				main_menu_event_handle(app, event);
 		}
-		if ( i < 50)
-		{
-			draw_frame(app);
-			i++;
-		}
+		draw_frame(app);
 		app->delta_time = SDL_GetTicks() - app->time_since_start;
+		// ft_printf("frame ms: %d\n", app->delta_time);
 		cap_framerate(app);
 	}
 }

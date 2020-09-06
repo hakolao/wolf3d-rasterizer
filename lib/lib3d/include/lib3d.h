@@ -20,8 +20,6 @@
 
 typedef struct s_temp_calc
 {
-	t_vec4		ab;
-	t_vec4		ac;
 	t_vec3		normal;
 	t_vec3		ax;
 	t_vec3		cross_dir_ax;
@@ -76,6 +74,8 @@ typedef struct		s_triangle
 	t_vec3		center; //consider if center calculated when mesh loaded
 						//or center calculated when needed
 	t_vec3		normal;
+	t_vec3		ab;
+	t_vec3		ac;
 }					t_triangle;
 
 typedef struct		s_ray

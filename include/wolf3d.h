@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 16:32:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 17:11:21 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ typedef struct						s_object
 	t_mesh					*mesh;
 	t_vec3					origin;
 	t_vec3					orientation[3];
+	t_mat4					transform;
 	t_vec3					parent_origin;
 	t_vec3					parent_orientation[3];
 	t_scene					*parent_scene;
@@ -167,6 +168,7 @@ struct						s_mesh
 	int						triangle_count;
 	t_vec3					origin;
 	t_vec3					orientation[3];
+	t_mat4					transform;
 	t_box3d					bound_box;
 	t_shader				shader;
 	t_object				*parent_object;

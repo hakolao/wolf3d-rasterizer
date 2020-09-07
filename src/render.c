@@ -64,6 +64,7 @@ void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	int			intersections[6];
 	int			i;
 	(void)corners_on_screen;
+	i = 0;
 	if (((screen_triangles[0].vtc[i] =
 				(t_vertex *)malloc(sizeof(t_vertex))) == NULL) ||
 		((screen_triangles[1].vtc[i] =
@@ -92,11 +93,11 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	t_vec3 normalized_normal;
 	screen_intersection(app, triangle, NULL);
 	ml_vector3_normalize(triangle->normal, normalized_normal);
-	color = 0xffaaffff;  
+	color = 0xffaaffff;
 	// color = (1 & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | (blue & 255);
 	i = 0;
 	//1. Cast rays from triangle corners through screen to camera
-	//2. Calculate intersection points with screen and convert them to 
+	//2. Calculate intersection points with screen and convert them to
 	//		screen pixels.
 	//3. Calculate border edges of the triangle in screen pixels using triangle
 	//		elemental vectors and the difference in x value between ab and ac.

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 20:07:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 21:12:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 				player_action_handle(app, event);
 		}
 		draw_frame(app);
-		capture_frameorate(app);
+		capture_framerate(app);
 		cap_framerate(app);
 	}
 }

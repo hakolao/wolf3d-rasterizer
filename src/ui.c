@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 19:20:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 14:33:24 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,28 @@ static void		render_main_game_ui(t_wolf3d *app)
 	(void)app;
 }
 
+static void		render_debug_information(t_wolf3d *app)
+{
+	char	debug_info[256];
+
+	ft_sprintf(debug_info,
+		"FPS: %u",
+		app->debug_info.fps);
+	// ft_sprintf(debug_info,
+	// 	"FPS: %u\n"
+	// 	"delta_time: %.2f",
+	// 	app->debug_info.fps,
+	// 	app->debug_info.avg_delta_time);
+	render_text(app, debug_info,
+		(SDL_Color){255, 255, 255, 255}, (int[2]){5, 5});
+}
+
 void			render_ui(t_wolf3d *app)
 {
 	if (app->active_scene->scene_id == scene_id_main_menu)
 		render_main_menu_ui(app);
 	else if (app->active_scene->scene_id == scene_id_main_game)
 		render_main_game_ui(app);
+	if (app->is_debug)
+		render_debug_information(app);
 }

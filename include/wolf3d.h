@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 19:28:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 14:23:38 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,9 +201,17 @@ struct s_scene
 	t_scene_id				scene_id;
 };
 
+typedef struct						s_wolf3d_debug
+{
+	uint32_t				fps;
+	float					avg_delta_time;
+}									t_wolf3d_debug;
+
 typedef struct						s_wolf3d
 {
 	t_bool					is_running;
+	t_bool					is_debug;
+	t_wolf3d_debug			debug_info;
 	t_window				*main_window;
 	t_scene					*active_scene;
 	uint32_t				time_since_start;
@@ -220,7 +228,7 @@ void								wolf3d_run(t_wolf3d *app);
 /*
 ** Time
 */
-void								cap_framerate(t_wolf3d *app);
+void								capture_framerate(t_wolf3d *app);
 float								sin_time(t_wolf3d *app,
 									float min, float max, float speed);
 
@@ -318,5 +326,10 @@ SDL_Surface							*surface_from_font(t_wolf3d *app,
 void								surface_to_framebuffer(t_wolf3d *app,
 									SDL_Surface *surface, float blend_ratio,
 									int xy[2]);
+
+/*
+** Debug information
+*/
+void								capture_framerate(t_wolf3d *app);
 
 #endif

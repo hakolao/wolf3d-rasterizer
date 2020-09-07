@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 19:23:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 14:06:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,15 @@ static void 	main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 			else if (app->active_scene->selected_option == menu_action_quit_game)
 				app->is_running = false;
 		}
+		if (event.key.keysym.sym == SDLK_g)
+			app->is_debug = !app->is_debug;
 	}
 }
 
 static void		wolf3d_main_loop(t_wolf3d *app)
 {
 	SDL_Event	event;
-	app->is_running = true;
+
 	while (app->is_running)
 	{
 		app->time_since_start = SDL_GetTicks();
@@ -52,15 +54,17 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 				main_menu_event_handle(app, event);
 		}
 		draw_frame(app);
-		app->delta_time = SDL_GetTicks() - app->time_since_start;
-		// ft_printf("frame ms: %d\n", app->delta_time);
-		cap_framerate(app);
+		capture_framerate(app);
+		//ToDo: cap_framerate(app) if needed;
 	}
 }
 
 void		wolf3d_init(t_wolf3d *app)
 {
 	app->active_scene = NULL;
+	app->is_running = true;
+	app->is_debug = true;
+	ft_bzero(&app->debug_info, sizeof(app->debug_info));
 	init_player(app);
 	set_active_scene(app, scene_id_main_menu);
 }

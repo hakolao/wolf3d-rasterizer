@@ -163,7 +163,7 @@ struct						s_mesh
 {
 	t_vertex				**vtc;
 	int						vtx_count;
-	t_triangle				*triangles;
+	t_triangle				**triangles;
 	int						triangle_count;
 	t_vec3					origin;
 	t_vec3					orientation[3];
@@ -251,6 +251,12 @@ t_object							*create_object_triangle(t_scene *scene,
 															t_wolf3d *app);
 
 /*
+**	Mesh
+*/
+
+void								copy_mesh(t_mesh *src, t_mesh *dest);
+
+/*
 ** Player
 */
 
@@ -271,7 +277,7 @@ void								camera_transform(t_camera *camera,
 */
 
 void								draw_frame(t_wolf3d *app);
-t_bool								render_mesh(t_mesh *mesh,
+t_bool								render_mesh(t_wolf3d *app, t_mesh *mesh,
 												t_camera *camera);
 t_bool								render_triangle(t_wolf3d *app,
 													t_triangle *triangle,

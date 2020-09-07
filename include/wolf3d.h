@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 14:23:38 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 14:52:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ void								wolf3d_run(t_wolf3d *app);
 /*
 ** Time
 */
-void								capture_framerate(t_wolf3d *app);
+void								cap_framerate(t_wolf3d *app);
 float								sin_time(t_wolf3d *app,
 									float min, float max, float speed);
 

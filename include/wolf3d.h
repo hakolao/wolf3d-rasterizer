@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 17:11:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 20:20:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,6 @@ typedef struct						s_object
 	t_mat4					transform;
 	t_vec3					parent_origin;
 	t_vec3					parent_orientation[3];
-	t_scene					*parent_scene;
 }									t_object;
 
 struct						s_mesh
@@ -333,5 +332,6 @@ void								surface_to_framebuffer(t_wolf3d *app,
 ** Debug information
 */
 void								capture_framerate(t_wolf3d *app);
+void								render_debug_grid(t_wolf3d *app);
 
 #endif

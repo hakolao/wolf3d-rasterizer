@@ -91,7 +91,7 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	int					i;
 	(void)mesh;
 	t_vec3 normalized_normal;
-	screen_intersection(app, triangle, NULL);
+	// screen_intersection(app, triangle, NULL);
 	ml_vector3_normalize(triangle->normal, normalized_normal);
 	color = 0xffaaffff;
 	// color = (1 & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | (blue & 255);

@@ -41,8 +41,7 @@ SOURCES = main.c \
 			text.c \
 			surface.c \
 			debug.c \
-			copy_mesh.c \
-			scene1.c
+			copy_mesh.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

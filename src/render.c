@@ -135,13 +135,13 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 
 // 	// copy_mesh(mesh, mesh_copy);
 // 	// i = -1;
-// 	// // for (vertex in triangle in mesh)
-// 	// // {
-// 	// // 	// can't actually modify original vertex data
-// 	// // 	// figure out if create temporary copy of all vertices
-// 	// // 	// or some other way
-// 	// // ((*mesh).shader)->v(vertex, mesh, camera);
-// 	// // }
+// 	// for (vertex in triangle in mesh)
+// 	// {
+// 		// can't actually modify original vertex data
+// 		// figure out if create temporary copy of all vertices
+// 		// or some other way
+// 	// ((*mesh).shader)->v(vertex, mesh, camera);
+// 	// }
 // 	// while (i < mesh->triangle_count)
 // 	// {
 // 	// 	render_triangle(app, mesh->triangles[i], mesh, camera);

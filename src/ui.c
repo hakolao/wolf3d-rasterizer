@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 14:33:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 16:19:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,12 @@ static void		render_debug_information(t_wolf3d *app)
 	char	debug_info[256];
 
 	ft_sprintf(debug_info,
-		"FPS: %u",
-		app->debug_info.fps);
-	// ft_sprintf(debug_info,
-	// 	"FPS: %u\n"
-	// 	"delta_time: %.2f",
-	// 	app->debug_info.fps,
-	// 	app->debug_info.avg_delta_time);
+		"fps: %u\n"
+		"delta time: %.2f",
+		app->debug_info.fps,
+		app->debug_info.avg_delta_time);
 	render_text(app, debug_info,
-		(SDL_Color){255, 255, 255, 255}, (int[2]){5, 5});
+		(SDL_Color){255, 255, 255, 0}, (int[2]){5, 5});
 }
 
 void			render_ui(t_wolf3d *app)

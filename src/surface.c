@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/03 14:05:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 16:29:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 16:12:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,9 @@ SDL_Surface			*surface_from_font(t_wolf3d *app,
 {
 	SDL_Surface		*text_surface;
 	SDL_Surface		*formatted_surface;
-	SDL_Color		bg_color;
 
-	bg_color = (SDL_Color){0, 0, 0, 0};
-	text_surface =
-		TTF_RenderText_Shaded(app->main_window->font, text,
-			text_color, bg_color);
+	text_surface = TTF_RenderText_Blended_Wrapped(
+		app->main_window->font, text, text_color, app->main_window->width);
 	error_check(!text_surface, TTF_GetError());
 	formatted_surface = SDL_ConvertSurfaceFormat(text_surface,
 		PIXEL_FORMAT, 0);

@@ -40,7 +40,8 @@ SOURCES = main.c \
 			color_utils.c \
 			text.c \
 			surface.c \
-			debug.c
+			debug.c \
+			copy_mesh.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

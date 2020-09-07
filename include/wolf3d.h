@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 14:52:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 16:32:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,7 @@ t_object							*create_object_triangle(t_scene *scene,
 */
 
 void								init_player(t_wolf3d *app);
-void								move_player(t_player *player, t_move dir);
+void								move_player(t_wolf3d *app, t_move dir);
 
 /*
 ** Camera

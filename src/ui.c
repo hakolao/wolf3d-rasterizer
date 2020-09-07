@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 16:19:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 16:39:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,16 @@ static void		render_main_game_ui(t_wolf3d *app)
 static void		render_debug_information(t_wolf3d *app)
 {
 	char	debug_info[256];
+	char	pos[32];
 
+	ml_vector3_to_str(app->player.pos, pos);
 	ft_sprintf(debug_info,
 		"fps: %u\n"
-		"delta time: %.2f",
+		"delta time: %.2f\n"
+		"pos: %s",
 		app->debug_info.fps,
-		app->debug_info.avg_delta_time);
+		app->debug_info.avg_delta_time,
+		pos);
 	render_text(app, debug_info,
 		(SDL_Color){255, 255, 255, 0}, (int[2]){5, 5});
 }

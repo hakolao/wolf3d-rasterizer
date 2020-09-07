@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 14:52:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 16:46:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,21 @@ static void 	main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 			else if (app->active_scene->selected_option == menu_action_quit_game)
 				app->is_running = false;
 		}
-		if (event.key.keysym.sym == SDLK_g)
-			app->is_debug = !app->is_debug;
+	}
+}
+
+static void 	player_action_handle(t_wolf3d *app, SDL_Event event)
+{
+	if (event.type == SDL_KEYDOWN)
+	{
+		if (event.key.keysym.sym == SDLK_w)
+			move_player(app, move_forward);
+		else if (event.key.keysym.sym == SDLK_a)
+			move_player(app, move_strafe_right);
+		else if (event.key.keysym.sym == SDLK_s)
+			move_player(app, move_backward);
+		else if (event.key.keysym.sym == SDLK_d)
+			move_player(app, move_strafe_left);
 	}
 }
 
@@ -50,8 +63,12 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
+			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
+				app->is_debug = !app->is_debug;
 			if (app->active_scene->scene_id == scene_id_main_menu)
 				main_menu_event_handle(app, event);
+			else
+				player_action_handle(app, event);
 		}
 		draw_frame(app);
 		capture_framerate(app);

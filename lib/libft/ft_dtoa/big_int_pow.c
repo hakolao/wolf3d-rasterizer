@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/18 22:14:37 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/01 01:07:28 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 23:19:49 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,14 +224,14 @@ void			big_int_pow_10(uint32_t exponent, t_big_int *res)
 		if (exponent & 1)
 		{
 			big_int_mul(&curr, &g_power_of_10_big[table_index], &next);
-			swap = curr;
-			curr = next;
-			next = swap;
+			big_int_copy(&curr, &swap);
+			big_int_copy(&next, &curr);
+			big_int_copy(&swap, &next);
 		}
 		table_index++;
 		exponent >>= 1;
 	}
-	*res = curr;
+	big_int_copy(&curr, res);
 }
 
 /*
@@ -249,7 +249,7 @@ void			big_int_mul_pow_10(t_big_int *lhs, uint32_t exponent,
 	if ((exponent & 0x7) != 0)
 		big_int_mul_u32(lhs, g_power_of_10_u32[exponent & 0x7], &curr);
 	else
-		curr = *lhs;
+		big_int_copy(lhs, &curr);
 	exponent >>= 3;
 	table_index = 0;
 	while (exponent != 0)
@@ -257,14 +257,14 @@ void			big_int_mul_pow_10(t_big_int *lhs, uint32_t exponent,
 		if (exponent & 1)
 		{
 			big_int_mul(&curr, &g_power_of_10_big[table_index], &next);
-			swap = curr;
-			curr = next;
-			next = swap;
+			big_int_copy(&curr, &swap);
+			big_int_copy(&next, &curr);
+			big_int_copy(&swap, &next);
 		}
 		table_index++;
 		exponent >>= 1;
 	}
-	*res = curr;
+	big_int_copy(&curr, res);
 }
 
 /*

@@ -96,17 +96,17 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	t_intersection		intsec;
 	int					color;
 	int					i;
-	// t_vec2				corners_on_screen[3];
+	t_vec2				corners_on_screen[3];
 	// t_vec3				normalized_normal;
-	// uint32_t			*zbuffer;
+	uint32_t			*zbuffer;
 	int					width = app->main_window->width;
 	int					height = app->main_window->height;
 	(void)width;
 	(void)height;
 
-	// zbuffer = app->main_window->zbuffer;
+	zbuffer = app->main_window->zbuffer;
 	(void)mesh;
-	// screen_intersection(app, triangle, NULL);
+	screen_intersection(app, triangle, corners_on_screen);
 	// ml_vector3_normalize(triangle->normal, normalized_normal);
 	color = 0xffaaffff;
 	//Here we borrow zbuffers memory to store the triangle's screen coordinates

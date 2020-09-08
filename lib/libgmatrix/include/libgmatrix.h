@@ -42,6 +42,8 @@ typedef struct		s_canvas
 
 void		ml_vector2_copy(t_vec2 src, t_vec2 dest);
 void		ml_vector2_print(t_vec2 v);
+float		ml_vector2_mag(t_vec2 v);
+void		ml_vector2_sub(t_vec2 v1, t_vec2 v2, t_vec2 res);
 
 void		ml_vector3_add(t_vec3 v1, t_vec3 v2, t_vec3 res);
 void		ml_vector3_sub(t_vec3 v1, t_vec3 v2, t_vec3 res);

@@ -40,21 +40,41 @@ void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	}
 }
 
-// void		paint_edge_to_buffer(uint32_t *zbuffer, t_vec2 *start, t_vec2 *end)
+// void		fill_triangle_area(uint32_t *zbuffer, int startpoint)
 // {
-// 	t_vec2		dir;
-// 	int			increment;
-// 	int			deltax;
 
-// 	deltax = endx - startx;
-// 	while (i < deltax)
-// 	{
-// 		increment = i * magn(end - start) / deltax;
-// 		xi = x0 + increment * dir.x;
-// 		yi = y0 + increment * dir.y
-// 		zbuffer.paint[x, y]
-// 	}
 // }
+
+void		paint_edge_to_buffer(t_wolf3d *app, uint32_t *zbuffer, t_vec2 *start, t_vec2 *end)
+{
+	int			increment;
+	int			deltax;
+	int			i;
+	t_vec2		edge_vector;
+	float		edge_vector_magn;
+	// int			xi;
+	// int			yi;
+
+	i = 0;
+	// xi = 0;
+	// yi = 0;
+	// xi = (*start)[0] + increment * edge_vector[0];
+	// yi = (*start)[1] + increment * edge_vector[1];
+	deltax = (*end)[0] - (*start)[0];
+	edge_vector_magn = ml_vector2_mag(edge_vector);
+	ml_vector2_sub(*end, *start, edge_vector);
+	while (i < deltax)
+	{
+		increment = (i * edge_vector_magn) / deltax;
+	
+		zbuffer[screen_to_frame_coords(	app->main_window->width,
+										app->main_window->height,
+								(*start)[0] + increment * edge_vector[0] +
+											app->main_window->width / 2,
+								(*start)[1] + increment * edge_vector[1] +
+											app->main_window->width / 2)] = 1;
+	}
+}
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 			t_mesh *mesh, t_camera *camera)
@@ -62,16 +82,19 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	t_intersection		intsec;
 	int					color;
 	int					i;
-	t_vec2				corners_on_screen[3];
+	// t_vec2				corners_on_screen[3];
 	t_vec3				normalized_normal;
 	uint32_t			*zbuffer;
-	int					width = app->main_window->zbuffer;
-	int					height = app->main_window->zbuffer;
+	int					width = app->main_window->width;
+	int					height = app->main_window->height;
+	(void)width;
+	(void)height;
 
 	zbuffer = app->main_window->zbuffer;
 	(void)mesh;
 	screen_intersection(app, triangle, NULL);
 	ml_vector3_normalize(triangle->normal, normalized_normal);
+	color = 0xffaaffff;
 	//Here we borrow zbuffers memory to store the triangle's screen coordinates
 	//the area will be filled right after with triangles z values (might be fragile af)
 	// zbuffer[screen_to_frame_coords(width, height, + width / 2, + height / 2)] = 0;

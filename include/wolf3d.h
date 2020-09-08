@@ -264,6 +264,7 @@ void								copy_mesh(t_mesh *src, t_mesh *dest);
 
 void								init_player(t_wolf3d *app);
 void								move_player(t_wolf3d *app, t_move dir);
+void								rotate_player(t_wolf3d *app, t_vec3 axes);
 
 /*
 ** Camera

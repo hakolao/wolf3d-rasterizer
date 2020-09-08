@@ -43,3 +43,19 @@ void	ml_vector3_copy(t_vec3 src, t_vec3 dest)
 		i++;
 	}
 }
+
+/*
+**	Copies the elements of one vector to another for t_vec2
+*/
+
+void	ml_vector2_copy(t_vec2 src, t_vec2 dest)
+{
+	int i;
+
+	i = 0;
+	while (i < 2)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+}

@@ -23,6 +23,11 @@ void		ml_vector3_print(t_vec3 v)
 	printf("Vec3[%.2f, %.2f, %.2f]\n", v[0], v[1], v[2]);
 }
 
+void		ml_vector2_print(t_vec2 v)
+{
+	printf("Vec2[%.2f, %.2f]\n", v[0], v[1]);
+}
+
 void		ml_vector4_to_str(t_vec4 v, char *res)
 {
 	ft_sprintf(res, "Vec4[%.2f, %.2f, %.2f, %.2f]\n", v[0], v[1], v[2], v[3]);

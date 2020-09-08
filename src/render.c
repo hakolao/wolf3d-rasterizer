@@ -20,65 +20,23 @@
 
 #include "wolf3d.h"
 
-// t_mesh		*create_renderable_mesh(t_mesh *mesh, t_shader *shader,
-// 									int *framebuffer)
-// //framebuffer input here questionable?
-// {
-// 	t_mesh *mesh;
-
-// 	return (mesh);
-// }
-
-void		init_screen_triangles(t_wolf3d *app, t_triangle *st)
-{
-	int			i;
-	int			w;
-	int			h;
-	int			sd;
-
-	w = app->main_window->width;
-	h = app->main_window->height;
-	sd = app->active_scene->main_camera->screen_dist;
-	i = -1;
-	while (++i < 3)
-	{
-		if (i == 0)
-		{
-			ml_vector3_copy((t_vec3){sd, w / 2, h / 2}, st[0].vtc[i]->position);
-			ml_vector3_copy((t_vec3){sd, -w / 2, -h / 2},
-									st[1].vtc[i]->position);
-			continue;
-		}
-		ml_vector3_copy((t_vec3){sd, (3 - i * 2) * (w / 2), -(3 - i * 2) *
-									h / 2}, st[0].vtc[i]->position);
-		ml_vector3_copy((t_vec3){sd, (3 - i * 2) * (w / 2), -(3 - i * 2) *
-									h / 2}, st[1].vtc[i]->position);
-	}
-}
-
 void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 								t_vec2 *corners_on_screen)
 {
-	t_ray		rays[3];
-	t_triangle	screen_triangles[2];
-	int			intersections[6];
-	int			i;
-	(void)corners_on_screen;
-	i = 0;
-	if (((screen_triangles[0].vtc[i] =
-				(t_vertex *)malloc(sizeof(t_vertex))) == NULL) ||
-		((screen_triangles[1].vtc[i] =
-				(t_vertex *)malloc(sizeof(t_vertex))) == NULL))
-			ft_printf("Malloc Error in init_screen_triangles.\n"); //TODO properly handle errors
+	t_ray	rays[3];
+	int		i;
+	float	scaler;
 
-	init_screen_triangles(app, screen_triangles);
-	ft_memset(intersections, 0 , sizeof(int) * 6);
 	i = -1;
 	while (++i < 3)
 	{
-		ft_memset(rays[i].origin, 0 , sizeof(rays[i].origin));
-		ml_vector3_copy(triangle->vtc[i]->position, rays[i].dir);
+		rays[i] = new_ray((t_vec3){0.0, 0.0, 0.0}, triangle->vtc[i]->position);
 		ml_vector3_normalize(rays[i].dir, rays[i].normalized_dir);
+		scaler = (app->active_scene->main_camera->screen_dist / rays[i].dir[0]);
+		rays[i].dir[1] *= scaler;
+		rays[i].dir[2] *= scaler;
+		ml_vector2_copy((t_vec2){rays[i].dir[1], rays[i].dir[2]},
+						corners_on_screen[i]);
 	}
 	// project_triangle_onto_screen(app, triangle, screen_triangles, rays); //! WIP
 }
@@ -127,24 +85,3 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	}
 	return (true);
 }
-
-// t_bool		render_mesh(t_wolf3d *app, t_mesh *mesh, t_camera *camera)
-// {
-// 	// int		i;
-// 	// t_mesh	*mesh_copy;
-
-// 	// copy_mesh(mesh, mesh_copy);
-// 	// i = -1;
-// 	// for (vertex in triangle in mesh)
-// 	// {
-// 		// can't actually modify original vertex data
-// 		// figure out if create temporary copy of all vertices
-// 		// or some other way
-// 	// ((*mesh).shader)->v(vertex, mesh, camera);
-// 	// }
-// 	// while (i < mesh->triangle_count)
-// 	// {
-// 	// 	render_triangle(app, mesh->triangles[i], mesh, camera);
-// 	// }
-// 	return (true);
-// }

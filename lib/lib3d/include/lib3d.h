@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:07:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/01 18:07:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 15:12:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct		s_vertex
 	t_vec4			position;
 	t_vec3			normal;
 	unsigned int	color;
-}					t_vertex;	
+}					t_vertex;
 
 /*
 **	The box structures are rectangular and consist of points that for the
@@ -44,28 +44,28 @@ typedef struct		s_vertex
 
 typedef struct		s_box3d
 {
-	t_vec3			topa;
-	t_vec3			topb;
-	t_vec3			topc;
-	t_vec3			topd;
-	t_vec3			bota;
-	t_vec3			botb;
-	t_vec3			botc;
-	t_vec3			botd;
+	t_vec3			top_a;
+	t_vec3			top_b;
+	t_vec3			top_c;
+	t_vec3			top_d;
+	t_vec3			bot_a;
+	t_vec3			bot_b;
+	t_vec3			bot_c;
+	t_vec3			bot_d;
 }					t_box3d;
 
 typedef struct		s_box2d
 {
-	t_vec2			topa;
-	t_vec2			topb;
-	t_vec2			bota;
-	t_vec2			botb;
+	t_vec2			top_a;
+	t_vec2			top_b;
+	t_vec2			bot_a;
+	t_vec2			bot_b;
 }					t_box2d;
 
 /*
 **	Triangle structure includes references to its vertices in an array for
 **	Easier iteration. The vertex pointers directly point at the corresponding
-**	vertices in the mesh vertex list.	
+**	vertices in the mesh vertex list.
 */
 
 typedef struct		s_triangle

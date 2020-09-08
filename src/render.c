@@ -58,16 +58,16 @@ void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 
 // }
 
-void		vec2_sub_y_z(t_vec4 v1, t_vec4 v2, t_vec2 res)
+void		vec2_sub_y_z(t_vec2 v1, t_vec2 v2, t_vec2 res)
 {
-	res[0] = v1[1] - v2[1];
-	res[1] = v1[2] - v2[2];
+	res[0] = v1[0] - v2[0];
+	res[1] = v1[1] - v2[1];
 }
 
-void		paint_edge_to_buffer(t_wolf3d *app, uint32_t *zbuffer, t_vec4 *start, t_vec4 *end)
+void		paint_edge_to_buffer(t_wolf3d *app, uint32_t *zbuffer, t_vec2 *start, t_vec2 *end)
 {
-	int			increment;
-	int			deltax;
+	float		increment;
+	float		deltax;
 	int			i;
 	t_vec2		edge_vector;
 	float		edge_vector_magn;
@@ -78,29 +78,34 @@ void		paint_edge_to_buffer(t_wolf3d *app, uint32_t *zbuffer, t_vec4 *start, t_ve
 	// yi = 0;
 	// xi = (*start)[0] + increment * edge_vector[0];
 	// yi = (*start)[1] + increment * edge_vector[1];
-	deltax = (*end)[1] - (*start)[1];
+	deltax = (float)((*end)[0] - (*start)[0]);
+	printf("deltax : %f\n", (*end)[0] - (*start)[0]);
 	vec2_sub_y_z(*end, *start, edge_vector);
 	edge_vector_magn = ml_vector2_mag(edge_vector);
-	ft_printf("deltax: %d", deltax);
+	ft_printf("edge_vector_mag: %f\n", edge_vector_magn);
 	ml_vector2_print(edge_vector);
-	// while (i < deltax)
-	// {
-	// 	increment = (i * edge_vector_magn) / deltax;
-	
-	// 	zbuffer[screen_to_frame_coords(	app->main_window->width,
-	// 									app->main_window->height,
-	// 							(*start)[0] + increment * edge_vector[0] +
-	// 										app->main_window->width / 2,
-	// 							(*start)[1] + increment * edge_vector[1] +
-	// 										app->main_window->width / 2)] = 0xffaaffff;
-	// 	ft_printf("painted: %d\n", screen_to_frame_coords(	app->main_window->width,
-	// 									app->main_window->height,
-	// 							(*start)[0] + increment * edge_vector[0] +
-	// 										app->main_window->width / 2,
-	// 							(*start)[1] + increment * edge_vector[1] +
-	// 										app->main_window->width / 2));
-	// 	i++;
-	// }
+	while (i < ft_abs((double)deltax))
+	{
+		increment = i / (ft_abs((double)deltax));
+		ft_printf("increment: %f\n", increment);
+		ft_printf("x: %d\n", (int)((*start)[0] + increment * edge_vector[0] +
+											app->main_window->width / 2));
+		ft_printf("y: %d\n", (int)((*start)[1] + increment * edge_vector[1] +
+								   app->main_window->height / 2));
+		zbuffer[screen_to_frame_coords(	app->main_window->width,
+										app->main_window->height,
+								(int)((*start)[0] + increment * edge_vector[0] +
+											app->main_window->width / 2),
+								(int)((*start)[1] + increment * edge_vector[1] +
+											app->main_window->height / 2))] = 0xffaaffff;
+		ft_printf("painted: %d\n", screen_to_frame_coords(	app->main_window->width,
+										app->main_window->height,
+								(int)((*start)[0] + increment * edge_vector[0] +
+											app->main_window->width / 2),
+								(int)((*start)[1] + increment * edge_vector[1] +
+											app->main_window->height / 2)));
+		i++;
+	}
 	(void)increment;
 	(void)zbuffer;
 	(void)app;
@@ -122,8 +127,12 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 
 	zbuffer = app->main_window->zbuffer;
 	(void)mesh;
-	screen_intersection(app, triangle, corners_on_screen);
-	paint_edge_to_buffer(app, zbuffer, &(triangle->vtc[0]->position), &(triangle->vtc[1]->position));
+	// screen_intersection(app, triangle, corners_on_screen);
+	// paint_edge_to_buffer(app, zbuffer, &(corners_on_screen[0]), &(corners_on_screen[1]));
+	// paint_edge_to_buffer(app, zbuffer, &(corners_on_screen[0]), &(corners_on_screen[2]));
+	// paint_edge_to_buffer(app, zbuffer, &(corners_on_screen[1]), &(corners_on_screen[2]));
+	// paint_edge_to_buffer(app, zbuffer, &(triangle->vtc[0]->position), &(triangle->vtc[2]->position));
+	// paint_edge_to_buffer(app, zbuffer, &(triangle->vtc[1]->position), &(triangle->vtc[2]->position));
 	int k = 0;
 	while (k < width * height)
 	{
@@ -149,18 +158,20 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	i = 0;
 	while (i < camera->raycount)
 	{
-		// if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))
-		// {
-			// app->main_window->framebuffer[
-			// 	screen_to_frame_coords(app->main_window->width, app->main_window->height,
-			// 	(int)(camera->rays[i].dir[1]) + camera->screen_width / 2,
-			// 	(int)(camera->rays[i].dir[2]) + camera->screen_height / 2)] = color;
-		// }
+		if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))
+		{
+			app->main_window->framebuffer[
+				screen_to_frame_coords(app->main_window->width, app->main_window->height,
+				(int)(camera->rays[i].dir[1]) + camera->screen_width / 2,
+				(int)(camera->rays[i].dir[2]) + camera->screen_height / 2)] = color;
+		}
 		i++;
 		//find a way to get uv data in fragment shader
 		//mesh->shader->f(triangle, calculate_baryocoords(intsec), color);
 		//find a way to get framebuffer data in and or out of this function
 	}
 	(void)intsec;
+	(void)corners_on_screen;
+	(void)triangle;
 	return (true);
 }

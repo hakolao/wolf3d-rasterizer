@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 23:05:03 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 13:44:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,7 @@ void		update_frame_buffer(t_wolf3d *app)
 	ft_memset(app->main_window->framebuffer, 0,
 		app->main_window->width * app->main_window->height * sizeof (uint32_t));
 	if (app->active_scene->main_camera != NULL)
-	{
 		render_active_scene(app);
-		if (app->is_debug)
-			render_debug_grid(app);
-	}
 	render_ui(app);
 }
 

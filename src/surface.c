@@ -6,20 +6,20 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/03 14:05:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 16:12:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 14:00:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-SDL_Surface			*surface_from_font(t_wolf3d *app,
-					const char *text, SDL_Color text_color)
+SDL_Surface			*surface_from_font(t_wolf3d *app, t_text_params params)
 {
 	SDL_Surface		*text_surface;
 	SDL_Surface		*formatted_surface;
 
 	text_surface = TTF_RenderText_Blended_Wrapped(
-		app->main_window->font, text, text_color, app->main_window->width);
+		app->main_window->font, params.text, params.text_color,
+			app->main_window->width);
 	error_check(!text_surface, TTF_GetError());
 	formatted_surface = SDL_ConvertSurfaceFormat(text_surface,
 		PIXEL_FORMAT, 0);

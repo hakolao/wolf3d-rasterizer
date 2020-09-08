@@ -34,14 +34,14 @@ SOURCES = main.c \
 			camera.c \
 			scene.c \
 			time.c \
-			object.c \
 			render.c \
 			ui.c \
 			color_utils.c \
 			text.c \
 			surface.c \
 			debug.c \
-			copy_mesh.c
+			3d_object.c \
+			scene_objects.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

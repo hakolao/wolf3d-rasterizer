@@ -20,6 +20,20 @@
 
 #include "wolf3d.h"
 
+/*
+**	Converts pixel position from screen coordinates to frame buffer index
+**	Left top corner is considered (0,0) and bottom right (width, height)
+*/
+
+int			screen_to_frame_coords(uint32_t width, uint32_t height, int x, int y)
+{
+	x *= -1;
+	y *= -1;
+	x += width;
+	y += height;
+	return (x + y * width);
+}
+
 void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 								t_vec2 *corners_on_screen)
 {

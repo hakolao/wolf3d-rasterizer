@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 19:35:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 15:57:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,15 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.menu_options[2] = "Quit";
 		data.menu_option_count = 3;
 		data.main_camera = NULL;
+		data.objects = NULL;
+		data.object_count = 0;
 	}
 	else if (scene_id == scene_id_main_game)
 	{
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
+		data.objects = create_test_scene_objects(&data.object_count);
 	}
 	app->active_scene = new_scene(app, &data);
 }
@@ -41,7 +44,7 @@ void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
 	select_scene(app, to_scene);
 }
 
-t_scene		*new_scene(t_wolf3d *app, t_scene_data *data)
+t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)
 {
 	t_scene		*scene;
 
@@ -55,18 +58,30 @@ t_scene		*new_scene(t_wolf3d *app, t_scene_data *data)
 	scene->menu_option_count = data->menu_option_count;
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
+	scene->object_count = data->object_count;
+	scene->objects = data->objects;
 	if (scene->main_camera)
 		update_camera(app);
 	return (scene);
 }
 
-void		destroy_scene(t_scene *scene)
+void			destroy_scene(t_scene *scene)
 {
-	// ToDo: Destroy objects
+	int		i;
+
+	if (scene->objects != NULL)
+	{
+		i = -1;
+		while (++i < scene->object_count)
+			destroy_object(scene->objects[i]);
+		free(scene->objects);
+		scene->objects = NULL;
+	}
 	if (scene->main_camera)
 	{
 		free(scene->main_camera->rays);
 		free(scene->main_camera);
+		scene->main_camera = NULL;
 	}
 	scene = NULL;
 	return ;

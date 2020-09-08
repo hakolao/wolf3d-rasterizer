@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 17:11:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 16:12:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,39 +141,18 @@ typedef struct						s_player
 **	Structs and typedefs used in rendering
 */
 
-typedef void *(t_vertex_shader(char *fmt, ...));
-typedef void *(t_fragment_shader(char *fmt, ...));
-
-typedef struct						s_shader
+typedef struct						s_3d_object
 {
-	t_vertex_shader			*v;
-	t_fragment_shader		*f;
-}									t_shader;
-
-typedef struct						s_object
-{
-	t_mesh					*mesh;
 	t_vec3					origin;
-	t_vec3					orientation[3];
+	t_vec3					position; // == origin * transform
 	t_mat4					transform;
-	t_vec3					parent_origin;
-	t_vec3					parent_orientation[3];
-	t_scene					*parent_scene;
-}									t_object;
-
-struct						s_mesh
-{
-	t_vertex				**vtc;
-	int						vtx_count;
-	t_triangle				**triangles;
-	int						triangle_count;
-	t_vec3					origin;
-	t_vec3					orientation[3];
-	t_mat4					transform;
-	t_box3d					bound_box;
-	t_shader				shader;
-	t_object				*parent_object;
-};
+	t_vertex				*mesh_vertices;
+	int32_t					mesh_vertex_count;
+	t_triangle				*mesh_triangles;
+	int32_t					mesh_triangle_count;
+	t_mat4					mesh_transform;
+	t_box3d					mesh_bound_box;
+}									t_3d_object;
 
 /*
 **	Typedefs related to app and scene management
@@ -186,16 +165,14 @@ typedef struct						s_scene_data
 	const char				*menu_options[64];
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
-	//add here all the date needed to create a scene
-	//for example fetch the map and included
-	//objects. This will be passed to new_scene()
-	//that will interpret the data and create the scene
+	t_3d_object				**objects; //Read from map eventually
+	int32_t					object_count; //Read from map eventually
 }									t_scene_data;
 
 struct s_scene
 {
-	t_object				**objects;
-	uint32_t				object_count;
+	t_3d_object				**objects;
+	int32_t					object_count;
 	t_camera				*main_camera;
 	t_window				*main_window;
 	const char				*menu_options[64];
@@ -244,19 +221,20 @@ t_scene								*new_scene(t_wolf3d *app,
 void								destroy_scene(t_scene *scene);
 void								set_active_scene(t_wolf3d *app,
 									t_scene_id to_scene);
+t_3d_object							**create_test_scene_objects(
+									int32_t *object_count);
 
 /*
-** Objects
+**	3d Object
 */
-
-t_object							*create_object_triangle(t_scene *scene,
-															t_wolf3d *app);
-
-/*
-**	Mesh
-*/
-
-void								copy_mesh(t_mesh *src, t_mesh *dest);
+t_3d_object							*create_3d_object(void);
+void								init_3d_object(t_3d_object *obj,
+									t_vertex *vertices,
+									uint32_t vertex_count, t_vec3 origin);
+void								init_triangle(t_triangle *triangle,
+									t_vertex *pos_a, t_vertex *pos_b,
+									t_vertex *pos_c);
+void								destroy_object(t_3d_object *object);
 
 /*
 ** Player

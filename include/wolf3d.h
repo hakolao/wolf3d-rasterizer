@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 13:32:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 14:19:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
 # define GAME_FONT "assets/pixelated.ttf"
+# define DEBUG_FONT "assets/Roboto-Regular.ttf"
 # define FONT_SIZE 15
 
 # define WIDTH 1280
@@ -220,6 +221,16 @@ typedef struct						s_wolf3d
 	t_player				player;
 }									t_wolf3d;
 
+typedef struct						s_text_params
+{
+	const char				*font;
+	const char				*text;
+	SDL_Color				text_color;
+	int						font_size;
+	int						*xy;
+	float					blend_ratio;
+}									t_text_params;
+
 /*
 **	Function declarations
 */
@@ -313,24 +324,22 @@ SDL_Color							u32_to_rgba(uint32_t color);
 /*
 ** Text
 */
-void								render_text(t_wolf3d *app, const char *text,
-									SDL_Color text_color, int xy[2]);
+void								render_text(t_wolf3d *app,
+									t_text_params params);
 void								render_blinking_text(t_wolf3d *app,
-									const char *text, SDL_Color text_color,
-									int xy[2]);
+									t_text_params params);
 void								render_centered_blinking_text(t_wolf3d *app,
-									const char *text, SDL_Color text_color,
-									int xy[2]);
+									t_text_params params);
 void								render_centered_text(t_wolf3d *app,
-									const char *text, SDL_Color text_color,
-									int xy[2]);
-uint32_t							get_font_size(t_wolf3d *app);
+									t_text_params params);
+uint32_t							get_relative_font_size(t_wolf3d *app,
+									uint32_t font_size);
 
 /*
 ** SDL Surface
 */
 SDL_Surface							*surface_from_font(t_wolf3d *app,
-									const char *text, SDL_Color text_color);
+									t_text_params params);
 void								surface_to_framebuffer(t_wolf3d *app,
 									SDL_Surface *surface, float blend_ratio,
 									int xy[2]);

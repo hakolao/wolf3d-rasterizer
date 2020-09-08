@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/09 00:10:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/09 00:18:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /*
 ** ToDo: Might not work right yet :D
+** ToDo: Apply changes to object transformation matrices
 */
 
 static void		apply_transform_to_world(t_wolf3d *app, t_mat4 transform)
@@ -64,7 +65,7 @@ void			rotate_player(t_wolf3d *app, t_vec3 axes)
 	t_player *player;
 
 	player = &app->player;
-	ml_vector3_mul(axes, ml_rad(player->rot_speed), axes);
+	ml_vector3_mul(axes, ml_rad(player->rot_speed * app->delta_time), axes);
 	ml_matrix4_rotation(axes[0], axes[1], axes[2], rotation);
 	ml_matrix4_mul_vec3(rotation, player->forward, new_direction);
 	apply_transform_to_world(app, rotation);
@@ -81,24 +82,24 @@ void			move_player(t_wolf3d *app, t_move dir)
 	player = &app->player;
 	if (dir == move_forward)
 	{
-		ml_vector3_mul(player->forward, player->speed, add);
+		ml_vector3_mul(player->forward, player->speed * app->delta_time, add);
 		ml_vector3_add(player->pos, add, new_pos);
 	}
 	else if (dir == move_backward)
 	{
-		ml_vector3_mul(player->forward, -player->speed, add);
+		ml_vector3_mul(player->forward, -player->speed * app->delta_time, add);
 		ml_vector3_add(player->pos, add, new_pos);
 	}
 	else if (dir == move_strafe_left)
 	{
 		ml_vector3_cross(player->forward, player->up, sideways);
-		ml_vector3_mul(sideways, player->speed, sideways);
+		ml_vector3_mul(sideways, player->speed * app->delta_time, sideways);
 		ml_vector3_sub(player->pos, sideways, new_pos);
 	}
 	else if (dir == move_strafe_right)
 	{
 		ml_vector3_cross(player->forward, player->up, sideways);
-		ml_vector3_mul(sideways, player->speed, sideways);
+		ml_vector3_mul(sideways, player->speed * app->delta_time, sideways);
 		ml_vector3_add(player->pos, sideways, new_pos);
 	}
 	apply_movement(app, new_pos);

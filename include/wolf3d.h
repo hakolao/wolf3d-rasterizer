@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/07 20:20:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/08 13:32:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,7 @@ void								copy_mesh(t_mesh *src, t_mesh *dest);
 
 void								init_player(t_wolf3d *app);
 void								move_player(t_wolf3d *app, t_move dir);
+void								rotate_player(t_wolf3d *app, t_vec3 axes);
 
 /*
 ** Camera

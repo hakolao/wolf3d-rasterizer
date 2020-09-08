@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 14:19:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/07 17:11:21 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
 # define GAME_FONT "assets/pixelated.ttf"
-# define DEBUG_FONT "assets/Roboto-Regular.ttf"
 # define FONT_SIZE 15
 
 # define WIDTH 1280
@@ -90,6 +89,7 @@ typedef struct						s_window
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
 	uint32_t				*framebuffer;
+	uint32_t				*zbuffer;
 	TTF_Font				*font;
 	int32_t					width;
 	int32_t					height;
@@ -158,6 +158,7 @@ typedef struct						s_object
 	t_mat4					transform;
 	t_vec3					parent_origin;
 	t_vec3					parent_orientation[3];
+	t_scene					*parent_scene;
 }									t_object;
 
 struct						s_mesh
@@ -221,16 +222,6 @@ typedef struct						s_wolf3d
 	t_player				player;
 }									t_wolf3d;
 
-typedef struct						s_text_params
-{
-	const char				*font;
-	const char				*text;
-	SDL_Color				text_color;
-	int						font_size;
-	int						*xy;
-	float					blend_ratio;
-}									t_text_params;
-
 /*
 **	Function declarations
 */
@@ -273,7 +264,6 @@ void								copy_mesh(t_mesh *src, t_mesh *dest);
 
 void								init_player(t_wolf3d *app);
 void								move_player(t_wolf3d *app, t_move dir);
-void								rotate_player(t_wolf3d *app, t_vec3 axes);
 
 /*
 ** Camera
@@ -324,22 +314,24 @@ SDL_Color							u32_to_rgba(uint32_t color);
 /*
 ** Text
 */
-void								render_text(t_wolf3d *app,
-									t_text_params params);
+void								render_text(t_wolf3d *app, const char *text,
+									SDL_Color text_color, int xy[2]);
 void								render_blinking_text(t_wolf3d *app,
-									t_text_params params);
+									const char *text, SDL_Color text_color,
+									int xy[2]);
 void								render_centered_blinking_text(t_wolf3d *app,
-									t_text_params params);
+									const char *text, SDL_Color text_color,
+									int xy[2]);
 void								render_centered_text(t_wolf3d *app,
-									t_text_params params);
-uint32_t							get_relative_font_size(t_wolf3d *app,
-									uint32_t font_size);
+									const char *text, SDL_Color text_color,
+									int xy[2]);
+uint32_t							get_font_size(t_wolf3d *app);
 
 /*
 ** SDL Surface
 */
 SDL_Surface							*surface_from_font(t_wolf3d *app,
-									t_text_params params);
+									const char *text, SDL_Color text_color);
 void								surface_to_framebuffer(t_wolf3d *app,
 									SDL_Surface *surface, float blend_ratio,
 									int xy[2]);
@@ -348,6 +340,5 @@ void								surface_to_framebuffer(t_wolf3d *app,
 ** Debug information
 */
 void								capture_framerate(t_wolf3d *app);
-void								render_debug_grid(t_wolf3d *app);
 
 #endif

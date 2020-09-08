@@ -38,8 +38,23 @@ void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 		ml_vector2_copy((t_vec2){rays[i].dir[1], rays[i].dir[2]},
 						corners_on_screen[i]);
 	}
-	// project_triangle_onto_screen(app, triangle, screen_triangles, rays); //! WIP
 }
+
+// void		paint_edge_to_buffer(uint32_t *zbuffer, t_vec2 *start, t_vec2 *end)
+// {
+// 	t_vec2		dir;
+// 	int			increment;
+// 	int			deltax;
+
+// 	deltax = endx - startx;
+// 	while (i < deltax)
+// 	{
+// 		increment = i * magn(end - start) / deltax;
+// 		xi = x0 + increment * dir.x;
+// 		yi = y0 + increment * dir.y
+// 		zbuffer.paint[x, y]
+// 	}
+// }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 			t_mesh *mesh, t_camera *camera)
@@ -47,13 +62,20 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	t_intersection		intsec;
 	int					color;
 	int					i;
+	t_vec2				corners_on_screen[3];
+	t_vec3				normalized_normal;
+	uint32_t			*zbuffer;
+	int					width = app->main_window->zbuffer;
+	int					height = app->main_window->zbuffer;
+
+	zbuffer = app->main_window->zbuffer;
 	(void)mesh;
-	t_vec3 normalized_normal;
-	// screen_intersection(app, triangle, NULL);
+	screen_intersection(app, triangle, NULL);
 	ml_vector3_normalize(triangle->normal, normalized_normal);
-	color = 0xffaaffff;
-	// color = (1 & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | (blue & 255);
-	i = 0;
+	//Here we borrow zbuffers memory to store the triangle's screen coordinates
+	//the area will be filled right after with triangles z values (might be fragile af)
+	// zbuffer[screen_to_frame_coords(width, height, + width / 2, + height / 2)] = 0;
+	// paint_edge_to_buffer(uint32_t *zbuffer, t_vec2 *start, t_vec2 *end);
 	//1. Cast rays from triangle corners through screen to camera
 	//2. Calculate intersection points with screen and convert them to
 	//		screen pixels.
@@ -64,11 +86,7 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	//5. Use all these pixels which are now guaranteed to be inside the triangle
 	//		and cast rays from camera through the pixels and calculate intersection
 	//		normally with the triangle.
-	// t_vec2	triangle_corners_screen[3];
-	// screen_intersection(app, triangle, triangle_corners_screen);
-	// (void)app;
-	// (void)mesh;
-	// (void)camera;
+	i = 0;
 	while (i < camera->raycount)
 	{
 		if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))

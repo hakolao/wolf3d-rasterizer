@@ -68,6 +68,9 @@ void			main_window_init(t_wolf3d *app)
 	app->main_window->is_hidden = false;
 	app->main_window->frame = NULL;
 	app->main_window->framebuffer = NULL;
+	error_check((app->main_window->zbuffer = (uint32_t*)malloc(sizeof(float) *
+				app->main_window->width * app->main_window->height)) == NULL,
+				"Window zbuffer malloc failed");
 	recreate_frame(app);
 	SDL_AddEventWatch(resize_callback, app->main_window);
 	app->main_window->resized = false;

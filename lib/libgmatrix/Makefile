@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/08/24 15:45:00 by ohakola          ###   ########.fr        #
+#    Updated: 2020/09/08 23:54:37 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,9 @@ SOURCES = ml_matrix4_id.c \
 			ml_vector_set.c \
 			ml_set_orientation_base.c \
 			ml_vector2_mag.c \
-			ml_vector2_sub.c
+			ml_vector2_sub.c \
+			ml_matrix4_translation.c \
+			ml_matrix4_copy.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

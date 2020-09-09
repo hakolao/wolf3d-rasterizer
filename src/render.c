@@ -53,10 +53,37 @@ void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	}
 }
 
-// void		fill_triangle_area(uint32_t *zbuffer, int startpoint)
-// {
 
-// }
+void		fill_triangle_area_column(t_wolf3d *app, uint32_t *zbuffer, int startx, int starty)
+{
+	static int counter = 0;
+	// ft_printf("counter: %d\n", counter);
+	counter++;
+	uint32_t		width;
+	uint32_t height;
+	uint32_t	index;
+
+	width = app->main_window->width;
+	height = app->main_window->height;
+	index = screen_to_frame_coords(width, height, startx + width / 2, starty + height / 2);
+	// ft_printf("startx: %d | starty: %d", startx, starty);
+	// ft_printf("index: %d\n", index);
+	// // if (counter > 1427)
+	// // 	return ;
+	// ft_printf("hex: %x\n", zbuffer[index]);
+	if (zbuffer[index] == 0xffaaffff)
+	{
+		return ;
+	}
+	else if (index > 0 && index < width * height - 1)
+	{
+		zbuffer[index] = 0xffaaffff;
+			fill_triangle_area_column(app, zbuffer, startx, starty + 1);
+			fill_triangle_area_column(app, zbuffer, startx, starty - 1);
+			fill_triangle_area_column(app, zbuffer, startx + 1, starty);
+			fill_triangle_area_column(app, zbuffer, startx - 1, starty);
+	}
+}
 
 void		vec2_sub_y_z(t_vec2 v1, t_vec2 v2, t_vec2 res)
 {
@@ -64,51 +91,57 @@ void		vec2_sub_y_z(t_vec2 v1, t_vec2 v2, t_vec2 res)
 	res[1] = v1[1] - v2[1];
 }
 
-void		paint_edge_to_buffer(t_wolf3d *app, uint32_t *zbuffer, t_vec2 *start, t_vec2 *end)
+void		paint_edge_x(t_wolf3d *app, t_vec2 *start, t_vec2 edge_vector, float deltax)
 {
-	float		increment;
-	float		deltax;
+	float	increment;
+	int		i;
+
+	i = -1;
+	while (++i < ft_abs((double)deltax))
+	{
+		increment = i / (ft_abs((double)deltax));
+		app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width,
+									   app->main_window->height,
+									   (int)((*start)[0] + increment * edge_vector[0] +
+											 app->main_window->width / 2),
+									   (int)((*start)[1] + increment * edge_vector[1] +
+											 app->main_window->height / 2))] = 0xffaaffff;
+		i++;
+	}
+}
+
+void		paint_edge_y(t_wolf3d *app, t_vec2 *start, t_vec2 edge_vector, float deltay)
+{
+	float	increment;
+	int		i;
+
+	i = -1;
+	while (++i < ft_abs((double)deltay))
+	{
+		increment = i / (ft_abs((double)deltay));
+		app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width,
+									   app->main_window->height,
+									   (int)((*start)[0] + increment * edge_vector[0] +
+											 app->main_window->width / 2),
+									   (int)((*start)[1] + increment * edge_vector[1] +
+											 app->main_window->height / 2))] = 0xffaaffff;
+		i++;
+	}
+}
+
+void		paint_edge_to_buffer(t_wolf3d *app, t_vec2 *start, t_vec2 *end)
+{
+	float		delta[2];
 	int			i;
 	t_vec2		edge_vector;
 	float		edge_vector_magn;
-	// int			xi;
-	// int			yi;
 	i = 0;
-	// xi = 0;
-	// yi = 0;
-	// xi = (*start)[0] + increment * edge_vector[0];
-	// yi = (*start)[1] + increment * edge_vector[1];
-	deltax = (float)((*end)[0] - (*start)[0]);
-	printf("deltax : %f\n", (*end)[0] - (*start)[0]);
+	delta[0] = ((float)((*end)[0] - (*start)[0])) * 2;
+	delta[1] = ((float)((*end)[1] - (*start)[1])) * 2;
 	vec2_sub_y_z(*end, *start, edge_vector);
 	edge_vector_magn = ml_vector2_mag(edge_vector);
-	ft_printf("edge_vector_mag: %f\n", edge_vector_magn);
-	ml_vector2_print(edge_vector);
-	while (i < ft_abs((double)deltax))
-	{
-		increment = i / (ft_abs((double)deltax));
-		ft_printf("increment: %f\n", increment);
-		ft_printf("x: %d\n", (int)((*start)[0] + increment * edge_vector[0] +
-											app->main_window->width / 2));
-		ft_printf("y: %d\n", (int)((*start)[1] + increment * edge_vector[1] +
-								   app->main_window->height / 2));
-		zbuffer[screen_to_frame_coords(	app->main_window->width,
-										app->main_window->height,
-								(int)((*start)[0] + increment * edge_vector[0] +
-											app->main_window->width / 2),
-								(int)((*start)[1] + increment * edge_vector[1] +
-											app->main_window->height / 2))] = 0xffaaffff;
-		ft_printf("painted: %d\n", screen_to_frame_coords(	app->main_window->width,
-										app->main_window->height,
-								(int)((*start)[0] + increment * edge_vector[0] +
-											app->main_window->width / 2),
-								(int)((*start)[1] + increment * edge_vector[1] +
-											app->main_window->height / 2)));
-		i++;
-	}
-	(void)increment;
-	(void)zbuffer;
-	(void)app;
+	paint_edge_x(app, start, edge_vector, delta[0]);
+	paint_edge_y(app, start, edge_vector, delta[1]);
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
@@ -119,26 +152,31 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	int					i;
 	t_vec2				corners_on_screen[3];
 	// t_vec3				normalized_normal;
-	uint32_t			*zbuffer;
+	uint32_t			*rbuffer;
 	int					width = app->main_window->width;
 	int					height = app->main_window->height;
 	(void)width;
 	(void)height;
 
-	zbuffer = app->main_window->zbuffer;
+	rbuffer = app->main_window->rbuffer;
 	(void)mesh;
-	// screen_intersection(app, triangle, corners_on_screen);
-	// paint_edge_to_buffer(app, zbuffer, &(corners_on_screen[0]), &(corners_on_screen[1]));
-	// paint_edge_to_buffer(app, zbuffer, &(corners_on_screen[0]), &(corners_on_screen[2]));
-	// paint_edge_to_buffer(app, zbuffer, &(corners_on_screen[1]), &(corners_on_screen[2]));
-	// paint_edge_to_buffer(app, zbuffer, &(triangle->vtc[0]->position), &(triangle->vtc[2]->position));
-	// paint_edge_to_buffer(app, zbuffer, &(triangle->vtc[1]->position), &(triangle->vtc[2]->position));
+	screen_intersection(app, triangle, corners_on_screen);
+	paint_edge_to_buffer(app, &(corners_on_screen[0]), &(corners_on_screen[1]));
+	paint_edge_to_buffer(app, &(corners_on_screen[0]), &(corners_on_screen[2]));
+	paint_edge_to_buffer(app, &(corners_on_screen[1]), &(corners_on_screen[2]));
+	fill_triangle_area_column(app, rbuffer, 0, 0);
+	// printf("fill triangle startx: %d\n", (int)((corners_on_screen[0])[0]) - 1);
+	// printf("fill triangle starty: %d\n", (int)((corners_on_screen[0])[1]));
+	//TODO WE NOW HAVE A FUNCTION THAT PAINTS AN ENTIRE PIXEL COLUMN WITHIN BOUNDARIES
+	//TODO NEED TO IMPLEMENT A LOOP THAT RUNS IT FOR EVERY COLUMN IN TRIANGLE
+	//TODO REMEMBER TO CHANGE TRIANGLE AND GRID RENDERING BACK
 	int k = 0;
 	while (k < width * height)
 	{
-		app->main_window->framebuffer[k] = zbuffer[k];
+		app->main_window->framebuffer[k] = rbuffer[k];
 		k++;
 	}
+	ft_memset(rbuffer, 0, sizeof(float) * WIDTH * HEIGHT);
 	// ml_vector3_normalize(triangle->normal, normalized_normal);
 	color = 0xffaaffff;
 	//Here we borrow zbuffers memory to store the triangle's screen coordinates
@@ -158,13 +196,13 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	i = 0;
 	while (i < camera->raycount)
 	{
-		if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))
-		{
-			app->main_window->framebuffer[
-				screen_to_frame_coords(app->main_window->width, app->main_window->height,
-				(int)(camera->rays[i].dir[1]) + camera->screen_width / 2,
-				(int)(camera->rays[i].dir[2]) + camera->screen_height / 2)] = color;
-		}
+		// if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))
+		// {
+		// 	app->main_window->framebuffer[
+		// 		screen_to_frame_coords(app->main_window->width, app->main_window->height,
+		// 		(int)(camera->rays[i].dir[1]) + camera->screen_width / 2,
+		// 		(int)(camera->rays[i].dir[2]) + camera->screen_height / 2)] = color;
+		// }
 		i++;
 		//find a way to get uv data in fragment shader
 		//mesh->shader->f(triangle, calculate_baryocoords(intsec), color);

@@ -91,6 +91,7 @@ typedef struct						s_window
 	SDL_Texture				*frame;
 	uint32_t				*framebuffer;
 	uint32_t				*zbuffer;
+	uint32_t				*rbuffer;
 	TTF_Font				*font;
 	int32_t					width;
 	int32_t					height;

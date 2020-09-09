@@ -54,8 +54,8 @@ static void		render_debug_information(t_wolf3d *app)
 		app->debug_info.avg_delta_time,
 		pos,
 		dir);
-	if (app->active_scene->scene_id != scene_id_main_menu)
-		render_debug_grid(app);
+	// if (app->active_scene->scene_id != scene_id_main_menu)
+	// 	render_debug_grid(app);
 	render_text(app, (t_text_params){
 		.text = debug_info, .font = DEBUG_FONT, .blend_ratio = 1.0,
 		.font_size = FONT_SIZE, .xy = (int[2]){5, 5},

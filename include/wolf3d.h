@@ -92,6 +92,7 @@ typedef struct						s_window
 	uint32_t				*framebuffer;
 	uint32_t				*zbuffer;
 	uint32_t				*rbuffer;
+	uint32_t				rbuf_render_color;
 	TTF_Font				*font;
 	int32_t					width;
 	int32_t					height;

@@ -34,6 +34,7 @@ void		update_frame_buffer(t_wolf3d *app)
 		app->main_window->width * app->main_window->height * sizeof (uint32_t));
 	if (app->active_scene->main_camera != NULL)
 		render_active_scene_objects(app);
+	// render_debug_grid(app);
 	render_ui(app);
 }
 

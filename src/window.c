@@ -78,7 +78,7 @@ void			main_window_init(t_wolf3d *app)
 				"Window zbuffer malloc failed");
 	ft_memset(app->main_window->rbuffer, 0, sizeof(uint32_t) *
 				app->main_window->width * app->main_window->height);
-
+	app->main_window->rbuf_render_color = 0xffaaffff;
 	recreate_frame(app);
 	SDL_AddEventWatch(resize_callback, app->main_window);
 	app->main_window->resized = false;

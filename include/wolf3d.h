@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 16:12:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/11 17:31:03 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
+
+# define FILE_READ_BUF 1024
 
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
 # define GAME_FONT "assets/pixelated.ttf"
@@ -212,6 +214,12 @@ typedef struct						s_text_params
 	float					blend_ratio;
 }									t_text_params;
 
+typedef struct						s_file_contents
+{
+	void				*buf;
+	uint32_t			size;
+}									t_file_contents;
+
 /*
 **	Function declarations
 */
@@ -332,5 +340,10 @@ void								surface_to_framebuffer(t_wolf3d *app,
 */
 void								capture_framerate(t_wolf3d *app);
 void								render_debug_grid(t_wolf3d *app);
+
+/*
+** File read
+*/
+void								read_obj(const char *filename);
 
 #endif

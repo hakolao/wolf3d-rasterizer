@@ -293,7 +293,10 @@ void		calculate_fill_start_points(t_wolf3d *app, t_triangle *triangle,
 		ft_printf("loop2\n");
 		ft_memset(travelled_dist, 0, sizeof(travelled_dist));
 		ft_printf("triangle->vtc[k]->position[1]: %f\n", triangle->vtc[k]->position[1]);
-		ft_printf("triangle->vtc[k]->position[2]: %f\n", triangle->vtc[k]->position[2]);
+		printf("float: %f\n", triangle->vtc[k]->position[1]);
+		printf("digit: %u\n", (uint32_t)triangle->vtc[k]->position[1]);
+		printf("triangle->vtc[k]->position[2]: %f\n", triangle->vtc[k]->position[2]);
+
 		i = (uint32_t)screen_to_frame_coords(app->main_window->width, app->main_window->height,
 								triangle->vtc[k]->position[1] + app->main_window->width / 2,
 								triangle->vtc[k]->position[2] + app->main_window->height / 2);
@@ -309,11 +312,14 @@ void		calculate_fill_start_points(t_wolf3d *app, t_triangle *triangle,
 			i = screen_to_frame_coords(app->main_window->width, app->main_window->height,
 			triangle->vtc[k]->position[1] + app->main_window->width / 2 + travelled_dist[0],
 				triangle->vtc[k]->position[2] + app->main_window->height / 2 + travelled_dist[1]);
-			ft_printf("triangle->vtc[k]->position[1]: %f\n", triangle->vtc[k]->position[1]);
-			ft_printf("triangle->vtc[k]->position[2]: %f\n", triangle->vtc[k]->position[2]);
+			// ft_printf("triangle->vtc[k]->position[1]: %f\n", triangle->vtc[k]->position[1]);
+			// ft_printf("digit: %u\n", triangle->vtc[k]->position[1]);
+			// ft_printf("triangle->vtc[k]->position[2]: %f\n", triangle->vtc[k]->position[2]);
 			ft_printf("i3: %u\n", i);
-			start_points[0 + k] = triangle->vtc[k]->position[1] + app->main_window->width / 2 + travelled_dist[0];
-			start_points[1 + 2 * k] = triangle->vtc[k]->position[2] + app->main_window->height / 2 + travelled_dist[1];
+			ft_printf("start Y: %f\n", triangle->vtc[k]->position[1] + travelled_dist[0]);
+			ft_printf("start Z: %f\n", triangle->vtc[k]->position[2] + travelled_dist[1]);
+			start_points[2 * k] = triangle->vtc[k]->position[1] + travelled_dist[0];
+			start_points[1 + 2 * k] = triangle->vtc[k]->position[2] + travelled_dist[1];
 		}
 	}
 }
@@ -334,7 +340,7 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	(void)width;
 	(void)height;
 	(void)camera;
-
+	app->main_window->rbuf_render_color = 0xffaaffff / 2;
 	rbuffer = app->main_window->rbuffer;
 	(void)mesh;
 	screen_intersection(app, triangle, corners_on_screen);
@@ -347,8 +353,10 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	// printf("fill triangle startx: %d\n", triangle_center[0]);
 	// printf("fill triangle starty: %d\n", triangle_center[1]);
 	calculate_fill_start_points(app, triangle, triangle_center, start_points);
-	ft_printf("output start points: %d | %d", start_points[4], start_points[5]);
-	// fill_triangle_area(app, start_points[4], start_points[5] - 5);
+	ft_printf("output start points A: %d | %d\n", start_points[0], start_points[1]);
+	ft_printf("output start points B: %d | %d\n", start_points[2], start_points[3]);
+	ft_printf("output start points C: %d | %d\n", start_points[4], start_points[5]);
+	fill_triangle_area(app, start_points[4], start_points[5]);
 
 	//TODO REMEMBER TO CHANGE TRIANGLE AND GRID RENDERING BACK
 	int k = 0;

@@ -39,9 +39,9 @@ static void		render_main_game_ui(t_wolf3d *app)
 
 static void		render_debug_information(t_wolf3d *app)
 {
-	char	debug_info[256];
-	char	pos[32];
-	char	dir[32];
+	char	debug_info[1024];
+	char	pos[64];
+	char	dir[64];
 
 	ml_vector3_to_str(app->player.pos, pos);
 	ml_vector3_to_str(app->player.forward, dir);

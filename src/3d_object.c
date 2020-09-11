@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 17:22:11 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/08 16:11:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/11 18:14:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ void			init_triangle(t_triangle *triangle,
 }
 
 void		init_3d_object(t_3d_object *obj, t_vertex *vertices,
-			uint32_t vertex_count, t_vec3 origin)
+			uint32_t vertex_count)
 {
 	obj->mesh_vertices = vertices;
 	obj->mesh_vertex_count = vertex_count;
-	ml_vector3_copy(obj->origin, origin);
-	ml_vector3_copy(obj->position, origin);
+	ml_vector3_copy((t_vec3){0, 0, 0}, obj->origin);
+	ml_vector3_copy((t_vec3){0, 0, 0}, obj->position);
 	ml_matrix4_id(obj->transform);
 	ml_matrix4_id(obj->mesh_transform);
 	// obj->mesh_bound_box; ToDo: Calculate bounding box

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/11 17:31:03 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/11 18:14:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,8 +248,7 @@ t_3d_object							**create_test_scene_objects(
 */
 t_3d_object							*create_3d_object(void);
 void								init_3d_object(t_3d_object *obj,
-									t_vertex *vertices,
-									uint32_t vertex_count, t_vec3 origin);
+									t_vertex *vertices, uint32_t vertex_count);
 void								init_triangle(t_triangle *triangle,
 									t_vertex *pos_a, t_vertex *pos_b,
 									t_vertex *pos_c);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/18 22:14:37 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 23:19:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/11 16:32:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,33 +205,45 @@ t_big_int		g_power_of_10_big[10] = {(t_big_int){1, {100000000}},
 			0xbb0fd922, 0x25254932, 0xa60a9fc0, 0x104bcd64, 0x30290145,
 			0x00000062}}};
 
+void			mul_lhs_by_small_exponent(t_big_int *lhs, uint32_t exponent,
+				t_big_int *curr)
+{
+	if ((exponent & 0x7) != 0)
+		big_int_mul_u32(lhs, g_power_of_10_u32[(exponent & 0x7)], curr);
+	else
+		*curr = *lhs;
+}
+
 /*
 ** Outputs a big int of 10^exponent into result
 */
 
 void			big_int_pow_10(uint32_t exponent, t_big_int *res)
 {
-	t_big_int	curr;
-	t_big_int	next;
-	t_big_int	swap;
+	t_big_int	temps[2];
+	t_big_int	*curr;
+	t_big_int	*next;
+	t_big_int	*swap;
 	uint32_t	table_index;
 
-	big_int_set_u32(&curr, g_power_of_10_u32[exponent & 0x7]);
+	curr = &temps[0];
+	next = &temps[1];
+	big_int_set_u32(curr, g_power_of_10_u32[exponent & 0x7]);
 	exponent >>= 3;
 	table_index = 0;
 	while (exponent != 0)
 	{
 		if (exponent & 1)
 		{
-			big_int_mul(&curr, &g_power_of_10_big[table_index], &next);
-			big_int_copy(&curr, &swap);
-			big_int_copy(&next, &curr);
-			big_int_copy(&swap, &next);
+			big_int_mul(curr, &g_power_of_10_big[table_index], next);
+			swap = curr;
+			curr = next;
+			next = swap;
 		}
 		table_index++;
 		exponent >>= 1;
 	}
-	big_int_copy(&curr, res);
+	*res = *curr;
 }
 
 /*
@@ -241,30 +253,30 @@ void			big_int_pow_10(uint32_t exponent, t_big_int *res)
 void			big_int_mul_pow_10(t_big_int *lhs, uint32_t exponent,
 				t_big_int *res)
 {
-	t_big_int	curr;
-	t_big_int	next;
-	t_big_int	swap;
+	t_big_int	temps[2];
+	t_big_int	*curr;
+	t_big_int	*next;
+	t_big_int	*swap;
 	uint32_t	table_index;
 
-	if ((exponent & 0x7) != 0)
-		big_int_mul_u32(lhs, g_power_of_10_u32[exponent & 0x7], &curr);
-	else
-		big_int_copy(lhs, &curr);
+	curr = &temps[0];
+	next = &temps[1];
+	mul_lhs_by_small_exponent(lhs, exponent, curr);
 	exponent >>= 3;
 	table_index = 0;
 	while (exponent != 0)
 	{
 		if (exponent & 1)
 		{
-			big_int_mul(&curr, &g_power_of_10_big[table_index], &next);
-			big_int_copy(&curr, &swap);
-			big_int_copy(&next, &curr);
-			big_int_copy(&swap, &next);
+			big_int_mul(curr, &g_power_of_10_big[table_index], next);
+			swap = curr;
+			curr = next;
+			next = swap;
 		}
 		table_index++;
 		exponent >>= 1;
 	}
-	big_int_copy(&curr, res);
+	*res = *curr;
 }
 
 /*

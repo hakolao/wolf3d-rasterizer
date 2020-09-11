@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/18 23:26:36 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/19 13:36:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/11 17:48:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,9 @@ double		ft_floor(double num)
 
 	fd.f = num;
 	return (!fd.b.sign ? (long long int)num : (long long int)num - 1);
+}
+
+int			ft_round(double num)
+{ 
+	return (num < 0 ? num - 0.5 : num + 0.5); 
 }

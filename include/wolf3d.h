@@ -256,6 +256,7 @@ void								destroy_object(t_3d_object *object);
 void								init_player(t_wolf3d *app);
 void								move_player(t_wolf3d *app, t_move dir);
 void								rotate_player(t_wolf3d *app, t_vec3 axes);
+void								player_action_handle(t_wolf3d *app, SDL_Event event);
 
 /*
 ** Camera

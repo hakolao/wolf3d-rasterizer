@@ -46,6 +46,7 @@ SOURCES = ml_matrix4_id.c \
 			ml_set_orientation_base.c \
 			ml_vector2_mag.c \
 			ml_vector2_sub.c \
+			ml_vector2_normalize.c \
 			ml_matrix4_translation.c \
 			ml_matrix4_copy.c
 

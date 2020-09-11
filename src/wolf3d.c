@@ -36,7 +36,7 @@ static void 	main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 	}
 }
 
-static void 	player_action_handle(t_wolf3d *app, SDL_Event event)
+void 		player_action_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_KEYDOWN)
 	{

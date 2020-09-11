@@ -26,9 +26,9 @@ t_3d_object		**create_test_scene_objects(int32_t *object_count)
 	ft_memset(&objects[0]->mesh_vertices[0], 0, sizeof(t_vertex));
 	ft_memset(&objects[0]->mesh_vertices[1], 0, sizeof(t_vertex));
 	ft_memset(&objects[0]->mesh_vertices[2], 0, sizeof(t_vertex));
-	ml_vector3_copy((t_vec3){WIDTH, 20.0, 40.0}, objects[0]->mesh_vertices[0].position);
-	ml_vector3_copy((t_vec3){WIDTH, 30.0, -40.0}, objects[0]->mesh_vertices[1].position);
-	ml_vector3_copy((t_vec3){WIDTH, -50.0, -50.0}, objects[0]->mesh_vertices[2].position);
+	ml_vector3_copy((t_vec3){WIDTH, 20.0, 350}, objects[0]->mesh_vertices[0].position);
+	ml_vector3_copy((t_vec3){WIDTH, WIDTH / 2 - 5, -138.0}, objects[0]->mesh_vertices[1].position);
+	ml_vector3_copy((t_vec3){WIDTH, -WIDTH / 2 + 5, -140.0}, objects[0]->mesh_vertices[2].position);
 	error_check(!(objects[0]->mesh_triangles = malloc(sizeof(t_triangle) * 1)),
 		"Failed to malloc triangles for test scene object");
 	objects[0]->mesh_triangle_count = 1;

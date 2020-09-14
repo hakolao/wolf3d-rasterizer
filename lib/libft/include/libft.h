@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 14:42:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/11 17:49:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 15:20:49 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void			ft_putchar(char c);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char const *str, int fd);
 int				ft_atoi(const char *str);
+long long int	ft_atoi_long(const char *str);
 char			*ft_strstr(const char *haystack, const char *needle);
 char			*ft_strnstr(const char *haystack, const char *needle,
 				size_t len);
@@ -189,6 +190,9 @@ char			*ft_itoa_base_32(int32_t nb, int32_t base);
 char			*ft_itoa_base_64(int64_t nb, int64_t base);
 char			*ft_itoa_base_u32(uint32_t nb, uint32_t base);
 char			*ft_itoa_base_u64(uint64_t nb, uint64_t base);
+double			ft_atod(char *str);
+void			ft_scroll_over(char **str, char c);
+void			ft_scroll_to(char **str, char c);
 
 /*
 ** Expose ft_printf functions via libft.h

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 18:13:12 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 18:27:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
 	if (app->active_scene != NULL)
 		destroy_scene(app->active_scene);
 	select_scene(app, to_scene);
+	debug_scene(app->active_scene);
 }
 
 t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)
@@ -85,4 +86,35 @@ void			destroy_scene(t_scene *scene)
 	}
 	scene = NULL;
 	return ;
+}
+
+void			debug_scene(t_scene *scene)
+{
+	int		i;
+	int		j;
+	int		k;
+	
+	ft_printf("Scene: %d\n"
+	"objects: %d\n",
+		scene->scene_id,
+		scene->object_count);
+	i = -1;
+	while (++i < scene->object_count)
+	{
+		j = -1;
+		while (++j < (int)scene->objects[i]->mesh_triangle_count)
+		{
+			ft_printf("Triangle: %d\n", j);
+			k = -1;
+			while (++k < 3)
+			{
+				ml_vector3_print(
+					scene->objects[i]->mesh_triangles[j].vtc[0]->position);	
+				ml_vector3_print(
+					scene->objects[i]->mesh_triangles[j].vtc[1]->position);	
+				ml_vector3_print(
+					scene->objects[i]->mesh_triangles[j].vtc[2]->position);	
+			}
+		}
+	}
 }

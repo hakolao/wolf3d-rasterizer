@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 17:22:11 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/14 18:13:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 18:32:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,21 @@ void			init_3d_object(t_obj_result *read_obj, t_3d_object *obj)
 	i = -1;
 	while (++i < (int)read_obj->num_triangles)
 	{
+		j = -1;
+		while (++j < 3)
+		{
+			v_i = read_obj->triangles[i][j][0] - 1;
+			vt_i = read_obj->triangles[i][j][1] - 1;
+			vn_i = read_obj->triangles[i][j][2] - 1;
+			ml_vector3_copy(read_obj->v[v_i],
+				obj->mesh_vertices[v_i].position);
+			ml_vector2_copy(read_obj->vt[vt_i],
+				obj->mesh_text_coords[vt_i]);
+		}
 		init_triangle(&obj->mesh_triangles[i],
 			&obj->mesh_vertices[read_obj->triangles[i][0][0] - 1],
 			&obj->mesh_vertices[read_obj->triangles[i][1][0] - 1],
 			&obj->mesh_vertices[read_obj->triangles[i][2][0] - 1]);
-		j = -1;
-		while (++j < 3)
-		{
-			v_i = read_obj->triangles[i][j][0];
-			vt_i = read_obj->triangles[i][j][1];
-			vn_i = read_obj->triangles[i][j][2];
-			ml_vector3_copy(obj->mesh_vertices[v_i - 1].position,
-				read_obj->v[v_i - 1]);
-			ml_vector2_copy(obj->mesh_text_coords[vt_i - 1],
-				read_obj->vt[vt_i - 1]);
-		}
 	}
 }
 

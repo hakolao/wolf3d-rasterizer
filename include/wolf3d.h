@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 18:14:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 18:23:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,5 +348,6 @@ void								destroy_scene(t_scene *scene);
 void								set_active_scene(t_wolf3d *app,
 									t_scene_id to_scene);
 t_3d_object							**create_scene1_objects(int32_t *obj_count);
+void								debug_scene(t_scene *scene);
 
 #endif

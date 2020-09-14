@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 15:59:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/01 17:19:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 14:23:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char				*handle_padding(t_printf *data, char *res)
 		return (handle_char_padding(data, res));
 	else if (data->c == '%')
 		return (handle_string_padding(data, res));
-	return (res);
+	return (handle_string_padding(data, res));
 }
 
 /*
@@ -60,8 +60,6 @@ static void				handle_int_flag_specials(t_printf *data)
 		(data->has_precision && data->precision == 0) ||
 		data->c == 'b')
 		data->pad_zeros = false;
-	if (data->show_sign || data->is_negative)
-		data->blank_space = false;
 	if (data->c == 'u' || data->c == 'U' ||
 		data->c == 'x' || data->c == 'X' ||
 		data->c == 'o' || data->c == 'O' || data->c == 'p')
@@ -70,6 +68,8 @@ static void				handle_int_flag_specials(t_printf *data)
 		data->is_negative = false;
 		data->blank_space = false;
 	}
+	if (data->show_sign || data->is_negative)
+		data->blank_space = false;
 }
 
 /*
@@ -79,7 +79,7 @@ static void				handle_int_flag_specials(t_printf *data)
 
 char					*handle_formatting(t_printf *data, char *res)
 {
-	if (is_int_specifier(data->c))
+	if (is_int_specifier(data->c) || data->c == 'p')
 		handle_int_flag_specials(data);
 	else if (is_float_specifier(data->c))
 	{

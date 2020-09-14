@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 16:07:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/31 20:12:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 14:22:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static char				*parse_variable(t_printf *data)
 		return ((res = ft_strnew(1)));
 	}
 	data->var_len++;
-	return ((res = ft_strdup(&data->c)));
+	return (handle_formatting(data, (res = ft_strdup(&data->c))));
 }
 
 /*

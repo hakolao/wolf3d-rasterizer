@@ -6,11 +6,12 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 15:12:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 15:12:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 15:51:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <math.h>
 
 double					ft_atod(char *str)
 {

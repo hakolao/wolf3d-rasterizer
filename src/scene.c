@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 18:27:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 18:35:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ void			debug_scene(t_scene *scene)
 				ml_vector3_print(
 					scene->objects[i]->mesh_triangles[j].vtc[2]->position);	
 			}
+			ft_printf("Normal:\n");
+			ml_vector3_print(scene->objects[i]->mesh_triangles[j].normal);
 		}
 	}
 }

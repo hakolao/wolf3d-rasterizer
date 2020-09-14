@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 17:22:11 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/14 18:32:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 18:42:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,18 @@ void			init_3d_object(t_obj_result *read_obj, t_3d_object *obj)
 			&obj->mesh_vertices[read_obj->triangles[i][0][0] - 1],
 			&obj->mesh_vertices[read_obj->triangles[i][1][0] - 1],
 			&obj->mesh_vertices[read_obj->triangles[i][2][0] - 1]);
+	}
+
+	t_mat4	translate;
+	
+	ml_matrix4_translation(500.0, 0, 0, translate);
+	j = -1;
+	while (++j < obj->mesh_vertex_count)
+	{
+		obj->mesh_vertices[j].position[0] += 500.0;
+		// ml_matrix4_mul_vec3(translate,
+		// 	obj->mesh_vertices[j].position,
+		// 	obj->mesh_vertices[j].position);
 	}
 }
 

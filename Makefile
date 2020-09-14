@@ -42,7 +42,8 @@ SOURCES = main.c \
 			debug.c \
 			3d_object.c \
 			scene_objects.c \
-			read_obj.c
+			read_obj.c \
+			read_obj_utils.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 15:30:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 15:52:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 17:30:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,10 @@ t_file_contents				*read_file(const char *filename)
 		ft_dprintf(2, "Failed to close file %s\n", filename))
 		return (NULL);
 	return (contents);
+}
+
+void						destroy_file_contents(t_file_contents *f)
+{
+	free(f->buf);
+	free(f);
 }

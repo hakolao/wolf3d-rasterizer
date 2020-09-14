@@ -6,35 +6,56 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 15:12:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 15:51:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 16:51:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <math.h>
 
-double					ft_atod(char *str)
+static double			fractional_part(char *str)
 {
-	double	val;
-	double	frac;
 	int		zeros;
+	double	frac;
+	double	divider;
 
-	if (*str != '-' || *str != '+' || !ft_isdigit(*str))
-		return (0.0);
-	val = ft_atoi_long(str);
-	while (ft_isdigit(*str))
-		str++;
-	if (*str == '.')
-		str++;
-	else
-		return (val);
+	str++;
 	zeros = 0;
-	while (*str == '0')
+	frac = 0.0;
+	while (*str && *str == '0')
 	{
 		str++;
 		zeros++;
 	}
-	frac = ft_atoi_long(str);
-	val += ft_atoi_long(str) / pow(10, zeros + ft_ceil(log10(frac)));
-	return (val);
+	if (ft_isdigit(*str))
+	{
+		frac = (double)ft_atoi_long(str);
+		divider = pow(10.0, (double)zeros + ft_ceil(log10(frac)));
+		if (divider != 0.0)
+			frac = frac / divider;
+	}
+	return (frac);
+}
+
+/*
+** Turns a double *str into a double
+** Int part + factional part = resulting value.
+** For zero int part, sign = -1 if first char is '-'. Else 1, because atoi
+** returns sign for int part.
+*/
+
+double					ft_atod(char *str)
+{
+	double	val;
+	int		sign;
+
+	if (!(*str == '-' || *str == '+' || ft_isdigit(*str)))
+		return (0.0);
+	val = (double)ft_atoi_long(str);
+	sign = val == 0.0 && *str == '-' ? -1 : 1;
+	while (ft_isdigit(*str) || *str == '-' || *str == '+')
+		str++;
+	if (*str && *str == '.')
+		val += fractional_part(str);
+	return (val * sign);
 }

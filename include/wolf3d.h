@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/11 18:14:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 18:14:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 
 # define WIDTH 1280
 # define HEIGHT 720
+
+# define MAX_OBJ_TRIANGLES 1024
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the
@@ -153,6 +155,8 @@ typedef struct						s_3d_object
 	int32_t					mesh_vertex_count;
 	t_triangle				*mesh_triangles;
 	int32_t					mesh_triangle_count;
+	t_vec2					*mesh_text_coords;
+	int32_t					mesh_text_coord_count;
 	t_mat4					mesh_transform;
 	t_box3d					mesh_bound_box;
 }									t_3d_object;
@@ -212,11 +216,17 @@ typedef struct						s_text_params
 	float					blend_ratio;
 }									t_text_params;
 
-typedef struct						s_file_contents
+typedef struct						s_obj_result
 {
-	void				*buf;
-	uint32_t			size;
-}									t_file_contents;
+	t_vec3			v[MAX_OBJ_TRIANGLES];
+	uint32_t		num_vertices;
+	t_vec2			vt[MAX_OBJ_TRIANGLES];
+	uint32_t		num_v_text_coords;
+	t_vec3			vn[MAX_OBJ_TRIANGLES];
+	uint32_t		num_v_normals;
+	uint32_t		triangles[MAX_OBJ_TRIANGLES][3][3];
+	uint32_t		num_triangles;
+}									t_obj_result;
 
 /*
 **	Function declarations
@@ -230,29 +240,6 @@ void								wolf3d_run(t_wolf3d *app);
 void								cap_framerate(t_wolf3d *app);
 float								sin_time(t_wolf3d *app,
 									float min, float max, float speed);
-
-/*
-** Scene
-*/
-
-t_scene								*new_scene(t_wolf3d *app,
-												t_scene_data *data);
-void								destroy_scene(t_scene *scene);
-void								set_active_scene(t_wolf3d *app,
-									t_scene_id to_scene);
-t_3d_object							**create_test_scene_objects(
-									int32_t *object_count);
-
-/*
-**	3d Object
-*/
-t_3d_object							*create_3d_object(void);
-void								init_3d_object(t_3d_object *obj,
-									t_vertex *vertices, uint32_t vertex_count);
-void								init_triangle(t_triangle *triangle,
-									t_vertex *pos_a, t_vertex *pos_b,
-									t_vertex *pos_c);
-void								destroy_object(t_3d_object *object);
 
 /*
 ** Player
@@ -338,8 +325,28 @@ void								capture_framerate(t_wolf3d *app);
 void								render_debug_grid(t_wolf3d *app);
 
 /*
-** File read
+**	3d Object
 */
-void								read_obj(const char *filename);
+t_3d_object							*create_3d_object(t_obj_result *read_ob);
+void								init_3d_object(t_obj_result *read_ob,
+									t_3d_object *obj);
+void								destroy_object(t_3d_object *object);
+
+/*
+** Obj file read
+*/
+t_3d_object							*read_object_file(const char *filename);
+t_bool								is_valid_obj_result(t_obj_result *result);
+
+/*
+** Scene
+*/
+
+t_scene								*new_scene(t_wolf3d *app,
+												t_scene_data *data);
+void								destroy_scene(t_scene *scene);
+void								set_active_scene(t_wolf3d *app,
+									t_scene_id to_scene);
+t_3d_object							**create_scene1_objects(int32_t *obj_count);
 
 #endif

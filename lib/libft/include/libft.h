@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 14:42:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 15:48:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 17:30:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,5 +210,6 @@ int				ft_sprintf(char *str, const char *format, ...);
 int				ft_printf(const char *format, ...);
 
 t_file_contents	*read_file(const char *filename);
+void			destroy_file_contents(t_file_contents *f);
 
 #endif

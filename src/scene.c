@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 14:38:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 15:13:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
 		destroy_scene(app->active_scene);
 	select_scene(app, to_scene);
 	scene_vertices_init(app, app->active_scene);
-	debug_scene(app->active_scene);
+	// debug_scene(app->active_scene);
 }
 
 t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)

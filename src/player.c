@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 12:56:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 13:15:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,12 @@ static void		apply_transform_to_world(t_wolf3d *app, t_mat4 transform)
 		}
 		j = -1;
 		while (++j < app->active_scene->objects[i]->mesh_triangle_count)
+		{
 			l3d_triangle_normal_set(
-				&app->active_scene->objects[i]->mesh_triangles[i]);
+				&app->active_scene->objects[i]->mesh_triangles[j]);
+			ml_vector3_mul(app->active_scene->objects[i]->mesh_triangles[j].normal, -1,
+				app->active_scene->objects[i]->mesh_triangles[j].normal);
+		}
 	}
 }
 

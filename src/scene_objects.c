@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 13:34:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 14:05:15 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,19 @@ void				scene_vertices_init(t_wolf3d *app, t_scene *scene)
 				scene->objects[i]->mesh_triangles[j].normal);
 		}
 	}
+}
+
+/*
+** Add assets as .obj files to scenes
+*/
+
+t_3d_object		**create_scene1_objects(int32_t *object_count)
+{
+	t_3d_object	**objects;
+
+	*object_count = 1;
+	error_check(!(objects = malloc(sizeof(*objects) * *object_count)),
+		"Failed to malloc objects for test scene");
+	objects[0] = read_object_file("assets/icosphere.obj");
+	return (objects);
 }

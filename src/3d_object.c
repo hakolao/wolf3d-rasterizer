@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 17:22:11 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/15 12:29:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 12:51:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,7 @@ static void		init_triangle(t_triangle *triangle,
 	triangle->vtc[0] = pos_a;
 	triangle->vtc[1] = pos_b;
 	triangle->vtc[2] = pos_c;
-	ml_vector3_sub(triangle->vtc[1]->position, triangle->vtc[0]->position,
-		triangle->ab);
-	ml_vector3_sub(triangle->vtc[2]->position, triangle->vtc[0]->position,
-		triangle->ac);
-	ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
+	l3d_triangle_normal_set(triangle);
 }
 
 static void		set_3d_object_transform_counts(t_obj_result *read_obj,

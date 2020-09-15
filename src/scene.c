@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 13:41:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 13:53:38 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_3d_object	**create_scene_test_objects(int32_t *object_count)
 		"Failed to malloc vertex test scene object");
 	error_check(!(objects[0]->mesh_vertices[2] = malloc(sizeof(t_vertex))),
 		"Failed to malloc vertex test scene object");
-	ml_vector3_copy((t_vec3){1.0, 0.5, 0.6}, objects[0]->mesh_vertices[0]->position);
-	ml_vector3_copy((t_vec3){1.0, -0.5, -0.4}, objects[0]->mesh_vertices[1]->position);
+	ml_vector3_copy((t_vec3){1.0, 0.5, 0.5}, objects[0]->mesh_vertices[0]->position);
+	ml_vector3_copy((t_vec3){1.0, -0.5, 0.4}, objects[0]->mesh_vertices[1]->position);
 	ml_vector3_copy((t_vec3){1.0, -0.2, -0.2}, objects[0]->mesh_vertices[2]->position);
 	error_check(!(objects[0]->mesh_triangles = malloc(sizeof(t_triangle) * 1)),
 		"Failed to malloc triangles for test scene object");

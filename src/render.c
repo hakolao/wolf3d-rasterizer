@@ -20,7 +20,7 @@
 #define EDGE_DELAY 2 //TODO REMOVE
 #define FILL_SPEED 1
 #define ANIMATION 0
-#define FILL_ANIMATION 1
+#define FILL_ANIMATION 0
 #define RANDOM_COLOR 0
 
 #include "wolf3d.h"

@@ -18,7 +18,7 @@
 //fragment shader use
 
 #define EDGE_DELAY 2 //TODO REMOVE
-#define FILL_SPEED 200
+#define FILL_SPEED 1
 #define ANIMATION 0
 #define FILL_ANIMATION 1
 #define RANDOM_COLOR 0
@@ -58,53 +58,90 @@ void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	}
 }
 
+void		fill_triangle_corners(t_wolf3d *app, int *ints_on_screen, int *triangle_center)
+{
+	int		i;
+	int		deltax;
+	int		deltay;
+	//!MAKE THIS FUNCTION WORK SO THAT IT FILLS THE END POINTS CORRECTLY> THEN BORDERS WILL HOPEFULLY WORK
+	i = -1;
+	deltax = 0;
+	deltay = 0;
+	while (++i < 3)
+	{
+		deltax = ints_on_screen[i * 2] - triangle_center[0];
+		deltay = ints_on_screen[i * 2 + 1] - triangle_center[1];
+		if (fabs((double)(deltax > deltay)))
+			{
+				// ft_printf("here1\n");
+				if (deltax > 0)
+				{
+					// ft_printf("deltax > 0\n");
+					app->main_window->rbuffer[
+						screen_to_frame_coords(app->main_window->width, app->main_window->height,
+						ints_on_screen[i * 2] + 1, ints_on_screen[i * 2 + 1])] =
+						app->main_window->rbuf_render_color / 2;
+				}
+				else
+				{
+					// ft_printf("deltax <= 0\n");
+					app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
+																	 ints_on_screen[i * 2] - 1, ints_on_screen[i * 2 + 1])] =
+						app->main_window->rbuf_render_color / 2;
+				}
+			}
+			else
+			{
+				if (deltay > 0)
+				{
+					// ft_printf("deltay > 0\n");
+					app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
+																	 ints_on_screen[i * 2], ints_on_screen[i * 2 + 1] + 1)] =
+						app->main_window->rbuf_render_color / 2;
+				}
+				else
+				{
+					// ft_printf("deltay <= 0\n");
+					app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
+																	 ints_on_screen[i * 2], ints_on_screen[i * 2 + 1] - 1)] =
+						app->main_window->rbuf_render_color / 2;
+				}
+			}
+	}
+}
+
 /*
 **	Flood fills the triangle area in rbuffer. This information is used when
 **	casting rays. 
 */
 
-void		fill_triangle_area(t_wolf3d *app, int startx, int starty)
+void		fill_triangle_area(t_wolf3d *app, t_vertex *vtx, int *start)
 {
 	static int counter = 0;
 	uint32_t		width;
 	uint32_t		height;
 	uint32_t		index;
-	// uint32_t		adjacent;
 	uint32_t		*rbuffer;
+
 	counter++;
-	// adjacent = 0;
 	rbuffer = app->main_window->rbuffer;
 	width = app->main_window->width;
 	height = app->main_window->height;
-	index = screen_to_frame_coords(width, height, startx + width / 2, starty + height / 2);
+	index = screen_to_frame_coords(width, height, start[0] + width / 2, start[1] + height / 2);
 	if (index > 0 && index < width * height - 1 &&
-		(rbuffer[index] == app->main_window->rbuf_render_color ||
+		(
 		 rbuffer[index] == app->main_window->rbuf_render_color / 2))
 		{
 			// ft_printf("returned\n");
 			return;
 		}
-		// ft_printf("not returned\n");
-		 //!TODO CHANGE BOUNDARY COLOR TO SOMETHING SENSIBLE
 	if (index > 0 && index < width * height - 1)
 	{
-		// adjacent = screen_to_frame_coords(width, height, startx + width / 2 + 1, starty + height / 2);
-		// if (adjacent > 0 && adjacent < width * height - 1 && rbuffer[adjacent]
-		// 	== app->main_window->rbuf_render_color - 1)
-		// 	{
-		// 		fill_triangle_area(app, startx + 1, starty);
-		// 	}
-		// ft_printf("index: %d\n", index);
-		rbuffer[index] = app->main_window->rbuf_render_color;
+		rbuffer[index] = app->main_window->rbuf_render_color / 2;
 		//////////!
-		SDL_Event event;
 		uint32_t k = 0;
 		if (FILL_ANIMATION)
 		{
-			while (SDL_PollEvent(&event))
-		{
-			player_action_handle(app, event);
-		}
 			if (counter % FILL_SPEED == 0)
 			{SDL_LockTexture(app->main_window->frame, NULL,
 							(void **)&app->main_window->framebuffer,
@@ -121,133 +158,19 @@ void		fill_triangle_area(t_wolf3d *app, int startx, int starty)
 			SDL_Delay(1);}
 		}
 		//////////!
-		fill_triangle_area(app, startx, starty + 1);
-		fill_triangle_area(app, startx, starty - 1);
-		fill_triangle_area(app, startx + 1, starty);
-		fill_triangle_area(app, startx - 1, starty);
-	}
+
 	
+		fill_triangle_area(app, vtx, (int[2]){start[0], start[1] - 1});
+		fill_triangle_area(app, vtx, (int[2]){start[0], start[1] + 1});
+		fill_triangle_area(app, vtx, (int[2]){start[0] - 1, start[1]});
+		fill_triangle_area(app, vtx, (int[2]){start[0] + 1, start[1]});
+	}
 }
 
 void		vec2_sub_y_z(t_vec2 v1, t_vec2 v2, t_vec2 res)
 {
 	res[0] = v1[0] - v2[0];
 	res[1] = v1[1] - v2[1];
-}
-
-/*
-**	Paints the edges of the triangle into rbuffer keeping horizontal borders
-**	contiguous.
-*/
-
-void		paint_edge_x(t_wolf3d *app, t_vec2 *start, t_vec2 edge_vector, float deltax)
-{
-	float	increment;
-	int		index;
-	int		i;
-	uint32_t *rbuffer =  app->main_window->rbuffer;
-	i = -1;
-	index = 0.0;
-	while (++i < ft_abs((double)deltax))
-	{
-		increment = i / (ft_abs((double)deltax));
-		index = screen_to_frame_coords(app->main_window->width,
-			app->main_window->height,
-			(int)((*start)[0] + increment * edge_vector[0] +
-				app->main_window->width / 2),
-			(int)((*start)[1] + increment * edge_vector[1] +
-				app->main_window->height / 2));
-		if (index >= 0 && index < app->main_window->width * app->main_window->height)
-			app->main_window->rbuffer[index] = app->main_window->rbuf_render_color;
-		i++;
-		////////////!
-		uint32_t k = 0;
-		if (ANIMATION)
-		{
-			SDL_LockTexture(app->main_window->frame, NULL,
-							(void **)&app->main_window->framebuffer,
-							&app->main_window->pitch);
-			while (k < WIDTH * HEIGHT)
-			{
-				app->main_window->framebuffer[k] = rbuffer[k];
-				k++;
-			}
-			SDL_UnlockTexture(app->main_window->frame);
-			SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
-						   NULL, NULL);
-			SDL_RenderPresent(app->main_window->renderer);
-			SDL_Delay(EDGE_DELAY);
-		}
-		//////////////!
-	}
-}
-
-/*
-**	Paints the edges of the triangle into rbuffer keeping vertical borders
-**	contiguous.
-*/
-
-void		paint_edge_y(t_wolf3d *app, t_vec2 *start, t_vec2 edge_vector, float deltay)
-{
-	float	increment;
-	int		index;
-	int		i;
-	uint32_t *rbuffer = app->main_window->rbuffer;
-
-	i = -1;
-	index = 0;
-	while (++i < ft_abs((double)deltay))
-	{
-		increment = i / (ft_abs((double)deltay));
-		index = screen_to_frame_coords(app->main_window->width,
-			app->main_window->height,
-			(int)((*start)[0] + increment * edge_vector[0] +
-				app->main_window->width / 2),
-			(int)((*start)[1] + increment * edge_vector[1] +
-				app->main_window->height / 2));
-		if (index >= 0 && index < app->main_window->width * app->main_window->height)
-			app->main_window->rbuffer[index] = app->main_window->rbuf_render_color;
-		i++;
-		////////////!
-		uint32_t k = 0;
-		if (ANIMATION)
-		{
-			app->main_window->rbuffer[index] = app->main_window->rbuf_render_color / 2;
-			SDL_LockTexture(app->main_window->frame, NULL,
-							(void **)&app->main_window->framebuffer,
-							&app->main_window->pitch);
-			while (k < WIDTH * HEIGHT)
-			{
-				app->main_window->framebuffer[k] = rbuffer[k];
-				k++;
-			}
-			SDL_UnlockTexture(app->main_window->frame);
-			SDL_RenderCopy(app->main_window->renderer, app->main_window->frame,
-						   NULL, NULL);
-			SDL_RenderPresent(app->main_window->renderer);
-			SDL_Delay(EDGE_DELAY);
-		}
-		//////////////!
-	}
-}
-
-/*
-**	Paints the triangle edges into rbuffer to be flood filled
-*/
-
-void		paint_edge_to_rbuffer(t_wolf3d *app, t_vec2 *start, t_vec2 *end)
-{
-	float		delta[2];
-	int			i;
-	t_vec2		edge_vector;
-	float		edge_vector_magn;
-	i = 0;
-	delta[0] = ((float)((*end)[0] - (*start)[0])) * 3;//TODO THIS MULTIPLIER INCREASES ACCURACY
-	delta[1] = ((float)((*end)[1] - (*start)[1])) * 3;//TODO MUST TEST FOR PERFORMANCE, 3 SEEMS
-	vec2_sub_y_z(*end, *start, edge_vector);		  //TODO TO BE ACCURATE ENOUGH
-	edge_vector_magn = ml_vector2_mag(edge_vector);
-	paint_edge_x(app, start, edge_vector, delta[0]);
-	paint_edge_y(app, start, edge_vector, delta[1]);
 }
 
 void		calculate_triangle_center(t_triangle *triangle,
@@ -264,6 +187,31 @@ void		calculate_triangle_center(t_triangle *triangle,
 						printf("calc center y: %d\n", triangle_center[1]);
 }
 
+void		round_start_points(t_vertex *vtx, int *start_points, t_vec2 center_dir, t_vec2 travelled_dist)
+{
+	if (center_dir[0] < 0)
+	{
+		start_points[0] = ft_floor(vtx->position[1] + travelled_dist[0]);
+		ft_printf("here1\n");
+	}
+	else
+	{
+		start_points[0] = ft_ceil(vtx->position[1] + travelled_dist[0]);
+		ft_printf("here2\n");
+	}
+	if (center_dir[1] < 0)
+	{
+		start_points[1] = ft_floor(vtx->position[2] + travelled_dist[1]);
+		ft_printf("here3\n");
+	}
+	else
+	{
+		start_points[1] = ft_ceil(vtx->position[2] + travelled_dist[1]);
+		ft_printf("here4\n");
+	}
+	ft_printf("start points: %d | %d\n", start_points[0], start_points[1]);
+}
+
 /*
 **	Calculates the valid starting points for filling the triangle for each
 **	corner. 
@@ -273,36 +221,40 @@ void		calculate_fill_start_points(t_wolf3d *app, t_triangle *triangle,
 										int *triangle_center, int *start_points)
 {
 	t_vec2			center_dir[3];
-	float			delta_center[3];
-	uint32_t		i;
+	float			i;
 	int				k;
 	t_vec2			travelled_dist;
 
-	i = 0;
+	i = 0.0;
 	k = -1;
-	while (i < 3)
-	{
-		center_dir[i][0] = triangle_center[0] - triangle->vtc[i]->position[1];
-		center_dir[i][1] = triangle_center[1] - triangle->vtc[i]->position[2];
-		ml_vector2_normalize(center_dir[i], center_dir[i]);
-		delta_center[i] = ml_vector2_mag((t_vec2){center_dir[i][0], center_dir[i][1]});
-		i++;
-	}
 	while (++k < 3)
 	{
-		ft_printf("loop2\n");
+		center_dir[k][0] = triangle_center[0] - triangle->vtc[k]->position[1];
+		center_dir[k][1] = triangle_center[1] - triangle->vtc[k]->position[2];
+		triangle_center[2 + k * 2] = center_dir[k][0];
+		triangle_center[2 + k * 2 + 1] = center_dir[k][1];
+		ml_vector2_normalize(center_dir[k], center_dir[k]);
+	}
+	k = -1;
+	while (++k < 3)
+	{
+		ft_memset(travelled_dist, 0, sizeof(travelled_dist));
+		ft_printf("loop2 K: %d\n", k);
 		ft_memset(travelled_dist, 0, sizeof(travelled_dist));
 		ft_printf("triangle->vtc[k]->position[1]: %f\n", triangle->vtc[k]->position[1]);
-		printf("float: %f\n", triangle->vtc[k]->position[1]);
-		printf("digit: %u\n", (uint32_t)triangle->vtc[k]->position[1]);
 		printf("triangle->vtc[k]->position[2]: %f\n", triangle->vtc[k]->position[2]);
 
 		i = (uint32_t)screen_to_frame_coords(app->main_window->width, app->main_window->height,
-								triangle->vtc[k]->position[1] + app->main_window->width / 2,
-								triangle->vtc[k]->position[2] + app->main_window->height / 2);
+				triangle->vtc[k]->position[1] + travelled_dist[0] + app->main_window->width / 2,
+				triangle->vtc[k]->position[2] + travelled_dist[1] + app->main_window->height / 2);
 		ft_printf("i: %u\n", i);
-		while (app->main_window->rbuffer[i] == app->main_window->rbuf_render_color &&
-				ml_vector2_mag(travelled_dist) < delta_center[k] + 1)
+		ft_printf("start pixel color before loop3: %x\n",
+				  app->main_window->rbuffer[(int)i]);
+		start_points[2 * k] = -1 * ((int)i % app->main_window->width - app->main_window->width / 2);
+		start_points[2 * k + 1] = -1 * ((int)(i / app->main_window->width) - app->main_window->height / 2);
+		ft_printf("start points before loop3, %d | %d\n", (start_points + k * 2)[0], (start_points + k * 2)[1]);
+		while (app->main_window->rbuffer[(int)i] == app->main_window->rbuf_render_color )//&&
+				//ml_vector2_mag(travelled_dist) < delta_center[k] * 2)
 		{
 			ft_printf("loop3\n");
 			travelled_dist[0] += center_dir[k][0];
@@ -310,18 +262,48 @@ void		calculate_fill_start_points(t_wolf3d *app, t_triangle *triangle,
 			ft_printf("travelled_dist[0]: %f\n", travelled_dist[0]);
 			ft_printf("travelled_dist[1]: %f\n", travelled_dist[1]);
 			i = screen_to_frame_coords(app->main_window->width, app->main_window->height,
-			triangle->vtc[k]->position[1] + app->main_window->width / 2 + travelled_dist[0],
-				triangle->vtc[k]->position[2] + app->main_window->height / 2 + travelled_dist[1]);
+				triangle->vtc[k]->position[1] + travelled_dist[0] + app->main_window->width / 2,
+				triangle->vtc[k]->position[2] + travelled_dist[1] + app->main_window->height / 2);
 			// ft_printf("triangle->vtc[k]->position[1]: %f\n", triangle->vtc[k]->position[1]);
 			// ft_printf("digit: %u\n", triangle->vtc[k]->position[1]);
 			// ft_printf("triangle->vtc[k]->position[2]: %f\n", triangle->vtc[k]->position[2]);
 			ft_printf("i3: %u\n", i);
-			ft_printf("start Y: %f\n", triangle->vtc[k]->position[1] + travelled_dist[0]);
-			ft_printf("start Z: %f\n", triangle->vtc[k]->position[2] + travelled_dist[1]);
-			start_points[2 * k] = triangle->vtc[k]->position[1] + travelled_dist[0];
-			start_points[1 + 2 * k] = triangle->vtc[k]->position[2] + travelled_dist[1];
+			ft_printf("start Y for k: %f %d\n", triangle->vtc[k]->position[1] + travelled_dist[0], k);
+			ft_printf("start Z for k: %f %d\n", triangle->vtc[k]->position[2] + travelled_dist[1], k);
+			// ft_printf("start pixel color: %x\n", app->main_window->rbuffer[i]);
 		}
+		round_start_points(triangle->vtc[k], start_points + (2 * k), center_dir[k], travelled_dist);
+		ft_printf("start color: %x: \n", app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
+				start_points[0] + app->main_window->width / 2,
+				start_points[1] + app->main_window->height / 2)]);
+		// start_points[2 * k] = ft_abs_ceil(triangle->vtc[k]->position[1] + travelled_dist[0]);
+		// start_points[1 + 2 * k] = ft_abs_ceil(triangle->vtc[k]->position[2] + travelled_dist[1]);
+		ft_printf("===================================\n");
 	}
+	
+}
+
+
+void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
+{
+	if (ints_on_screen[0] > ints_on_screen [2])
+		draw_line_lower((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
+						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
+	else
+		draw_line_upper((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
+						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
+	if (ints_on_screen[0] > ints_on_screen[4])
+		draw_line_upper((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
+						(t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2}, color, app);
+	else
+		draw_line_lower((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
+						(t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2}, color, app);
+	if (ints_on_screen[4] > ints_on_screen [2])
+		draw_line_upper((t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2},
+						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
+	else
+		draw_line_lower((t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2},
+						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
@@ -335,28 +317,37 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	uint32_t			*rbuffer;
 	int					width = app->main_window->width;
 	int					height = app->main_window->height;
-	int					triangle_center[2];
-	int					start_points[6];
-	(void)width;
-	(void)height;
-	(void)camera;
-	app->main_window->rbuf_render_color = 0xffaaffff / 2;
+	int					triangle_center[8];
+	// int					start_points[6];
+	int					ints_on_screen[6];
+
+	// app->main_window->rbuf_render_color = 0xffaaffff / 2;
 	rbuffer = app->main_window->rbuffer;
 	(void)mesh;
 	screen_intersection(app, triangle, corners_on_screen);
-	paint_edge_to_rbuffer(app, &(corners_on_screen[0]), &(corners_on_screen[1]));
-	paint_edge_to_rbuffer(app, &(corners_on_screen[0]), &(corners_on_screen[2]));
-	paint_edge_to_rbuffer(app, &(corners_on_screen[1]), &(corners_on_screen[2]));
-	// int x = (int)triangle->vtc[0]->position[1];
-	// int y = (int)triangle->vtc[0]->position[2];
+	int j = -1;
+	while (++j < 3)
+	{
+		ints_on_screen[j * 2] = (int)corners_on_screen[j][0];
+		ints_on_screen[j * 2 + 1] = (int)corners_on_screen[j][1];
+	}
+	uint32_t linecolor = 0xffaaffff;
+	//!DRAW ORDER: AB, BC, CA
+	draw_triangle_edges(app, ints_on_screen, linecolor);
 	calculate_triangle_center(triangle, triangle_center);
 	// printf("fill triangle startx: %d\n", triangle_center[0]);
 	// printf("fill triangle starty: %d\n", triangle_center[1]);
-	calculate_fill_start_points(app, triangle, triangle_center, start_points);
-	ft_printf("output start points A: %d | %d\n", start_points[0], start_points[1]);
-	ft_printf("output start points B: %d | %d\n", start_points[2], start_points[3]);
-	ft_printf("output start points C: %d | %d\n", start_points[4], start_points[5]);
-	fill_triangle_area(app, start_points[4], start_points[5]);
+	// calculate_fill_start_points(app, triangle, triangle_center, start_points);
+	// ft_printf("output start points A: %d | %d\n", start_points[0], start_points[1]);
+	// ft_printf("output start points B: %d | %d\n", start_points[2], start_points[3]);
+	// ft_printf("output start points C: %d | %d\n", start_points[4], start_points[5]);
+	// ft_printf("start pixel color: %x\n",
+	// 		  app->main_window->rbuffer[screen_to_frame_coords(width, height, start_points[0]
+	// 		  + width / 2, start_points[1] + height / 2)]);
+	fill_triangle_corners(app, ints_on_screen, triangle_center);
+	fill_triangle_area(app, triangle->vtc[0], triangle_center);
+	//TODO OFFSET THE TRIANGLE CENTER BY CORRECT AMOUNT DEPENDING OF WHICH CORNER IS START
+	
 
 	//TODO REMEMBER TO CHANGE TRIANGLE AND GRID RENDERING BACK
 	int k = 0;
@@ -385,6 +376,9 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	//		and cast rays from camera through the pixels and calculate intersection
 	//		normally with the triangle.
 	i = 0;
+	(void)width;
+	(void)height;
+	(void)camera;
 	// while (i < camera->raycount)
 	// {
 	// 	// if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))

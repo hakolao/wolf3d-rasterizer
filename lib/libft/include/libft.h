@@ -183,6 +183,7 @@ char			*ft_strnjoin(char const *s1, char const *s2,
 double			ft_ceil(double num);
 double			ft_floor(double num);
 int				ft_round(double num);
+double			ft_abs_ceil(double num);
 char			*ft_itoa(int32_t nb);
 char			*ft_itoa_64(int64_t nb);
 char			*ft_itoa_base_32(int32_t nb, int32_t base);

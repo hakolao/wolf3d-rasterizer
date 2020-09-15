@@ -16,7 +16,6 @@ int main(void)
 {
 	t_wolf3d	app;
 	
-	read_obj("assets/icosphere.obj");
 	wolf3d_run(&app);
 	return (EXIT_SUCCESS);
 }

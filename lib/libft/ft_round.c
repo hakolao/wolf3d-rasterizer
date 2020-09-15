@@ -26,6 +26,16 @@ double		ft_ceil(double num)
 	return (fd.b.sign ? int_part : int_part + 1);
 }
 
+double		ft_abs_ceil(double num)
+{
+	t_float_dissector fd;
+
+	if (num == 0)
+		return (num);
+	fd.f = num;
+	return((fd.b.sign ? -1 : 1) * ft_ceil((ft_abs(num))));
+}
+
 double		ft_floor(double num)
 {
 	t_float_dissector	fd;

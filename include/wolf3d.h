@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 18:23:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 12:39:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,12 +151,10 @@ typedef struct						s_3d_object
 	t_vec3					origin;
 	t_vec3					position; // == origin * transform
 	t_mat4					transform;
-	t_vertex				*mesh_vertices;
+	t_vertex				**mesh_vertices;
 	int32_t					mesh_vertex_count;
 	t_triangle				*mesh_triangles;
 	int32_t					mesh_triangle_count;
-	t_vec2					*mesh_text_coords;
-	int32_t					mesh_text_coord_count;
 	t_mat4					mesh_transform;
 	t_box3d					mesh_bound_box;
 }									t_3d_object;
@@ -342,6 +340,8 @@ t_bool								is_valid_obj_result(t_obj_result *result);
 ** Scene
 */
 
+void								scene_vertices_init(t_wolf3d *app,
+									t_scene *scene);
 t_scene								*new_scene(t_wolf3d *app,
 												t_scene_data *data);
 void								destroy_scene(t_scene *scene);

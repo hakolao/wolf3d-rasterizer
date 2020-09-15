@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/09 00:18:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 12:42:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void		apply_transform_to_world(t_wolf3d *app, t_mat4 transform)
 		while (++j < app->active_scene->objects[i]->mesh_vertex_count)
 		{
 			ml_matrix4_mul_vec3(transform,
-			app->active_scene->objects[i]->mesh_vertices[j].position,
-			app->active_scene->objects[i]->mesh_vertices[j].position);
+			app->active_scene->objects[i]->mesh_vertices[j]->position,
+			app->active_scene->objects[i]->mesh_vertices[j]->position);
 		}
 	}
 }

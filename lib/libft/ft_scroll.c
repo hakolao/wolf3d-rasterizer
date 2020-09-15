@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_scroll.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/24 14:59:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 18:09:09 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/14 15:20:13 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/14 15:22:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "libft.h"
 
-int main(void)
+/*
+** Scroll to given character in &str
+*/
+
+void					ft_scroll_to(char **str, char c)
 {
-	t_wolf3d	app;
-	
-	wolf3d_run(&app);
-	return (EXIT_SUCCESS);
+	while (**str && **str != c)
+		(*str)++;
+}
+
+/*
+** Scroll to one over given character in &str
+*/
+
+void					ft_scroll_over(char **str, char c)
+{
+	ft_scroll_to(str, c);
+	if (**str)
+		(*str)++;
 }

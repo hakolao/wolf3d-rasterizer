@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   l3d_triangle_normal.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/24 14:59:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 18:09:09 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/15 12:50:13 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/15 12:51:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "lib3d.h"
 
-int main(void)
+void	l3d_triangle_normal_set(t_triangle *triangle)
 {
-	t_wolf3d	app;
-	
-	wolf3d_run(&app);
-	return (EXIT_SUCCESS);
+	ml_vector3_sub(triangle->vtc[1]->position, triangle->vtc[0]->position,
+		triangle->ab);
+	ml_vector3_sub(triangle->vtc[2]->position, triangle->vtc[0]->position,
+		triangle->ac);
+	ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
 }

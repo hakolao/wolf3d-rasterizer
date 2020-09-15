@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 15:57:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/15 13:07:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.objects = create_test_scene_objects(&data.object_count);
+		data.objects = create_scene1_objects(&data.object_count);
 	}
 	app->active_scene = new_scene(app, &data);
 }
@@ -42,6 +42,8 @@ void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
 	if (app->active_scene != NULL)
 		destroy_scene(app->active_scene);
 	select_scene(app, to_scene);
+	scene_vertices_init(app, app->active_scene);
+	debug_scene(app->active_scene);
 }
 
 t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)
@@ -85,4 +87,31 @@ void			destroy_scene(t_scene *scene)
 	}
 	scene = NULL;
 	return ;
+}
+
+void			debug_scene(t_scene *scene)
+{
+	int		i;
+	int		j;
+	int		k;
+
+	ft_printf("Scene: %d\n"
+	"objects: %d\n",
+		scene->scene_id,
+		scene->object_count);
+	i = -1;
+	while (++i < scene->object_count)
+	{
+		j = -1;
+		while (++j < (int)scene->objects[i]->mesh_triangle_count)
+		{
+			ft_printf("Triangle: %d\n", j);
+			k = -1;
+			while (++k < 3)
+				ml_vector3_print(
+					scene->objects[i]->mesh_triangles[j].vtc[k]->position);
+			ft_printf("Normal:\n");
+			ml_vector3_print(scene->objects[i]->mesh_triangles[j].normal);
+		}
+	}
 }

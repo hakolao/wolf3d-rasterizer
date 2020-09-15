@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 14:42:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/11 17:49:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/14 17:30:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # define BUFF_SIZE 50
+# define FILE_READ_BUF 1024
 # define MAX_FD 65536
 
 # include <string.h>
@@ -85,6 +86,12 @@ typedef union	u_float_dissector_ld {
 	t_float_bits_ld		b;
 }				t_float_dissector_ld;
 
+typedef struct	s_file_contents
+{
+	void				*buf;
+	uint32_t			size;
+}				t_file_contents;
+
 int				ft_isalnum(int c);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
@@ -104,6 +111,7 @@ void			ft_putchar(char c);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char const *str, int fd);
 int				ft_atoi(const char *str);
+long long int	ft_atoi_long(const char *str);
 char			*ft_strstr(const char *haystack, const char *needle);
 char			*ft_strnstr(const char *haystack, const char *needle,
 				size_t len);
@@ -190,6 +198,9 @@ char			*ft_itoa_base_32(int32_t nb, int32_t base);
 char			*ft_itoa_base_64(int64_t nb, int64_t base);
 char			*ft_itoa_base_u32(uint32_t nb, uint32_t base);
 char			*ft_itoa_base_u64(uint64_t nb, uint64_t base);
+double			ft_atod(char *str);
+void			ft_scroll_over(char **str, char c);
+void			ft_scroll_to(char **str, char c);
 
 /*
 ** Expose ft_printf functions via libft.h
@@ -198,5 +209,8 @@ char			*ft_itoa_base_u64(uint64_t nb, uint64_t base);
 int				ft_dprintf(int fd, const char *format, ...);
 int				ft_sprintf(char *str, const char *format, ...);
 int				ft_printf(const char *format, ...);
+
+t_file_contents	*read_file(const char *filename);
+void			destroy_file_contents(t_file_contents *f);
 
 #endif

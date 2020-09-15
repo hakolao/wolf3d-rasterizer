@@ -112,7 +112,7 @@ void		fill_triangle_corners(t_wolf3d *app, int *ints_on_screen, int *triangle_ce
 
 /*
 **	Flood fills the triangle area in rbuffer. This information is used when
-**	casting rays. 
+**	casting rays.
 */
 
 void		fill_triangle_area(t_wolf3d *app, t_vertex *vtx, int *start)
@@ -159,7 +159,7 @@ void		fill_triangle_area(t_wolf3d *app, t_vertex *vtx, int *start)
 		}
 		//////////!
 
-	
+
 		fill_triangle_area(app, vtx, (int[2]){start[0], start[1] - 1});
 		fill_triangle_area(app, vtx, (int[2]){start[0], start[1] + 1});
 		fill_triangle_area(app, vtx, (int[2]){start[0] - 1, start[1]});
@@ -179,12 +179,10 @@ void		calculate_triangle_center(t_triangle *triangle,
 	triangle_center[0] = (int)((triangle->vtc[0]->position[1] +
 						triangle->vtc[1]->position[1] +
 						triangle->vtc[2]->position[1]) / 3);
-						printf("calc center x: %d\n", triangle_center[0]);
 	triangle_center[1] = (int)((triangle->vtc[0]->position[2] +
 								triangle->vtc[1]->position[2] +
 								triangle->vtc[2]->position[2]) /
 							   3);
-						printf("calc center y: %d\n", triangle_center[1]);
 }
 
 void		round_start_points(t_vertex *vtx, int *start_points, t_vec2 center_dir, t_vec2 travelled_dist)
@@ -214,7 +212,7 @@ void		round_start_points(t_vertex *vtx, int *start_points, t_vec2 center_dir, t_
 
 /*
 **	Calculates the valid starting points for filling the triangle for each
-**	corner. 
+**	corner.
 */
 
 void		calculate_fill_start_points(t_wolf3d *app, t_triangle *triangle,
@@ -280,7 +278,7 @@ void		calculate_fill_start_points(t_wolf3d *app, t_triangle *triangle,
 		// start_points[1 + 2 * k] = ft_abs_ceil(triangle->vtc[k]->position[2] + travelled_dist[1]);
 		ft_printf("===================================\n");
 	}
-	
+
 }
 
 
@@ -344,10 +342,10 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	// ft_printf("start pixel color: %x\n",
 	// 		  app->main_window->rbuffer[screen_to_frame_coords(width, height, start_points[0]
 	// 		  + width / 2, start_points[1] + height / 2)]);
-	fill_triangle_corners(app, ints_on_screen, triangle_center);
-	fill_triangle_area(app, triangle->vtc[0], triangle_center);
+	// fill_triangle_corners(app, ints_on_screen, triangle_center);
+	// fill_triangle_area(app, triangle->vtc[0], triangle_center);
 	//TODO OFFSET THE TRIANGLE CENTER BY CORRECT AMOUNT DEPENDING OF WHICH CORNER IS START
-	
+
 
 	//TODO REMEMBER TO CHANGE TRIANGLE AND GRID RENDERING BACK
 	int k = 0;
@@ -356,7 +354,6 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 		app->main_window->framebuffer[k] = rbuffer[k];
 		k++;
 	}
-	ft_memset(rbuffer, 0, sizeof(float) * WIDTH * HEIGHT);
 	if (RANDOM_COLOR)
 		app->main_window->rbuf_render_color = sin(SDL_GetTicks() / 200) * 0xffffffff;
 	// ml_vector3_normalize(triangle->normal, normalized_normal);

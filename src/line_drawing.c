@@ -12,14 +12,14 @@
 
 #include "wolf3d.h"
 
-static void plot_line_low(t_ir p1, t_ir p2, uint32_t color, t_wolf3d *app)
+static void plot_line_low(int *p1, int *p2, uint32_t color, t_wolf3d *app)
 {
 	int dxy[2];
 	int dyi[2];
 	int xy[2];
 
-	dxy[0] = p2.a - p1.a;
-	dxy[1] = p2.b - p1.b;
+	dxy[0] = p2[0] - p1[0];
+	dxy[1] = p2[1] - p1[1];
 	dyi[1] = 1;
 	if (dxy[1] < 0)
 	{
@@ -27,9 +27,9 @@ static void plot_line_low(t_ir p1, t_ir p2, uint32_t color, t_wolf3d *app)
 		dxy[1] = -dxy[1];
 	}
 	dyi[0] = 2 * dxy[1] - dxy[0];
-	xy[1] = p1.b;
-	xy[0] = p1.a - 1;
-	while (++xy[0] <= p2.a)
+	xy[1] = p1[1];
+	xy[0] = p1[0] - 1;
+	while (++xy[0] <= p2[0])
 	{
 		plot_pixel(app, app->main_window->rbuffer, xy, color);
 		if (dyi[0] > 0)
@@ -41,14 +41,14 @@ static void plot_line_low(t_ir p1, t_ir p2, uint32_t color, t_wolf3d *app)
 	}
 }
 
-static void plot_line_high(t_ir p1, t_ir p2, uint32_t color, t_wolf3d *app)
+static void plot_line_high(int *p1, int *p2, uint32_t color, t_wolf3d *app)
 {
 	int dxy[2];
 	int dxi[2];
 	int xy[2];
 
-	dxy[0] = p2.a - p1.a;
-	dxy[1] = p2.b - p1.b;
+	dxy[0] = p2[0] - p1[0];
+	dxy[1] = p2[1] - p1[1];
 	dxi[1] = 1;
 	if (dxy[0] < 0)
 	{
@@ -56,9 +56,9 @@ static void plot_line_high(t_ir p1, t_ir p2, uint32_t color, t_wolf3d *app)
 		dxy[0] = -dxy[0];
 	}
 	dxi[0] = 2 * dxy[0] - dxy[1];
-	xy[0] = p1.a;
-	xy[1] = p1.b - 1;
-	while (++xy[1] <= p2.b)
+	xy[0] = p1[0];
+	xy[1] = p1[1] - 1;
+	while (++xy[1] <= p2[1])
 	{
 		plot_pixel(app, app->main_window->rbuffer, xy, color);
 		if (dxi[0] > 0)
@@ -70,75 +70,75 @@ static void plot_line_high(t_ir p1, t_ir p2, uint32_t color, t_wolf3d *app)
 	}
 }
 
-static void plot_vertical(t_ir begin, t_ir finish, uint32_t color, t_wolf3d *app)
+static void plot_vertical(int *begin, int *finish, uint32_t color, t_wolf3d *app)
 {
-	if (begin.b <= finish.b)
+	if (begin[1] <= finish[1])
 	{
-		begin.b--;
-		while (begin.b <= finish.b)
+		begin[1]--;
+		while (begin[1] <= finish[1])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){begin.a, begin.b}, color);
-			begin.b++;
+			plot_pixel(app, app->main_window->rbuffer, (int[2]){begin[0], begin[1]}, color);
+			begin[1]++;
 		}
 	}
-	else if (begin.b >= finish.b)
+	else if (begin[1] >= finish[1])
 	{
-		finish.b--;
-		while (begin.b >= finish.b)
+		finish[1]--;
+		while (begin[1] >= finish[1])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){finish.a, finish.b}, color);
-			finish.b++;
+			plot_pixel(app, app->main_window->rbuffer, (int[2]){finish[0], finish[1]}, color);
+			finish[1]++;
 		}
 	}
 }
 
-static void plot_horizontal(t_ir begin, t_ir finish, uint32_t color, t_wolf3d *app)
+static void plot_horizontal(int *begin, int *finish, uint32_t color, t_wolf3d *app)
 {
-	if (begin.a <= finish.a)
+	if (begin[0] <= finish[0])
 	{
-		begin.a--;
-		while (begin.a <= finish.a)
+		begin[0]--;
+		while (begin[0] <= finish[0])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){begin.a, begin.b}, color);
-			begin.a++;
+			plot_pixel(app, app->main_window->rbuffer, (int[2]){begin[0], begin[1]}, color);
+			begin[0]++;
 		}
 	}
-	else if (begin.a >= finish.a)
+	else if (begin[0] >= finish[0])
 	{
-		finish.a--;
-		while (begin.a >= finish.a)
+		finish[0]--;
+		while (begin[0] >= finish[0])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){finish.a, finish.b}, color);
-			finish.a++;
+			plot_pixel(app, app->main_window->rbuffer, (int[2]){finish[0], finish[1]}, color);
+			finish[0]++;
 		}
 	}
 }
 
-void draw_line(t_ir begin, t_ir finish, uint32_t color, t_wolf3d *app)
+void draw_line(int *begin, int *finish, uint32_t color, t_wolf3d *app)
 {
-	if (begin.a == finish.a)
+	if (begin[0] == finish[0])
 		plot_vertical(begin, finish, color, app);
-	else if (begin.b == finish.b)
+	else if (begin[1] == finish[1])
 		plot_horizontal(begin, finish, color, app);
 	else
 	{
-		if (ft_abs(finish.b - begin.b) < ft_abs(finish.a - begin.a))
+		if (ft_abs(finish[1] - begin[1]) < ft_abs(finish[0] - begin[0]))
 		{
-			if (begin.a > finish.a)
-				plot_line_low((t_ir){.a = finish.a, .b = finish.b},
-							  (t_ir){.a = begin.a, .b = begin.b}, color, app);
+			if (begin[0] > finish[0])
+				plot_line_low((int[2]){finish[0], finish[1]},
+							  (int[2]){begin[0], begin[1]}, color, app);
 			else
-				plot_line_low((t_ir){.a = begin.a, .b = begin.b},
-							  (t_ir){.a = finish.a, .b = finish.b}, color, app);
+				plot_line_low((int[2]){begin[0], begin[1]},
+							  (int[2]){finish[0], finish[1]}, color, app);
 		}
 		else
 		{
-			if (begin.b > finish.b)
-				plot_line_high((t_ir){.a = finish.a, .b = finish.b},
-							   (t_ir){.a = begin.a, .b = begin.b}, color, app);
+			if (begin[1] > finish[1])
+				plot_line_high((int[2]){finish[0], finish[1]},
+							   (int[2]){begin[0], begin[1]}, color, app);
 			else
-				plot_line_high((t_ir){.a = begin.a, .b = begin.b},
-							   (t_ir){.a = finish.a, .b = finish.b}, color, app);
+				plot_line_high((int[2]){begin[0], begin[1]},
+							   (int[2]){finish[0], finish[1]}, color, app);
 		}
 	}
 }

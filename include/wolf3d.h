@@ -280,7 +280,7 @@ int									screen_to_frame_coords(uint32_t width,
 															uint32_t height,
 															int x, int y);
 void								render_ui(t_wolf3d *app);
-void								draw_line(t_ir begin, t_ir finish, uint32_t color, t_wolf3d *app);
+void								draw_line(int *begin, int *finish, uint32_t color, t_wolf3d *app);
 void								plot_pixel(t_wolf3d *app, uint32_t *buffer, int *point, uint32_t color);
 
 /*

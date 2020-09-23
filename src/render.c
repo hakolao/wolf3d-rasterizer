@@ -73,12 +73,18 @@ void		calculate_triangle_center(t_triangle *triangle,
 
 void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 {
-		draw_line((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
-						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
-		draw_line((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
-						(t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2}, color, app);
-		draw_line((t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2},
-						(t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2}, color, app);
+		draw_line(	(int[2]){ints_on_screen[0] + WIDTH / 2,
+							ints_on_screen[1] + HEIGHT / 2},
+					(int[2]){ints_on_screen[2] + WIDTH / 2,
+							ints_on_screen[3] + HEIGHT / 2}, color, app);
+		draw_line(	(int[2]){ints_on_screen[0] + WIDTH / 2,
+							ints_on_screen[1] + HEIGHT / 2},
+					(int[2]){ints_on_screen[4] + WIDTH / 2,
+							ints_on_screen[5] + HEIGHT / 2}, color, app);
+		draw_line(	(int[2]){ints_on_screen[2] + WIDTH / 2,
+							ints_on_screen[3] + HEIGHT / 2},
+					(int[2]){ints_on_screen[4] + WIDTH / 2,
+							ints_on_screen[5] + HEIGHT / 2}, color, app);
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,

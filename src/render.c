@@ -284,42 +284,26 @@ void		calculate_fill_start_points(t_wolf3d *app, t_triangle *triangle,
 
 void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 {
-	if (ints_on_screen[0] > ints_on_screen [2])
-		draw_line_lower((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
+		draw_line((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
 						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
-	else
-		draw_line_upper((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
-						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
-	if (ints_on_screen[0] > ints_on_screen[4])
-		draw_line_upper((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
+		draw_line((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
 						(t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2}, color, app);
-	else
-		draw_line_lower((t_ir){.a = ints_on_screen[0] + WIDTH / 2, .b = ints_on_screen[1] + HEIGHT / 2},
+		draw_line((t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2},
 						(t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2}, color, app);
-	if (ints_on_screen[4] > ints_on_screen [2])
-		draw_line_upper((t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2},
-						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
-	else
-		draw_line_lower((t_ir){.a = ints_on_screen[4] + WIDTH / 2, .b = ints_on_screen[5] + HEIGHT / 2},
-						(t_ir){.a = ints_on_screen[2] + WIDTH / 2, .b = ints_on_screen[3] + HEIGHT / 2}, color, app);
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 					   t_mesh *mesh, t_camera *camera)
 {
 	t_intersection		intsec;
-	int					color;
 	int					i;
 	t_vec2				corners_on_screen[3];
-	// t_vec3				normalized_normal;
 	uint32_t			*rbuffer;
 	int					width = app->main_window->width;
 	int					height = app->main_window->height;
 	int					triangle_center[8];
-	// int					start_points[6];
 	int					ints_on_screen[6];
 
-	// app->main_window->rbuf_render_color = 0xffaaffff / 2;
 	rbuffer = app->main_window->rbuffer;
 	(void)mesh;
 	screen_intersection(app, triangle, corners_on_screen);
@@ -331,67 +315,21 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 	}
 	uint32_t linecolor = 0xffaaffff;
 	//!DRAW ORDER: AB, BC, CA
-	draw_triangle_edges(app, ints_on_screen, linecolor);
-	calculate_triangle_center(triangle, triangle_center);
-	// printf("fill triangle startx: %d\n", triangle_center[0]);
-	// printf("fill triangle starty: %d\n", triangle_center[1]);
-	// calculate_fill_start_points(app, triangle, triangle_center, start_points);
-	// ft_printf("output start points A: %d | %d\n", start_points[0], start_points[1]);
-	// ft_printf("output start points B: %d | %d\n", start_points[2], start_points[3]);
-	// ft_printf("output start points C: %d | %d\n", start_points[4], start_points[5]);
-	// ft_printf("start pixel color: %x\n",
-	// 		  app->main_window->rbuffer[screen_to_frame_coords(width, height, start_points[0]
-	// 		  + width / 2, start_points[1] + height / 2)]);
-	// fill_triangle_corners(app, ints_on_screen, triangle_center);
-	// fill_triangle_area(app, triangle->vtc[0], triangle_center);
-	//TODO OFFSET THE TRIANGLE CENTER BY CORRECT AMOUNT DEPENDING OF WHICH CORNER IS START
-
-
-	//TODO REMEMBER TO CHANGE TRIANGLE AND GRID RENDERING BACK
+	draw_triangle_edges(app, ints_on_screen, app->main_window->rbuf_render_color);
 	int k = 0;
 	while (k < width * height)
 	{
 		app->main_window->framebuffer[k] = rbuffer[k];
 		k++;
 	}
-	if (RANDOM_COLOR)
-		app->main_window->rbuf_render_color = sin(SDL_GetTicks() / 200) * 0xffffffff;
-	// ml_vector3_normalize(triangle->normal, normalized_normal);
-	color = app->main_window->rbuf_render_color;
-	//Here we borrow zbuffers memory to store the triangle's screen coordinates
-	//the area will be filled right after with triangles z values (might be fragile af)
-	// zbuffer[screen_to_frame_coords(width, height, + width / 2, + height / 2)] = 0;
-	// paint_edge_to_buffer(uint32_t *zbuffer, t_vec2 *start, t_vec2 *end);,
-	//1. Cast rays from triangle corners through screen to camera
-	//2. Calculate intersection points with screen and convert them to
-	//		screen pixels.
-	//3. Calculate border edges of the triangle in screen pixels using triangle
-	//		elemental vectors and the difference in x value between ab and ac.
-	//4. Use recursive filling algorithm to find out the pixel coordinates
-	//		inside the triangle.
-	//5. Use all these pixels which are now guaranteed to be inside the triangle
-	//		and cast rays from camera through the pixels and calculate intersection
-	//		normally with the triangle.
 	i = 0;
 	(void)width;
 	(void)height;
 	(void)camera;
-	// while (i < camera->raycount)
-	// {
-	// 	// if (triangle_intersection(triangle, &(camera->rays[i]), &intsec))
-	// 	// {
-	// 	// 	app->main_window->framebuffer[
-	// 	// 		screen_to_frame_coords(app->main_window->width, app->main_window->height,
-	// 	// 		(int)(camera->rays[i].dir[1]) + camera->screen_width / 2,
-	// 	// 		(int)(camera->rays[i].dir[2]) + camera->screen_height / 2)] = color;
-	// 	// }
-	// 	i++;
-	// 	//find a way to get uv data in fragment shader
-	// 	//mesh->shader->f(triangle, calculate_baryocoords(intsec), color);
-	// 	//find a way to get framebuffer data in and or out of this function
-	// }
 	(void)intsec;
 	(void)corners_on_screen;
 	(void)triangle;
+	(void)triangle_center;
+	(void)linecolor;
 	return (true);
 }

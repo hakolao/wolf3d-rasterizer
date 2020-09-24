@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:04:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 17:19:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void			destroy_scene(t_scene *scene)
 	}
 	if (scene->main_camera)
 	{
-		free(scene->main_camera->rays);
 		free(scene->main_camera);
 		scene->main_camera = NULL;
 	}

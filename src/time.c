@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 14:34:58 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/07 14:55:50 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 17:59:17 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void			cap_framerate(t_wolf3d *app)
 		SDL_Delay((uint32_t)((uint32_t)time_per_frame - app->delta_time));
 }
 
-float			sin_time(t_wolf3d *app,
-				float min, float max, float speed)
+float			sin_time(float min, float max, float speed)
 {
 	float		amplitude;
 	float		zero_offset;
@@ -37,5 +36,5 @@ float			sin_time(t_wolf3d *app,
 	amplitude = (max - min) / 2.0;
 	zero_offset = min + amplitude;
 	return (amplitude *
-		sin((app->time_since_start / 1000.0) * speed ) + zero_offset);
+		sin((SDL_GetTicks() / 1000.0) * speed ) + zero_offset);
 }

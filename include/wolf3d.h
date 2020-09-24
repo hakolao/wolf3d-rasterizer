@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:33:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 18:00:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,8 +192,9 @@ typedef struct						s_wolf3d
 	t_wolf3d_debug			debug_info;
 	t_window				*main_window;
 	t_scene					*active_scene;
-	uint32_t				time_since_start;
-	uint32_t				delta_time;
+	uint64_t				performance_start;
+	uint64_t				performance_end;
+	uint64_t				delta_time;
 	t_player				player;
 }									t_wolf3d;
 
@@ -234,8 +235,7 @@ void								wolf3d_run(t_wolf3d *app);
 ** Time
 */
 void								cap_framerate(t_wolf3d *app);
-float								sin_time(t_wolf3d *app,
-									float min, float max, float speed);
+float								sin_time(float min, float max, float speed);
 
 /*
 ** Player
@@ -319,7 +319,7 @@ void								surface_to_framebuffer(t_wolf3d *app,
 /*
 ** Debug information
 */
-void								capture_framerate(t_wolf3d *app);
+uint64_t							capture_framerate(uint64_t delta_time);
 void								render_debug_grid(t_wolf3d *app);
 
 /*

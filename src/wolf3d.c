@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:30:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 18:02:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 
 	while (app->is_running)
 	{
-		app->time_since_start = SDL_GetTicks();
+		app->performance_start = SDL_GetPerformanceCounter();
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
@@ -79,8 +79,10 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 				player_action_handle(app, event);
 		}
 		draw_frame(app);
-		capture_framerate(app);
-		cap_framerate(app);
+		app->performance_end = SDL_GetPerformanceCounter();
+		app->delta_time = (app->performance_end - app->performance_start) *
+			1000.0 / SDL_GetPerformanceFrequency();
+		app->debug_info.fps = capture_framerate(app->delta_time);
 	}
 }
 
@@ -99,9 +101,9 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 	destroy_scene(app->active_scene);
 	SDL_DestroyRenderer(app->main_window->renderer);
 	SDL_DestroyWindow(app->main_window->window);
-	free(app->main_window);
 	TTF_CloseFont(app->main_window->main_font);
 	TTF_CloseFont(app->main_window->debug_font);
+	free(app->main_window);
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();

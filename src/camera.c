@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:32:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/03 16:03:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 15:46:45 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ static t_ray	*precompute_rays(t_camera *camera)
 		x = -1;
 		while (++x < (int32_t)camera->screen_width)
 		{
-			dir[0] = camera->screen_dist;
-			dir[1] = -(float)x + (float)camera->screen_width / 2.0;
-			dir[2] = -(float)y + (float)camera->screen_height / 2.0;
-				rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
+			dir[0] = -(float)x + (float)camera->screen_width / 2.0;
+			dir[1] = -(float)y + (float)camera->screen_height / 2.0;
+			dir[2] = camera->screen_dist;
+			rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
 			ml_vector3_normalize(rays[y * camera->screen_width + x].dir,
 							rays[y * camera->screen_width + x].normalized_dir);
 		}

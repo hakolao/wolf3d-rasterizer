@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 12:39:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 16:45:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,20 +119,12 @@ typedef struct						s_window
 typedef struct						s_camera
 {
 	t_vec3					origin;
-	t_vec3					orientation[3];
-	uint32_t				screen_width;
-	uint32_t				screen_height;
-	float					fovx;
-	float					fovy;
+	float					fov;
 	float					screen_dist;
+	int						width;
+	int						height;
 	t_ray					*rays;
-	int						raycount;
-	t_scene					*parent_scene;
-
-	uint32_t				mallocsize;
-	t_mat4					view;
-	t_mat4					model;
-	t_mat4					projection;
+	int						num_rays;
 }									t_camera;
 
 typedef struct						s_player

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 15:35:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 16:37:17 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ void			move_player(t_wolf3d *app, t_move dir)
 	player = &app->player;
 	if (dir == move_forward)
 	{
-		ml_vector3_mul(player->forward, player->speed * app->delta_time, add);
+		ml_vector3_mul(player->forward, -player->speed * app->delta_time, add);
 		ml_vector3_add(player->pos, add, new_pos);
 	}
 	else if (dir == move_backward)
 	{
-		ml_vector3_mul(player->forward, -player->speed * app->delta_time, add);
+		ml_vector3_mul(player->forward, player->speed * app->delta_time, add);
 		ml_vector3_add(player->pos, add, new_pos);
 	}
 	else if (dir == move_strafe_left)

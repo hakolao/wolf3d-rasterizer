@@ -6,37 +6,42 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:32:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 15:46:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 16:46:17 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static t_ray	*precompute_rays(t_camera *camera)
+static t_ray	*rays_create(t_wolf3d *app, t_camera *camera)
 {
-	t_ray		*rays;
-	int32_t		x;
-	int32_t		y;
-	int32_t		size;
-	t_vec3		dir;
+	float	scale;
+	float	aspect_ratio;
+	int		x;
+	int		y;
+	int		i;
+	t_ray	*rays;
 
-	y = -1;
-	size = camera->screen_width *camera->screen_height;
-	if (!(rays = (t_ray*)malloc(sizeof(t_ray) * size)))
+	if (!(rays = (t_ray*)malloc(sizeof(t_ray) *
+		app->main_window->width * app->main_window->height)))
 		return (NULL);
-	camera->mallocsize = sizeof(t_ray) * size;
-	camera->raycount = size;
-	while (++y < (int32_t)camera->screen_height)
+	scale = tan(ml_rad((camera->fov * 0.5)));
+ 	aspect_ratio = app->main_window->width / (float)app->main_window->height;
+	y = -1;
+	i = 0;
+	while (++y < app->main_window->height)
 	{
 		x = -1;
-		while (++x < (int32_t)camera->screen_width)
+		while (++x < app->main_window->width)
 		{
-			dir[0] = -(float)x + (float)camera->screen_width / 2.0;
-			dir[1] = -(float)y + (float)camera->screen_height / 2.0;
-			dir[2] = camera->screen_dist;
-			rays[y * camera->screen_width + x] = new_ray(camera->origin, dir);
-			ml_vector3_normalize(rays[y * camera->screen_width + x].dir,
-							rays[y * camera->screen_width + x].normalized_dir);
+			rays[i].dir[0] = (2 * (x + 0.5) / (float)app->main_window->width - 1)
+				* aspect_ratio * scale;
+			rays[i].dir[1] = (1 - 2 * (y + 0.5) / (float)app->main_window->height) *
+				scale;
+			rays[i].dir[2] = -1.0;
+			ml_vector3_copy(camera->origin, rays[i].origin);
+			ml_vector3_sub(rays[i].dir, rays[i].origin, rays[i].dir);
+			ml_vector3_normalize(rays[i].dir, rays[i].dir);
+			i++;
 		}
 	}
 	return (rays);
@@ -47,22 +52,17 @@ void			update_camera(t_wolf3d *app)
 	t_camera	*camera;
 
 	camera = app->active_scene->main_camera;
-	camera->screen_width = app->main_window->width * VIEW_SCALE;
-	camera->screen_height = app->main_window->height * VIEW_SCALE;
-	camera->screen_dist = app->main_window->width * VIEW_SCALE;
-	camera->fovx = 2 * (atan(camera->screen_width / (2 * camera->screen_dist)));
-	camera->fovy = 2 * (atan(camera->screen_height /
-						(2 * camera->screen_dist)));
-	ml_set_orientation_base(camera->orientation, VEC_FORWARD, VEC_LEFT, VEC_UP);
-	camera->raycount = 0;
+	camera->fov = 90;
+	camera->screen_dist = app->main_window->width;
+	camera->width = app->main_window->width;
+	camera->height = app->main_window->height;
 	if (camera->rays == NULL)
-		camera->rays = precompute_rays(camera);
+		camera->rays = rays_create(app, camera);
 	else
 	{
 		free(camera->rays);
-		camera->rays = precompute_rays(camera);
+		camera->rays = rays_create(app, camera);
 	}
-	camera->parent_scene = app->active_scene;
 }
 
 t_camera		*new_camera()

@@ -33,7 +33,7 @@ int			screen_to_frame_coords(uint32_t width, uint32_t height, int x, int y)
 	return (x + y * width);
 }
 
-void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
+void		screen_intersection(t_camera *camera, t_triangle *triangle,
 								t_vec2 *corners_on_screen)
 {
 	t_ray	rays[3];
@@ -44,10 +44,10 @@ void		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	while (++i < 3)
 	{
 		rays[i] = new_ray((t_vec3){0.0, 0.0, 0.0}, triangle->vtc[i]->position);
-		scaler = (app->active_scene->main_camera->screen_dist / rays[i].dir[0]);
+		scaler = (camera->screen_dist / rays[i].dir[2]);
+		rays[i].dir[0] *= scaler;
 		rays[i].dir[1] *= scaler;
-		rays[i].dir[2] *= scaler;
-		ml_vector2_copy((t_vec2){rays[i].dir[1], rays[i].dir[2]},
+		ml_vector2_copy((t_vec2){rays[i].dir[0], rays[i].dir[1]},
 						corners_on_screen[i]);
 	}
 }
@@ -67,18 +67,18 @@ void		calculate_triangle_center(t_triangle *triangle,
 
 void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 {
-		draw_line(	(int[2]){ints_on_screen[0] + WIDTH / 2,
-							ints_on_screen[1] + HEIGHT / 2},
-					(int[2]){ints_on_screen[2] + WIDTH / 2,
-							ints_on_screen[3] + HEIGHT / 2}, color, app);
-		draw_line(	(int[2]){ints_on_screen[0] + WIDTH / 2,
-							ints_on_screen[1] + HEIGHT / 2},
-					(int[2]){ints_on_screen[4] + WIDTH / 2,
-							ints_on_screen[5] + HEIGHT / 2}, color, app);
-		draw_line(	(int[2]){ints_on_screen[2] + WIDTH / 2,
-							ints_on_screen[3] + HEIGHT / 2},
-					(int[2]){ints_on_screen[4] + WIDTH / 2,
-							ints_on_screen[5] + HEIGHT / 2}, color, app);
+	draw_line(	(int[2]){ints_on_screen[0],
+						ints_on_screen[1]},
+				(int[2]){ints_on_screen[2],
+						ints_on_screen[3]}, color, app);
+	draw_line(	(int[2]){ints_on_screen[0],
+						ints_on_screen[1]},
+				(int[2]){ints_on_screen[4],
+						ints_on_screen[5]}, color, app);
+	draw_line(	(int[2]){ints_on_screen[2],
+						ints_on_screen[3]},
+				(int[2]){ints_on_screen[4],
+						ints_on_screen[5]}, color, app);
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
@@ -86,23 +86,23 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
 {
 	t_vec2				corners_on_screen[3];
 	uint32_t			*rbuffer;
-	int					width = app->main_window->width;
-	int					height = app->main_window->height;
 	int					ints_on_screen[6];
 
 	rbuffer = app->main_window->rbuffer;
 	(void)mesh;
-	screen_intersection(app, triangle, corners_on_screen);
+	screen_intersection(app->active_scene->main_camera, triangle, corners_on_screen);
 	int j = -1;
 	while (++j < 3)
 	{
-		ints_on_screen[j * 2] = (int)corners_on_screen[j][0];
-		ints_on_screen[j * 2 + 1] = (int)corners_on_screen[j][1];
+		ints_on_screen[j * 2] =
+			(int)corners_on_screen[j][0] + app->main_window->width / 2;
+		ints_on_screen[j * 2 + 1] =
+			(int)corners_on_screen[j][1] + app->main_window->height / 2;
 	}
 	//!DRAW ORDER: AB, BC, CA
 	draw_triangle_edges(app, ints_on_screen, app->main_window->rbuf_render_color);
 	int k = 0;
-	while (k < width * height)
+	while (k < app->main_window->width *  app->main_window->height)
 	{
 		app->main_window->framebuffer[k] = rbuffer[k];
 		k++;

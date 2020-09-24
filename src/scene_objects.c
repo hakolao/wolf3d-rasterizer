@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 14:08:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 16:35:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void				scene_vertices_init(t_wolf3d *app, t_scene *scene)
 
 	if (app->active_scene->main_camera == NULL)
 		return ;
-	ml_matrix4_translation(app->active_scene->main_camera->screen_dist, 0, 0,
-		translation);
+	ml_matrix4_translation(0, 0, -1000, translation);
 	scale = app->main_window->height / 2.0 - 1;
 	i = -1;
 	while (++i < scene->object_count)

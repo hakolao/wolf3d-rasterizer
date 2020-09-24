@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 15:12:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 15:35:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void		apply_movement(t_wolf3d *app, t_vec3 new_pos)
 void			init_player(t_wolf3d *app)
 {
 	ft_memcpy(&app->player.pos, &(t_vec3){0, 0, 0}, sizeof(t_vec3));
-	ft_memcpy(&app->player.forward, &(t_vec3){1, 0, 0}, sizeof(t_vec3));
+	ft_memcpy(&app->player.forward, &(t_vec3){0, 0, 1}, sizeof(t_vec3));
 	ft_memcpy(&app->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
 	app->player.speed = 0.5f;
 	app->player.rot_speed = 0.1f;

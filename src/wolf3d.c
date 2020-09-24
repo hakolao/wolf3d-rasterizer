@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 16:38:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 17:30:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 	SDL_DestroyRenderer(app->main_window->renderer);
 	SDL_DestroyWindow(app->main_window->window);
 	free(app->main_window);
-	TTF_CloseFont(app->main_window->font);
+	TTF_CloseFont(app->main_window->main_font);
+	TTF_CloseFont(app->main_window->debug_font);
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();

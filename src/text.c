@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/03 14:04:30 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 14:26:03 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 17:32:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,17 @@
 
 static SDL_Surface	*text_surface(t_wolf3d *app, t_text_params params)
 {
-	SDL_Surface	*surface;
-	static char	selected_font[128];
+	SDL_Surface		*text_surface;
+	SDL_Surface		*formatted_surface;
 
-	if (!ft_strequ(selected_font, params.font))
-	{
-		if (app->main_window->font == NULL)
-		app->main_window->font = TTF_OpenFont(params.font,
-			get_relative_font_size(app, params.font_size));
-		else
-		{
-			TTF_CloseFont(app->main_window->font);
-			app->main_window->font = TTF_OpenFont(params.font,
-				get_relative_font_size(app, params.font_size));
-		}
-		error_check(!app->main_window->font, TTF_GetError());
-		ft_memcpy(selected_font, params.font, ft_strlen(params.font));
-	}
-	surface = surface_from_font(app, params);
-	return (surface);
+	text_surface = TTF_RenderText_Blended_Wrapped(params.font, params.text,
+		params.text_color, app->main_window->width);
+	error_check(!text_surface, TTF_GetError());
+	formatted_surface = SDL_ConvertSurfaceFormat(text_surface,
+		PIXEL_FORMAT, 0);
+	SDL_FreeSurface(text_surface);
+	error_check(!formatted_surface, SDL_GetError());
+	return (formatted_surface);
 }
 
 uint32_t			get_relative_font_size(t_wolf3d *app, uint32_t font_size)

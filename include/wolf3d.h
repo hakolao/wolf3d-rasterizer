@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:19:10 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 18:00:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
 # define GAME_FONT "assets/pixelated.ttf"
 # define DEBUG_FONT "assets/Roboto-Regular.ttf"
-# define FONT_SIZE 15
+# define FONT_SIZE 20
 
 # define WIDTH 1280
 # define HEIGHT 720
@@ -97,7 +97,8 @@ typedef struct						s_window
 	uint32_t				*zbuffer;
 	uint32_t				*rbuffer;
 	uint32_t				rbuf_render_color;
-	TTF_Font				*font;
+	TTF_Font				*main_font;
+	TTF_Font				*debug_font;
 	int32_t					width;
 	int32_t					height;
 	int32_t					pitch;
@@ -191,17 +192,17 @@ typedef struct						s_wolf3d
 	t_wolf3d_debug			debug_info;
 	t_window				*main_window;
 	t_scene					*active_scene;
-	uint32_t				time_since_start;
-	uint32_t				delta_time;
+	uint64_t				performance_start;
+	uint64_t				performance_end;
+	uint64_t				delta_time;
 	t_player				player;
 }									t_wolf3d;
 
 typedef struct						s_text_params
 {
-	const char				*font;
 	const char				*text;
 	SDL_Color				text_color;
-	int						font_size;
+	TTF_Font 				*font;
 	int						*xy;
 	float					blend_ratio;
 }									t_text_params;
@@ -234,8 +235,7 @@ void								wolf3d_run(t_wolf3d *app);
 ** Time
 */
 void								cap_framerate(t_wolf3d *app);
-float								sin_time(t_wolf3d *app,
-									float min, float max, float speed);
+float								sin_time(float min, float max, float speed);
 
 /*
 ** Player
@@ -311,8 +311,7 @@ uint32_t							get_relative_font_size(t_wolf3d *app,
 /*
 ** SDL Surface
 */
-SDL_Surface							*surface_from_font(t_wolf3d *app,
-									t_text_params params);
+
 void								surface_to_framebuffer(t_wolf3d *app,
 									SDL_Surface *surface, float blend_ratio,
 									int xy[2]);
@@ -320,7 +319,7 @@ void								surface_to_framebuffer(t_wolf3d *app,
 /*
 ** Debug information
 */
-void								capture_framerate(t_wolf3d *app);
+uint64_t							capture_framerate(uint64_t delta_time);
 void								render_debug_grid(t_wolf3d *app);
 
 /*

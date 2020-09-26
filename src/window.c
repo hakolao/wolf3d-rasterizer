@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 14:18:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 17:30:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,8 @@ void			main_window_init(t_wolf3d *app)
 	recreate_frame(app);
 	SDL_AddEventWatch(resize_callback, app->main_window);
 	app->main_window->resized = false;
-	app->main_window->font = NULL;
+	error_check(!(app->main_window->main_font =
+		TTF_OpenFont(GAME_FONT, FONT_SIZE)), TTF_GetError());
+	error_check(!(app->main_window->debug_font =
+		TTF_OpenFont(DEBUG_FONT, FONT_SIZE)), TTF_GetError());
 }

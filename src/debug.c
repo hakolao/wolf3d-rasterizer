@@ -6,28 +6,28 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 13:08:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/08 13:47:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/24 18:00:03 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void			capture_framerate(t_wolf3d *app)
+uint64_t			capture_framerate(uint64_t delta_time)
 {
-	static uint32_t		delta_time_sum;
-	static uint32_t		frames_per_sec;
+	static uint64_t		delta_time_sum;
+	static uint64_t		frames_per_sec;
+	static uint64_t		prev_fps;
 
-	app->delta_time = SDL_GetTicks() - app->time_since_start;
-	delta_time_sum += app->delta_time;
+	delta_time_sum += delta_time;
 	frames_per_sec++;
 	if (delta_time_sum > 1000.0)
 	{
-		app->debug_info.fps = frames_per_sec;
-		app->debug_info.avg_delta_time =
-			(float)delta_time_sum / (float)frames_per_sec;
+		prev_fps = frames_per_sec;
 		delta_time_sum = 0;
 		frames_per_sec = 0;
+		return (frames_per_sec);
 	}
+	return (prev_fps);
 }
 
 void			render_debug_grid(t_wolf3d *app)

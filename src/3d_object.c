@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 17:22:11 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/27 16:21:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 16:25:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,21 @@ t_3d_object		*create_3d_object(t_obj_result *read_obj)
 	obj->num_vertices = read_obj->num_vertices;
 	return (obj);
 }
+
+void		transform_3d_object(t_3d_object *obj, t_mat4 transform)
+{
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < obj->num_vertices)
+		ml_matrix4_mul_vec3(transform,
+			obj->vertices[i]->position, obj->vertices[i]->position);
+	j = -1;
+	while (++j < obj->num_triangles)
+		l3d_triangle_normal_set(&obj->triangles[j]);
+}
+
 
 void		destroy_object(t_3d_object *object)
 {

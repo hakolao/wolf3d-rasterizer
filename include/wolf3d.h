@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 16:20:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 17:18:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ typedef struct						s_player
 {
 	t_vec3					pos;
 	t_vec3					forward;
+	t_vec3					sideways;
 	t_vec3					up;
 	float					speed;
 	float					rot_speed;
@@ -161,6 +162,10 @@ typedef struct						s_scene_data
 	t_camera				*main_camera;
 	t_3d_object				**objects; //Read from map eventually
 	int32_t					object_count; //Read from map eventually
+	t_mat4					world_transform;
+	t_mat4					world_scale;
+	t_mat4					world_rotation;
+	t_mat4					world_translation;
 }									t_scene_data;
 
 struct s_scene
@@ -173,6 +178,10 @@ struct s_scene
 	int32_t					menu_option_count;
 	int32_t					selected_option;
 	t_scene_id				scene_id;
+	t_mat4					world_transform;
+	t_mat4					world_scale;
+	t_mat4					world_rotation;
+	t_mat4					world_translation;
 };
 
 typedef struct						s_wolf3d_debug
@@ -325,6 +334,8 @@ t_3d_object							*create_3d_object(t_obj_result *read_ob);
 void								init_3d_object(t_obj_result *read_ob,
 									t_3d_object *obj);
 void								destroy_object(t_3d_object *object);
+void								transform_3d_object(t_3d_object *obj,
+									t_mat4 transform);
 
 /*
 ** Obj file read
@@ -345,5 +356,6 @@ void								set_active_scene(t_wolf3d *app,
 									t_scene_id to_scene);
 t_3d_object							**create_scene1_objects(int32_t *obj_count);
 void								debug_scene(t_scene *scene);
+void								update_world_transform(t_scene *scene);
 
 #endif

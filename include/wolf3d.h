@@ -19,6 +19,7 @@
 # include "libft.h"
 # include "libgmatrix.h"
 # include "lib3d.h"
+# include <float.h>
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0

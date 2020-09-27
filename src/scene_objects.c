@@ -21,7 +21,7 @@ void				scene_vertices_init(t_wolf3d *app, t_scene *scene)
 
 	if (app->active_scene->main_camera == NULL)
 		return ;
-	ml_matrix4_translation(0, 0, -1000, translation);
+	ml_matrix4_translation(0, 0, -2000, translation);
 	scale = app->main_window->height / 2.0 - 1;
 	i = -1;
 	while (++i < scene->object_count)

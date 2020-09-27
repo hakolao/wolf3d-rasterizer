@@ -22,9 +22,12 @@ static void	render_active_scene_objects(t_wolf3d *app)
 	{
 		j = -1;
 		while (++j < app->active_scene->objects[i]->mesh_triangle_count)
+		{
 			render_triangle(app,
 				&app->active_scene->objects[i]->mesh_triangles[j], NULL,
 				app->active_scene->main_camera);
+				
+		}
 	}
 }
 

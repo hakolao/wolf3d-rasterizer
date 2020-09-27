@@ -86,6 +86,7 @@ SOURCES = ft_atoi.c \
 		ft_lmap_int.c \
 		ft_lmap_double.c \
 		ft_max.c \
+		ft_max_index.c \
 		ft_abs.c \
 		ft_pixel_foreach.c \
 		ft_sort_int_tab.c \

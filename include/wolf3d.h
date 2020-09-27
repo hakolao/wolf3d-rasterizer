@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 18:00:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 16:20:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,15 +141,11 @@ typedef struct						s_player
 
 typedef struct						s_3d_object
 {
-	t_vec3					origin;
-	t_vec3					position; // == origin * transform
 	t_mat4					transform;
-	t_vertex				**mesh_vertices;
-	int32_t					mesh_vertex_count;
-	t_triangle				*mesh_triangles;
-	int32_t					mesh_triangle_count;
-	t_mat4					mesh_transform;
-	t_box3d					mesh_bound_box;
+	t_vertex				**vertices;
+	int32_t					num_vertices;
+	t_triangle				*triangles;
+	int32_t					num_triangles;
 }									t_3d_object;
 
 /*

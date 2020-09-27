@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 16:37:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 16:21:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@ static void		apply_transform_to_world(t_wolf3d *app, t_mat4 transform)
 	while (++i < app->active_scene->object_count)
 	{
 		j = -1;
-		while (++j < app->active_scene->objects[i]->mesh_vertex_count)
+		while (++j < app->active_scene->objects[i]->num_vertices)
 		{
 			ml_matrix4_mul_vec3(transform,
-			app->active_scene->objects[i]->mesh_vertices[j]->position,
-			app->active_scene->objects[i]->mesh_vertices[j]->position);
+			app->active_scene->objects[i]->vertices[j]->position,
+			app->active_scene->objects[i]->vertices[j]->position);
 		}
 		j = -1;
-		while (++j < app->active_scene->objects[i]->mesh_triangle_count)
+		while (++j < app->active_scene->objects[i]->num_triangles)
 		{
 			l3d_triangle_normal_set(
-				&app->active_scene->objects[i]->mesh_triangles[j]);
+				&app->active_scene->objects[i]->triangles[j]);
 			// ml_vector3_mul(app->active_scene->objects[i]->mesh_triangles[j].normal, -1,
 			// 	app->active_scene->objects[i]->mesh_triangles[j].normal);
 		}

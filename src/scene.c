@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:46:37 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 16:21:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,15 @@ void			debug_scene(t_scene *scene)
 	while (++i < scene->object_count)
 	{
 		j = -1;
-		while (++j < (int)scene->objects[i]->mesh_triangle_count)
+		while (++j < (int)scene->objects[i]->num_triangles)
 		{
 			ft_printf("Triangle: %d\n", j);
 			k = -1;
 			while (++k < 3)
 				ml_vector3_print(
-					scene->objects[i]->mesh_triangles[j].vtc[k]->position);
+					scene->objects[i]->triangles[j].vtc[k]->position);
 			ft_printf("Normal:\n");
-			ml_vector3_print(scene->objects[i]->mesh_triangles[j].normal);
+			ml_vector3_print(scene->objects[i]->triangles[j].normal);
 		}
 	}
 }

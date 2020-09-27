@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:47:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 16:21:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ void				scene_vertices_init(t_wolf3d *app, t_scene *scene)
 	while (++i < scene->object_count)
 	{
 		j = -1;
-		while (++j < scene->objects[i]->mesh_vertex_count)
+		while (++j < scene->objects[i]->num_vertices)
 		{
-			ml_vector3_mul(scene->objects[i]->mesh_vertices[j]->position,
-				scale, scene->objects[i]->mesh_vertices[j]->position);
+			ml_vector3_mul(scene->objects[i]->vertices[j]->position,
+				scale, scene->objects[i]->vertices[j]->position);
 			ml_matrix4_mul_vec3(translation,
-			scene->objects[i]->mesh_vertices[j]->position,
-			scene->objects[i]->mesh_vertices[j]->position);
+			scene->objects[i]->vertices[j]->position,
+			scene->objects[i]->vertices[j]->position);
 		}
 		j = -1;
-		while (++j < scene->objects[i]->mesh_triangle_count)
-			l3d_triangle_normal_set(&scene->objects[i]->mesh_triangles[j]);
+		while (++j < scene->objects[i]->num_triangles)
+			l3d_triangle_normal_set(&scene->objects[i]->triangles[j]);
 	}
 }
 

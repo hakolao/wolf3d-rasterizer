@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 17:47:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 18:22:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void			rotate_player(t_wolf3d *app, t_vec3 axes)
 	ml_matrix4_mul_vec3(rotation, app->player.sideways, app->player.sideways);
 	ml_matrix4_mul(app->active_scene->world_rotation, rotation, new_world_rotation);
 	ft_memcpy(app->active_scene->world_rotation, new_world_rotation, sizeof(t_mat4));
-	update_world_rotation(app->active_scene, rotation);
+	update_world_transform(app->active_scene);
 }
 
 void			move_player(t_wolf3d *app, t_move dir)
@@ -47,6 +47,7 @@ void			move_player(t_wolf3d *app, t_move dir)
 	t_vec3		add;
 	t_vec3		new_pos;
 	t_mat4		translation;
+	t_mat4		new_translation;
 
 	if (dir == move_forward)
 	{
@@ -70,5 +71,7 @@ void			move_player(t_wolf3d *app, t_move dir)
 	}
 	ml_vector3_copy(new_pos, app->player.pos);
 	ml_matrix4_translation(-add[0], -add[1], -add[2], translation);
-	update_world_translation(app->active_scene, translation);
+	ml_matrix4_mul(app->active_scene->world_translation, translation, new_translation);
+	ft_memcpy(app->active_scene->world_translation, new_translation, sizeof(t_mat4));
+	update_world_transform(app->active_scene);
 }

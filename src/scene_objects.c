@@ -6,36 +6,61 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 17:40:37 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 17:51:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-/*
-** First scale, then rotate, then translate.
-** In player movement, changes are already applied to rotation & translation
-** here, vertices are reset to original state and then multiplied with new
-** transform.
-*/
-
-void			update_world_transform(t_scene *scene)
+void			update_world_scale(t_scene *scene, t_mat4 scale)
 {
 	int				i;
-	t_mat4			tmp;
-	t_mat4			transform;
+	t_mat4			new_scale;
 	t_mat4			inverse;
 
-	ml_matrix4_inverse(scene->world_transform, inverse);
-	ml_matrix4_mul(scene->world_scale, scene->world_rotation, tmp);
-	ml_matrix4_mul(scene->world_translation, tmp, transform);
+	ml_matrix4_inverse(scene->world_scale, inverse);
+	ml_matrix4_mul(scene->world_scale, scale, new_scale);
 	i = -1;
 	while (++i < scene->object_count)
 	{
 		transform_3d_object(scene->objects[i], inverse);
-		transform_3d_object(scene->objects[i], transform);
+		transform_3d_object(scene->objects[i], new_scale);
 	}
-	ft_memcpy(scene->world_transform, transform, sizeof(t_mat4));
+	ft_memcpy(scene->world_scale, new_scale, sizeof(t_mat4));
+}
+
+void			update_world_rotation(t_scene *scene, t_mat4 rotation)
+{
+	int				i;
+	t_mat4			new_rotation;
+	t_mat4			inverse;
+
+	ml_matrix4_inverse(scene->world_rotation, inverse);
+	ml_matrix4_mul(scene->world_rotation, rotation, new_rotation);
+	i = -1;
+	while (++i < scene->object_count)
+	{
+		transform_3d_object(scene->objects[i], inverse);
+		transform_3d_object(scene->objects[i], new_rotation);
+	}
+	ft_memcpy(scene->world_rotation, new_rotation, sizeof(t_mat4));
+}
+
+void			update_world_translation(t_scene *scene, t_mat4 translation)
+{
+	int				i;
+	t_mat4			new_translation;
+	t_mat4			inverse;
+
+	ml_matrix4_inverse(scene->world_translation, inverse);
+	ml_matrix4_mul(scene->world_translation, translation, new_translation);
+	i = -1;
+	while (++i < scene->object_count)
+	{
+		transform_3d_object(scene->objects[i], inverse);
+		transform_3d_object(scene->objects[i], new_translation);
+	}
+	ft_memcpy(scene->world_translation, new_translation, sizeof(t_mat4));
 }
 
 /*

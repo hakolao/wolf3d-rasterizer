@@ -6,11 +6,18 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 17:20:04 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 17:40:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+/*
+** First scale, then rotate, then translate.
+** In player movement, changes are already applied to rotation & translation
+** here, vertices are reset to original state and then multiplied with new
+** transform.
+*/
 
 void			update_world_transform(t_scene *scene)
 {

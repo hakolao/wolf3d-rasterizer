@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 14:52:12 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 16:21:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,10 @@ static void	render_active_scene_objects(t_wolf3d *app)
 	while (++i < app->active_scene->object_count)
 	{
 		j = -1;
-		while (++j < app->active_scene->objects[i]->mesh_triangle_count)
-		{
+		while (++j < app->active_scene->objects[i]->num_triangles)
 			render_triangle(app,
-				&app->active_scene->objects[i]->mesh_triangles[j], NULL,
-				app->active_scene->main_camera);
-				
-		}
+				&app->active_scene->objects[i]->triangles[j], NULL,
+				app->active_scene->main_camera);	
 	}
 }
 

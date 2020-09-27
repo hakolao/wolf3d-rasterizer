@@ -6,39 +6,61 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:47:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 17:51:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void				scene_vertices_init(t_wolf3d *app, t_scene *scene)
+void			update_world_scale(t_scene *scene, t_mat4 scale)
 {
-	int		i;
-	int		j;
-	t_mat4	translation;
-	float	scale;
+	int				i;
+	t_mat4			new_scale;
+	t_mat4			inverse;
 
-	if (app->active_scene->main_camera == NULL)
-		return ;
-	ml_matrix4_translation(0, 0, -2000, translation);
-	scale = app->main_window->height / 2.0 - 1;
+	ml_matrix4_inverse(scene->world_scale, inverse);
+	ml_matrix4_mul(scene->world_scale, scale, new_scale);
 	i = -1;
 	while (++i < scene->object_count)
 	{
-		j = -1;
-		while (++j < scene->objects[i]->mesh_vertex_count)
-		{
-			ml_vector3_mul(scene->objects[i]->mesh_vertices[j]->position,
-				scale, scene->objects[i]->mesh_vertices[j]->position);
-			ml_matrix4_mul_vec3(translation,
-			scene->objects[i]->mesh_vertices[j]->position,
-			scene->objects[i]->mesh_vertices[j]->position);
-		}
-		j = -1;
-		while (++j < scene->objects[i]->mesh_triangle_count)
-			l3d_triangle_normal_set(&scene->objects[i]->mesh_triangles[j]);
+		transform_3d_object(scene->objects[i], inverse);
+		transform_3d_object(scene->objects[i], new_scale);
 	}
+	ft_memcpy(scene->world_scale, new_scale, sizeof(t_mat4));
+}
+
+void			update_world_rotation(t_scene *scene, t_mat4 rotation)
+{
+	int				i;
+	t_mat4			new_rotation;
+	t_mat4			inverse;
+
+	ml_matrix4_inverse(scene->world_rotation, inverse);
+	ml_matrix4_mul(scene->world_rotation, rotation, new_rotation);
+	i = -1;
+	while (++i < scene->object_count)
+	{
+		transform_3d_object(scene->objects[i], inverse);
+		transform_3d_object(scene->objects[i], new_rotation);
+	}
+	ft_memcpy(scene->world_rotation, new_rotation, sizeof(t_mat4));
+}
+
+void			update_world_translation(t_scene *scene, t_mat4 translation)
+{
+	int				i;
+	t_mat4			new_translation;
+	t_mat4			inverse;
+
+	ml_matrix4_inverse(scene->world_translation, inverse);
+	ml_matrix4_mul(scene->world_translation, translation, new_translation);
+	i = -1;
+	while (++i < scene->object_count)
+	{
+		transform_3d_object(scene->objects[i], inverse);
+		transform_3d_object(scene->objects[i], new_translation);
+	}
+	ft_memcpy(scene->world_translation, new_translation, sizeof(t_mat4));
 }
 
 /*

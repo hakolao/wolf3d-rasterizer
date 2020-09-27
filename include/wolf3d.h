@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 17:45:50 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 18:20:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,8 +356,6 @@ void								set_active_scene(t_wolf3d *app,
 									t_scene_id to_scene);
 t_3d_object							**create_scene1_objects(int32_t *obj_count);
 void								debug_scene(t_scene *scene);
-void								update_world_translation(t_scene *scene, t_mat4 translation);
-void								update_world_scale(t_scene *scene, t_mat4 scale);
-void								update_world_rotation(t_scene *scene, t_mat4 rotation);
+void								update_world_transform(t_scene *scene);
 
 #endif

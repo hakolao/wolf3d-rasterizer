@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 17:22:11 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/28 17:07:38 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/28 17:31:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		obj_file_to_3d_obj(t_obj *read_obj, t_3d_object *obj)
+static void		obj_file_to_3d_obj(t_3d_object *obj, t_obj *read_obj)
 {
 	int		i;
 	int		j;
@@ -43,8 +43,27 @@ static void		obj_file_to_3d_obj(t_obj *read_obj, t_3d_object *obj)
 			obj->vertices[read_obj->triangles[i * 9 + 2 * 3 + 0] - 1];
 		l3d_triangle_centroid(&obj->triangles[i]);
 	}
+	free(read_obj->v);
+	free(read_obj->vt);
+	free(read_obj->vn);
+	free(read_obj->triangles);
 }
 
+void		allocate_3d_object_content(t_3d_object *object, t_obj *read_obj)
+{
+
+	error_check(!(object->vertices =
+		malloc(sizeof(t_vertex*) * read_obj->num_vertices)),
+		"Failed to malloc 3d obj vertices");
+	ft_memset(object->vertices, 0,
+		sizeof(t_vertex*) *  read_obj->num_vertices);
+	error_check(!(object->triangles =
+		malloc(sizeof(t_triangle) *  read_obj->num_triangles)),
+		"Failed to malloc 3d obj triangles");
+	error_check(!(object->uvs =
+		malloc(sizeof(t_vec2) *  read_obj->num_v_text_coords)),
+		"Failed to malloc 3d obj uvs");
+}
 
 void		obj_content_to_scene_data(t_scene_data *data, t_obj_content *obj)
 {
@@ -59,24 +78,10 @@ void		obj_content_to_scene_data(t_scene_data *data, t_obj_content *obj)
 	num_triangles = 0;
 	while (++i < (int)obj->num_objects)
 	{
-		error_check(!(data->objects[i] = malloc(sizeof(*data->objects[i]))),
-			"Failed to malloc 3d obj");
-		error_check(!(data->objects[i]->vertices =
-			malloc(sizeof(t_vertex*) * obj->objects[i].num_vertices)),
-			"Failed to malloc 3d obj vertices");
-		ft_memset(data->objects[i]->vertices, 0,
-			sizeof(t_vertex*) * obj->objects[i].num_vertices);
-		error_check(!(data->objects[i]->triangles =
-			malloc(sizeof(t_triangle) * obj->objects[i].num_triangles)),
-			"Failed to malloc 3d obj triangles");
-		error_check(!(data->objects[i]->uvs =
-			malloc(sizeof(t_vec2) * obj->objects[i].num_v_text_coords)),
-			"Failed to malloc 3d obj uvs");
-		obj_file_to_3d_obj(&obj->objects[i], data->objects[i]);
-		free(obj->objects[i].v);
-		free(obj->objects[i].vt);
-		free(obj->objects[i].vn);
-		free(obj->objects[i].triangles);
+		error_check(!(data->objects[i] = malloc(sizeof(t_3d_object))),
+		"Failed to malloc 3d obj");
+		allocate_3d_object_content(data->objects[i], &obj->objects[i]);
+		obj_file_to_3d_obj(data->objects[i], &obj->objects[i]);
 		data->objects[i]->num_triangles = obj->objects[i].num_triangles;
 		data->objects[i]->num_vertices = obj->objects[i].num_vertices;
 		num_triangles -= 1;

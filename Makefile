@@ -44,8 +44,7 @@ SOURCES = main.c \
 			world.c \
 			read_obj.c \
 			plot.c \
-			line_drawing.c \
-			read_obj_utils.c
+			line_drawing.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

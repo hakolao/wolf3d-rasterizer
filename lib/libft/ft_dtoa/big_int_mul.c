@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/18 22:11:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/01 00:50:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/28 14:00:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void			big_int_mul_u32(t_big_int *lhs, uint32_t rhs, t_big_int *res)
 	uint64_t	product;
 	size_t		i;
 
+	carry = 0;
 	i = -1;
 	res->length = lhs->length;
 	while (++i < lhs->length)

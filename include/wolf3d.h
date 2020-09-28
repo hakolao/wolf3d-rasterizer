@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 18:20:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/28 16:54:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # define HEIGHT 720
 
 # define MAX_OBJ_TRIANGLES 1024
+# define MAX_OBJ_VERTICES 1024
+# define MAX_OBJECTS 32
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the
@@ -142,11 +144,12 @@ typedef struct						s_player
 
 typedef struct						s_3d_object
 {
-	t_mat4					transform;
 	t_vertex				**vertices;
 	int32_t					num_vertices;
 	t_triangle				*triangles;
 	int32_t					num_triangles;
+	t_vec2					*uvs;
+	int32_t					num_uvs;
 }									t_3d_object;
 
 /*
@@ -160,9 +163,10 @@ typedef struct						s_scene_data
 	const char				*menu_options[64];
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
-	t_3d_object				**objects; //Read from map eventually
-	int32_t					object_count; //Read from map eventually
-	t_mat4					world_transform;
+	t_3d_object				**objects;
+	int32_t					num_objects;
+	t_triangle				*triangle_ref[MAX_OBJ_TRIANGLES * MAX_OBJECTS];
+	uint32_t				num_triangles;
 	t_mat4					world_scale;
 	t_mat4					world_rotation;
 	t_mat4					world_translation;
@@ -171,14 +175,15 @@ typedef struct						s_scene_data
 struct s_scene
 {
 	t_3d_object				**objects;
-	int32_t					object_count;
+	int32_t					num_objects;
+	t_triangle				*triangle_ref[MAX_OBJ_TRIANGLES * MAX_OBJECTS];
+	uint32_t				num_triangles;
 	t_camera				*main_camera;
 	t_window				*main_window;
 	const char				*menu_options[64];
 	int32_t					menu_option_count;
 	int32_t					selected_option;
 	t_scene_id				scene_id;
-	t_mat4					world_transform;
 	t_mat4					world_scale;
 	t_mat4					world_rotation;
 	t_mat4					world_translation;
@@ -212,17 +217,23 @@ typedef struct						s_text_params
 	float					blend_ratio;
 }									t_text_params;
 
-typedef struct						s_obj_result
+typedef struct						s_obj
 {
-	t_vec3			v[MAX_OBJ_TRIANGLES];
+	t_vec3			*v;
 	uint32_t		num_vertices;
-	t_vec2			vt[MAX_OBJ_TRIANGLES];
+	t_vec2			*vt;
 	uint32_t		num_v_text_coords;
-	t_vec3			vn[MAX_OBJ_TRIANGLES];
+	t_vec3			*vn;
 	uint32_t		num_v_normals;
-	uint32_t		triangles[MAX_OBJ_TRIANGLES][3][3];
+	uint32_t		*triangles;
 	uint32_t		num_triangles;
-}									t_obj_result;
+}									t_obj;
+
+typedef struct						s_obj_content
+{
+	uint32_t		num_objects;
+	t_obj	objects[MAX_OBJECTS];
+}									t_obj_content;
 
 typedef struct	s_ir //?DELETE IF LINE DRAWING DOESNT WORK
 {
@@ -330,9 +341,8 @@ void								render_debug_grid(t_wolf3d *app);
 /*
 **	3d Object
 */
-t_3d_object							*create_3d_object(t_obj_result *read_ob);
-void								init_3d_object(t_obj_result *read_ob,
-									t_3d_object *obj);
+void								obj_content_to_scene_data(t_scene_data *data, t_obj_content *obj);
+void								read_objects_to_scene_data(t_scene_data *data, const char *filename);
 void								destroy_object(t_3d_object *object);
 void								transform_3d_object(t_3d_object *obj,
 									t_mat4 transform);
@@ -341,7 +351,7 @@ void								transform_3d_object(t_3d_object *obj,
 ** Obj file read
 */
 t_3d_object							*read_object_file(const char *filename);
-t_bool								is_valid_obj_result(t_obj_result *result);
+t_bool								is_valid_obj_result(t_obj *result);
 
 /*
 ** Scene
@@ -356,6 +366,8 @@ void								set_active_scene(t_wolf3d *app,
 									t_scene_id to_scene);
 t_3d_object							**create_scene1_objects(int32_t *obj_count);
 void								debug_scene(t_scene *scene);
-void								update_world_transform(t_scene *scene);
+void								update_world_translation(t_scene *scene, t_mat4	new_translation);
+void								update_world_rotation(t_scene *scene, t_mat4 new_rotation);
+void								update_world_scale(t_scene *scene, t_mat4 new_scale);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:07:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 12:51:08 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/28 16:59:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct		s_vertex
 {
 	t_vec4			position;
 	t_vec3			normal;
+	t_vec2			uv;
 	unsigned int	color;
 }					t_vertex;
 
@@ -99,5 +100,6 @@ t_bool						triangle_intersection(t_triangle *triangle,
 													t_intersection *is);
 t_ray						new_ray(t_vec3 origin, t_vec3 direction);
 void						l3d_triangle_normal_set(t_triangle *triangle);
+void						l3d_triangle_centroid(t_triangle *triangle);
 
 #endif

@@ -41,7 +41,7 @@ SOURCES = main.c \
 			surface.c \
 			debug.c \
 			3d_object.c \
-			scene_objects.c \
+			world.c \
 			read_obj.c \
 			plot.c \
 			line_drawing.c \

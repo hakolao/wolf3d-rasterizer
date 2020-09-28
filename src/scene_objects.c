@@ -6,39 +6,29 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:47:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 18:22:50 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void				scene_vertices_init(t_wolf3d *app, t_scene *scene)
+void			update_world_transform(t_scene *scene)
 {
-	int		i;
-	int		j;
-	t_mat4	translation;
-	float	scale;
+	int				i;
+	t_mat4			tmp;
+	t_mat4			transform;
+	t_mat4			inverse;
 
-	if (app->active_scene->main_camera == NULL)
-		return ;
-	ml_matrix4_translation(0, 0, -1000, translation);
-	scale = app->main_window->height / 2.0 - 1;
+	ml_matrix4_inverse(scene->world_transform, inverse);
+	ml_matrix4_mul(scene->world_translation, scene->world_scale, tmp);
+	ml_matrix4_mul(scene->world_rotation, tmp, transform);
 	i = -1;
-	while (++i < scene->object_count)
+	while (++i < (int)scene->object_count)
 	{
-		j = -1;
-		while (++j < scene->objects[i]->mesh_vertex_count)
-		{
-			ml_vector3_mul(scene->objects[i]->mesh_vertices[j]->position,
-				scale, scene->objects[i]->mesh_vertices[j]->position);
-			ml_matrix4_mul_vec3(translation,
-			scene->objects[i]->mesh_vertices[j]->position,
-			scene->objects[i]->mesh_vertices[j]->position);
-		}
-		j = -1;
-		while (++j < scene->objects[i]->mesh_triangle_count)
-			l3d_triangle_normal_set(&scene->objects[i]->mesh_triangles[j]);
+		transform_3d_object(scene->objects[i], inverse);
+		transform_3d_object(scene->objects[i], transform);
 	}
+	ft_memcpy(scene->world_transform, transform, sizeof(t_mat4));
 }
 
 /*

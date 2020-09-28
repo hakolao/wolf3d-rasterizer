@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:19:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 23:35:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 15:57:15 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,11 @@ static void	set_inverse_half2(float m[16], float inv[16])
 
 static void	set_inverse(t_mat4 m1, float m[16], float inv[16])
 {
-	size_t	c;
-	size_t	r;
+	int	i;
 
-	c = -1;
-	while (++c < 4)
-	{
-		r = -1;
-		while (++r < 4)
-			m[c + r] = m1[r][c];
-	}
+	i = -1;
+	while (++i < 16)
+		m[i] = m1[i / 4][i % 4];
 	set_inverse_half1(m, inv);
 	set_inverse_half2(m, inv);
 }
@@ -74,17 +69,12 @@ void		ml_matrix4_inverse(t_mat4 m1, t_mat4 res)
 	float		inv[16];
 	float		m[16];
 	float		det;
-	size_t		c;
-	size_t		r;
+	int			i;
 
 	set_inverse(m1, m, inv);
 	det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
 	det = 1.0 / det;
-	c = -1;
-	while (++c < 4)
-	{
-		r = -1;
-		while (++r < 4)
-			res[r][c] = inv[c + r] * det;
-	}
+	i = -1;
+	while (++i < 16)
+		res[i / 4][i % 4] = inv[i] * det;
 }

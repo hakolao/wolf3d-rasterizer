@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 17:22:11 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/15 12:51:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/27 16:25:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,6 @@ static void		init_triangle(t_triangle *triangle,
 	triangle->vtc[1] = pos_b;
 	triangle->vtc[2] = pos_c;
 	l3d_triangle_normal_set(triangle);
-}
-
-static void		set_3d_object_transform_counts(t_obj_result *read_obj,
-				t_3d_object *obj)
-{
-	obj->mesh_triangle_count = read_obj->num_triangles;
-	obj->mesh_vertex_count = read_obj->num_vertices;
-	ml_vector3_copy((t_vec3){0, 0, 0}, obj->origin);
-	ml_vector3_copy((t_vec3){0, 0, 0}, obj->position);
-	ml_matrix4_id(obj->transform);
-	ml_matrix4_id(obj->mesh_transform);
 }
 
 void			init_3d_object(t_obj_result *read_obj, t_3d_object *obj)
@@ -50,16 +39,16 @@ void			init_3d_object(t_obj_result *read_obj, t_3d_object *obj)
 			v_i = read_obj->triangles[i][j][0] - 1;
 			vt_i = read_obj->triangles[i][j][1] - 1;
 			vn_i = read_obj->triangles[i][j][2] - 1;
-			if (obj->mesh_vertices[v_i] == NULL)
-				error_check(!(obj->mesh_vertices[v_i] =
+			if (obj->vertices[v_i] == NULL)
+				error_check(!(obj->vertices[v_i] =
 					malloc(sizeof(t_vertex))), "Failed to malloc vertex");
 			ml_vector3_copy(read_obj->v[v_i],
-				obj->mesh_vertices[v_i]->position);
+				obj->vertices[v_i]->position);
 		}
-		init_triangle(&obj->mesh_triangles[i],
-			obj->mesh_vertices[read_obj->triangles[i][0][0] - 1],
-			obj->mesh_vertices[read_obj->triangles[i][1][0] - 1],
-			obj->mesh_vertices[read_obj->triangles[i][2][0] - 1]);
+		init_triangle(&obj->triangles[i],
+			obj->vertices[read_obj->triangles[i][0][0] - 1],
+			obj->vertices[read_obj->triangles[i][1][0] - 1],
+			obj->vertices[read_obj->triangles[i][2][0] - 1]);
 	}
 }
 
@@ -68,28 +57,44 @@ t_3d_object		*create_3d_object(t_obj_result *read_obj)
 	t_3d_object	*obj;
 
 	error_check(!(obj = malloc(sizeof(*obj))), "Failed to malloc 3d obj");
-	error_check(!(obj->mesh_vertices =
+	error_check(!(obj->vertices =
 		malloc(sizeof(t_vertex*) * read_obj->num_vertices)),
 		"Failed to malloc 3d obj vertices");
-	ft_memset(obj->mesh_vertices, 0,
+	ft_memset(obj->vertices, 0,
 		sizeof(t_vertex*) * read_obj->num_vertices);
-	error_check(!(obj->mesh_triangles =
+	error_check(!(obj->triangles =
 		malloc(sizeof(t_triangle) * read_obj->num_triangles)),
 		"Failed to malloc 3d obj triangles");
 	init_3d_object(read_obj, obj);
-	set_3d_object_transform_counts(read_obj, obj);
+	obj->num_triangles = read_obj->num_triangles;
+	obj->num_vertices = read_obj->num_vertices;
 	return (obj);
 }
+
+void		transform_3d_object(t_3d_object *obj, t_mat4 transform)
+{
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < obj->num_vertices)
+		ml_matrix4_mul_vec3(transform,
+			obj->vertices[i]->position, obj->vertices[i]->position);
+	j = -1;
+	while (++j < obj->num_triangles)
+		l3d_triangle_normal_set(&obj->triangles[j]);
+}
+
 
 void		destroy_object(t_3d_object *object)
 {
 	int		i;
 
-	free(object->mesh_triangles);
+	free(object->triangles);
 	i = -1;
-	while (++i < object->mesh_vertex_count)
-		free(object->mesh_vertices[i]);
-	free(object->mesh_vertices);
+	while (++i < object->num_vertices)
+		free(object->vertices[i]);
+	free(object->vertices);
 	free(object);
 	object = NULL;
 }

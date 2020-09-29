@@ -6,22 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 18:20:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/28 17:14:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-static void		init_scene_transform(t_wolf3d *app, t_scene_data *data)
-{
-	ml_matrix4_id(data->world_rotation);
-	ml_matrix4_id(data->world_scale);
-	ml_matrix4_id(data->world_transform);
-	data->world_scale[0][0] = app->main_window->width / 4.0 - 1.0;
-	data->world_scale[1][1] = app->main_window->width / 4.0 - 1.0;
-	data->world_scale[2][2] = app->main_window->width / 4.0 - 1.0;
-	ml_matrix4_translation(0, 0, app->main_window->width, data->world_translation);
-}
 
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
@@ -36,15 +25,14 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.menu_option_count = 3;
 		data.main_camera = NULL;
 		data.objects = NULL;
-		data.object_count = 0;
+		data.num_objects = 0;
 	}
 	else if (scene_id == scene_id_main_game)
 	{
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.objects = create_scene1_objects(&data.object_count);
-		init_scene_transform(app, &data);
+		read_objects_to_scene_data(&data, "assets/icosphere.obj");
 	}
 	app->active_scene = new_scene(app, &data);
 }
@@ -71,13 +59,17 @@ t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)
 	scene->menu_option_count = data->menu_option_count;
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
-	scene->object_count = data->object_count;
+	scene->num_objects = data->num_objects;
 	scene->objects = data->objects;
-	ft_memcpy(scene->world_transform, data->world_transform, sizeof(t_mat4));
-	ft_memcpy(scene->world_rotation, data->world_rotation, sizeof(t_mat4));
-	ft_memcpy(scene->world_translation, data->world_translation, sizeof(t_mat4));
-	ft_memcpy(scene->world_scale, data->world_scale, sizeof(t_mat4));
-	update_world_transform(scene);
+	ml_matrix4_id(scene->world_rotation);
+	ml_matrix4_id(scene->world_scale);
+	ml_matrix4_id(scene->world_translation);
+	scene->world_scale[0][0] = app->main_window->width / 50.0;
+	scene->world_scale[1][1] = app->main_window->width / 50.0;
+	scene->world_scale[2][2] = app->main_window->width / 50.0;
+	update_world_scale(scene, scene->world_scale);
+	ml_matrix4_translation(0, -100, app->main_window->width, scene->world_translation);
+	update_world_translation(scene, scene->world_translation);
 	if (scene->main_camera)
 		update_camera(app);
 	return (scene);
@@ -90,7 +82,7 @@ void			destroy_scene(t_scene *scene)
 	if (scene->objects != NULL)
 	{
 		i = -1;
-		while (++i < scene->object_count)
+		while (++i < scene->num_objects)
 			destroy_object(scene->objects[i]);
 		free(scene->objects);
 		scene->objects = NULL;
@@ -114,9 +106,9 @@ void			debug_scene(t_scene *scene)
 	ft_printf("Scene: %d\n"
 	"objects: %d\n",
 		scene->scene_id,
-		scene->object_count);
+		scene->num_objects);
 	i = -1;
-	while (++i < scene->object_count)
+	while (++i < scene->num_objects)
 	{
 		j = -1;
 		while (++j < (int)scene->objects[i]->num_triangles)

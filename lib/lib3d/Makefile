@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/09/15 12:51:27 by ohakola          ###   ########.fr        #
+#    Updated: 2020/09/28 17:01:22 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ LIBGMATRIX = ../libgmatrix
 DIR_SRC = ./
 DIR_OBJ = temp
 SOURCES = l3d_triangle_normal.c \
-			l3d_intersection.c
+			l3d_intersection.c \
+			l3d_triangle_centroid.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

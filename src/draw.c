@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 16:21:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/28 16:44:15 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	render_active_scene_objects(t_wolf3d *app)
 	int		j;
 
 	i = -1;
-	while (++i < app->active_scene->object_count)
+	while (++i < app->active_scene->num_objects)
 	{
 		j = -1;
 		while (++j < app->active_scene->objects[i]->num_triangles)

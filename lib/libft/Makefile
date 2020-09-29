@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/15 14:43:04 by ohakola           #+#    #+#              #
-#    Updated: 2020/09/29 15:16:19 by ohakola          ###   ########.fr        #
+#    Updated: 2020/09/30 02:41:34 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -154,6 +154,17 @@ $(DIR_OBJ):
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INC) -c -o $@ $<
+
+DIR_TESTS = ./tests
+TEST_SRCS =$(wildcard $(DIR_TESTS)/*.c)
+
+test: all
+	$(CC) -o test_run $(TEST_SRCS) -I$(DIR_TESTS)/include \
+			 -L./ -lft $(FLAGS) $(INC) $(NAME)
+	./test_run
+	@/bin/rm -f main.o
+	@/bin/rm -f test_run
+	@make fclean
 
 clean:
 	@/bin/rm -f $(OBJS)

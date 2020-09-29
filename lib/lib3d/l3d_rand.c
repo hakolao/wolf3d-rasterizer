@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   l3d_rand.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/24 15:18:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/24 15:18:59 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/29 16:20:49 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 00:39:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "lib3d.h"
 
-void				error_check(int test, const char *message)
+/*
+** Just a simple random number between 0.0 and 1.0
+*/
+
+double			l3d_rand_d(void)
 {
-	if (test)
-	{
-		ft_printf("%s\n", message);
-		exit(EXIT_FAILURE);
-	}
+	return ((double)rand() / RAND_MAX);
 }

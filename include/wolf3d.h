@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/28 16:54:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 02:32:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
-# define FILE_READ_BUF 1024
-
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
 # define GAME_FONT "assets/pixelated.ttf"
 # define DEBUG_FONT "assets/Roboto-Regular.ttf"
@@ -32,10 +30,6 @@
 
 # define WIDTH 1280
 # define HEIGHT 720
-
-# define MAX_OBJ_TRIANGLES 1024
-# define MAX_OBJ_VERTICES 1024
-# define MAX_OBJECTS 32
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the
@@ -66,9 +60,6 @@
 /*
 ** Forward declarations
 */
-
-typedef struct						s_scene t_scene;
-typedef struct						s_mesh t_mesh;
 
 typedef enum						e_move
 {
@@ -139,20 +130,6 @@ typedef struct						s_player
 }									t_player;
 
 /*
-**	Structs and typedefs used in rendering
-*/
-
-typedef struct						s_3d_object
-{
-	t_vertex				**vertices;
-	int32_t					num_vertices;
-	t_triangle				*triangles;
-	int32_t					num_triangles;
-	t_vec2					*uvs;
-	int32_t					num_uvs;
-}									t_3d_object;
-
-/*
 **	Typedefs related to app and scene management
 */
 
@@ -164,19 +141,17 @@ typedef struct						s_scene_data
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
 	t_3d_object				**objects;
-	int32_t					num_objects;
-	t_triangle				*triangle_ref[MAX_OBJ_TRIANGLES * MAX_OBJECTS];
+	uint32_t				num_objects;
 	uint32_t				num_triangles;
 	t_mat4					world_scale;
 	t_mat4					world_rotation;
 	t_mat4					world_translation;
 }									t_scene_data;
 
-struct s_scene
+typedef struct						s_scene
 {
 	t_3d_object				**objects;
-	int32_t					num_objects;
-	t_triangle				*triangle_ref[MAX_OBJ_TRIANGLES * MAX_OBJECTS];
+	uint32_t				num_objects;
 	uint32_t				num_triangles;
 	t_camera				*main_camera;
 	t_window				*main_window;
@@ -187,7 +162,7 @@ struct s_scene
 	t_mat4					world_scale;
 	t_mat4					world_rotation;
 	t_mat4					world_translation;
-};
+}									t_scene;
 
 typedef struct						s_wolf3d_debug
 {
@@ -217,25 +192,7 @@ typedef struct						s_text_params
 	float					blend_ratio;
 }									t_text_params;
 
-typedef struct						s_obj
-{
-	t_vec3			*v;
-	uint32_t		num_vertices;
-	t_vec2			*vt;
-	uint32_t		num_v_text_coords;
-	t_vec3			*vn;
-	uint32_t		num_v_normals;
-	uint32_t		*triangles;
-	uint32_t		num_triangles;
-}									t_obj;
-
-typedef struct						s_obj_content
-{
-	uint32_t		num_objects;
-	t_obj	objects[MAX_OBJECTS];
-}									t_obj_content;
-
-typedef struct	s_ir //?DELETE IF LINE DRAWING DOESNT WORK
+typedef struct	s_ir
 {
 	int a;
 	int b;
@@ -276,11 +233,8 @@ void								camera_transform(t_camera *camera,
 */
 
 void								draw_frame(t_wolf3d *app);
-t_bool								render_mesh(t_wolf3d *app, t_mesh *mesh,
-												t_camera *camera);
 t_bool								render_triangle(t_wolf3d *app,
 													t_triangle *triangle,
-													t_mesh *mesh,
 													t_camera *camera);
 int									screen_to_frame_coords(uint32_t width,
 															uint32_t height,
@@ -305,6 +259,7 @@ void								recreate_frame(t_wolf3d *app);
 /*
 ** Color utils
 */
+
 uint32_t							rgba_to_u32(SDL_Color color);
 uint32_t							color_blend_u32(uint32_t color1,
 									uint32_t color2, float ratio);
@@ -321,8 +276,6 @@ void								render_centered_blinking_text(t_wolf3d *app,
 									t_text_params params);
 void								render_centered_text(t_wolf3d *app,
 									t_text_params params);
-uint32_t							get_relative_font_size(t_wolf3d *app,
-									uint32_t font_size);
 
 /*
 ** SDL Surface
@@ -337,21 +290,6 @@ void								surface_to_framebuffer(t_wolf3d *app,
 */
 uint64_t							capture_framerate(uint64_t delta_time);
 void								render_debug_grid(t_wolf3d *app);
-
-/*
-**	3d Object
-*/
-void								obj_content_to_scene_data(t_scene_data *data, t_obj_content *obj);
-void								read_objects_to_scene_data(t_scene_data *data, const char *filename);
-void								destroy_object(t_3d_object *object);
-void								transform_3d_object(t_3d_object *obj,
-									t_mat4 transform);
-
-/*
-** Obj file read
-*/
-t_3d_object							*read_object_file(const char *filename);
-t_bool								is_valid_obj_result(t_obj *result);
 
 /*
 ** Scene

@@ -5,101 +5,210 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/24 15:07:11 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/28 16:59:40 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 02:35:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIB3D_H
 # define LIB3D_H
 
+# include <stdlib.h>
+# include <float.h>
+# include "libft.h"
 # include "libgmatrix.h"
-# include <stdarg.h>
 
-# define EPSILON 0.00000001
+# define L3D_EPSILON 0.0000001
+# define L3D_SINGLE_SIDED 1
+# define L3D_MAX_KD_TREE_DEPTH 10
+# define L3D_MIN_KD_NODE_NUM_TRIANGLES 2
+# define L3D_TRI_VEC_INITIAL_CAPACITY 10
 
-typedef struct s_temp_calc
-{
-	t_vec3		normal;
-	t_vec3		ax;
-	t_vec3		cross_dir_ax;
-	float		det;
-	float		invdet;
-}					t_temp_calc;
-
-typedef struct		s_vertex
-{
-	t_vec4			position;
-	t_vec3			normal;
-	t_vec2			uv;
-	unsigned int	color;
-}					t_vertex;
+# define L3D_MAX_OBJECTS 32
+# define L3D_MAX_TRIANGLES 16383
+# define L3D_MAX_VERTICES 16383
 
 /*
-**	The box structures are rectangular and consist of points that for the
-**	boundary. The top and bot part refer to the top and bottom rectangles
-**	(or lines in 2d case). The rectangles are read counter-clock-wise order
-**	starting from smallest coordinate. The a,b,c,d indices correspond to a,b,c,d
-**	on the other side.
+** OBJ file temporary structs
 */
 
-typedef struct		s_box3d
+typedef struct				s_obj
 {
-	t_vec3			top_a;
-	t_vec3			top_b;
-	t_vec3			top_c;
-	t_vec3			top_d;
-	t_vec3			bot_a;
-	t_vec3			bot_b;
-	t_vec3			bot_c;
-	t_vec3			bot_d;
-}					t_box3d;
+	t_vec3			*v;
+	uint32_t		num_vertices;
+	t_vec2			*vt;
+	uint32_t		num_v_text_coords;
+	t_vec3			*vn;
+	uint32_t		num_v_normals;
+	uint32_t		*triangles;
+	uint32_t		num_triangles;
+}							t_obj;
 
-typedef struct		s_box2d
+typedef struct				s_obj_content
 {
-	t_vec2			top_a;
-	t_vec2			top_b;
-	t_vec2			bot_a;
-	t_vec2			bot_b;
-}					t_box2d;
+	uint32_t		num_objects;
+	t_obj			objects[L3D_MAX_OBJECTS];
+}							t_obj_content;
 
-/*
-**	Triangle structure includes references to its vertices in an array for
-**	Easier iteration. The vertex pointers directly point at the corresponding
-**	vertices in the mesh vertex list.
-*/
-
-typedef struct		s_triangle
+typedef struct				s_ray
 {
-	t_vertex	*vtc[3];
-	t_vec3		center; //consider if center calculated when mesh loaded
-						//or center calculated when needed
-	t_vec3		normal;
-	t_vec3		ab;
-	t_vec3		ac;
-}					t_triangle;
-
-typedef struct		s_ray
-{
-	t_vec3			origin;
 	t_vec3			dir;
-	t_vec3			normalized_dir;
-}					t_ray;
+	t_vec3			origin;
+	t_vec3			dir_inv;
+}							t_ray;
 
-
-typedef struct		s_intersection
+typedef struct				s_hit
 {
-	float			u;
-	float			v;
 	float			t;
-	float			det;
-}					t_intersection;
+	t_vec3			normal;
+	t_vec3			hit_point;
+}							t_hit;
 
-t_bool						triangle_intersection(t_triangle *triangle,
-													t_ray *ray,
-													t_intersection *is);
-t_ray						new_ray(t_vec3 origin, t_vec3 direction);
-void						l3d_triangle_normal_set(t_triangle *triangle);
-void						l3d_triangle_centroid(t_triangle *triangle);
+typedef struct				s_vertex
+{
+	t_vec4			pos;
+	uint32_t		color;
+	t_vec2			uv;
+}							t_vertex;
+
+typedef struct				s_box3d
+{
+	t_vec3			center;
+	t_vec3			size;
+	float			xyz_min[3];
+	float			xyz_max[3];
+}							t_box3d;
+
+typedef struct				s_triangle
+{
+	t_vertex		*vtc[3];
+	t_vec3			center;
+	t_vec3			normal;
+	t_bool			is_single_sided;
+}							t_triangle;
+
+/*
+** Final 3d object struct to which obj file is transformed
+*/
+
+typedef struct				s_3d_object
+{
+	t_vertex		**vertices;
+	int32_t			num_vertices;
+	t_triangle		*triangles;
+	int32_t			num_triangles;
+	t_vec2			*uvs;
+	int32_t			num_uvs;
+}							t_3d_object;
+
+typedef enum				e_axis
+{
+	l3d_axis_x,
+	l3d_axis_y,
+	l3d_axis_z,
+	l3d_axis_none,
+}							t_axis;
+
+typedef struct				s_tri_vec
+{
+	t_triangle		**triangles;
+	uint32_t		size;
+	uint32_t		capacity;
+}							t_tri_vec;
+
+typedef struct s_kd_node	t_kd_node;
+
+struct						s_kd_node
+{
+	uint32_t		uuid;
+	t_box3d			bounding_box;
+	t_axis			axis;
+	t_tri_vec		*triangles;
+	t_kd_node		*left;
+	t_kd_node		*right;
+};
+
+typedef struct				s_kd_tree
+{
+	uint32_t		num_nodes;
+	t_kd_node		*root;
+}							t_kd_tree;
+
+void						l3d_kd_tree_create_or_update(t_kd_tree **tree,
+							t_triangle **triangles, uint32_t num_triangles);
+t_kd_tree					*l3d_kd_tree_create(t_triangle **triangles,
+							uint32_t num_triangles);
+void						l3d_kd_tree_destroy(t_kd_tree *tree);
+void						l3d_kd_tree_print(t_kd_tree *tree);
+
+/*
+** Ray
+*/
+
+t_bool						l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
+							float t_max, t_hit *hit);
+t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
+							t_ray *ray, t_hit *hit);
+t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
+							t_ray *ray, t_hit *hit);
+void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
+
+/*
+** Triangle vector utils
+*/
+
+void						l3d_triangle_vec_push(t_tri_vec *vector,
+							t_triangle *triangle);
+t_tri_vec					*l3d_triangle_vec_empty(void);
+t_tri_vec					*l3d_triangle_vec(t_triangle **triangles,
+							uint32_t num_triangles);
+void						l3d_triangle_vec_delete(t_tri_vec *vector);
+
+/*
+** Triangles
+*/
+
+void						l3d_triangle_set(t_triangle *triangle,
+							t_vertex *vtc1, t_vertex *vtc2, t_vertex *vtc3);
+void						l3d_triangle_update(t_triangle *triangle);
+void						l3d_triangles_midpoint(t_triangle **triangles,
+							uint32_t num_triangles, t_vec3 res);
+void						l3d_triangle_vec_midpoint(t_tri_vec *triangles,
+							t_vec3 res);
+void						l3d_triangle_centroid_update(t_triangle *triangle);
+void						l3d_triangle_normal_update(t_triangle *triangle);
+
+/*
+** Bounding box
+*/
+
+t_axis						l3d_bounding_box_longest_axis(t_box3d bounding_box);
+void						l3d_bounding_box_set(t_tri_vec *triangles,
+							t_box3d *res);
+
+/*
+** 3d objects
+*/
+
+void						l3d_3d_object_transform(t_3d_object *obj,
+							t_mat4 transform);
+t_3d_object					*l3d_3d_object_create(uint32_t num_vertices,
+							uint32_t num_triangles, uint32_t num_text_coords);
+void						l3d_3d_object_destroy(t_3d_object *object);
+
+/*
+** OBJ reading
+*/
+
+t_3d_object					**l3d_read_obj(const char *filename,
+							uint32_t *num_objects);
+
+/*
+** Math utils
+*/
+
+float						l3d_fmax(float n1, float n2);
+float						l3d_fmin(float n1, float n2);
+double						l3d_rand_d(void);
 
 #endif

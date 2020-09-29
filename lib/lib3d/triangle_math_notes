@@ -1,9 +1,0 @@
-Elemental vectors E1 and E2 (E1 = B - A, E2 = C - A)
-are not normalized and will describe any point on surface
-with P = uE1 + vE2; u,v >= 0 && u + v <= 1
-
-Vector cross product uses right hand rule and so does triangle 
-normals with counter clockwise rotation. In triangle intersection
-function we use left handed cross product because it gives the correct
-result. Probably because the original source is using left handed cross
-product.

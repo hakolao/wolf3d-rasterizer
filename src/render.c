@@ -43,7 +43,7 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 	i = -1;
 	while (++i < 3)
 	{
-		rays[i] = new_ray((t_vec3){0.0, 0.0, 0.0}, triangle->vtc[i]->position);
+		l3d_ray_set(triangle->vtc[i]->pos, (t_vec3){0.0, 0.0, 0.0}, &rays[i]);
 		scaler = (camera->screen_dist / rays[i].dir[2]);
 		rays[i].dir[0] *= scaler;
 		rays[i].dir[1] *= scaler;
@@ -55,12 +55,12 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 void		calculate_triangle_center(t_triangle *triangle,
 										int *triangle_center)
 {
-	triangle_center[0] = (int)((triangle->vtc[0]->position[1] +
-						triangle->vtc[1]->position[1] +
-						triangle->vtc[2]->position[1]) / 3);
-	triangle_center[1] = (int)((triangle->vtc[0]->position[2] +
-								triangle->vtc[1]->position[2] +
-								triangle->vtc[2]->position[2]) /
+	triangle_center[0] = (int)((triangle->vtc[0]->pos[1] +
+						triangle->vtc[1]->pos[1] +
+						triangle->vtc[2]->pos[1]) / 3);
+	triangle_center[1] = (int)((triangle->vtc[0]->pos[2] +
+								triangle->vtc[1]->pos[2] +
+								triangle->vtc[2]->pos[2]) /
 							   3);
 }
 
@@ -82,14 +82,13 @@ void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
-					   t_mesh *mesh, t_camera *camera)
+							t_camera *camera)
 {
 	t_vec2				corners_on_screen[3];
 	uint32_t			*rbuffer;
 	int					ints_on_screen[6];
 
 	rbuffer = app->main_window->rbuffer;
-	(void)mesh;
 	screen_intersection(app->active_scene->main_camera, triangle, corners_on_screen);
 	int j = -1;
 	while (++j < 3)

@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_round.c                                         :+:      :+:    :+:   */
+/*   hash_map_foreach.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/18 23:26:36 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/19 13:36:22 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/17 20:31:08 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/17 23:23:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "hash_map.h"
 
-double		ft_ceil(double num)
+void				hash_map_foreach(t_hash_table *table, void (*f)(void *val))
 {
-	long long int		int_part;
-	double				fraction;
-	t_float_dissector	fd;
+	t_hash_node	**curr;
+	int			i;
 
-	if (num == 0)
-		return (num);
-	fd.f = num;
-	int_part = (long long int)num;
-	fraction = num - int_part;
-	return (fd.b.sign ? int_part : int_part + 1);
-}
-
-double		ft_floor(double num)
-{
-	t_float_dissector	fd;
-
-	fd.f = num;
-	return (!fd.b.sign ? (long long int)num : (long long int)num - 1);
+	if (!table)
+		return ;
+	i = -1;
+	while (++i < table->size)
+	{
+		curr = &table->list[i];
+		while (*curr)
+		{
+			f(*curr);
+			*curr = (*curr)->next;
+		}
+	}
 }

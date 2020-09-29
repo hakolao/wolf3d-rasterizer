@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 14:42:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 17:30:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/29 15:16:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,17 @@
 # define LIBFT_H
 
 # define BUFF_SIZE 50
-# define FILE_READ_BUF 1024
 # define MAX_FD 65536
+# define FILE_READ_BUF 1024
 
 # include <string.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdint.h>
-
-typedef enum	e_bool
-{
-	false,
-	true
-}				t_bool;
+# include <pthread.h>
+# include "t_bool.h"
+# include "hash_map.h"
 
 typedef struct	s_list
 {
@@ -190,8 +187,7 @@ char			*ft_strnjoin(char const *s1, char const *s2,
 				size_t len1, size_t len2);
 double			ft_ceil(double num);
 double			ft_floor(double num);
-int				ft_round(double num);
-double			ft_abs_ceil(double num);
+uint32_t		ft_rand(uint32_t seed);
 char			*ft_itoa(int32_t nb);
 char			*ft_itoa_64(int64_t nb);
 char			*ft_itoa_base_32(int32_t nb, int32_t base);
@@ -199,8 +195,6 @@ char			*ft_itoa_base_64(int64_t nb, int64_t base);
 char			*ft_itoa_base_u32(uint32_t nb, uint32_t base);
 char			*ft_itoa_base_u64(uint64_t nb, uint64_t base);
 double			ft_atod(char *str);
-void			ft_scroll_over(char **str, char c);
-void			ft_scroll_to(char **str, char c);
 
 /*
 ** Expose ft_printf functions via libft.h
@@ -210,7 +204,11 @@ int				ft_dprintf(int fd, const char *format, ...);
 int				ft_sprintf(char *str, const char *format, ...);
 int				ft_printf(const char *format, ...);
 
-t_file_contents	*read_file(const char *filename);
 void			destroy_file_contents(t_file_contents *f);
+t_file_contents	*read_file(const char *filename);
+void			ft_scroll_over(char **str, char c);
+void			ft_scroll_to(char **str, char c);
+
+void			error_check(int test, const char *message);
 
 #endif

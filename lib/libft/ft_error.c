@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_round.c                                         :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/18 23:26:36 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/19 13:36:22 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/29 15:15:42 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/29 15:15:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-double		ft_ceil(double num)
+void				error_check(int test, const char *message)
 {
-	long long int		int_part;
-	double				fraction;
-	t_float_dissector	fd;
-
-	if (num == 0)
-		return (num);
-	fd.f = num;
-	int_part = (long long int)num;
-	fraction = num - int_part;
-	return (fd.b.sign ? int_part : int_part + 1);
-}
-
-double		ft_floor(double num)
-{
-	t_float_dissector	fd;
-
-	fd.f = num;
-	return (!fd.b.sign ? (long long int)num : (long long int)num - 1);
+	if (test)
+	{
+		ft_dprintf(2, "%s\n", message);
+		exit(1);
+	}
 }

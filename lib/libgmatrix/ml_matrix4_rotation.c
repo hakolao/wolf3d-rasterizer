@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:43:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/17 00:18:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 01:49:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void		ml_matrix4_rotation_x(float rad, t_mat4 res)
 	res[2][1] = -sin(rad);
 	res[1][2] = sin(rad);
 	res[2][2] = cos(rad);
-
 }
 
 void		ml_matrix4_rotation_y(float rad, t_mat4 res)
@@ -60,31 +59,4 @@ void		ml_matrix4_rotation(float rad_x, float rad_y, float rad_z,
 	ml_matrix4_rotation_z(rad_z, rotz);
 	ml_matrix4_mul(roty, rotx, tmp);
 	ml_matrix4_mul(rotz, tmp, res);
-}
-
-void		ml_matrix4_rotate_x(t_mat4 m, float rad, t_mat4 res)
-{
-	t_mat4	rotation;
-
-	ft_memset(res, 0, sizeof(t_mat4));
-	ml_matrix4_rotation_x(rad, rotation);
-	ml_matrix4_mul(m, rotation, res);
-}
-
-void		ml_matrix4_rotate_y(t_mat4 m, float rad, t_mat4 res)
-{
-	t_mat4	rotation;
-
-	ft_memset(res, 0, sizeof(t_mat4));
-	ml_matrix4_rotation_y(rad, rotation);
-	ml_matrix4_mul(m, rotation, res);
-}
-
-void		ml_matrix4_rotate_z(t_mat4 m, float rad, t_mat4 res)
-{
-	t_mat4	rotation;
-
-	ft_memset(res, 0, sizeof(t_mat4));
-	ml_matrix4_rotation_z(rad, rotation);
-	ml_matrix4_mul(m, rotation, res);
 }

@@ -6,12 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 18:03:43 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/17 00:27:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 01:37:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libgmatrix.h"
-
 
 static void		view_matrix(t_vec3 axes[3], t_vec3 eye, t_mat4 res)
 {
@@ -50,8 +49,8 @@ void			ml_matrix4_lookat(t_vec3 eye, t_vec3 center, t_vec3 up,
 	ft_memcpy(&axes[0], &xaxis, sizeof(t_vec3));
 	ft_memcpy(&axes[1], &yaxis, sizeof(t_vec3));
 	ft_memcpy(&axes[2], &zaxis, sizeof(t_vec3));
-	view_matrix(axes, eye, res);}
-
+	view_matrix(axes, eye, res);
+}
 
 void			ml_matrix4_fps(t_vec3 eye, float pitch, float yaw, t_mat4 res)
 {

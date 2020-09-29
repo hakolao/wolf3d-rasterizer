@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   test_state.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 20:46:53 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 20:05:49 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 01:24:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
+#ifndef TEST_STATE_H
+# define TEST_STATE_H
 
-/*
-** Vector
-*/
-const char	*test_vector_ops();
+typedef struct		s_test_state
+{
+	t_bool		success;
+	const char	*result;
+	int			id;
+}					t_test_state;
 
-/*
-** Matrix
-*/
-const char	*test_matrix_ops();
+t_test_state		test_state_create(t_bool success,
+					const char *result, int id);
+void				update_test_state(const char *(*test)(void));
 
 #endif

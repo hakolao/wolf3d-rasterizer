@@ -43,7 +43,7 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 	i = -1;
 	while (++i < 3)
 	{
-		rays[i] = new_ray((t_vec3){0.0, 0.0, 0.0}, triangle->vtc[i]->position);
+		l3d_ray_set(triangle->vtc[i]->pos, (t_vec3){0.0, 0.0, 0.0}, &rays[i]);
 		scaler = (camera->screen_dist / rays[i].dir[2]);
 		rays[i].dir[0] *= scaler;
 		rays[i].dir[1] *= scaler;
@@ -51,19 +51,6 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 						corners_on_screen[i]);
 	}
 }
-
-void		calculate_triangle_center(t_triangle *triangle,
-										int *triangle_center)
-{
-	triangle_center[0] = (int)((triangle->vtc[0]->position[1] +
-						triangle->vtc[1]->position[1] +
-						triangle->vtc[2]->position[1]) / 3);
-	triangle_center[1] = (int)((triangle->vtc[0]->position[2] +
-								triangle->vtc[1]->position[2] +
-								triangle->vtc[2]->position[2]) /
-							   3);
-}
-
 
 void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 {
@@ -84,41 +71,40 @@ void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 void	order_vertices_y(t_triangle *triangle, t_vertex **vtc) //?static??
 {
 	size_t indices[3];
-	ft_max_double_idx((double[3]){triangle->vtc[0]->position[1],
-								 triangle->vtc[1]->position[1],
-								 triangle->vtc[2]->position[1]},
+	ft_max_double_idx((double[3]){triangle->vtc[0]->pos[1],
+								 triangle->vtc[1]->pos[1],
+								 triangle->vtc[2]->pos[1]},
 					  3, &indices[0]);
 	vtc[2] = triangle->vtc[indices[0]];
-	ft_min_double_idx((double[3]){triangle->vtc[0]->position[1],
-								  triangle->vtc[1]->position[1],
-								  triangle->vtc[2]->position[1]},
+	ft_min_double_idx((double[3]){triangle->vtc[0]->pos[1],
+								  triangle->vtc[1]->pos[1],
+								  triangle->vtc[2]->pos[1]},
 					  3, &indices[2]);
 	vtc[0] = triangle->vtc[indices[2]];
 	vtc[1] = triangle->vtc[3 - (indices[0] + indices[2])];
-	// ml_vector3_print(vtc[0]->position);
-	// ml_vector3_print(vtc[1]->position);
-	// ml_vector3_print(vtc[2]->position);
+	// ml_vector3_print(vtc[0]->pos);
+	// ml_vector3_print(vtc[1]->pos);
+	// ml_vector3_print(vtc[2]->pos);
 }
 
-void raster_upper(t_wolf3d *app, t_vertex **vtc,
-				  t_mesh *mesh, t_camera *camera)
+void raster_upper(t_wolf3d *app, t_vertex **vtc, t_camera *camera)
 {
 	float x;
 	float y;
-	y = vtc[0]->position[1];
-	x = vtc[0]->position[0];
+	y = vtc[0]->pos[1];
+	x = vtc[0]->pos[0];
 	int i = 0;
-	while ((int)y != (int)vtc[1]->position[1]) // from {0;1} to {0;2}
+	while ((int)y != (int)vtc[1]->pos[1]) // from {0;1} to {0;2}
 	{
-		y += (vtc[1]->position[1] - y) / (fabs((float)((vtc[1]->position[1]) - y)));
-		x = vtc[0]->position[0] + (vtc[1]->position[0] - vtc[0]->position[0]) * ((y - vtc[0]->position[1]) / (vtc[1]->position[1] - vtc[0]->position[1]));
-		float end_x = vtc[0]->position[0] + (vtc[2]->position[0] - vtc[0]->position[0]) * ((y - vtc[0]->position[1]) / (vtc[2]->position[1] - vtc[0]->position[1]));
+		y += (vtc[1]->pos[1] - y) / (fabs((float)((vtc[1]->pos[1]) - y)));
+		x = vtc[0]->pos[0] + (vtc[1]->pos[0] - vtc[0]->pos[0]) * ((y - vtc[0]->pos[1]) / (vtc[1]->pos[1] - vtc[0]->pos[1]));
+		float end_x = vtc[0]->pos[0] + (vtc[2]->pos[0] - vtc[0]->pos[0]) * ((y - vtc[0]->pos[1]) / (vtc[2]->pos[1] - vtc[0]->pos[1]));
 		while ((int)x != (int)end_x)
 		{
 			app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
 			x + app->main_window->width / 2, y + app->main_window->height / 2)] = app->main_window->rbuf_render_color;
 
-			x += (vtc[0]->position[0] - vtc[1]->position[0]) / (fabs(vtc[0]->position[0] - vtc[1]->position[0]));
+			x += (vtc[0]->pos[0] - vtc[1]->pos[0]) / (fabs(vtc[0]->pos[0] - vtc[1]->pos[0]));
 			if (i++ >  500) //?prevents inf loops in testing mode
 			{
 				printf("break1\n");
@@ -126,29 +112,27 @@ void raster_upper(t_wolf3d *app, t_vertex **vtc,
 			}
 		}
 	}
-	(void)mesh;
 	(void)camera;
 }
 
-void	raster_lower(t_wolf3d *app, t_vertex **vtc,
-					t_mesh *mesh, t_camera *camera)
+void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_camera *camera)
 {
 	float	x;
 	float	y;
-	y = vtc[1]->position[1];
-	x = vtc[1]->position[0];
+	y = vtc[1]->pos[1];
+	x = vtc[1]->pos[0];
 	int i = 0;
-	while ((int)y != (int)vtc[2]->position[1]) // from {1;2} to {0;2}
+	while ((int)y != (int)vtc[2]->pos[1]) // from {1;2} to {0;2}
 	{
-		y += (vtc[2]->position[1] - vtc[1]->position[1]) / (fabs((float)((vtc[2]->position[1])-vtc[1]->position[1])));
-		x = vtc[1]->position[0] + (vtc[2]->position[0] - vtc[1]->position[0]) * ((y - vtc[1]->position[1]) / (vtc[2]->position[1] - vtc[1]->position[1]));
-		float end_x = vtc[0]->position[0] + (vtc[2]->position[0] - vtc[0]->position[0]) * ((y - vtc[0]->position[1]) / (vtc[2]->position[1] - vtc[0]->position[1]));
+		y += (vtc[2]->pos[1] - vtc[1]->pos[1]) / (fabs((float)((vtc[2]->pos[1])-vtc[1]->pos[1])));
+		x = vtc[1]->pos[0] + (vtc[2]->pos[0] - vtc[1]->pos[0]) * ((y - vtc[1]->pos[1]) / (vtc[2]->pos[1] - vtc[1]->pos[1]));
+		float end_x = vtc[0]->pos[0] + (vtc[2]->pos[0] - vtc[0]->pos[0]) * ((y - vtc[0]->pos[1]) / (vtc[2]->pos[1] - vtc[0]->pos[1]));
 		while ((int)x != (int)end_x)
 		{
 			app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
 			x + app->main_window->width / 2, y + app->main_window->height / 2)] = app->main_window->rbuf_render_color;
 
-			x += (vtc[2]->position[0] - vtc[1]->position[0]) / (fabs(vtc[2]->position[0] - vtc[1]->position[0]));
+			x += (vtc[2]->pos[0] - vtc[1]->pos[0]) / (fabs(vtc[2]->pos[0] - vtc[1]->pos[0]));
 			if (i++ >  500) //?prevents inf loops in testing mode
 			{
 				printf("break2\n");
@@ -156,17 +140,15 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc,
 			}
 		}
 	}
-	(void)mesh;
 	(void)camera;
 }
 
-void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle,
-					t_mesh *mesh, t_camera *camera)
+void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_camera *camera)
 {
 	t_vertex *vtc[3];
 	order_vertices_y(triangle, vtc); //?static??
-	raster_upper(app, vtc, mesh, camera);
-	raster_lower(app, vtc, mesh, camera);
+	raster_upper(app, vtc, camera);
+	raster_lower(app, vtc, camera);
 
 	/*
 	** sort vertices in height order in an array
@@ -177,22 +159,20 @@ void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle,
 	** a += (b-a)/(abs()b-a) until a == b
 	*/
 	(void)camera;
-	(void)mesh;
 	(void)app;
 	// (void)x;
 	(void)triangle;
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
-					   t_mesh *mesh, t_camera *camera)
+							t_camera *camera)
 {
 	
 	t_vec2				corners_on_screen[3];
 	uint32_t			*rbuffer;
 	int					ints_on_screen[6];
 	rbuffer = app->main_window->rbuffer;
-	(void)mesh;
-	rasterize_triangle(app, triangle, mesh, camera);
+	rasterize_triangle(app, triangle, camera);
 	screen_intersection(app->active_scene->main_camera, triangle, corners_on_screen);
 	int j = -1;
 	while (++j < 3)

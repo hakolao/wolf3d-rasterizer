@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:23:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:07:42 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 02:39:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ t_test_state g_test_states[MAX_TESTS];
 
 static void		all_tests(void)
 {
-	(void)g_tests_run;
+	ft_printf("Hash_map tests:\n");
+	OH_RUN_TEST(test_hash_map_create);
+	OH_RUN_TEST(test_hash_map_add);
+	OH_RUN_TEST(test_hash_map_get);
+	OH_RUN_TEST(test_hash_map_delete);
+	OH_RUN_TEST(test_hash_map_has_key);
+	OH_RUN_TEST(test_hash_map_foreach);
 }
 
 int				main(void)

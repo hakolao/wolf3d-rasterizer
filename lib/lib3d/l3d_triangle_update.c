@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ml_vector2_mag.c                                   :+:      :+:    :+:   */
+/*   l3d_triangle_update.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/08 15:49:32 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:58 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/29 22:30:39 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 00:41:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libgmatrix.h"
+#include "lib3d.h"
 
-float		ml_vector2_mag(t_vec2 v)
+/*
+** Updates triangle centroid and normals
+*/
+
+void				l3d_triangle_update(t_triangle *triangle)
 {
-	size_t	i;
-	float	res;
-
-	i = -1;
-	res = 0;
-	while (++i < 2)
-		res += v[i] * v[i];
-	return (sqrt(res));
+	l3d_triangle_centroid_update(triangle);
+	l3d_triangle_normal_update(triangle);
 }

@@ -29,7 +29,6 @@ SOURCES = main.c \
 			wolf3d.c \
 			window.c \
 			draw.c \
-			error.c \
 			player.c \
 			camera.c \
 			scene.c \
@@ -40,9 +39,7 @@ SOURCES = main.c \
 			text.c \
 			surface.c \
 			debug.c \
-			3d_object.c \
 			world.c \
-			read_obj.c \
 			plot.c \
 			line_drawing.c
 

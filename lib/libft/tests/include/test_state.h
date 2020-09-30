@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ml_vector2_mag.c                                   :+:      :+:    :+:   */
+/*   test_state.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/08 15:49:32 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:58 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 20:05:49 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 01:24:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libgmatrix.h"
+#ifndef TEST_STATE_H
+# define TEST_STATE_H
 
-float		ml_vector2_mag(t_vec2 v)
+typedef struct		s_test_state
 {
-	size_t	i;
-	float	res;
+	t_bool		success;
+	const char	*result;
+	int			id;
+}					t_test_state;
 
-	i = -1;
-	res = 0;
-	while (++i < 2)
-		res += v[i] * v[i];
-	return (sqrt(res));
-}
+t_test_state		test_state_create(t_bool success,
+					const char *result, int id);
+void				update_test_state(const char *(*test)(void));
+
+#endif

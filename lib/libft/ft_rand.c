@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_state.h                                       :+:      :+:    :+:   */
+/*   ft_rand.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 20:05:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/01 18:11:41 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/17 19:36:38 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/18 01:17:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEST_STATE_H
-# define TEST_STATE_H
+#include "libft.h"
 
-	typedef struct s_test_state
-	{
-		t_bool		success;
-		const char	*result;
-		int			id;
-	}				t_test_state;
+/*
+** https://stackoverflow.com/questions/3062746/
+** special-simple-random-number-generator
+*/
 
-t_test_state		test_state_create(t_bool success, const char *result, int id);
-
-#endif
+uint32_t			ft_rand(uint32_t seed)
+{
+	return ((1103515245 * seed + 12345) % (1 << 31));
+}

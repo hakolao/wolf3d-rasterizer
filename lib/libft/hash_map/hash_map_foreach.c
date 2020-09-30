@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ml_vector2_mag.c                                   :+:      :+:    :+:   */
+/*   hash_map_foreach.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/08 15:49:32 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:58 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/17 20:31:08 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/17 23:23:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libgmatrix.h"
+#include "hash_map.h"
 
-float		ml_vector2_mag(t_vec2 v)
+void				hash_map_foreach(t_hash_table *table, void (*f)(void *val))
 {
-	size_t	i;
-	float	res;
+	t_hash_node	**curr;
+	int			i;
 
+	if (!table)
+		return ;
 	i = -1;
-	res = 0;
-	while (++i < 2)
-		res += v[i] * v[i];
-	return (sqrt(res));
+	while (++i < table->size)
+	{
+		curr = &table->list[i];
+		while (*curr)
+		{
+			f(*curr);
+			*curr = (*curr)->next;
+		}
+	}
 }

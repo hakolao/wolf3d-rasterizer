@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:32:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/17 00:48:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 01:39:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ static void		ml_matrix4_perspective(t_canvas c, t_mat4 res)
 void			ml_matrix4_projection(t_projection_type type,
 				t_canvas c, t_mat4 res)
 {
-	if (type == ML_ORTHOGRAPHIC)
+	if (type == ml_orthographic)
 		ml_matrix4_orthographic(c, res);
-	else if (type == ML_PERSPECTIVE)
+	else if (type == ml_perspective)
 		ml_matrix4_perspective(c, res);
 	else
 		ml_matrix4_perspective(c, res);

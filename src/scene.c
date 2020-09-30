@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/28 17:14:42 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 02:33:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		read_objects_to_scene_data(&data, "assets/icosphere.obj");
+		data.objects = l3d_read_obj("assets/icosphere.obj", &data.num_objects);
 	}
 	app->active_scene = new_scene(app, &data);
 }
@@ -82,8 +82,8 @@ void			destroy_scene(t_scene *scene)
 	if (scene->objects != NULL)
 	{
 		i = -1;
-		while (++i < scene->num_objects)
-			destroy_object(scene->objects[i]);
+		while (++i < (int)scene->num_objects)
+			l3d_3d_object_destroy(scene->objects[i]);
 		free(scene->objects);
 		scene->objects = NULL;
 	}
@@ -108,7 +108,7 @@ void			debug_scene(t_scene *scene)
 		scene->scene_id,
 		scene->num_objects);
 	i = -1;
-	while (++i < scene->num_objects)
+	while (++i < (int)scene->num_objects)
 	{
 		j = -1;
 		while (++j < (int)scene->objects[i]->num_triangles)
@@ -117,7 +117,7 @@ void			debug_scene(t_scene *scene)
 			k = -1;
 			while (++k < 3)
 				ml_vector3_print(
-					scene->objects[i]->triangles[j].vtc[k]->position);
+					scene->objects[i]->triangles[j].vtc[k]->pos);
 			ft_printf("Normal:\n");
 			ml_vector3_print(scene->objects[i]->triangles[j].normal);
 		}

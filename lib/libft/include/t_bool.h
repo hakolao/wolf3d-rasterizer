@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ml_vector2_mag.c                                   :+:      :+:    :+:   */
+/*   t_bool.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/08 15:49:32 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:58 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/16 14:04:56 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 01:26:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libgmatrix.h"
+#ifndef T_BOOL_H
+# define T_BOOL_H
 
-float		ml_vector2_mag(t_vec2 v)
+typedef enum	e_bool
 {
-	size_t	i;
-	float	res;
+	false,
+	true
+}				t_bool;
 
-	i = -1;
-	res = 0;
-	while (++i < 2)
-		res += v[i] * v[i];
-	return (sqrt(res));
-}
+#endif

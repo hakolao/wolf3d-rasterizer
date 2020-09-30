@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/09/28 17:01:22 by ohakola          ###   ########.fr        #
+#    Created: 2020/09/29 14:50:34 by ohakola           #+#    #+#              #
+#    Updated: 2020/09/30 02:35:23 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,21 @@ LIBFT = ../libft
 LIBGMATRIX = ../libgmatrix
 DIR_SRC = ./
 DIR_OBJ = temp
-SOURCES = l3d_triangle_normal.c \
-			l3d_intersection.c \
-			l3d_triangle_centroid.c
+SOURCES = l3d_triangle.c \
+			l3d_triangle_update.c \
+			l3d_triangle_vector.c \
+			l3d_ray.c \
+			l3d_ray_hit.c \
+			l3d_rand.c \
+			l3d_obj_read.c \
+			l3d_obj_read_utils1.c \
+			l3d_obj_read_utils2.c \
+			l3d_3d_object.c \
+			l3d_kd_tree.c \
+			l3d_kd_tree_node.c \
+			l3d_kd_tree_utils.c \
+			l3d_fminmax.c \
+			l3d_bounding_box.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

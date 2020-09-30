@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scene_objects.c                                    :+:      :+:    :+:   */
+/*   world.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/28 16:47:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 02:20:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			update_world_rotation(t_scene *scene, t_mat4 new_rotation)
 	ft_memcpy(scene->world_rotation, new_world_rotation, sizeof(t_mat4));
 	i = -1;
 	while (++i < (int)scene->num_objects)
-		transform_3d_object(scene->objects[i], new_rotation);
+		l3d_3d_object_transform(scene->objects[i], new_rotation);
 }
 
 void			update_world_scale(t_scene *scene, t_mat4 new_scale)
@@ -36,9 +36,9 @@ void			update_world_scale(t_scene *scene, t_mat4 new_scale)
 	i = -1;
 	while (++i < (int)scene->num_objects)
 	{
-		transform_3d_object(scene->objects[i], inverse_translation);
-		transform_3d_object(scene->objects[i], new_world_scale);
-		transform_3d_object(scene->objects[i], scene->world_translation);
+		l3d_3d_object_transform(scene->objects[i], inverse_translation);
+		l3d_3d_object_transform(scene->objects[i], new_world_scale);
+		l3d_3d_object_transform(scene->objects[i], scene->world_translation);
 	}
 }
 
@@ -51,5 +51,5 @@ void			update_world_translation(t_scene *scene, t_mat4	new_translation)
 	ft_memcpy(scene->world_translation, new_world_translation, sizeof(t_mat4));
 	i = -1;
 	while (++i < (int)scene->num_objects)
-		transform_3d_object(scene->objects[i], new_translation);
+		l3d_3d_object_transform(scene->objects[i], new_translation);
 }

@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ml_vector2_mag.c                                   :+:      :+:    :+:   */
+/*   l3d_fminmax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/08 15:49:32 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:58 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/29 15:01:27 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 00:23:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libgmatrix.h"
+#include "lib3d.h"
 
-float		ml_vector2_mag(t_vec2 v)
+/*
+** Returns min of two float values
+*/
+
+float	l3d_fmin(float n1, float n2)
 {
-	size_t	i;
-	float	res;
+	return (n1 < n2 ? n1 : n2);
+}
 
-	i = -1;
-	res = 0;
-	while (++i < 2)
-		res += v[i] * v[i];
-	return (sqrt(res));
+/*
+** Returns max of two float values
+*/
+
+float	l3d_fmax(float n1, float n2)
+{
+	return (n1 > n2 ? n1 : n2);
 }

@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   tests.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/24 15:18:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/24 15:18:59 by ohakola          ###   ########.fr       */
+/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 02:38:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#ifndef TESTS_H
+# define TESTS_H
 
-void				error_check(int test, const char *message)
-{
-	if (test)
-	{
-		ft_printf("%s\n", message);
-		exit(EXIT_FAILURE);
-	}
-}
+const char		*test_hash_map_create(void);
+const char		*test_hash_map_add(void);
+const char		*test_hash_map_get(void);
+const char		*test_hash_map_delete(void);
+const char		*test_hash_map_has_key(void);
+const char		*test_hash_map_foreach(void);
+
+#endif

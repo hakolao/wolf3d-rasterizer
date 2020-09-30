@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   l3d_triangle_normal.c                              :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/15 12:50:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/15 12:51:32 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/29 15:15:42 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/29 15:15:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib3d.h"
+#include "libft.h"
 
-void	l3d_triangle_normal_set(t_triangle *triangle)
+void				error_check(int test, const char *message)
 {
-	ml_vector3_sub(triangle->vtc[1]->position, triangle->vtc[0]->position,
-		triangle->ab);
-	ml_vector3_sub(triangle->vtc[2]->position, triangle->vtc[0]->position,
-		triangle->ac);
-	ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
+	if (test)
+	{
+		ft_dprintf(2, "%s\n", message);
+		exit(1);
+	}
 }

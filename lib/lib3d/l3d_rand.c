@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ml_vector2_mag.c                                   :+:      :+:    :+:   */
+/*   l3d_rand.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/08 15:49:32 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:58 by ohakola          ###   ########.fr       */
+/*   Created: 2020/09/29 16:20:49 by ohakola           #+#    #+#             */
+/*   Updated: 2020/09/30 00:39:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libgmatrix.h"
+#include "lib3d.h"
 
-float		ml_vector2_mag(t_vec2 v)
+/*
+** Just a simple random number between 0.0 and 1.0
+*/
+
+double			l3d_rand_d(void)
 {
-	size_t	i;
-	float	res;
-
-	i = -1;
-	res = 0;
-	while (++i < 2)
-		res += v[i] * v[i];
-	return (sqrt(res));
+	return ((double)rand() / RAND_MAX);
 }

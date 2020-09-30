@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/09/08 23:54:37 by ohakola          ###   ########.fr        #
+#    Updated: 2020/09/30 02:04:41 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,10 @@ SOURCES = ml_matrix4_id.c \
 			ml_matrix4_mul_vec.c \
 			ml_matrix4_projection.c \
 			ml_matrix4_rotation.c \
+			ml_matrix4_rotate.c \
 			ml_matrix4_view.c \
-			ml_print.c \
+			ml_print1.c \
+			ml_print2.c \
 			ml_rad.c \
 			ml_vector3_add.c \
 			ml_vector3_cross.c \
@@ -43,7 +45,6 @@ SOURCES = ml_matrix4_id.c \
 			ml_vector4_sub.c \
 			ml_vector_copy.c \
 			ml_vector_set.c \
-			ml_set_orientation_base.c \
 			ml_vector2_mag.c \
 			ml_vector2_sub.c \
 			ml_vector2_normalize.c \
@@ -70,7 +71,8 @@ TEST_SRCS =$(wildcard $(DIR_TESTS)/*.c)
 
 test: all
 	@make -C $(LIBFT)
-	$(CC) -o test_run $(TEST_SRCS) -L$(LIBFT) -lft $(FLAGS) $(INCLUDES) $(NAME)
+	$(CC) -o test_run $(TEST_SRCS) \
+	-I./tests/include -L$(LIBFT) -lft $(FLAGS) $(INCLUDES) $(NAME)
 	./test_run
 	@/bin/rm -f main.o
 	@/bin/rm -f test_run

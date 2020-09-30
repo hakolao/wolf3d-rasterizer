@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 14:14:08 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 14:18:02 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hit *hit)
 ** A tradeoff with readability & 42 norms. I refuse to set temp structs for just
 ** this function, because it'll only bloat the header files. In this case
 ** bundled arrays are better to beautify the api of triangle_ray_hit function.
+** Hit results are saved into hit record.
 */
 
 static t_bool	l3d_determine_triangle_hit(t_vec3 edges_hsq[5],
@@ -69,6 +70,8 @@ static t_bool	l3d_determine_triangle_hit(t_vec3 edges_hsq[5],
 		hit->u = afuvt[2];
 		hit->v = afuvt[3];
 		hit->t = afuvt[4];
+		ml_vector3_mul(ray->dir, hit->t, hit->hit_point);
+		ml_vector3_add(ray->origin, hit->hit_point, hit->hit_point);
 		return (true);
 	}
 	return (false);

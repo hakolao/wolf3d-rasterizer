@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 14:13:37 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 14:18:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ typedef struct				s_ray
 ** Ray hit is saved to this hit record struct. Add params if needed.
 ** For example material information could be saved here.
 */
-
 
 typedef struct				s_hit
 {

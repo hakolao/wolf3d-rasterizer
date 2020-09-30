@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:35:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 03:03:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@
 # define L3D_MAX_VERTICES 16383
 
 /*
-** OBJ file temporary structs
+** OBJ file temporary structs. They are used in transfering obj data to final
+** t_3d_obj form. These structs are easier to use in obj reading, but don't
+** really fit to the rest of the 3d stuff.
 */
 
 typedef struct				s_obj
@@ -50,12 +52,23 @@ typedef struct				s_obj_content
 	t_obj			objects[L3D_MAX_OBJECTS];
 }							t_obj_content;
 
+/*
+** Ray with direction and origin. Dir_inv is precalculated for faster
+** bounding box intersection calculations.
+*/
+
 typedef struct				s_ray
 {
 	t_vec3			dir;
 	t_vec3			origin;
 	t_vec3			dir_inv;
 }							t_ray;
+
+/*
+** Ray hit is saved to this hit record struct. Add params if needed.
+** For example material information could be saved here.
+*/
+
 
 typedef struct				s_hit
 {
@@ -64,12 +77,22 @@ typedef struct				s_hit
 	t_vec3			hit_point;
 }							t_hit;
 
+/*
+** Basic vertex struct with position, color and texture coordinates.
+*/
+
 typedef struct				s_vertex
 {
 	t_vec4			pos;
 	uint32_t		color;
 	t_vec2			uv;
 }							t_vertex;
+
+/*
+** Bounding box AAABBB. Minimum and maximum coordinates are used in
+** bounding box ray intersection calculations.
+** center and size are useful in kd_tree / bvh structs.
+*/
 
 typedef struct				s_box3d
 {
@@ -78,6 +101,11 @@ typedef struct				s_box3d
 	float			xyz_min[3];
 	float			xyz_max[3];
 }							t_box3d;
+
+/*
+** Triangle contains pointers to vertices (which get transformed over time)
+** Center and normal should be updated if vertices are transformed.
+*/
 
 typedef struct				s_triangle
 {
@@ -88,7 +116,8 @@ typedef struct				s_triangle
 }							t_triangle;
 
 /*
-** Final 3d object struct to which obj file is transformed
+** Final 3d object struct to which obj file is transformed.
+** This is the main struct to hold 3d object data.
 */
 
 typedef struct				s_3d_object
@@ -101,6 +130,10 @@ typedef struct				s_3d_object
 	int32_t			num_uvs;
 }							t_3d_object;
 
+/*
+** Utility enum for x y z axes.
+*/
+
 typedef enum				e_axis
 {
 	l3d_axis_x,
@@ -108,6 +141,12 @@ typedef enum				e_axis
 	l3d_axis_z,
 	l3d_axis_none,
 }							t_axis;
+
+/*
+** Triangle vector struct holding pointers to triangles. Kd tree uses this, but
+** can be used in isolation as well. Triangles can be pushed to an existing
+** triangle vector.
+*/
 
 typedef struct				s_tri_vec
 {
@@ -117,6 +156,11 @@ typedef struct				s_tri_vec
 }							t_tri_vec;
 
 typedef struct s_kd_node	t_kd_node;
+
+/*
+** Kd node is a single node in kd tree containing triangle information and
+** bounding box information.
+*/
 
 struct						s_kd_node
 {
@@ -128,11 +172,20 @@ struct						s_kd_node
 	t_kd_node		*right;
 };
 
+/*
+** BVH (kd tree) for fast ray intersection calculations (or collisions).
+** It's used to partition triangle data into a fast searchable format.
+*/
+
 typedef struct				s_kd_tree
 {
 	uint32_t		num_nodes;
 	t_kd_node		*root;
 }							t_kd_tree;
+
+/*
+** Kd tree
+*/
 
 void						l3d_kd_tree_create_or_update(t_kd_tree **tree,
 							t_triangle **triangles, uint32_t num_triangles);
@@ -154,7 +207,7 @@ t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
 void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
 
 /*
-** Triangle vector utils
+** Triangle vector
 */
 
 void						l3d_triangle_vec_push(t_tri_vec *vector,
@@ -204,7 +257,7 @@ t_3d_object					**l3d_read_obj(const char *filename,
 							uint32_t *num_objects);
 
 /*
-** Math utils
+** Math utils (could be moved somewhere else...)
 */
 
 float						l3d_fmax(float n1, float n2);

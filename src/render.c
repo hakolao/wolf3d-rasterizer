@@ -52,19 +52,6 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 	}
 }
 
-void		calculate_triangle_center(t_triangle *triangle,
-										int *triangle_center)
-{
-	triangle_center[0] = (int)((triangle->vtc[0]->pos[1] +
-						triangle->vtc[1]->pos[1] +
-						triangle->vtc[2]->pos[1]) / 3);
-	triangle_center[1] = (int)((triangle->vtc[0]->pos[2] +
-								triangle->vtc[1]->pos[2] +
-								triangle->vtc[2]->pos[2]) /
-							   3);
-}
-
-
 void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 {
 	draw_line(	(int[2]){ints_on_screen[0],

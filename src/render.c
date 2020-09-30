@@ -54,18 +54,19 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 
 void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 {
-	draw_line(	(int[2]){ints_on_screen[0],
-						ints_on_screen[1]},
-				(int[2]){ints_on_screen[2],
-						ints_on_screen[3]}, color, app);
-	draw_line(	(int[2]){ints_on_screen[0],
-						ints_on_screen[1]},
-				(int[2]){ints_on_screen[4],
-						ints_on_screen[5]}, color, app);
-	draw_line(	(int[2]){ints_on_screen[2],
-						ints_on_screen[3]},
-				(int[2]){ints_on_screen[4],
-						ints_on_screen[5]}, color, app);
+	uint32_t	dimensions[2];
+
+	dimensions[0] = app->main_window->width;
+	dimensions[1] = app->main_window->height;
+	draw_line(app->main_window->rbuffer, dimensions,
+		(int32_t[2][2]){{ints_on_screen[0], ints_on_screen[1]},
+			{ints_on_screen[2], ints_on_screen[3]}}, color);
+	draw_line(app->main_window->rbuffer, dimensions,
+		(int32_t[2][2]){{ints_on_screen[0], ints_on_screen[1]},
+			{ints_on_screen[4], ints_on_screen[5]}}, color);
+	draw_line(app->main_window->rbuffer, dimensions,
+		(int32_t[2][2]){{ints_on_screen[2], ints_on_screen[3]},
+			{ints_on_screen[4], ints_on_screen[5]}}, color);
 }
 
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,

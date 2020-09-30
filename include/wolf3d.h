@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:32:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 15:45:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,9 @@ int									screen_to_frame_coords(uint32_t width,
 															uint32_t height,
 															int x, int y);
 void								render_ui(t_wolf3d *app);
-void								draw_line(int *begin, int *finish, uint32_t color, t_wolf3d *app);
+void								draw_line(uint32_t *buffer,
+										uint32_t dimensions_wh[2],
+										int32_t edge[2][2], uint32_t color);
 void								plot_pixel(t_wolf3d *app, uint32_t *buffer, int *point, uint32_t color);
 
 /*

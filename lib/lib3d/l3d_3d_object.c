@@ -6,14 +6,14 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 00:33:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 03:13:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d.h"
 
 /*
-** Create's an empty 3d object allocating space for vertices, triangles and
+** Creates an empty 3d object allocating space for vertices, triangles and
 ** text coords.
 */
 

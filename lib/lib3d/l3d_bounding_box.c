@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:03:24 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 00:39:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 03:13:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void			init_bounding_box(t_box3d *res, t_tri_vec *triangles)
 }
 
 /*
-** Set's bounding box's size and center
+** Sets bounding box's size and center
 */
 
 static void			bounding_box_size_and_center_set(t_box3d *res)

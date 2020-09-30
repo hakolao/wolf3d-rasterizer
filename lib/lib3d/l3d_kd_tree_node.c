@@ -6,14 +6,14 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 00:10:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 00:36:28 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 03:14:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d_internals.h"
 
 /*
-** Destroy's a kd node and its children leaving triangles intact, though the
+** Destroys a kd node and its children leaving triangles intact, though the
 ** triangle vector is deleted.
 */
 

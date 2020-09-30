@@ -6,11 +6,16 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:02:15 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 00:40:10 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 03:14:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d.h"
+
+/*
+** Pushes triangles into left or right depending ont heir
+** mid point at given axis (longes).
+*/
 
 void				l3d_kd_tree_split_triangles(t_tri_vec *triangles,
 					t_axis axis, t_tri_vec *left_tris, t_tri_vec *right_tris)

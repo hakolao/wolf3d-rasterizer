@@ -58,13 +58,13 @@ void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
 
 	dimensions[0] = app->main_window->width;
 	dimensions[1] = app->main_window->height;
-	draw_line(app->main_window->rbuffer, dimensions,
+	l3d_line_draw(app->main_window->rbuffer, dimensions,
 		(int32_t[2][2]){{ints_on_screen[0], ints_on_screen[1]},
 			{ints_on_screen[2], ints_on_screen[3]}}, color);
-	draw_line(app->main_window->rbuffer, dimensions,
+	l3d_line_draw(app->main_window->rbuffer, dimensions,
 		(int32_t[2][2]){{ints_on_screen[0], ints_on_screen[1]},
 			{ints_on_screen[4], ints_on_screen[5]}}, color);
-	draw_line(app->main_window->rbuffer, dimensions,
+	l3d_line_draw(app->main_window->rbuffer, dimensions,
 		(int32_t[2][2]){{ints_on_screen[2], ints_on_screen[3]},
 			{ints_on_screen[4], ints_on_screen[5]}}, color);
 }

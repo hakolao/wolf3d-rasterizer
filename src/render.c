@@ -70,7 +70,7 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 		corners[i][0] = corners_on_screen[i][0] + app->main_window->width / 2;
 		corners[i][1] = corners_on_screen[i][1] + app->main_window->height / 2;
 	}
-	l3d_triangle_edges_draw(app->main_window->rbuffer,
+	l3d_triangle_2d_draw(app->main_window->rbuffer,
 		(uint32_t[2]){app->main_window->width,
 		app->main_window->height},
 		corners, app->main_window->rbuf_render_color);

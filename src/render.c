@@ -19,8 +19,8 @@
 
 #include "wolf3d.h"
 
-void		screen_intersection(t_camera *camera, t_triangle *triangle,
-				t_vec2 *corners_on_screen)
+void			screen_intersection(t_camera *camera, t_triangle *triangle,
+					t_vec2 *corners_on_screen)
 {
 	t_ray	rays[3];
 	int		i;
@@ -45,22 +45,22 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 ** is not enough.
 */
 
-t_bool		triangle_behind_camera(t_triangle *triangle)
+static t_bool	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 {
-	if (triangle->vtc[0]->pos[2] < NEAR_CLIP_DIST &&
-		triangle->vtc[1]->pos[2] < NEAR_CLIP_DIST &&
-		triangle->vtc[2]->pos[2] < NEAR_CLIP_DIST)
+	if (triangle->vtc[0]->pos[2] < camera->near_clip &&
+		triangle->vtc[1]->pos[2] < camera->near_clip &&
+		triangle->vtc[2]->pos[2] < camera->near_clip)
 		return (false);
 	return (true);
 }
 
-t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle)
+t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 {
 	t_vec2				corners_on_screen[3];
 	t_vec2				corners[3];
 	int					i;
 
-	if (triangle_behind_camera(triangle))
+	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
 		return (false);
 	screen_intersection(app->active_scene->main_camera, triangle,
 		corners_on_screen);

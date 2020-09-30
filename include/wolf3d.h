@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:55:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 17:06:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct						s_camera
 	float					screen_dist;
 	int						width;
 	int						height;
+	float					near_clip;
 }									t_camera;
 
 typedef struct						s_player

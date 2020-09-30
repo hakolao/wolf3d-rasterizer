@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 14:18:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 14:28:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,9 @@ typedef struct				s_kd_tree
 */
 
 void						l3d_kd_tree_create_or_update(t_kd_tree **tree,
-							t_triangle **triangles, uint32_t num_triangles);
+								t_triangle **triangles, uint32_t num_triangles);
 t_kd_tree					*l3d_kd_tree_create(t_triangle **triangles,
-							uint32_t num_triangles);
+								uint32_t num_triangles);
 void						l3d_kd_tree_destroy(t_kd_tree *tree);
 void						l3d_kd_tree_print(t_kd_tree *tree);
 
@@ -200,11 +200,11 @@ void						l3d_kd_tree_print(t_kd_tree *tree);
 */
 
 t_bool						l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
-							float t_max, t_hit *hit);
+								float t_max, t_hit *hit);
 t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
-							t_ray *ray, t_hit *hit);
+								t_ray *ray, t_hit *hit);
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
-							t_ray *ray, t_hit *hit);
+								t_ray *ray, t_hit *hit);
 void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
 
 /*
@@ -212,10 +212,10 @@ void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
 */
 
 void						l3d_triangle_vec_push(t_tri_vec *vector,
-							t_triangle *triangle);
+								t_triangle *triangle);
 t_tri_vec					*l3d_triangle_vec_empty(void);
 t_tri_vec					*l3d_triangle_vec(t_triangle **triangles,
-							uint32_t num_triangles);
+								uint32_t num_triangles);
 void						l3d_triangle_vec_delete(t_tri_vec *vector);
 
 /*
@@ -223,12 +223,12 @@ void						l3d_triangle_vec_delete(t_tri_vec *vector);
 */
 
 void						l3d_triangle_set(t_triangle *triangle,
-							t_vertex *vtc1, t_vertex *vtc2, t_vertex *vtc3);
+								t_vertex *vtc1, t_vertex *vtc2, t_vertex *vtc3);
 void						l3d_triangle_update(t_triangle *triangle);
 void						l3d_triangles_midpoint(t_triangle **triangles,
-							uint32_t num_triangles, t_vec3 res);
+								uint32_t num_triangles, t_vec3 res);
 void						l3d_triangle_vec_midpoint(t_tri_vec *triangles,
-							t_vec3 res);
+								t_vec3 res);
 void						l3d_triangle_centroid_update(t_triangle *triangle);
 void						l3d_triangle_normal_update(t_triangle *triangle);
 
@@ -238,16 +238,16 @@ void						l3d_triangle_normal_update(t_triangle *triangle);
 
 t_axis						l3d_bounding_box_longest_axis(t_box3d bounding_box);
 void						l3d_bounding_box_set(t_tri_vec *triangles,
-							t_box3d *res);
+								t_box3d *res);
 
 /*
 ** 3d objects
 */
 
 void						l3d_3d_object_transform(t_3d_object *obj,
-							t_mat4 transform);
+								t_mat4 transform);
 t_3d_object					*l3d_3d_object_create(uint32_t num_vertices,
-							uint32_t num_triangles, uint32_t num_text_coords);
+								uint32_t num_triangles, uint32_t num_text_coords);
 void						l3d_3d_object_destroy(t_3d_object *object);
 
 /*
@@ -255,7 +255,7 @@ void						l3d_3d_object_destroy(t_3d_object *object);
 */
 
 t_3d_object					**l3d_read_obj(const char *filename,
-							uint32_t *num_objects);
+								uint32_t *num_objects);
 
 /*
 ** Math utils (could be moved somewhere else...)
@@ -264,5 +264,13 @@ t_3d_object					**l3d_read_obj(const char *filename,
 float						l3d_fmax(float n1, float n2);
 float						l3d_fmin(float n1, float n2);
 double						l3d_rand_d(void);
+
+/*
+** Plot pixel
+*/
+
+void						l3d_pixel_plot(uint32_t *buffer,
+							uint32_t dimensions_wh[2], int32_t xy[2],
+							uint32_t color);
 
 #endif

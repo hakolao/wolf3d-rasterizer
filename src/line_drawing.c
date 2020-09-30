@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line_drawing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: veilo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 17:51:22 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/14 17:51:23 by veilo            ###   ########.fr       */
+/*   Updated: 2020/09/30 14:33:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static void plot_line_low(int *p1, int *p2, uint32_t color, t_wolf3d *app)
 	xy[0] = p1[0] - 1;
 	while (++xy[0] <= p2[0])
 	{
-		plot_pixel(app, app->main_window->rbuffer, xy, color);
+		l3d_pixel_plot(app->main_window->rbuffer, (uint32_t[2]){
+			app->main_window->width, app->main_window->height}, xy, color);
 		if (dyi[0] > 0)
 		{
 			xy[1] += dyi[1];
@@ -60,7 +61,8 @@ static void plot_line_high(int *p1, int *p2, uint32_t color, t_wolf3d *app)
 	xy[1] = p1[1] - 1;
 	while (++xy[1] <= p2[1])
 	{
-		plot_pixel(app, app->main_window->rbuffer, xy, color);
+		l3d_pixel_plot(app->main_window->rbuffer, (uint32_t[2]){
+			app->main_window->width, app->main_window->height}, xy, color);
 		if (dxi[0] > 0)
 		{
 			xy[0] += dxi[1];
@@ -77,7 +79,8 @@ static void plot_vertical(int *begin, int *finish, uint32_t color, t_wolf3d *app
 		begin[1]--;
 		while (begin[1] <= finish[1])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){begin[0], begin[1]}, color);
+			l3d_pixel_plot(app->main_window->rbuffer, (uint32_t[2]){
+				app->main_window->width, app->main_window->height}, begin, color);
 			begin[1]++;
 		}
 	}
@@ -86,7 +89,8 @@ static void plot_vertical(int *begin, int *finish, uint32_t color, t_wolf3d *app
 		finish[1]--;
 		while (begin[1] >= finish[1])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){finish[0], finish[1]}, color);
+			l3d_pixel_plot(app->main_window->rbuffer, (uint32_t[2]){
+				app->main_window->width, app->main_window->height}, finish, color);
 			finish[1]++;
 		}
 	}
@@ -99,7 +103,8 @@ static void plot_horizontal(int *begin, int *finish, uint32_t color, t_wolf3d *a
 		begin[0]--;
 		while (begin[0] <= finish[0])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){begin[0], begin[1]}, color);
+			l3d_pixel_plot(app->main_window->rbuffer, (uint32_t[2]){
+				app->main_window->width, app->main_window->height}, begin, color);
 			begin[0]++;
 		}
 	}
@@ -108,7 +113,8 @@ static void plot_horizontal(int *begin, int *finish, uint32_t color, t_wolf3d *a
 		finish[0]--;
 		while (begin[0] >= finish[0])
 		{
-			plot_pixel(app, app->main_window->rbuffer, (int[2]){finish[0], finish[1]}, color);
+			l3d_pixel_plot(app->main_window->rbuffer, (uint32_t[2]){
+				app->main_window->width, app->main_window->height}, finish, color);
 			finish[0]++;
 		}
 	}

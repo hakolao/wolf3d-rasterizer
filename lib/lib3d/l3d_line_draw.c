@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 16:10:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:12:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 16:48:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,24 @@ void			l3d_line_draw(uint32_t *buffer, uint32_t dimensions_wh[2],
 			l3d_line_edge_end_swap(edge);
 		l3d_line_plot_high(buffer, dimensions_wh, edge, color);
 	}
+}
+
+/*
+** Draws a triangle wireframe using Bresenham's line drawing algorithm.
+** Draw order AB, BC, CA
+*/
+
+void			l3d_triangle_edges_draw(uint32_t *buffer,
+				uint32_t dimensions_wh[2],
+				t_vec2 corners[3], uint32_t color)
+{
+	l3d_line_draw(buffer, dimensions_wh,
+		(int32_t[2][2]){{corners[0][0], corners[0][1]},
+			{corners[1][0], corners[1][1]}}, color);
+	l3d_line_draw(buffer, dimensions_wh,
+		(int32_t[2][2]){{corners[1][0], corners[1][1]},
+			{corners[2][0], corners[2][1]}}, color);
+	l3d_line_draw(buffer, dimensions_wh,
+		(int32_t[2][2]){{corners[2][0], corners[2][1]},
+			{corners[0][0], corners[0][1]}}, color);
 }

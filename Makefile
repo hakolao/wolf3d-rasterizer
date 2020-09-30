@@ -39,9 +39,7 @@ SOURCES = main.c \
 			text.c \
 			surface.c \
 			debug.c \
-			world.c \
-			plot.c \
-			line_drawing.c
+			world.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

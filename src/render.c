@@ -19,22 +19,8 @@
 
 #include "wolf3d.h"
 
-/*
-**	Converts pixel position from screen coordinates to frame buffer index
-**	Left top corner is considered (0,0) and bottom right (width, height)
-*/
-
-int			screen_to_frame_coords(uint32_t width, uint32_t height, int x, int y)
-{
-	x *= -1;
-	y *= -1;
-	x += width;
-	y += height;
-	return (x + y * width);
-}
-
 void		screen_intersection(t_camera *camera, t_triangle *triangle,
-								t_vec2 *corners_on_screen)
+				t_vec2 *corners_on_screen)
 {
 	t_ray	rays[3];
 	int		i;
@@ -48,52 +34,30 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 		rays[i].dir[0] *= scaler;
 		rays[i].dir[1] *= scaler;
 		ml_vector2_copy((t_vec2){rays[i].dir[0], rays[i].dir[1]},
-						corners_on_screen[i]);
+			corners_on_screen[i]);
 	}
 }
 
-void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
-{
-	uint32_t	dimensions[2];
-
-	dimensions[0] = app->main_window->width;
-	dimensions[1] = app->main_window->height;
-	l3d_line_draw(app->main_window->rbuffer, dimensions,
-		(int32_t[2][2]){{ints_on_screen[0], ints_on_screen[1]},
-			{ints_on_screen[2], ints_on_screen[3]}}, color);
-	l3d_line_draw(app->main_window->rbuffer, dimensions,
-		(int32_t[2][2]){{ints_on_screen[0], ints_on_screen[1]},
-			{ints_on_screen[4], ints_on_screen[5]}}, color);
-	l3d_line_draw(app->main_window->rbuffer, dimensions,
-		(int32_t[2][2]){{ints_on_screen[2], ints_on_screen[3]},
-			{ints_on_screen[4], ints_on_screen[5]}}, color);
-}
-
-t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
-							t_camera *camera)
+t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle)
 {
 	t_vec2				corners_on_screen[3];
-	uint32_t			*rbuffer;
-	int					ints_on_screen[6];
+	t_vec2				corners[3];
+	int					i;
 
-	rbuffer = app->main_window->rbuffer;
-	screen_intersection(app->active_scene->main_camera, triangle, corners_on_screen);
-	int j = -1;
-	while (++j < 3)
+	screen_intersection(app->active_scene->main_camera, triangle,
+		corners_on_screen);
+	i = -1;
+	while (++i < 3)
 	{
-		ints_on_screen[j * 2] =
-			(int)corners_on_screen[j][0] + app->main_window->width / 2;
-		ints_on_screen[j * 2 + 1] =
-			(int)corners_on_screen[j][1] + app->main_window->height / 2;
+		corners[i][0] = corners_on_screen[i][0] + app->main_window->width / 2;
+		corners[i][1] = corners_on_screen[i][1] + app->main_window->height / 2;
 	}
-	//!DRAW ORDER: AB, BC, CA
-	draw_triangle_edges(app, ints_on_screen, app->main_window->rbuf_render_color);
-	int k = 0;
-	while (k < app->main_window->width *  app->main_window->height)
-	{
-		app->main_window->framebuffer[k] = rbuffer[k];
-		k++;
-	}
-	(void)camera;
+	l3d_triangle_edges_draw(app->main_window->rbuffer,
+		(uint32_t[2]){app->main_window->width,
+		app->main_window->height},
+		corners, app->main_window->rbuf_render_color);
+	i = -1;
+	while (++i < app->main_window->width * app->main_window->height)
+		app->main_window->framebuffer[i] = app->main_window->rbuffer[i];
 	return (true);
 }

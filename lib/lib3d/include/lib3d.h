@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:12:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 16:48:38 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,5 +281,8 @@ void						l3d_pixel_plot(uint32_t *buffer,
 void						l3d_line_draw(uint32_t *buffer,
 								uint32_t dimensions_wh[2], int32_t edge[2][2],
 								uint32_t color);
+void						l3d_triangle_edges_draw(uint32_t *buffer,
+							uint32_t dimensions_wh[2],
+							t_vec2 corners[3], uint32_t color);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:11:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 16:47:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,8 +234,7 @@ void								camera_transform(t_camera *camera,
 
 void								draw_frame(t_wolf3d *app);
 t_bool								render_triangle(t_wolf3d *app,
-													t_triangle *triangle,
-													t_camera *camera);
+													t_triangle *triangle);
 int									screen_to_frame_coords(uint32_t width,
 															uint32_t height,
 															int x, int y);

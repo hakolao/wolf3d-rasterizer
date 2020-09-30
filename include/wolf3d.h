@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:47:42 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 16:55:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@
 */
 
 # define BYTES_PER_PIXEL 8
+
+# define NEAR_CLIP_DIST -10
 
 /*
 ** Forward declarations

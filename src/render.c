@@ -38,12 +38,30 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 	}
 }
 
+/*
+** Checks if any of triangle vertices are behind near clip distance so the
+** perspective projection does not get distorted and nothing "behind" camera
+** are drawn. Edit NEAR_CLIP_DIST if needed and you notice that current value
+** is not enough.
+*/
+
+t_bool		triangle_behind_camera(t_triangle *triangle)
+{
+	if (triangle->vtc[0]->pos[2] < NEAR_CLIP_DIST &&
+		triangle->vtc[1]->pos[2] < NEAR_CLIP_DIST &&
+		triangle->vtc[2]->pos[2] < NEAR_CLIP_DIST)
+		return (false);
+	return (true);
+}
+
 t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle)
 {
 	t_vec2				corners_on_screen[3];
 	t_vec2				corners[3];
 	int					i;
 
+	if (triangle_behind_camera(triangle))
+		return (false);
 	screen_intersection(app->active_scene->main_camera, triangle,
 		corners_on_screen);
 	i = -1;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 03:03:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 14:13:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ typedef struct				s_ray
 typedef struct				s_hit
 {
 	float			t;
+	float			u;
+	float			v;
 	t_vec3			normal;
 	t_vec3			hit_point;
 }							t_hit;

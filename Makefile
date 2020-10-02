@@ -79,8 +79,8 @@ fclean: clean
 re: fclean all
 
 testrun: #this is only for quicker lib3d debug
-	@make -C $(LIB3D) clean
-	make -C $(LIB3D)
+	#@make -C $(LIB3D) clean
+	#make -C $(LIB3D)
 	@/bin/rm -f $(OBJS)
 	@/bin/rm -rf $(DIR_OBJ)
 	make all

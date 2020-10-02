@@ -258,6 +258,8 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 
 	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
 		return (false);
+	if (ml_vector4_dot(triangle->normal, (t_vec3){0,0,-1}) > 0)
+		return (false);
 	screen_intersection(app->active_scene->main_camera, triangle,
 		corners_on_screen);
 	rasterize_triangle(app, triangle, ordered_corners, corners_on_screen,

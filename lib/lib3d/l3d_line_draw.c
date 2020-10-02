@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 16:10:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:48:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 17:41:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void			l3d_line_draw(uint32_t *buffer, uint32_t dimensions_wh[2],
 ** Draw order AB, BC, CA
 */
 
-void			l3d_triangle_edges_draw(uint32_t *buffer,
+void			l3d_triangle_2d_draw(uint32_t *buffer,
 				uint32_t dimensions_wh[2],
 				t_vec2 corners[3], uint32_t color)
 {

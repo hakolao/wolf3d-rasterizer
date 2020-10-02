@@ -240,7 +240,7 @@ void	draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
 ** is not enough.
 */
 
-static t_bool triangle_behind_camera(t_triangle *triangle, t_camera *camera)
+static t_bool 	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 {
 	if (triangle->vtc[0]->pos[2] < camera->near_clip &&
 		triangle->vtc[1]->pos[2] < camera->near_clip &&
@@ -249,16 +249,23 @@ static t_bool triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 	return (true);
 }
 
+static t_bool	is_triangle_facing(t_triangle *triangle, t_vec3 dir)
+{
+	return (ml_vector3_dot(triangle->normal, dir) <= 0);
+}
+
 t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 {
 	t_vec2				corners_on_screen[3];
 	t_vec2				ordered_corners[3];
 	t_vec2				corners[3];
+	t_vec3				dir;
 	int					i;
 
 	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
 		return (false);
-	if (ml_vector4_dot(triangle->normal, (t_vec3){0,0,-1}) > 0)
+	ml_vector3_sub(triangle->center, app->active_scene->main_camera->origin, dir);
+	if (!is_triangle_facing(triangle, dir))
 		return (false);
 	screen_intersection(app->active_scene->main_camera, triangle,
 		corners_on_screen);
@@ -276,7 +283,7 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 		(uint32_t[2]){app->main_window->width,
 		app->main_window->height},
 		corners, app->main_window->rbuf_render_color / 5);
-	draw_debug_crosshair_on_corners(app, ordered_corners);
+	// draw_debug_crosshair_on_corners(app, ordered_corners);
 	i = -1;
 	while (++i < app->main_window->width * app->main_window->height)
 		app->main_window->framebuffer[i] = app->main_window->rbuffer[i];

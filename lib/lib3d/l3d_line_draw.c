@@ -129,8 +129,8 @@ void			l3d_triangle_2d_draw(uint32_t *buffer,
 			{corners[1][0], corners[1][1]}}, color);
 	l3d_line_draw(buffer, dimensions_wh,
 		(int32_t[2][2]){{corners[1][0], corners[1][1]},
-			{corners[2][0], corners[2][1]}}, color);
+			{corners[2][0], corners[2][1]}}, color / 2);
 	l3d_line_draw(buffer, dimensions_wh,
 		(int32_t[2][2]){{corners[2][0], corners[2][1]},
-			{corners[0][0], corners[0][1]}}, color);
+			{corners[0][0], corners[0][1]}}, color / 3);
 }

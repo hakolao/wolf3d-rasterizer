@@ -57,15 +57,15 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 void	order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corners, t_vec2 *corners_on_screen) //?static??
 {
 	size_t indices[3];
-	ft_max_double_idx((double[3]){corners_on_screen[0][1],
+	ft_min_double_idx((double[3]){corners_on_screen[0][1],
 								  corners_on_screen[1][1],
 								  corners_on_screen[2][1]},
 					  3, &(indices[0]));
 	vtc[0] = triangle->vtc[indices[0]];
 	ml_vector2_copy(corners_on_screen[indices[0]], ordered_corners[0]);//!
-	ft_min_double_idx((double[3]){corners_on_screen[0][1],
+	ft_max_double_idx((double[3]){corners_on_screen[0][1],
 								  corners_on_screen[1][1],
-								  corners_on_screen[0][1]},
+								  corners_on_screen[2][1]},
 					  3, &(indices[2]));
 	vtc[2] = triangle->vtc[indices[2]];
 	ml_vector2_copy(corners_on_screen[indices[2]], ordered_corners[2]); //!
@@ -73,22 +73,10 @@ void	order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corne
 	indices[1] = 3 - (indices[0] + indices[2]);
 	vtc[1] = triangle->vtc[indices[1]];
 	ml_vector2_copy(corners_on_screen[indices[1]], ordered_corners[1]);//!
-	// ft_printf("indices: %d | %d | %d\n", indices[0], indices[1], indices[2]);
-	// 	ft_printf("==================================\n");
-	// ft_printf("first y: %f\n", ordered_corners[0][1]);
-	// // ml_vector3_print(vtc[0]->pos);
-	// ft_printf("second y: %f\n", ordered_corners[1][1]);
-	// // ml_vector3_print(vtc[1]->pos);
-	// ft_printf("third y: %f\n", ordered_corners[2][1]);
-	// // ml_vector3_print(vtc[2]->pos);
-	// ft_printf("first y: %f\n", corners_on_screen[0][1]);
-	// ft_printf("second y: %f\n", corners_on_screen[1][1]);
-	// ft_printf("third y: %f\n", corners_on_screen[2][1]);
-	// ft_printf("==================================\n");
 	(void)corners_on_screen;
 }
 
-void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_camera *camera)
+void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_camera *camera)
 {
 	float x;
 	float y;
@@ -98,23 +86,25 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 	// float y1 = vtc[0]->pos[1];
 	// float y2 = vtc[1]->pos[1];
 	// float y3 = vtc[2]->pos[1];
-	float x1 = corners_on_screen[0][0];
-	float x2 = corners_on_screen[1][0];
-	float x3 = corners_on_screen[2][0];
-	float y1 = corners_on_screen[0][1];
-	float y2 = corners_on_screen[1][1];
-	float y3 = corners_on_screen[2][1];
+	float x1 = ordered_corners[0][0];
+	float x2 = ordered_corners[1][0];
+	float x3 = ordered_corners[2][0];
+	float y1 = ordered_corners[0][1];
+	float y2 = ordered_corners[1][1];
+	float y3 = ordered_corners[2][1];
 	int width = app->main_window->width;
 	int height = app->main_window->height;
 
 	y = y1;
-	x = y2;
+	x = y1;
 	int i = 0;
+	float end_x;
 	while ((int)y != (int)y2) // from {0;1} to {0;2}
 	{
-		y += (y2 - y) / (fabs((float)((y2) - y)));
+		y += (y2 - y) / (fabs((y2)-y));
+		// ft_printf("increment upper: %f\n", y);
 		x = x1 + (x2 - x1) * ((y - y1) / (y2 - y1));
-		float end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
+		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
 			// app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
@@ -125,7 +115,7 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 			// x, y
 			// rbuffer[x,y] = color;
 
-			x += (x1 - x2) / (fabs(x1 - x2));
+			x += (end_x - x) / (fabs(end_x - x));
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
 				// printf("break1\n");
@@ -134,11 +124,11 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 		}
 	}
 	(void)camera;
-	(void)corners_on_screen;
+	(void)ordered_corners;
 	(void)vtc;
 }
 
-void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_camera *camera)
+void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_camera *camera)
 {
 	float	x;
 	float	y;
@@ -148,22 +138,23 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 	// float y1 = vtc[0]->pos[1];
 	// float y2 = vtc[1]->pos[1];
 	// float y3 = vtc[2]->pos[1];
-	float x1 = corners_on_screen[0][0];
-	float x2 = corners_on_screen[1][0];
-	float x3 = corners_on_screen[2][0];
-	float y1 = corners_on_screen[0][1];
-	float y2 = corners_on_screen[1][1];
-	float y3 = corners_on_screen[2][1];
+	float x1 = ordered_corners[0][0];
+	float x2 = ordered_corners[1][0];
+	float x3 = ordered_corners[2][0];
+	float y1 = ordered_corners[0][1];
+	float y2 = ordered_corners[1][1];
+	float y3 = ordered_corners[2][1];
 	int width = app->main_window->width;
 	int height = app->main_window->height;
 	y = y2;
 	x = x2;
 	int i = 0;
+	float end_x;
 	while ((int)y != (int)y3) // from {1;2} to {0;2}
 	{
-		y += (y3 - y2) / (fabs((float)((y3)-y2)));
+		y += (y3 - y2) / (fabs((y3)-y2));
 		x = x2 + (x3 - x2) * ((y - y2) / (y3 - y2));
-		float end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
+		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
 			// app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
@@ -171,7 +162,7 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 			l3d_pixel_plot(app->main_window->rbuffer,
 							(uint32_t[2]){width,height},
 							(int[2]){x + width / 2, y + height / 2}, app->main_window->rbuf_render_color);
-				x += (x3 - x2) / (fabs(x3 - x2));
+				x += (end_x - x) / (fabs(end_x - x));
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
 				// printf("break2\n");
@@ -180,7 +171,7 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 		}
 	}
 	(void)camera;
-	(void)corners_on_screen;
+	(void)ordered_corners;
 	(void)vtc;
 }
 
@@ -240,11 +231,40 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 	{
 		corners[i][0] = corners_on_screen[i][0] + app->main_window->width / 2;
 		corners[i][1] = corners_on_screen[i][1] + app->main_window->height / 2;
+		ordered_corners[i][0] += app->main_window->width / 2;
+		ordered_corners[i][1] += app->main_window->height / 2;
 	}
 	l3d_triangle_2d_draw(app->main_window->rbuffer,
 		(uint32_t[2]){app->main_window->width,
 		app->main_window->height},
-		corners, app->main_window->rbuf_render_color);
+		corners, app->main_window->rbuf_render_color / 5);
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[0][0], ordered_corners[0][1]},
+							  {ordered_corners[0][0], ordered_corners[0][1] + 20}},
+				  0x00ff00ff);
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[0][0], ordered_corners[0][1]},
+							  {ordered_corners[0][0] + 20, ordered_corners[0][1]}},
+				  0x00ff00ff);
+
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[1][0], ordered_corners[1][1]},
+							  {ordered_corners[1][0], ordered_corners[1][1] + 20}},
+				  0xff0000ff);
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[1][0], ordered_corners[1][1]},
+							  {ordered_corners[1][0] + 20, ordered_corners[1][1]}},
+				  0xff0000ff);
+
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[2][0], ordered_corners[2][1]},
+							  {ordered_corners[2][0], ordered_corners[2][1] + 20}},
+				  0xfff0f0ff);
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[2][0], ordered_corners[2][1]},
+							  {ordered_corners[2][0] + 20, ordered_corners[2][1]}},
+				  0xfff0f0ff);
+
 	i = -1;
 	while (++i < app->main_window->width * app->main_window->height)
 		app->main_window->framebuffer[i] = app->main_window->rbuffer[i];

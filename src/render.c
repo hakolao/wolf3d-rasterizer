@@ -76,7 +76,7 @@ void	order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corne
 	(void)corners_on_screen;
 }
 
-void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_camera *camera)
+void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_triangle *triangle)
 {
 	float x;
 	float y;
@@ -107,11 +107,15 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_came
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
-			// app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
-			// x + width / 2, y + height / 2)] = app->main_window->rbuf_render_color;
+			t_vec3 normal;
+			ml_vector3_normalize(triangle->normal, normal);
+			uint32_t color = 0x0;
+			color += (uint32_t)(255 * normal[0]) << 8;
+			color +=  (uint32_t)(255 * normal[1]) << 16;
+			color += (uint32_t)(255 * normal[2]) << 24;
 			l3d_pixel_plot(app->main_window->rbuffer,
 						   (uint32_t[2]){width, height},
-						   (int[2]){x + width / 2, y + height / 2}, app->main_window->rbuf_render_color);
+						   (int[2]){x + width / 2, y + height / 2}, color);
 			// x, y
 			// rbuffer[x,y] = color;
 
@@ -123,12 +127,11 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_came
 			}
 		}
 	}
-	(void)camera;
 	(void)ordered_corners;
 	(void)vtc;
 }
 
-void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_camera *camera)
+void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_triangle *triangle)
 {
 	float	x;
 	float	y;
@@ -157,11 +160,15 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_came
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
-			// app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
-			// x + width / 2, y + height / 2)] = app->main_window->rbuf_render_color;
+			t_vec3 normal;
+			ml_vector3_normalize(triangle->normal, normal);
+			uint32_t color = 0x0;
+			color += (uint32_t)(255 * normal[0]) << 8;
+			color += (uint32_t)(255 * normal[1]) << 16;
+			color += (uint32_t)(255 * normal[2]) << 24;
 			l3d_pixel_plot(app->main_window->rbuffer,
 							(uint32_t[2]){width,height},
-							(int[2]){x + width / 2, y + height / 2}, app->main_window->rbuf_render_color);
+							(int[2]){x + width / 2, y + height / 2}, color);
 				x += (end_x - x) / (fabs(end_x - x));
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
@@ -170,7 +177,6 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_came
 			}
 		}
 	}
-	(void)camera;
 	(void)ordered_corners;
 	(void)vtc;
 }
@@ -180,8 +186,8 @@ void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_cor
 {
 	t_vertex *vtc[3];
 	order_corners_y(triangle, vtc, ordered_corners, corners_on_screen); //?static??
-	raster_upper(app, vtc, ordered_corners, camera);
-	raster_lower(app, vtc, ordered_corners, camera);
+	raster_upper(app, vtc, ordered_corners, triangle);
+	raster_lower(app, vtc, ordered_corners, triangle);
 
 	/*
 	** sort vertices in height order in an array
@@ -195,6 +201,36 @@ void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_cor
 	(void)app;
 	// (void)x;
 	(void)triangle;
+}
+
+void	draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
+{
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[0][0], ordered_corners[0][1]},
+							  {ordered_corners[0][0], ordered_corners[0][1] + 20}},
+				  0x00ff00ff);
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[0][0], ordered_corners[0][1]},
+							  {ordered_corners[0][0] + 20, ordered_corners[0][1]}},
+				  0x00ff00ff);
+
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[1][0], ordered_corners[1][1]},
+							  {ordered_corners[1][0], ordered_corners[1][1] + 20}},
+				  0xff0000ff);
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[1][0], ordered_corners[1][1]},
+							  {ordered_corners[1][0] + 20, ordered_corners[1][1]}},
+				  0xff0000ff);
+
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[2][0], ordered_corners[2][1]},
+							  {ordered_corners[2][0], ordered_corners[2][1] + 20}},
+				  0xfff0f0ff);
+	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
+				  (int[2][2]){{ordered_corners[2][0], ordered_corners[2][1]},
+							  {ordered_corners[2][0] + 20, ordered_corners[2][1]}},
+				  0xfff0f0ff);
 }
 
 /*
@@ -238,33 +274,7 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 		(uint32_t[2]){app->main_window->width,
 		app->main_window->height},
 		corners, app->main_window->rbuf_render_color / 5);
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[0][0], ordered_corners[0][1]},
-							  {ordered_corners[0][0], ordered_corners[0][1] + 20}},
-				  0x00ff00ff);
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[0][0], ordered_corners[0][1]},
-							  {ordered_corners[0][0] + 20, ordered_corners[0][1]}},
-				  0x00ff00ff);
-
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[1][0], ordered_corners[1][1]},
-							  {ordered_corners[1][0], ordered_corners[1][1] + 20}},
-				  0xff0000ff);
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[1][0], ordered_corners[1][1]},
-							  {ordered_corners[1][0] + 20, ordered_corners[1][1]}},
-				  0xff0000ff);
-
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[2][0], ordered_corners[2][1]},
-							  {ordered_corners[2][0], ordered_corners[2][1] + 20}},
-				  0xfff0f0ff);
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[2][0], ordered_corners[2][1]},
-							  {ordered_corners[2][0] + 20, ordered_corners[2][1]}},
-				  0xfff0f0ff);
-
+	draw_debug_crosshair_on_corners(app, ordered_corners);
 	i = -1;
 	while (++i < app->main_window->width * app->main_window->height)
 		app->main_window->framebuffer[i] = app->main_window->rbuffer[i];

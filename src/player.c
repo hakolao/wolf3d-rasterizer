@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/02 13:30:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/02 13:42:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,6 @@ void			init_player(t_wolf3d *app)
 	app->player.rot_speed = 0.1f;
 }
 
-/*
-** !Note: Rotation axes have been switched to accommodate our chosen
-** axes for the world & camera.
-*/
 
 void			rotate_player(t_wolf3d *app, t_vec3 axes)
 {

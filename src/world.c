@@ -6,11 +6,29 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 15:28:44 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:20:53 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/02 13:42:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void			update_world_rotation_local(t_scene *scene, t_mat4 new_rotation)
+{
+	int				i;
+	t_mat4			inverse_translation;
+	t_mat4			new_world_rotation;
+
+	ml_matrix4_inverse(scene->world_translation, inverse_translation);
+	ml_matrix4_mul(scene->world_rotation, new_rotation, new_world_rotation);
+	ft_memcpy(scene->world_rotation, new_world_rotation, sizeof(t_mat4));
+	i = -1;
+	while (++i < (int)scene->num_objects)
+	{
+		l3d_3d_object_transform(scene->objects[i], inverse_translation);
+		l3d_3d_object_transform(scene->objects[i], new_rotation);
+		l3d_3d_object_transform(scene->objects[i], scene->world_translation);
+	}
+}
 
 void			update_world_rotation(t_scene *scene, t_mat4 new_rotation)
 {
@@ -52,4 +70,13 @@ void			update_world_translation(t_scene *scene, t_mat4	new_translation)
 	i = -1;
 	while (++i < (int)scene->num_objects)
 		l3d_3d_object_transform(scene->objects[i], new_translation);
+}
+
+void			rotate_world_local(t_wolf3d *app, t_vec3 axes)
+{
+	t_mat4	rotation;
+
+	ml_vector3_mul(axes, ml_rad(app->player.rot_speed * app->delta_time), axes);
+	ml_matrix4_rotation(-axes[0], -axes[1], -axes[2], rotation);
+	update_world_rotation_local(app->active_scene, rotation);
 }

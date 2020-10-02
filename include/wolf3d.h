@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:32:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/02 13:43:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@
 */
 
 # define BYTES_PER_PIXEL 8
+
+# define NEAR_CLIP_DIST -10
 
 /*
 ** Forward declarations
@@ -118,6 +120,7 @@ typedef struct						s_camera
 	float					screen_dist;
 	int						width;
 	int						height;
+	float					near_clip;
 }									t_camera;
 
 typedef struct						s_player
@@ -235,14 +238,11 @@ void								camera_transform(t_camera *camera,
 
 void								draw_frame(t_wolf3d *app);
 t_bool								render_triangle(t_wolf3d *app,
-													t_triangle *triangle,
-													t_camera *camera);
+													t_triangle *triangle);
 int									screen_to_frame_coords(uint32_t width,
 															uint32_t height,
 															int x, int y);
 void								render_ui(t_wolf3d *app);
-void								draw_line(int *begin, int *finish, uint32_t color, t_wolf3d *app);
-void								plot_pixel(t_wolf3d *app, uint32_t *buffer, int *point, uint32_t color);
 
 /*
 ** Utils
@@ -308,5 +308,7 @@ void								debug_scene(t_scene *scene);
 void								update_world_translation(t_scene *scene, t_mat4	new_translation);
 void								update_world_rotation(t_scene *scene, t_mat4 new_rotation);
 void								update_world_scale(t_scene *scene, t_mat4 new_scale);
+void								update_world_rotation_local(t_scene *scene, t_mat4 new_rotation);
+void								rotate_world_local(t_wolf3d *app, t_vec3 axes);
 
 #endif

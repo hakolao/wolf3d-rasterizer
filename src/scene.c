@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:33:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/09/30 17:06:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)
 	scene->world_scale[1][1] = app->main_window->width / 50.0;
 	scene->world_scale[2][2] = app->main_window->width / 50.0;
 	update_world_scale(scene, scene->world_scale);
-	ml_matrix4_translation(0, 0, app->main_window->width + 500, scene->world_translation);
+	ml_matrix4_translation(0, 0, -app->main_window->width - 500, scene->world_translation);
 	update_world_translation(scene, scene->world_translation);
 	if (scene->main_camera)
 		update_camera(app);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/28 16:57:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/02 13:42:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,6 @@ void			init_player(t_wolf3d *app)
 	app->player.rot_speed = 0.1f;
 }
 
-/*
-** !Note: Rotation axes have been switched to accommodate our chosen
-** axes for the world & camera.
-*/
 
 void			rotate_player(t_wolf3d *app, t_vec3 axes)
 {
@@ -44,23 +40,23 @@ void			move_player(t_wolf3d *app, t_move dir)
 
 	if (dir == move_forward)
 	{
-		ml_vector3_mul(app->player.forward, app->player.speed * app->delta_time, add);
+		ml_vector3_mul(app->player.forward, -app->player.speed * app->delta_time, add);
 		ml_vector3_add(app->player.pos, add, new_pos);
 	}
 	else if (dir == move_backward)
 	{
-		ml_vector3_mul(app->player.forward, -app->player.speed * app->delta_time, add);
+		ml_vector3_mul(app->player.forward, app->player.speed * app->delta_time, add);
 		ml_vector3_add(app->player.pos, add, new_pos);
 	}
 	else if (dir == move_strafe_left)
 	{
 		ml_vector3_mul(app->player.sideways, app->player.speed * app->delta_time, add);
-		ml_vector3_sub(app->player.pos, app->player.sideways, new_pos);
+		ml_vector3_sub(app->player.pos, add, new_pos);
 	}
 	else if (dir == move_strafe_right)
 	{
 		ml_vector3_mul(app->player.sideways, -app->player.speed * app->delta_time, add);
-		ml_vector3_sub(app->player.pos, app->player.sideways, new_pos);
+		ml_vector3_sub(app->player.pos, add, new_pos);
 	}
 	ml_vector3_copy(new_pos, app->player.pos);
 	ml_matrix4_translation(-add[0], -add[1], -add[2], translation);

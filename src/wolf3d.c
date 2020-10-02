@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/27 17:09:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/02 13:45:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,21 @@ void 		player_action_handle(t_wolf3d *app, SDL_Event event)
 		else if (event.key.keysym.sym == SDLK_d)
 			move_player(app, move_strafe_right);
 		else if (event.key.keysym.sym == SDLK_UP)
-			rotate_player(app, (t_vec3){-1, 0, 0});
-		else if (event.key.keysym.sym == SDLK_DOWN)
 			rotate_player(app, (t_vec3){1, 0, 0});
+		else if (event.key.keysym.sym == SDLK_DOWN)
+			rotate_player(app, (t_vec3){-1, 0, 0});
 		else if (event.key.keysym.sym == SDLK_RIGHT)
-			rotate_player(app, (t_vec3){0, -1, 0});
-		else if (event.key.keysym.sym == SDLK_LEFT)
 			rotate_player(app, (t_vec3){0, 1, 0});
+		else if (event.key.keysym.sym == SDLK_LEFT)
+			rotate_player(app, (t_vec3){0, -1, 0});
+		else if (event.key.keysym.sym == SDLK_q)
+			rotate_world_local(app, (t_vec3){0, -1, 0});
+		else if (event.key.keysym.sym == SDLK_e)
+			rotate_world_local(app, (t_vec3){0, 1, 0});
+		else if (event.key.keysym.sym == SDLK_z)
+			rotate_world_local(app, (t_vec3){-1, 0, 0});
+		else if (event.key.keysym.sym == SDLK_c)
+			rotate_world_local(app, (t_vec3){1, 0, 0});
 	}
 }
 

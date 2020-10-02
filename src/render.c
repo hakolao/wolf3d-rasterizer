@@ -48,25 +48,11 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 		rays[i].dir[0] *= scaler;
 		rays[i].dir[1] *= scaler;
 		ml_vector2_copy((t_vec2){rays[i].dir[0], rays[i].dir[1]},
-						corners_on_screen[i]);
+			corners_on_screen[i]);
 	}
 }
 
-void		draw_triangle_edges(t_wolf3d *app, int *ints_on_screen, uint32_t color)
-{
-	draw_line(	(int[2]){ints_on_screen[0],
-						ints_on_screen[1]},
-				(int[2]){ints_on_screen[2],
-						ints_on_screen[3]}, color / 2, app);
-	draw_line(	(int[2]){ints_on_screen[0],
-						ints_on_screen[1]},
-				(int[2]){ints_on_screen[4],
-						ints_on_screen[5]}, color / 3, app);
-	draw_line(	(int[2]){ints_on_screen[2],
-						ints_on_screen[3]},
-				(int[2]){ints_on_screen[4],
-						ints_on_screen[5]}, color, app);
-}
+
 
 void	order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corners, t_vec2 *corners_on_screen) //?static??
 {
@@ -215,33 +201,47 @@ void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_cor
 	(void)triangle;
 }
 
-t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle,
-							t_camera *camera)
+/*
+** Checks if any of triangle vertices are behind near clip distance so the
+** perspective projection does not get distorted and nothing "behind" camera
+** are drawn. Edit NEAR_CLIP_DIST if needed and you notice that current value
+** is not enough.
+*/
+
+static t_bool triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 {
-	
+	if (triangle->vtc[0]->pos[2] < camera->near_clip &&
+		triangle->vtc[1]->pos[2] < camera->near_clip &&
+		triangle->vtc[2]->pos[2] < camera->near_clip)
+		return (false);
+	return (true);
+}
+
+t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
+{
 	t_vec2				corners_on_screen[3];
 	t_vec2				ordered_corners[3];
-	uint32_t			*rbuffer;
-	int					ints_on_screen[6];
-	rbuffer = app->main_window->rbuffer;
-	screen_intersection(app->active_scene->main_camera, triangle, corners_on_screen);
-	rasterize_triangle(app, triangle, ordered_corners, corners_on_screen, camera);
-	int j = -1;
-	while (++j < 3)
+	t_vec2				corners[3];
+	int					i;
+
+	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
+		return (false);
+	screen_intersection(app->active_scene->main_camera, triangle,
+		corners_on_screen);
+	rasterize_triangle(app, triangle, ordered_corners, corners_on_screen,
+						app->active_scene->main_camera);
+	i = -1;
+	while (++i < 3)
 	{
-		ints_on_screen[j * 2] =
-			(int)corners_on_screen[j][0] + app->main_window->width / 2;
-		ints_on_screen[j * 2 + 1] =
-			(int)corners_on_screen[j][1] + app->main_window->height / 2;
+		corners[i][0] = corners_on_screen[i][0] + app->main_window->width / 2;
+		corners[i][1] = corners_on_screen[i][1] + app->main_window->height / 2;
 	}
-	//!DRAW ORDER: AB, BC, CA
-	draw_triangle_edges(app, ints_on_screen, app->main_window->rbuf_render_color);
-	int k = 0;
-	while (k < app->main_window->width *  app->main_window->height)
-	{
-		app->main_window->framebuffer[k] = rbuffer[k];
-		k++;
-	}
-	(void)camera;
+	l3d_triangle_2d_draw(app->main_window->rbuffer,
+		(uint32_t[2]){app->main_window->width,
+		app->main_window->height},
+		corners, app->main_window->rbuf_render_color);
+	i = -1;
+	while (++i < app->main_window->width * app->main_window->height)
+		app->main_window->framebuffer[i] = app->main_window->rbuffer[i];
 	return (true);
 }

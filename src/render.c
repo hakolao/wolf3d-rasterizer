@@ -117,8 +117,11 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 		float end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
-			app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
-			x + width / 2, y + height / 2)] = app->main_window->rbuf_render_color;
+			// app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
+			// x + width / 2, y + height / 2)] = app->main_window->rbuf_render_color;
+			l3d_pixel_plot(app->main_window->rbuffer,
+						   (uint32_t[2]){width, height},
+						   (int[2]){x + width / 2, y + height / 2}, app->main_window->rbuf_render_color);
 			// x, y
 			// rbuffer[x,y] = color;
 
@@ -163,10 +166,12 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *corners_on_screen, t_ca
 		float end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
-			app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
-			x + width / 2, y + height / 2)] = app->main_window->rbuf_render_color;
-
-			x += (x3 - x2) / (fabs(x3 - x2));
+			// app->main_window->rbuffer[screen_to_frame_coords(app->main_window->width, app->main_window->height,
+			// x + width / 2, y + height / 2)] = app->main_window->rbuf_render_color;
+			l3d_pixel_plot(app->main_window->rbuffer,
+							(uint32_t[2]){width,height},
+							(int[2]){x + width / 2, y + height / 2}, app->main_window->rbuf_render_color);
+				x += (x3 - x2) / (fabs(x3 - x2));
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
 				// printf("break2\n");

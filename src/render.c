@@ -110,9 +110,9 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 			t_vec3 normal;
 			ml_vector3_normalize(triangle->normal, normal);
 			uint32_t color = 0x0;
-			color += (uint32_t)(255 * normal[0]) << 8;
-			color +=  (uint32_t)(255 * normal[1]) << 16;
-			color += (uint32_t)(255 * normal[2]) << 24;
+			color += (uint32_t)(255 * fabs(normal[0])) << 8;
+			color +=  (uint32_t)(255 * fabs(normal[1])) << 16;
+			color += (uint32_t)(255 * fabs(normal[2])) << 24;
 			l3d_pixel_plot(app->main_window->rbuffer,
 						   (uint32_t[2]){width, height},
 						   (int[2]){x + width / 2, y + height / 2}, color);
@@ -163,9 +163,9 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_tria
 			t_vec3 normal;
 			ml_vector3_normalize(triangle->normal, normal);
 			uint32_t color = 0x0;
-			color += (uint32_t)(255 * normal[0]) << 8;
-			color += (uint32_t)(255 * normal[1]) << 16;
-			color += (uint32_t)(255 * normal[2]) << 24;
+			color += (uint32_t)(255 * fabs(normal[0])) << 8;
+			color += (uint32_t)(255 * fabs(normal[1])) << 16;
+			color += (uint32_t)(255 * fabs(normal[2])) << 24;
 			l3d_pixel_plot(app->main_window->rbuffer,
 							(uint32_t[2]){width,height},
 							(int[2]){x + width / 2, y + height / 2}, color);

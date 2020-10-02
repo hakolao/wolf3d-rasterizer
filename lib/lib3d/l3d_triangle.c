@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 14:55:40 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 00:40:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/02 20:11:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,7 @@ void				l3d_triangle_vec_midpoint(t_tri_vec *triangles, t_vec3 res)
 
 void				l3d_triangle_normal_update(t_triangle *triangle)
 {
-	t_vec3	ab;
-	t_vec3	ac;
-
-	ml_vector3_sub(triangle->vtc[1]->pos, triangle->vtc[0]->pos, ab);
-	ml_vector3_sub(triangle->vtc[2]->pos, triangle->vtc[0]->pos, ac);
-	ml_vector3_cross(ab, ac, triangle->normal);
+	ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
 }
 
 /*

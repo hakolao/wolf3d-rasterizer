@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 14:18:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/02 20:17:17 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,34 +44,29 @@ t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hit *hit)
 ** A tradeoff with readability & 42 norms. I refuse to set temp structs for just
 ** this function, because it'll only bloat the header files. In this case
 ** bundled arrays are better to beautify the api of triangle_ray_hit function.
-** Hit results are saved into hit record.
 */
 
-static t_bool	l3d_determine_triangle_hit(t_vec3 edges_hsq[5],
+static t_bool	l3d_determine_triangle_hit(t_vec3 hsq[3],
 				t_triangle *triangle, t_ray *ray, t_hit *hit)
 {
 	float	afuvt[5];
 
-	afuvt[0] = ml_vector3_dot(edges_hsq[0], edges_hsq[2]);
+	afuvt[0] = ml_vector3_dot(triangle->ab, hsq[0]);
 	if (afuvt[0] > -L3D_EPSILON && afuvt[0] < L3D_EPSILON)
 		return (false);
 	afuvt[1] = 1.0 / afuvt[0];
-	ml_vector3_sub(ray->origin, triangle->vtc[0]->pos, edges_hsq[3]);
-	afuvt[2] = afuvt[1] * ml_vector3_dot(edges_hsq[3], edges_hsq[2]);
+	ml_vector3_sub(ray->origin, triangle->vtc[0]->pos, hsq[1]);
+	afuvt[2] = afuvt[1] * ml_vector3_dot(hsq[1], hsq[0]);
 	if (afuvt[2] < 0.0 || afuvt[2] > 1.0)
 		return (false);
-	ml_vector3_cross(edges_hsq[3], edges_hsq[0], edges_hsq[4]);
-	afuvt[3] = afuvt[1] * ml_vector3_dot(ray->dir, edges_hsq[4]);
+	ml_vector3_cross(hsq[1], triangle->ab, hsq[2]);
+	afuvt[3] = afuvt[1] * ml_vector3_dot(ray->dir, hsq[2]);
 	if (afuvt[3] < 0.0 || afuvt[2] + afuvt[3] > 1.0)
 		return (false);
-	afuvt[4] = afuvt[1] * ml_vector3_dot(edges_hsq[1], edges_hsq[4]);
+	afuvt[4] = afuvt[1] * ml_vector3_dot(triangle->ac, hsq[2]);
 	if (afuvt[4] > L3D_EPSILON)
 	{
-		hit->u = afuvt[2];
-		hit->v = afuvt[3];
 		hit->t = afuvt[4];
-		ml_vector3_mul(ray->dir, hit->t, hit->hit_point);
-		ml_vector3_add(ray->origin, hit->hit_point, hit->hit_point);
 		return (true);
 	}
 	return (false);
@@ -87,15 +82,13 @@ static t_bool	l3d_determine_triangle_hit(t_vec3 edges_hsq[5],
 t_bool			l3d_triangle_ray_hit(t_triangle *triangle, t_ray *ray,
 				t_hit *hit)
 {
-	t_vec3	edges_hsq[5];
+	t_vec3	hsq[3];
 
-	ml_vector3_sub(triangle->vtc[1]->pos, triangle->vtc[0]->pos, edges_hsq[0]);
-	ml_vector3_sub(triangle->vtc[2]->pos, triangle->vtc[0]->pos, edges_hsq[1]);
-	ml_vector3_cross(ray->dir, edges_hsq[1], edges_hsq[2]);
 	if (ml_vector3_dot(ray->dir, triangle->normal) > 0 &&
 		triangle->is_single_sided)
 		return (false);
-	return (l3d_determine_triangle_hit(edges_hsq, triangle, ray, hit));
+	ml_vector3_cross(ray->dir, triangle->ac, hsq[0]);
+	return (l3d_determine_triangle_hit(hsq, triangle, ray, hit));
 }
 
 /*

@@ -99,14 +99,20 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 	x = y1;
 	int i = 0;
 	float end_x;
+	float deltax;
 	float slope = (x2 - x1) / (y2 - y1);
 	float deltay = (y2 - y1) / (fabs((y2)-y1));
 	while (floor(y) != floor(y2)) // from {0;1} to {0;2}
 	{
 		x = x2 + slope * (y - y2);
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
+		if (x > end_x)
+			deltax = -1.0;
+		else
+			deltax = 1.0;
+		ft_printf("deltax higher: %f\n", deltax);
 		y += deltay;
-		while (floor(x) != floor(end_x))
+		while (floor(x) != floor(end_x + deltax))
 		{
 			
 			t_vec3 normal;
@@ -118,9 +124,8 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 			
 			l3d_pixel_plot(app->main_window->rbuffer,
 						   (uint32_t[2]){width, height},
-						   (int[2]){x + width / 2, y + height / 2}, color);
-			
-			x += (end_x - x) / (fabs(end_x - x));
+						   (int[2]){floor(x) + width / 2, floor(y) + height / 2}, color);
+			x += deltax;
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
 				// printf("break1\n");
@@ -154,14 +159,19 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_tria
 	x = x2;
 	int i = 0;
 	float end_x;
+	float deltax;
 	float slope = (x3 - x2) / (y3 - y2);
 	float deltay = (y3 - y2) / (fabs((y3)-y2));
 	while (floor(y) != floor(y3)) // from {1;2} to {0;2}
 	{
 		x = x2 + slope * (y - y2);
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
+		if (x > end_x)
+			deltax = -1.0;
+		else
+			deltax = 1.0;
 		y += deltay;
-		while (floor(x) != floor(end_x))
+		while (floor(x) != floor(end_x + deltax))
 		{
 			
 			t_vec3 normal;
@@ -173,9 +183,10 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_tria
 			
 			l3d_pixel_plot(app->main_window->rbuffer,
 							(uint32_t[2]){width,height},
-							(int[2]){x + width / 2, y + height / 2}, color);
+							(int[2]){floor(x) + width / 2, floor(y) + height / 2}, color);
 			
-			x += (end_x - x) / (fabs(end_x - x));
+			// x += (end_x - x) / (fabs(end_x - x));
+			x += deltax;
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
 				// printf("break2\n");

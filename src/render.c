@@ -99,10 +99,12 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 	x = y1;
 	int i = 0;
 	float end_x;
+	float slope = (x2 - x1) / (y2 - y1);
+	float deltay = (y2 - y1) / (fabs((y2)-y1));
 	while ((int)y != (int)y2) // from {0;1} to {0;2}
 	{
-		x = x1 + (x2 - x1) * ((y - y1) / (y2 - y1));
-		y += (y2 - y) / (fabs((y2)-y));
+		x = x2 + slope * (y - y2);
+		y += deltay;
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
@@ -149,10 +151,12 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_tria
 	x = x2;
 	int i = 0;
 	float end_x;
+	float slope = (x3 - x2) / (y3 - y2);
+	float deltay = (y3 - y2) / (fabs((y3)-y2));
 	while ((int)y != (int)y3) // from {1;2} to {0;2}
 	{
-		x = x2 + (x3 - x2) * ((y - y2) / (y3 - y2));
-		y += (y3 - y2) / (fabs((y3)-y2));
+		x = x2 + slope * (y - y2);
+		y += deltay;
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
@@ -275,10 +279,10 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 		ordered_corners[i][0] += app->main_window->width / 2;
 		ordered_corners[i][1] += app->main_window->height / 2;
 	}
-	l3d_triangle_2d_draw(app->main_window->rbuffer,
-		(uint32_t[2]){app->main_window->width,
-		app->main_window->height},
-		corners, app->main_window->rbuf_render_color / 5);
+	// l3d_triangle_2d_draw(app->main_window->rbuffer,
+	// 	(uint32_t[2]){app->main_window->width,
+	// 	app->main_window->height},
+	// 	corners, app->main_window->rbuf_render_color / 5);
 	// draw_debug_crosshair_on_corners(app, ordered_corners);
 	i = -1;
 	while (++i < app->main_window->width * app->main_window->height)

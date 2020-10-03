@@ -91,6 +91,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 		app->delta_time = (app->performance_end - app->performance_start) *
 			1000.0 / SDL_GetPerformanceFrequency();
 		app->debug_info.fps = capture_framerate(app->delta_time);
+		app->debug_info.avg_delta_time = app->delta_time;
 	}
 }
 

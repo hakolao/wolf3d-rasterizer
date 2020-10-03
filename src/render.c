@@ -101,22 +101,25 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 	float end_x;
 	float slope = (x2 - x1) / (y2 - y1);
 	float deltay = (y2 - y1) / (fabs((y2)-y1));
-	while ((int)y != (int)y2) // from {0;1} to {0;2}
+	while (floor(y) != floor(y2)) // from {0;1} to {0;2}
 	{
 		x = x2 + slope * (y - y2);
-		y += deltay;
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
-		while ((int)x != (int)end_x)
+		y += deltay;
+		while (floor(x) != floor(end_x))
 		{
+			
 			t_vec3 normal;
 			ml_vector3_normalize(triangle->normal, normal);
 			uint32_t color = 0x0;
 			color += (uint32_t)(255 * fabs(normal[0])) << 8;
 			color +=  (uint32_t)(255 * fabs(normal[1])) << 16;
 			color += (uint32_t)(255 * fabs(normal[2])) << 24;
+			
 			l3d_pixel_plot(app->main_window->rbuffer,
 						   (uint32_t[2]){width, height},
 						   (int[2]){x + width / 2, y + height / 2}, color);
+			
 			x += (end_x - x) / (fabs(end_x - x));
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
@@ -153,23 +156,26 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_tria
 	float end_x;
 	float slope = (x3 - x2) / (y3 - y2);
 	float deltay = (y3 - y2) / (fabs((y3)-y2));
-	while ((int)y != (int)y3) // from {1;2} to {0;2}
+	while (floor(y) != floor(y3)) // from {1;2} to {0;2}
 	{
 		x = x2 + slope * (y - y2);
-		y += deltay;
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
-		while ((int)x != (int)end_x)
+		y += deltay;
+		while (floor(x) != floor(end_x))
 		{
+			
 			t_vec3 normal;
 			ml_vector3_normalize(triangle->normal, normal);
 			uint32_t color = 0x0;
 			color += (uint32_t)(255 * fabs(normal[0])) << 8;
 			color += (uint32_t)(255 * fabs(normal[1])) << 16;
 			color += (uint32_t)(255 * fabs(normal[2])) << 24;
+			
 			l3d_pixel_plot(app->main_window->rbuffer,
 							(uint32_t[2]){width,height},
 							(int[2]){x + width / 2, y + height / 2}, color);
-				x += (end_x - x) / (fabs(end_x - x));
+			
+			x += (end_x - x) / (fabs(end_x - x));
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
 				// printf("break2\n");

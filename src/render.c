@@ -101,9 +101,8 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 	float end_x;
 	while ((int)y != (int)y2) // from {0;1} to {0;2}
 	{
-		y += (y2 - y) / (fabs((y2)-y));
-		// ft_printf("increment upper: %f\n", y);
 		x = x1 + (x2 - x1) * ((y - y1) / (y2 - y1));
+		y += (y2 - y) / (fabs((y2)-y));
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{
@@ -116,9 +115,6 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 			l3d_pixel_plot(app->main_window->rbuffer,
 						   (uint32_t[2]){width, height},
 						   (int[2]){x + width / 2, y + height / 2}, color);
-			// x, y
-			// rbuffer[x,y] = color;
-
 			x += (end_x - x) / (fabs(end_x - x));
 			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 			{
@@ -155,8 +151,8 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_tria
 	float end_x;
 	while ((int)y != (int)y3) // from {1;2} to {0;2}
 	{
-		y += (y3 - y2) / (fabs((y3)-y2));
 		x = x2 + (x3 - x2) * ((y - y2) / (y3 - y2));
+		y += (y3 - y2) / (fabs((y3)-y2));
 		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
 		while ((int)x != (int)end_x)
 		{

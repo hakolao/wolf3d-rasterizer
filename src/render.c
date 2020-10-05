@@ -116,77 +116,75 @@ void scan_line(t_wolf3d *app, float *limits, t_vertex **vtc, t_triangle *triangl
 	(void)vtc;
 }
 
-void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_triangle *triangle)
+typedef struct	s_raster_data
 {
-	float x1 = floor(ordered_corners[0][0]);
-	float x2 = floor(ordered_corners[1][0]);
-	float x3 = floor(ordered_corners[2][0]);
-	float y1 = floor(ordered_corners[0][1]);
-	float y2 = floor(ordered_corners[1][1]);
-	float y3 = floor(ordered_corners[2][1]);
-	float x;
-	float y;
-	int end_x;
-	float slope12;
-	float slope13;
-	y = y1;
-	x = y1;
-	slope12 = (x2 - x1) / (y2 - y1);
-	slope13 = (x3 - x1) / (y3 - y1);
-	while (y < y2)
-	{
-		x = x2 + slope12 * (y - y2);
-		end_x = x1 + slope13 * (y - y1);
-		// deltax = x > end_x ? -1 : 1;
-		if (x < end_x)
-			scan_line(app, (float[3]){x, end_x + 1, y}, vtc, triangle);
-		else
-			scan_line(app, (float[3]){end_x, x + 1, y}, vtc, triangle);
-		y++;
-	}
-	(void)vtc;
-}
+	float	x1;
+	float	x2;
+	float	x3;
+	float	y1;
+	float	y2;
+	float	y3;
+	float	slope_ab;
+	float	slope_bc;
+	float	slope_ac;
+}				t_raster_data;
 
-void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_triangle *triangle)
+void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_data *data)
 {
-	float x1 = floor(ordered_corners[0][0]);
-	float x2 = floor(ordered_corners[1][0]);
-	float x3 = floor(ordered_corners[2][0]);
-	float y1 = floor(ordered_corners[0][1]);
-	float y2 = floor(ordered_corners[1][1]);
-	float y3 = floor(ordered_corners[2][1]);
 	float x;
 	float y;
 	float end_x;
-	float slope23;
-	float slope13;
-	y = y2;
-	x = x2;
-	slope23 = (x3 - x2) / (y3 - y2);
-	slope13 = (x3 - x1) / (y3 - y1);
-	while (y < y3)
+
+	y = data->y1;
+	while (y < data->y2)
 	{
-		x = x2 + slope23 * (y - y2);
-		end_x = x1 + slope13 * (y - y1);
-		// deltax = x > end_x ? -1 : 1;
+		x = data->x2 + data->slope_ab * (y - data->y2);
+		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
 			scan_line(app, (float[3]){x, end_x + 1, y}, vtc, triangle);
 		else
 			scan_line(app, (float[3]){end_x, x + 1, y}, vtc, triangle);
 		y++;
 	}
-	(void)vtc;
 }
 
+void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_data *data)
+{
+	float x;
+	float y;
+	float end_x;
+
+	y = data->y2;
+	while (y < data->y3)
+	{
+		x = data->x2 + data->slope_bc * (y - data->y2);
+		end_x = data->x1 + data->slope_ac * (y - data->y1);
+		if (x < end_x)
+			scan_line(app, (float[3]){x, end_x + 1, y}, vtc, triangle);
+		else
+			scan_line(app, (float[3]){end_x, x + 1, y}, vtc, triangle);
+		y++;
+	}
+}
 
 void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_corners,
 							t_vec2 *corners_on_screen, t_camera *camera)
 {
 	t_vertex *vtc[3];
-	order_corners_y(triangle, vtc, ordered_corners, corners_on_screen);
-	raster_upper(app, vtc, ordered_corners, triangle);
-	raster_lower(app, vtc, ordered_corners, triangle);
+	t_raster_data data;
 
+	order_corners_y(triangle, vtc, ordered_corners, corners_on_screen);
+	data.x1 = floor(ordered_corners[0][0]);
+	data.x2 = floor(ordered_corners[1][0]);
+	data.x3 = floor(ordered_corners[2][0]);
+	data.y1 = floor(ordered_corners[0][1]);
+	data.y2 = floor(ordered_corners[1][1]);
+	data.y3 = floor(ordered_corners[2][1]);
+	data.slope_bc = (data.x3 - data.x2) / (data.y3 - data.y2);
+	data.slope_ac = (data.x3 - data.x1) / (data.y3 - data.y1);
+	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);
+	raster_upper(app, vtc, triangle, &data);
+	raster_lower(app, vtc, triangle, &data);
 
 	/*
 	** sort vertices in height order in an array
@@ -197,9 +195,6 @@ void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_cor
 	** a += (b-a)/(abs()b-a) until a == b
 	*/
 	(void)camera;
-	(void)app;
-	// (void)x;
-	(void)triangle;
 }
 
 void	draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)

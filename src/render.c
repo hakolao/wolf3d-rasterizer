@@ -18,7 +18,8 @@
 //fragment shader use
 
 #include "wolf3d.h"
-#define BREAKLIMIT 100000
+#define BREAKLIMIT 100000//!debug only
+
 /*
 **	Converts pixel position from screen coordinates to frame buffer index
 **	Left top corner is considered (0,0) and bottom right (width, height)
@@ -52,9 +53,7 @@ void		screen_intersection(t_camera *camera, t_triangle *triangle,
 	}
 }
 
-
-
-void	order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corners, t_vec2 *corners_on_screen) //?static??
+void		order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corners, t_vec2 *corners_on_screen)
 {
 	size_t indices[3];
 	ft_min_double_idx((double[3]){corners_on_screen[0][1],
@@ -89,7 +88,7 @@ uint32_t	get_color_normal(t_triangle *triangle)
 	return (color);
 }
 
-void scan_line(t_wolf3d *app, float *limits, t_vertex **vtc, t_triangle *triangle)
+void		scan_line(t_wolf3d *app, float *limits, t_vertex **vtc, t_triangle *triangle)
 {
 	int i = 0;
 	int width = app->main_window->width;
@@ -129,7 +128,7 @@ typedef struct	s_raster_data
 	float	slope_ac;
 }				t_raster_data;
 
-void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_data *data)
+void		raster_upper(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_data *data)
 {
 	float x;
 	float y;
@@ -148,7 +147,7 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_
 	}
 }
 
-void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_data *data)
+void		raster_lower(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_data *data)
 {
 	float x;
 	float y;
@@ -167,7 +166,7 @@ void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_
 	}
 }
 
-void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_corners,
+void		rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_corners,
 							t_vec2 *corners_on_screen, t_camera *camera)
 {
 	t_vertex *vtc[3];
@@ -197,7 +196,7 @@ void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_cor
 	(void)camera;
 }
 
-void	draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
+void		draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
 {
 	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
 				  (int[2][2]){{ordered_corners[0][0], ordered_corners[0][1]},
@@ -234,7 +233,7 @@ void	draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
 ** is not enough.
 */
 
-static			t_bool 	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
+static		t_bool 	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 {
 	if (triangle->vtc[0]->pos[2] < camera->near_clip &&
 		triangle->vtc[1]->pos[2] < camera->near_clip &&
@@ -243,12 +242,12 @@ static			t_bool 	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 	return (true);
 }
 
-static			t_bool	is_triangle_facing(t_triangle *triangle, t_vec3 dir)
+static		t_bool	is_triangle_facing(t_triangle *triangle, t_vec3 dir)
 {
 	return (ml_vector3_dot(triangle->normal, dir) <= 0);
 }
 
-t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
+t_bool		is_rendered(t_wolf3d *app, t_triangle *triangle)
 {
 	t_vec3 dir;
 	
@@ -260,7 +259,8 @@ t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 	return (true);
 }
 
-t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
+t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle)//?App specific implementation
+// t_bool			render_triangle(dimensionswh, triangle, buffer, 2d_points)
 {
 	t_vec2		corners_on_screen[3];
 	t_vec2		ordered_corners[3];
@@ -271,7 +271,7 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 	screen_intersection(app->active_scene->main_camera, triangle,
 		corners_on_screen);
 	rasterize_triangle(app, triangle, ordered_corners, corners_on_screen,
-						app->active_scene->main_camera);
+						app->active_scene->main_camera);//?expose this
 	// draw_debug_crosshair_on_corners(app, ordered_corners);
 	i = -1;
 	while (++i < app->main_window->width * app->main_window->height)

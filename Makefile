@@ -37,7 +37,6 @@ SOURCES = main.c \
 			ui.c \
 			color_utils.c \
 			text.c \
-			surface.c \
 			debug.c \
 			world.c
 

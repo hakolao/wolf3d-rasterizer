@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/02 20:21:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 15:09:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,21 @@ typedef struct				s_kd_tree
 	t_kd_node		*root;
 }							t_kd_tree;
 
+typedef struct				s_image
+{
+	char			*pixels;
+	uint32_t		width;
+	uint32_t		height;
+	uint32_t		bytes_per_pixel;
+}							t_image;
+
+typedef struct				s_surface
+{
+	uint32_t		*pixels;
+	uint32_t		w;
+	uint32_t		h;
+}							t_surface;
+
 /*
 ** Kd tree
 */
@@ -286,5 +301,29 @@ void						l3d_line_draw(uint32_t *buffer,
 void						l3d_triangle_2d_draw(uint32_t *buffer,
 							uint32_t dimensions_wh[2],
 							t_vec2 corners[3], uint32_t color);
+
+/*
+** Bmp reading
+*/
+
+void						l3d_read_bmp_image_32bit_rgba(const char *filename,
+								uint32_t *pixels_out, uint32_t *width,
+								uint32_t *height);
+
+/*
+** Buffer image copying / placing
+*/
+void						l3d_framebuffer_image_place(t_surface *frame,
+								t_surface *image, int32_t pos_xy[2],
+								float blend_ratio);
+
+/*
+** Color utils
+*/
+
+uint32_t					l3d_rgba_to_u32(uint32_t rgba[4]);
+uint32_t					l3d_color_blend_u32(uint32_t color1,
+								uint32_t color2, float ratio);
+void						l3d_u32_to_rgba(uint32_t color, uint32_t rgba[4]);
 
 #endif

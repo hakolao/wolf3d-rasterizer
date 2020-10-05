@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 14:43:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 14:44:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,26 @@ static void	clear_frame(t_wolf3d *app)
 	}
 }
 
-static void	render_active_scene(t_wolf3d *app)
-{
-	int		i;
-	int		j;
+// static void	render_active_scene(t_wolf3d *app)
+// {
+// 	int		i;
+// 	int		j;
 
-	i = -1;
-	while (++i < (int)app->active_scene->num_objects)
-	{
-		j = -1;
-		while (++j < app->active_scene->objects[i]->num_triangles)
-			render_triangle(app, &app->active_scene->objects[i]->triangles[j]);
-	}
-}
+// 	i = -1;
+// 	while (++i < (int)app->active_scene->num_objects)
+// 	{
+// 		j = -1;
+// 		while (++j < app->active_scene->objects[i]->num_triangles)
+// 			render_triangle(app, &app->active_scene->objects[i]->triangles[j]);
+// 	}
+// }
 
 void		update_frame_buffer(t_wolf3d *app)
 {
 	clear_frame(app);
-	if (app->active_scene->main_camera != NULL)
-		render_active_scene(app);
+	
+	// if (app->active_scene->main_camera != NULL)
+	// 	render_active_scene(app);
 	render_ui(app);
 }
 

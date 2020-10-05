@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/03 14:04:30 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/24 17:32:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 15:07:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,12 @@ void				render_text(t_wolf3d *app, t_text_params params)
 	SDL_Surface	*surface;
 
 	surface = text_surface(app, params);
-	surface_to_framebuffer(app, surface, params.blend_ratio, params.xy);
+	l3d_framebuffer_image_place(&(t_surface){.h = app->main_window->height,
+		.w = app->main_window->width,
+		.pixels = app->main_window->framebuffer},
+		&(t_surface){.h = surface->h,
+		.w = surface->w,
+		.pixels = surface->pixels}, params.xy, params.blend_ratio);
 	SDL_FreeSurface(surface);
 }
 
@@ -55,7 +60,13 @@ void				render_centered_text(t_wolf3d *app, t_text_params params)
 	SDL_Surface	*surface;
 
 	surface = text_surface(app, params);
-	surface_to_framebuffer(app, surface, 1.0,
-		(int[2]){params.xy[0] - surface->w / 2, params.xy[1] - surface->h / 2});
+	l3d_framebuffer_image_place(&(t_surface){.h = app->main_window->height,
+		.w = app->main_window->width,
+		.pixels = app->main_window->framebuffer},
+		&(t_surface){.h = surface->h,
+		.w = surface->w,
+		.pixels = surface->pixels},
+		(int[2]){params.xy[0] - surface->w / 2, params.xy[1] - surface->h / 2},
+		1.0);
 	SDL_FreeSurface(surface);
 }

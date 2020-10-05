@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 13:08:46 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:04:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 15:11:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void			render_debug_grid(t_wolf3d *app)
 
 	i = 0;
 	interval = 20;
-	grid_color = rgba_to_u32((SDL_Color){50, 50, 50, 255});
-	axes_color = rgba_to_u32((SDL_Color){255, 0, 0, 255});
+	grid_color = l3d_rgba_to_u32((uint32_t[4]){50, 50, 50, 255});
+	axes_color = l3d_rgba_to_u32((uint32_t[4]){255, 0, 0, 255});
 	while (i < app->main_window->height * app->main_window->width)
 	{
 		if (i % interval == 0)

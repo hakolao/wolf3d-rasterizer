@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/29 14:50:34 by ohakola           #+#    #+#              #
-#    Updated: 2020/10/02 20:23:29 by ohakola          ###   ########.fr        #
+#    Updated: 2020/10/05 15:13:13 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,10 @@ SOURCES = l3d_triangle.c \
 			l3d_fminmax.c \
 			l3d_bounding_box.c \
 			l3d_pixel_plot.c \
-			l3d_line_draw.c
+			l3d_line_draw.c \
+			l3d_image_place.c \
+			l3d_color.c \
+			l3d_image_read.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

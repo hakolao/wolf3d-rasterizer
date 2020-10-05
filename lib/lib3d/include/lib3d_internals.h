@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:07:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 13:41:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 17:26:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,30 @@
 # define L3D_BMP_WIDTH_OFFSET 0x0012
 # define L3D_BMP_HEIGHT_OFFSET 0x0016
 # define L3D_BMP_BITS_PER_PIXEL_OFFSET 0x001C
+
+typedef struct	s_bmp_file_header
+{
+	int32_t		file_type;
+	uint32_t	size;
+	int32_t		reserved1;
+	int32_t		reserved2;
+	uint32_t	data_offset;
+}				t_bmp_file_header;
+
+typedef struct	s_bmp_file_info_header
+{
+	uint32_t	info_size;
+	int32_t		width;
+	int32_t		height;
+	int32_t		color_planes;
+	int32_t		bits_per_pixel;
+	uint32_t	compression_type;
+	uint32_t	image_size;
+	int32_t		pixels_per_meter_x;
+	int32_t		pixels_per_meter_y;
+	uint32_t	number_of_bit_map_colors;
+	uint32_t	number_of_important_colors;
+}				t_bmp_file_info_header;
 
 /*
 ** OBJ reading

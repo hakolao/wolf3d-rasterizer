@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:09:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 15:29:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ void						l3d_triangle_2d_draw(uint32_t *buffer,
 */
 
 void						l3d_read_bmp_image_32bit_rgba(const char *filename,
-								uint32_t *pixels_out, uint32_t *width,
+								uint32_t **pixels_out, uint32_t *width,
 								uint32_t *height);
 
 /*

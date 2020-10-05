@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 14:44:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 15:49:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,19 @@ void		update_frame_buffer(t_wolf3d *app)
 	
 	// if (app->active_scene->main_camera != NULL)
 	// 	render_active_scene(app);
+	uint32_t	*pixels;
+	uint32_t	width;
+	uint32_t	height;
+	l3d_read_bmp_image_32bit_rgba("assets/lemur.bmp", &pixels, &width, &height);
+	l3d_framebuffer_image_place(&(t_surface){.h = app->main_window->height,
+		.w = app->main_window->width,
+		.pixels = app->main_window->framebuffer},
+		&(t_surface){.h = height,
+		.w = width,
+		.pixels = pixels},
+		(int32_t[2]){100, 100},
+		1.0);
+	free(pixels);
 	render_ui(app);
 }
 

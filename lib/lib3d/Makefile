@@ -32,7 +32,10 @@ SOURCES = l3d_triangle.c \
 			l3d_fminmax.c \
 			l3d_bounding_box.c \
 			l3d_pixel_plot.c \
-			l3d_line_draw.c
+			l3d_line_draw.c \
+			l3d_image_place.c \
+			l3d_color.c \
+			
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

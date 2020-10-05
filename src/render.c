@@ -76,6 +76,18 @@ void	order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corne
 	(void)corners_on_screen;
 }
 
+uint32_t	get_color_normal(t_triangle *triangle)
+{
+	t_vec3		normal;
+	uint32_t	color;
+
+	ml_vector3_normalize(triangle->normal, normal);
+	color = 0x0;
+	color += (uint32_t)(255 * fabs(normal[0])) << 8;
+	color += (uint32_t)(255 * fabs(normal[1])) << 16;
+	color += (uint32_t)(255 * fabs(normal[2])) << 24;
+}
+
 void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_triangle *triangle)
 {
 	float x;

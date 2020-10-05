@@ -122,7 +122,6 @@ void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_tri
 			deltax = -1.0;
 		else
 			deltax = 1.0;
-		ft_printf("deltax higher: %f\n", deltax);
 		y += deltay;
 		while (floor(x) != floor(end_x + deltax))
 		{

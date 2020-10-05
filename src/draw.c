@@ -6,13 +6,38 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 16:57:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 14:43:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void	render_active_scene_objects(t_wolf3d *app)
+/*
+** Set 4 colors at a time for speed
+*/
+
+static void	clear_frame(t_wolf3d *app)
+{
+	int			i;
+	uint32_t	color;
+
+	i = 0;
+	color = 0x000000FF;
+	while (i < app->main_window->width * app->main_window->height)
+	{
+		app->main_window->framebuffer[i] = color;
+		app->main_window->framebuffer[i + 1] = color;
+		app->main_window->framebuffer[i + 2] = color;
+		app->main_window->framebuffer[i + 3] = color;
+		app->main_window->rbuffer[i] = color;
+		app->main_window->rbuffer[i + 1] = color;
+		app->main_window->rbuffer[i + 2] = color;
+		app->main_window->rbuffer[i + 3] = color;
+		i += 4;
+	}
+}
+
+static void	render_active_scene(t_wolf3d *app)
 {
 	int		i;
 	int		j;
@@ -28,11 +53,9 @@ static void	render_active_scene_objects(t_wolf3d *app)
 
 void		update_frame_buffer(t_wolf3d *app)
 {
-	ft_memset(app->main_window->framebuffer, 0,
-		app->main_window->width * app->main_window->height * sizeof (uint32_t));
-	ft_memset(app->main_window->rbuffer, 0, sizeof(float) * WIDTH * HEIGHT);
+	clear_frame(app);
 	if (app->active_scene->main_camera != NULL)
-		render_active_scene_objects(app);
+		render_active_scene(app);
 	render_ui(app);
 }
 

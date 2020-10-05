@@ -86,136 +86,107 @@ uint32_t	get_color_normal(t_triangle *triangle)
 	color += (uint32_t)(255 * fabs(normal[0])) << 8;
 	color += (uint32_t)(255 * fabs(normal[1])) << 16;
 	color += (uint32_t)(255 * fabs(normal[2])) << 24;
+	return (color);
+}
+
+void scan_line(t_wolf3d *app, float *limits, t_vertex **vtc, t_triangle *triangle)
+{
+	int i = 0;
+	int width = app->main_window->width;
+	int height = app->main_window->height;
+	int x;
+	int y;
+	int end_x;
+	y = floor(limits[2]);
+	x = floor(limits[0]);
+	end_x = floor(limits[1]);
+	while (x < end_x)
+	{
+		l3d_pixel_plot(app->main_window->rbuffer,
+					   (uint32_t[2]){width, height},
+					   (int[2]){x + width / 2, y + height / 2},
+					   get_color_normal(triangle));
+		x++;
+		if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
+		{
+			// printf("break2\n");
+			break;
+		}
+	}
+	(void)vtc;
 }
 
 void	raster_upper(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners,  t_triangle *triangle)
 {
+	float x1 = floor(ordered_corners[0][0]);
+	float x2 = floor(ordered_corners[1][0]);
+	float x3 = floor(ordered_corners[2][0]);
+	float y1 = floor(ordered_corners[0][1]);
+	float y2 = floor(ordered_corners[1][1]);
+	float y3 = floor(ordered_corners[2][1]);
 	float x;
 	float y;
-	// float x1 = vtc[0]->pos[0];
-	// float x2 = vtc[1]->pos[0];
-	// float x3 = vtc[2]->pos[0];
-	// float y1 = vtc[0]->pos[1];
-	// float y2 = vtc[1]->pos[1];
-	// float y3 = vtc[2]->pos[1];
-	float x1 = ordered_corners[0][0];
-	float x2 = ordered_corners[1][0];
-	float x3 = ordered_corners[2][0];
-	float y1 = ordered_corners[0][1];
-	float y2 = ordered_corners[1][1];
-	float y3 = ordered_corners[2][1];
-	int width = app->main_window->width;
-	int height = app->main_window->height;
-
+	int end_x;
+	float slope12;
+	float slope13;
 	y = y1;
 	x = y1;
-	int i = 0;
-	float end_x;
-	float deltax;
-	float slope = (x2 - x1) / (y2 - y1);
-	float deltay = (y2 - y1) / (fabs((y2)-y1));
-	while (floor(y) != floor(y2)) // from {0;1} to {0;2}
+	slope12 = (x2 - x1) / (y2 - y1);
+	slope13 = (x3 - x1) / (y3 - y1);
+	while (y < y2)
 	{
-		x = x2 + slope * (y - y2);
-		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
-		if (x > end_x)
-			deltax = -1.0;
+		x = x2 + slope12 * (y - y2);
+		end_x = x1 + slope13 * (y - y1);
+		// deltax = x > end_x ? -1 : 1;
+		if (x < end_x)
+			scan_line(app, (float[3]){x, end_x + 1, y}, vtc, triangle);
 		else
-			deltax = 1.0;
-		y += deltay;
-		while (floor(x) != floor(end_x + deltax))
-		{
-			
-			t_vec3 normal;
-			ml_vector3_normalize(triangle->normal, normal);
-			uint32_t color = 0x0;
-			color += (uint32_t)(255 * fabs(normal[0])) << 8;
-			color +=  (uint32_t)(255 * fabs(normal[1])) << 16;
-			color += (uint32_t)(255 * fabs(normal[2])) << 24;
-			
-			l3d_pixel_plot(app->main_window->rbuffer,
-						   (uint32_t[2]){width, height},
-						   (int[2]){floor(x) + width / 2, floor(y) + height / 2}, color);
-			x += deltax;
-			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
-			{
-				// printf("break1\n");
-				break;
-			}
-		}
+			scan_line(app, (float[3]){end_x, x + 1, y}, vtc, triangle);
+		y++;
 	}
-	(void)ordered_corners;
 	(void)vtc;
 }
 
 void	raster_lower(t_wolf3d *app, t_vertex **vtc, t_vec2 *ordered_corners, t_triangle *triangle)
 {
-	float	x;
-	float	y;
-	// float x1 = vtc[0]->pos[0];
-	// float x2 = vtc[1]->pos[0];
-	// float x3 = vtc[2]->pos[0];
-	// float y1 = vtc[0]->pos[1];
-	// float y2 = vtc[1]->pos[1];
-	// float y3 = vtc[2]->pos[1];
-	float x1 = ordered_corners[0][0];
-	float x2 = ordered_corners[1][0];
-	float x3 = ordered_corners[2][0];
-	float y1 = ordered_corners[0][1];
-	float y2 = ordered_corners[1][1];
-	float y3 = ordered_corners[2][1];
-	int width = app->main_window->width;
-	int height = app->main_window->height;
+	float x1 = floor(ordered_corners[0][0]);
+	float x2 = floor(ordered_corners[1][0]);
+	float x3 = floor(ordered_corners[2][0]);
+	float y1 = floor(ordered_corners[0][1]);
+	float y2 = floor(ordered_corners[1][1]);
+	float y3 = floor(ordered_corners[2][1]);
+	float x;
+	float y;
+	float end_x;
+	float slope23;
+	float slope13;
 	y = y2;
 	x = x2;
-	int i = 0;
-	float end_x;
-	float deltax;
-	float slope = (x3 - x2) / (y3 - y2);
-	float deltay = (y3 - y2) / (fabs((y3)-y2));
-	while (floor(y) != floor(y3)) // from {1;2} to {0;2}
+	slope23 = (x3 - x2) / (y3 - y2);
+	slope13 = (x3 - x1) / (y3 - y1);
+	while (y < y3)
 	{
-		x = x2 + slope * (y - y2);
-		end_x = x1 + (x3 - x1) * ((y - y1) / (y3 - y1));
-		if (x > end_x)
-			deltax = -1.0;
+		x = x2 + slope23 * (y - y2);
+		end_x = x1 + slope13 * (y - y1);
+		// deltax = x > end_x ? -1 : 1;
+		if (x < end_x)
+			scan_line(app, (float[3]){x, end_x + 1, y}, vtc, triangle);
 		else
-			deltax = 1.0;
-		y += deltay;
-		while (floor(x) != floor(end_x + deltax))
-		{
-			
-			t_vec3 normal;
-			ml_vector3_normalize(triangle->normal, normal);
-			uint32_t color = 0x0;
-			color += (uint32_t)(255 * fabs(normal[0])) << 8;
-			color += (uint32_t)(255 * fabs(normal[1])) << 16;
-			color += (uint32_t)(255 * fabs(normal[2])) << 24;
-			
-			l3d_pixel_plot(app->main_window->rbuffer,
-							(uint32_t[2]){width,height},
-							(int[2]){floor(x) + width / 2, floor(y) + height / 2}, color);
-			
-			// x += (end_x - x) / (fabs(end_x - x));
-			x += deltax;
-			if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
-			{
-				// printf("break2\n");
-				break;
-			}
-		}
+			scan_line(app, (float[3]){end_x, x + 1, y}, vtc, triangle);
+		y++;
 	}
-	(void)ordered_corners;
 	(void)vtc;
 }
+
 
 void	rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_corners,
 							t_vec2 *corners_on_screen, t_camera *camera)
 {
 	t_vertex *vtc[3];
-	order_corners_y(triangle, vtc, ordered_corners, corners_on_screen); //?static??
+	order_corners_y(triangle, vtc, ordered_corners, corners_on_screen);
 	raster_upper(app, vtc, ordered_corners, triangle);
 	raster_lower(app, vtc, ordered_corners, triangle);
+
 
 	/*
 	** sort vertices in height order in an array

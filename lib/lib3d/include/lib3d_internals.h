@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:07:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 00:11:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 13:41:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 # define LIB3D_INTERNALS_H
 
 # include "lib3d.h"
+
+# define L3D_BMP_DATA_OFFSET_OFFSET 0x000A
+# define L3D_BMP_WIDTH_OFFSET 0x0012
+# define L3D_BMP_HEIGHT_OFFSET 0x0016
+# define L3D_BMP_BITS_PER_PIXEL_OFFSET 0x001C
 
 /*
 ** OBJ reading

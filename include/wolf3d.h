@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/02 13:43:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/05 15:10:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,15 +258,6 @@ void								main_window_init(t_wolf3d *app);
 void								recreate_frame(t_wolf3d *app);
 
 /*
-** Color utils
-*/
-
-uint32_t							rgba_to_u32(SDL_Color color);
-uint32_t							color_blend_u32(uint32_t color1,
-									uint32_t color2, float ratio);
-SDL_Color							u32_to_rgba(uint32_t color);
-
-/*
 ** Text
 */
 void								render_text(t_wolf3d *app,
@@ -279,16 +270,9 @@ void								render_centered_text(t_wolf3d *app,
 									t_text_params params);
 
 /*
-** SDL Surface
-*/
-
-void								surface_to_framebuffer(t_wolf3d *app,
-									SDL_Surface *surface, float blend_ratio,
-									int xy[2]);
-
-/*
 ** Debug information
 */
+
 uint64_t							capture_framerate(uint64_t delta_time);
 void								render_debug_grid(t_wolf3d *app);
 

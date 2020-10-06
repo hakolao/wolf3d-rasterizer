@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:07:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 17:26:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/06 17:18:49 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,39 @@
 
 # include "lib3d.h"
 
-# define L3D_BMP_DATA_OFFSET_OFFSET 0x000A
-# define L3D_BMP_WIDTH_OFFSET 0x0012
-# define L3D_BMP_HEIGHT_OFFSET 0x0016
-# define L3D_BMP_BITS_PER_PIXEL_OFFSET 0x001C
+/*
+** Make sure file header data alignment is correct
+*/
 
-typedef struct	s_bmp_file_header
+# pragma pack(push)
+# pragma pack(1)
+
+/*
+** Don't use image size which can be zero for uncompressed bmps
+** https://elcharolin.wordpress.com/2018/11/28/read-and-write-bmp-files-in-c-c/
+*/
+
+typedef struct				s_bmp_file_header
 {
-	int32_t		file_type;
+	uint16_t	file_type;
 	uint32_t	size;
-	int32_t		reserved1;
-	int32_t		reserved2;
+	uint16_t	reserved1;
+	uint16_t	reserved2;
 	uint32_t	data_offset;
-}				t_bmp_file_header;
-
-typedef struct	s_bmp_file_info_header
-{
 	uint32_t	info_size;
 	int32_t		width;
 	int32_t		height;
-	int32_t		color_planes;
-	int32_t		bits_per_pixel;
+	uint16_t	color_planes;
+	uint16_t	bits_per_pixel;
 	uint32_t	compression_type;
 	uint32_t	image_size;
 	int32_t		pixels_per_meter_x;
 	int32_t		pixels_per_meter_y;
 	uint32_t	number_of_bit_map_colors;
 	uint32_t	number_of_important_colors;
-}				t_bmp_file_info_header;
+}							t_bmp_file_header;
+
+# pragma pack(pop)
 
 /*
 ** OBJ reading

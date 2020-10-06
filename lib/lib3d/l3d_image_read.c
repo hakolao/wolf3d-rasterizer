@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 13:33:28 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 17:24:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/06 17:42:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 ** BGR to RGB
 */
 
-static void		l3d_copy_bmp_pixels_rgb(t_bmp_file_info_header *info_header,
+static void		l3d_copy_bmp_pixels_rgb(t_bmp_file_header *header,
 				char *bmp_image)
 {
 	int32_t					i;
 	unsigned char			temp_rgb;
 
 	i = 0;
-	while (i < (int32_t)info_header->image_size)
+	while (i < (int32_t)(header->size - header->data_offset))
 	{
 		temp_rgb = bmp_image[i];
 		bmp_image[i] = bmp_image[i + 2];
@@ -36,7 +36,7 @@ static void		l3d_copy_bmp_pixels_rgb(t_bmp_file_info_header *info_header,
 ** ABGR to RGBA
 */
 
-static void		l3d_copy_bmp_pixels_rgba(t_bmp_file_info_header *info_header,
+static void		l3d_copy_bmp_pixels_rgba(t_bmp_file_header *header,
 				char *bmp_image)
 {
 	int32_t					i;
@@ -44,14 +44,14 @@ static void		l3d_copy_bmp_pixels_rgba(t_bmp_file_info_header *info_header,
 	unsigned char			temp_rgb;
 
 	i = 0;
-	while (i < (int32_t)info_header->image_size)
+	while (i < (int32_t)(header->size - header->data_offset))
 	{
 		j = -1;
 		while (++j < 2)
 		{
 			temp_rgb = bmp_image[i + j];
-			bmp_image[i + j] = bmp_image[i + 2 - j - 1];
-			bmp_image[i + 2 - j - 1] = temp_rgb;
+			bmp_image[i + j] = bmp_image[i + 4 - j - 1];
+			bmp_image[i + 4 - j - 1] = temp_rgb;
 		}
 		i += 4;
 	}
@@ -61,7 +61,7 @@ static void		l3d_read_bmp_image(const char *filename, t_image *image_res)
 {
 	t_file_contents			*file;
 	t_bmp_file_header		header;
-	t_bmp_file_info_header	info_header;
+	uint32_t				image_size;
 	char					*bmp_image;
 	void					*buf;
 
@@ -69,19 +69,19 @@ static void		l3d_read_bmp_image(const char *filename, t_image *image_res)
 	file = read_file(filename);
 	buf = file->buf;
 	ft_memcpy(&header, buf, sizeof(header));
-	ft_printf("%d\n", header.file_type);
 	error_check(header.file_type != 0x4D42, "Invalid bmp image");
-	ft_memcpy(&info_header, buf + sizeof(header), sizeof(info_header));
-	error_check(!(bmp_image = malloc(sizeof(char) * info_header.image_size)),
+	image_size = header.size - header.data_offset;
+	error_check(!(bmp_image = malloc(sizeof(char) * image_size)),
 		"Failed to malloc image pixels");
-	ft_memcpy(bmp_image, buf, info_header.image_size);
-	if (info_header.bits_per_pixel == 24)
-		l3d_copy_bmp_pixels_rgb(&info_header, bmp_image);
-	else if (info_header.bits_per_pixel == 32)
-		l3d_copy_bmp_pixels_rgba(&info_header, bmp_image);
-	image_res->bytes_per_pixel = info_header.bits_per_pixel / 8;
-	image_res->width = info_header.width;
-	image_res->height = info_header.height;
+	ft_memcpy(bmp_image, buf + header.data_offset, image_size);
+	ft_printf("image size %d\n", image_size);
+	if (header.bits_per_pixel == 24)
+		l3d_copy_bmp_pixels_rgb(&header, bmp_image);
+	else
+		l3d_copy_bmp_pixels_rgba(&header, bmp_image);
+	image_res->bytes_per_pixel = header.bits_per_pixel / 8;
+	image_res->width = header.width;
+	image_res->height = header.height;
 	image_res->pixels = bmp_image;
 	destroy_file_contents(file);
 }
@@ -95,17 +95,21 @@ void			l3d_read_bmp_image_32bit_rgba(const char *filename,
 {
 	t_image		image;
 	int32_t		i;
+	int32_t		j;
 	uint32_t	*pixels;
 
 	l3d_read_bmp_image(filename, &image);
 	error_check(!(pixels =
 		malloc(sizeof(uint32_t) * image.width * image.height)),
 		"Failed to malloc 32 bit pixels");
-	i = -1;
-	while (++i < (int32_t)(image.height * image.width))
+	i = 0;
+	j = 0;
+	while (i < (int32_t)(image.height * image.width * image.bytes_per_pixel))
 	{
-		ft_memset(pixels + i, 255, sizeof(uint32_t));
-		ft_memcpy(pixels + i, image.pixels + i, image.bytes_per_pixel * 8);
+		ft_memset(pixels + j, 255, sizeof(uint32_t));
+		ft_memcpy(pixels + j, image.pixels + i, image.bytes_per_pixel);
+		i += image.bytes_per_pixel;
+		j += 4;
 	}
 	*pixels_out = pixels;
 	*width = image.width;

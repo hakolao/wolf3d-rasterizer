@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:49:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/06 17:04:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		update_frame_buffer(t_wolf3d *app)
 	uint32_t	*pixels;
 	uint32_t	width;
 	uint32_t	height;
-	l3d_read_bmp_image_32bit_rgba("assets/lemur.bmp", &pixels, &width, &height);
+	l3d_read_bmp_image_32bit_rgba("assets/fractal.bmp", &pixels, &width, &height);
 	l3d_framebuffer_image_place(&(t_surface){.h = app->main_window->height,
 		.w = app->main_window->width,
 		.pixels = app->main_window->framebuffer},

@@ -47,7 +47,11 @@ static void	render_active_scene(t_wolf3d *app)
 	{
 		j = -1;
 		while (++j < app->active_scene->objects[i]->num_triangles)
+		{
 			render_triangle(app, &app->active_scene->objects[i]->triangles[j]);
+			// t_vertex *vertex = app->active_scene->objects[i]->triangles[j].vtc[0];
+			// ml_vector3_print(vertex->pos);
+		}
 	}
 }
 

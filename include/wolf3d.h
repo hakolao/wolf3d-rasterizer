@@ -41,6 +41,7 @@
 # define VIEW_SCALE 1
 # define FPS 60
 # define NAME "Wolf3D"
+# define SCREEN_INTERSECT_MAX FLT_MAX
 
 /*
 **	The vector convention is a right handed coordinate system where up axis
@@ -159,6 +160,7 @@ typedef struct						s_scene
 	uint32_t				num_triangles;
 	t_camera				*main_camera;
 	t_window				*main_window;
+	t_triangle				*screen_triangles;
 	const char				*menu_options[64];
 	int32_t					menu_option_count;
 	int32_t					selected_option;
@@ -206,93 +208,94 @@ typedef struct	s_ir
 **	Function declarations
 */
 
-void								wolf3d_run(t_wolf3d *app);
+void						wolf3d_run(t_wolf3d *app);
 
 /*
 ** Time
 */
-void								cap_framerate(t_wolf3d *app);
-float								sin_time(float min, float max, float speed);
+void						cap_framerate(t_wolf3d *app);
+float						sin_time(float min, float max, float speed);
 
 /*
 ** Player
 */
 
-void								init_player(t_wolf3d *app);
-void								move_player(t_wolf3d *app, t_move dir);
-void								rotate_player(t_wolf3d *app, t_vec3 axes);
-void								player_action_handle(t_wolf3d *app, SDL_Event event);
+void						init_player(t_wolf3d *app);
+void						move_player(t_wolf3d *app, t_move dir);
+void						rotate_player(t_wolf3d *app, t_vec3 axes);
+void						player_action_handle(t_wolf3d *app, SDL_Event event);
 
 /*
 ** Camera
 */
 
-t_camera							*new_camera();
-void								update_camera(t_wolf3d *app);
-void								camera_transform(t_camera *camera,
-									t_vec4 vertex, t_vec4 res);
+t_camera					*new_camera();
+void						update_camera(t_wolf3d *app);
+void						camera_transform(t_camera *camera,
+							t_vec4 vertex, t_vec4 res);
+void						create_screen_triangles(t_scene *scene);
 
 /*
 ** Draw / Render
 */
 
-void								draw_frame(t_wolf3d *app);
-t_bool								render_triangle(t_wolf3d *app,
-													t_triangle *triangle);
-int									screen_to_frame_coords(uint32_t width,
-															uint32_t height,
-															int x, int y);
-void								render_ui(t_wolf3d *app);
+void						draw_frame(t_wolf3d *app);
+t_bool						render_triangle(t_wolf3d *app,
+											t_triangle *triangle);
+int							screen_to_frame_coords(uint32_t width,
+													uint32_t height,
+													int x, int y);
+void						render_ui(t_wolf3d *app);
 
 /*
 ** Utils
 */
 
-void								error_check(int test, const char *message);
+void						error_check(int test, const char *message);
 
 /*
 ** Window
 */
 
-void								main_window_init(t_wolf3d *app);
-void								recreate_frame(t_wolf3d *app);
+void						main_window_init(t_wolf3d *app);
+void						recreate_frame(t_wolf3d *app);
 
 /*
 ** Text
 */
-void								render_text(t_wolf3d *app,
-									t_text_params params);
-void								render_blinking_text(t_wolf3d *app,
-									t_text_params params);
-void								render_centered_blinking_text(t_wolf3d *app,
-									t_text_params params);
-void								render_centered_text(t_wolf3d *app,
-									t_text_params params);
+void						render_text(t_wolf3d *app,
+							t_text_params params);
+void						render_blinking_text(t_wolf3d *app,
+							t_text_params params);
+void						render_centered_blinking_text(t_wolf3d *app,
+							t_text_params params);
+void						render_centered_text(t_wolf3d *app,
+							t_text_params params);
 
 /*
 ** Debug information
 */
 
-uint64_t							capture_framerate(uint64_t delta_time);
-void								render_debug_grid(t_wolf3d *app);
+uint64_t					capture_framerate(uint64_t delta_time);
+void						render_debug_grid(t_wolf3d *app);
 
 /*
 ** Scene
 */
 
-void								scene_vertices_init(t_wolf3d *app,
-									t_scene *scene);
-t_scene								*new_scene(t_wolf3d *app,
-												t_scene_data *data);
-void								destroy_scene(t_scene *scene);
-void								set_active_scene(t_wolf3d *app,
-									t_scene_id to_scene);
-t_3d_object							**create_scene1_objects(int32_t *obj_count);
-void								debug_scene(t_scene *scene);
-void								update_world_translation(t_scene *scene, t_mat4	new_translation);
-void								update_world_rotation(t_scene *scene, t_mat4 new_rotation);
-void								update_world_scale(t_scene *scene, t_mat4 new_scale);
-void								update_world_rotation_local(t_scene *scene, t_mat4 new_rotation);
-void								rotate_world_local(t_wolf3d *app, t_vec3 axes);
+void						scene_vertices_init(t_wolf3d *app,
+							t_scene *scene);
+t_scene						*new_scene(t_wolf3d *app,
+										t_scene_data *data);
+void						destroy_scene(t_scene *scene);
+void						set_active_scene(t_wolf3d *app,
+							t_scene_id to_scene);
+t_3d_object					**create_scene1_objects(int32_t *obj_count);
+void						debug_scene(t_scene *scene);
+void						update_world_translation(t_scene *scene, t_mat4	new_translation);
+void						update_world_rotation(t_scene *scene, t_mat4 new_rotation);
+void						update_world_scale(t_scene *scene, t_mat4 new_scale);
+void						update_world_rotation_local(t_scene *scene, t_mat4 new_rotation);
+void						rotate_world_local(t_wolf3d *app, t_vec3 axes);
 
 #endif

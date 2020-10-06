@@ -18,7 +18,7 @@
 //fragment shader use
 
 #include "wolf3d.h"
-#define BREAKLIMIT 100000//!debug only
+#define BREAKLIMIT 1000//!debug only
 
 /*
 **	Converts pixel position from screen coordinates to frame buffer index
@@ -34,23 +34,123 @@ int			screen_to_frame_coords(uint32_t width, uint32_t height, int x, int y)
 	return (x + y * width);
 }
 
-void		screen_intersection(t_camera *camera, t_triangle *triangle,
-								t_vec2 *corners_on_screen)
-{
-	t_ray	rays[3];
-	int		i;
-	float	scaler;
+/*
+**	Creates triangles to represent the screen. First triangle is top left, 
+**	second is bottom right.
+*/
 
+// void		create_screen_triangles(t_wolf3d *app, t_vec3 position,
+// 									float *dimensions, t_triangle *result)
+// {
+// 	result[0].vtc = 
+// }
+
+// typedef struct s_hit
+// {
+// 	float t;
+// 	float u;
+// 	float v;
+// 	t_vec3 normal;
+// 	t_vec3 hit_point;
+// }			t_hit;
+
+void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits, t_ray *rays)
+{
+	int		i;
+	t_vec3	dir[3];
 	i = -1;
 	while (++i < 3)
 	{
-		l3d_ray_set(triangle->vtc[i]->pos, (t_vec3){0.0, 0.0, 0.0}, &rays[i]);
-		scaler = (camera->screen_dist / rays[i].dir[2]);
-		rays[i].dir[0] *= scaler;
-		rays[i].dir[1] *= scaler;
-		ml_vector2_copy((t_vec2){rays[i].dir[0], rays[i].dir[1]},
-			corners_on_screen[i]);
+		// ml_vector3_normalize(rays[i].dir, dir[i]);
+		// ml_vector3_mul(dir[i], hits[i].t, dir[i]);//??
+		points_2d[i][0] = hits[i][0];
+		points_2d[i][1] = hits[i][1];
+		(void)rays;
+		(void)dir;
 	}
+}
+
+typedef struct	s_plane
+{
+	t_vec3		origin;
+	t_vec3		normal;
+}				t_plane;
+
+t_bool		screen_ray_intersect(t_plane *plane, t_ray *ray, t_vec3 hit_point)
+{
+	t_vec3	temp;
+	float	div;
+	float	d;
+	ft_printf("ray intersect with plane: \n");
+	ml_vector3_print(ray->dir);
+	ml_vector3_sub(plane->origin, ray->origin, temp);
+	if (fabs((div = ml_vector3_dot(ray->dir, plane->normal))) > L3D_EPSILON)
+	{
+		d = (ml_vector3_dot(temp, plane->normal)) / div;
+		ml_vector3_mul(ray->dir, d, hit_point);
+		ml_vector3_add(temp, ray->origin, hit_point);
+		return (true);
+	}
+	return (false);
+}
+
+t_bool		screen_intersection(t_wolf3d *app, t_camera *camera,
+								t_triangle *triangle, t_vec2 *corners_on_screen)
+{
+	// t_ray	rays[3];
+	t_ray	trays[3];	
+	t_vec2	points_2d[3];
+	t_vec3	hits[3];
+	int k = -1;
+	int		i;
+	// float	scaler;
+	i = -1;
+	// while (++i < 3)
+	// {
+	// 	l3d_ray_set(triangle->vtc[i]->pos, (t_vec3){0.0, 0.0, 0.0}, &rays[i]);
+	// 	scaler = (camera->screen_dist / rays[i].dir[2]);
+	// 	rays[i].dir[0] *= scaler;
+	// 	rays[i].dir[1] *= scaler;
+	// 	ml_vector2_copy((t_vec2){rays[i].dir[0], rays[i].dir[1]},
+	// 		corners_on_screen[i]);
+	// }
+	t_plane screen;
+	ml_vector3_set(screen.origin, 0.0, 0.0,
+					-app->active_scene->main_window->width);
+	ml_vector3_set(screen.normal, 0.0, 0.0, 1.0);
+	while (++k < 3)
+	{
+		//ft_printf("here2\n");
+		l3d_ray_set(triangle->vtc[k]->pos, (t_vec3){0.0, 0.0, 0.0}, &trays[k]);
+		if (!(screen_ray_intersect(&screen, &trays[k], hits[k])))
+			{
+				ft_printf("Error in screen_intersection: ray from triangle\n"
+							"didn't intersect with screen plane or did in too\n"
+							"small an angle. Pointo of hit set to default 0.\n");
+				ml_vector3_set_all(hits[k], 0);
+			}
+			ft_printf("screen intersection point: \n");
+			ml_vector3_print(hits[k]);
+	}
+	calculate_2d_points(points_2d, hits, trays);
+	int j = -1;
+	while (++j < 3)
+	{
+		//ft_printf("here1\n");
+		corners_on_screen[j][0] = points_2d[j][0];
+		corners_on_screen[j][1] = points_2d[j][1];
+	}
+	//ft_printf("got out\n");
+	return (true);
+	(void)trays;
+	(void)hits;
+	(void)points_2d;
+	(void)camera;
+	(void)corners_on_screen;
+	(void)i;
+	(void)k;
+	(void)triangle;
+	(void)app;
 }
 
 void		order_corners_y(t_triangle *triangle, t_vertex **vtc, t_vec2 *ordered_corners, t_vec2 *corners_on_screen)
@@ -108,7 +208,7 @@ void		scan_line(t_wolf3d *app, float *limits, t_vertex **vtc, t_triangle *triang
 		x++;
 		if (i++ > BREAKLIMIT) //?prevents inf loops in testing mode
 		{
-			// printf("break2\n");
+			// ft_printf("break2\n");
 			break;
 		}
 	}
@@ -134,6 +234,8 @@ void		raster_upper(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster
 	float y;
 	float end_x;
 
+	int i = 0;
+
 	y = data->y1;
 	while (y < data->y2)
 	{
@@ -144,7 +246,14 @@ void		raster_upper(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster
 		else
 			scan_line(app, (float[3]){end_x, x + 1, y}, vtc, triangle);
 		y++;
+		i++;
+		if (i > BREAKLIMIT)
+		{
+			//ft_printf("brokeupper\n");
+			break;
+		}
 	}
+	
 }
 
 void		raster_lower(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster_data *data)
@@ -152,6 +261,8 @@ void		raster_lower(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster
 	float x;
 	float y;
 	float end_x;
+
+	int i = 0;
 
 	y = data->y2;
 	while (y < data->y3)
@@ -163,6 +274,12 @@ void		raster_lower(t_wolf3d *app, t_vertex **vtc, t_triangle *triangle, t_raster
 		else
 			scan_line(app, (float[3]){end_x, x + 1, y}, vtc, triangle);
 		y++;
+		i++;
+		if (i > BREAKLIMIT)
+		{
+			//ft_printf("brokelower\n");
+			break;
+		}
 	}
 }
 
@@ -173,6 +290,7 @@ void		rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_co
 	t_raster_data data;
 
 	order_corners_y(triangle, vtc, ordered_corners, corners_on_screen);
+	//ft_printf("ordered\n");
 	data.x1 = floor(ordered_corners[0][0]);
 	data.x2 = floor(ordered_corners[1][0]);
 	data.x3 = floor(ordered_corners[2][0]);
@@ -183,7 +301,9 @@ void		rasterize_triangle(t_wolf3d *app, t_triangle *triangle, t_vec2 *ordered_co
 	data.slope_ac = (data.x3 - data.x1) / (data.y3 - data.y1);
 	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);
 	raster_upper(app, vtc, triangle, &data);
+	//ft_printf("rastered upper\n");
 	raster_lower(app, vtc, triangle, &data);
+	//ft_printf("rastered lower\n");
 
 	/*
 	** sort vertices in height order in an array
@@ -268,7 +388,7 @@ t_bool		render_triangle(t_wolf3d *app, t_triangle *triangle)//?App specific impl
 
 	if (!(is_rendered(app, triangle)))
 		return (false);
-	screen_intersection(app->active_scene->main_camera, triangle,
+	screen_intersection(app, app->active_scene->main_camera, triangle,
 		corners_on_screen);
 	rasterize_triangle(app, triangle, ordered_corners, corners_on_screen,
 						app->active_scene->main_camera);//?expose this

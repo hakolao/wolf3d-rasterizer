@@ -13,7 +13,7 @@
 #include "lib3d_internals.h"
 
 static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
-					 t_vec2 *ordered_corners, t_vec2 *points_2d)
+								t_vec2 *ordered_corners, t_vec2 *points_2d)
 {
 	size_t indices[3];
 
@@ -58,7 +58,7 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 }
 
 static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
-				  t_triangle *triangle, t_raster_data *data)
+							t_triangle *triangle, t_raster_data *data)
 {
 	float x;
 	float y;
@@ -80,7 +80,7 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 }
 
 static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
-				  t_triangle *triangle, t_raster_data *data)
+							t_triangle *triangle, t_raster_data *data)
 {
 	float x;
 	float y;
@@ -102,7 +102,7 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 }
 
 void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
-						t_triangle *triangle, t_vec2 *points_2d)
+									t_triangle *triangle, t_vec2 *points_2d)
 {
 	t_raster_data data;
 	t_vec2 ordered_points_2d[3];

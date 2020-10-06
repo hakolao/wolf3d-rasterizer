@@ -44,14 +44,11 @@
 # define SCREEN_INTERSECT_MAX FLT_MAX
 
 /*
-**	The vector convention is a right handed coordinate system where up axis
-**	is z (2), left axis is y (1), forward axis is x (0). The numbers are for
-**	easier referencing in t_vec3 structs.
+**	Player control macros
 */
 
-# define VEC_UP 2
-# define VEC_LEFT 1
-# define VEC_FORWARD 0
+# define PLAYER_SPEED 5
+# define PLAYER_ROTATION_SPEED 0.1
 
 /*
 **	Frame buffer

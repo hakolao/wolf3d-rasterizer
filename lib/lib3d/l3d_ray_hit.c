@@ -147,3 +147,26 @@ t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
 	}
 	return (false);
 }
+
+/*
+**	Detects hit between a ray and an infinite plane in 3D. Stores the hit point
+**	in a t_vec3.
+*/
+
+t_bool			plane_ray_intersect(t_plane *plane, t_ray *ray,
+									t_vec3 hit_point)
+{
+	t_vec3 temp;
+	float div;
+	float d;
+
+	ml_vector3_sub(plane->origin, ray->origin, temp);
+	if (fabs((div = ml_vector3_dot(ray->dir, plane->normal))) > L3D_EPSILON)
+	{
+		d = (ml_vector3_dot(temp, plane->normal)) / div;
+		ml_vector3_mul(ray->dir, d, hit_point);
+		ml_vector3_add(hit_point, ray->origin, hit_point);
+		return (true);
+	}
+	return (false);
+}

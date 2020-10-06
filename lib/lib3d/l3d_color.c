@@ -49,3 +49,16 @@ uint32_t		l3d_color_blend_u32(uint32_t color1, uint32_t color2,
 	new_color[3] = (int)((rgba_color1[3] * i_ratio) + (rgba_color2[3] * ratio));
 	return (l3d_rgba_to_u32(new_color));
 }
+
+uint32_t		l3d_triangle_normal_color(t_triangle *triangle)
+{
+	t_vec3 normal;
+	uint32_t color;
+
+	ml_vector3_normalize(triangle->normal, normal);
+	color = 0x0;
+	color += (uint32_t)(255 * fabs(normal[0])) << 8;
+	color += (uint32_t)(255 * fabs(normal[1])) << 16;
+	color += (uint32_t)(255 * fabs(normal[2])) << 24;
+	return (color);
+}

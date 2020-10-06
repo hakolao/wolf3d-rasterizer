@@ -20,6 +20,19 @@
 # define L3D_BMP_HEIGHT_OFFSET 0x0016
 # define L3D_BMP_BITS_PER_PIXEL_OFFSET 0x001C
 
+typedef struct				s_raster_data
+{
+	float x1;
+	float x2;
+	float x3;
+	float y1;
+	float y2;
+	float y3;
+	float slope_ab;
+	float slope_bc;
+	float slope_ac;
+}							t_raster_data;
+
 /*
 ** OBJ reading
 */

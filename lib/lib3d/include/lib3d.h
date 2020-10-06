@@ -239,7 +239,7 @@ void						l3d_triangle_hit_record_set(float afuvt[5], t_ray *ray,
 							t_triangle *triangle, t_hit *hit);
 void						l3d_bounding_box_hit_record_set(float t,
 								t_ray *ray, t_hit *hit);
-t_bool						plane_ray_intersect(t_plane *plane, t_ray *ray,
+t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point);
 
 /*

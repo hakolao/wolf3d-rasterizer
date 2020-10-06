@@ -153,7 +153,7 @@ t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
 **	in a t_vec3.
 */
 
-t_bool			plane_ray_intersect(t_plane *plane, t_ray *ray,
+t_bool			l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point)
 {
 	t_vec3 temp;

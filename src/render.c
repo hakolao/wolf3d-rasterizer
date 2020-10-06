@@ -41,7 +41,7 @@ t_bool		screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	{
 		ml_vector3_set(hits[k], 0.0, 0.0, 0.0);
 		l3d_ray_set(triangle->vtc[k]->pos, (t_vec3){0.0, 0.0, 0.0}, &rays[k]);
-		if (!(plane_ray_intersect(&screen, &rays[k], hits[k])))
+		if (!(l3d_plane_ray_hit(&screen, &rays[k], hits[k])))
 			{
 				ft_printf("Error in screen_intersection: ray from triangle\n"
 							"didn't intersect with screen plane or did in too\n"

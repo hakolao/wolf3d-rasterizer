@@ -16,16 +16,16 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 					 t_vec2 *ordered_corners, t_vec2 *points_2d)
 {
 	size_t indices[3];
-	
+
 	ft_min_double_idx((double[3]){points_2d[0][1],
-								  points_2d[1][1],
-								  points_2d[2][1]},
+									points_2d[1][1],
+									points_2d[2][1]},
 					  3, &(indices[0]));
 	vtc[0] = triangle->vtc[indices[0]];
 	ml_vector2_copy(points_2d[indices[0]], ordered_corners[0]);
 	ft_max_double_idx((double[3]){points_2d[0][1],
-								  points_2d[1][1],
-								  points_2d[2][1]},
+									points_2d[1][1],
+									points_2d[2][1]},
 					  3, &(indices[2]));
 	vtc[2] = triangle->vtc[indices[2]];
 	ml_vector2_copy(points_2d[indices[2]], ordered_corners[2]);
@@ -49,9 +49,9 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	while (x < end_x)
 	{
 		l3d_pixel_plot(buffer,
-					   (uint32_t[2]){width, height},
-					   (int[2]){x + width / 2, y + height / 2},
-					   l3d_triangle_normal_color(triangle));
+						(uint32_t[2]){width, height},
+						(int[2]){x + width / 2, y + height / 2},
+						l3d_triangle_normal_color(triangle));
 		x++;
 	}
 	//!use triangle->ordered_vtc

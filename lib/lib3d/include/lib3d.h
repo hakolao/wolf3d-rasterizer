@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:09:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/06 14:51:28 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,8 @@ t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
 								t_ray *ray, t_hit *hit);
 void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
+void						l3d_hit_record_set(float afuvt[5], t_ray *ray,
+							t_triangle *triangle, t_hit *hit);
 
 /*
 ** Triangle vector

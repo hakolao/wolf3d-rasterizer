@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/02 20:17:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/06 14:52:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static t_bool	l3d_determine_triangle_hit(t_vec3 hsq[3],
 	afuvt[4] = afuvt[1] * ml_vector3_dot(triangle->ac, hsq[2]);
 	if (afuvt[4] > L3D_EPSILON)
 	{
-		hit->t = afuvt[4];
+		l3d_hit_record_set(afuvt, ray, triangle, hit);
 		return (true);
 	}
 	return (false);

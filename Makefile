@@ -19,7 +19,6 @@ INCLUDES = -I ./include \
 		-I$(LIBFT)/include \
 		-I$(LIB3D)/include \
 		-I$(LIBGMATRIX)/include \
-		-I$(LIBVULKAN)/vulkan.framework/Headers \
 		-I$(LIBSDL2)/SDL2.framework/Headers \
 		-I$(LIBSDL2)/SDL2_image.framework/Headers \
 		-I$(LIBSDL2)/SDL2_ttf.framework/Headers

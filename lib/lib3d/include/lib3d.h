@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 14:31:20 by ohakola          ###   ########.fr       */
+/*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
+/*   Updated: 2020/10/07 14:34:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,19 @@ typedef struct				s_triangle
 	t_bool			is_single_sided;
 	t_vec3			ab;
 	t_vec3			ac;
+	t_vertex		*ordered_vtc[3];
 }							t_triangle;
+
+/*
+**	Describes an infinite plane in 3D. Origin is any point that is on the plane
+*/
+
+typedef struct				s_plane
+{
+	t_vec3		origin;
+	t_vec3		normal;
+}							t_plane;
+
 
 /*
 ** Final 3d object struct to which obj file is transformed.
@@ -216,6 +228,12 @@ t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
 								t_ray *ray, t_hit *hit);
 void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
+void						l3d_triangle_hit_record_set(float afuvt[5], t_ray *ray,
+							t_triangle *triangle, t_hit *hit);
+void						l3d_bounding_box_hit_record_set(float t,
+								t_ray *ray, t_hit *hit);
+t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
+									t_vec3 hit_point);
 
 /*
 ** Triangle vector
@@ -279,12 +297,21 @@ float						l3d_fmin(float n1, float n2);
 double						l3d_rand_d(void);
 
 /*
+**	Triangle rasterization
+*/
+
+void						l3d_triangle_raster(uint32_t *buffer,
+												uint32_t *dimensions,
+												t_triangle *triangle,
+												t_vec2 *points_2d);
+
+	/*
 ** Plot pixel
 */
 
-void						l3d_pixel_plot(uint32_t *buffer,
-								uint32_t dimensions_wh[2], int32_t xy[2],
-								uint32_t color);
+	void l3d_pixel_plot(uint32_t *buffer,
+						uint32_t dimensions_wh[2], int32_t xy[2],
+						uint32_t color);
 
 /*
 ** Line draw
@@ -308,6 +335,7 @@ void						l3d_read_bmp_image_32bit_rgba(const char *filename,
 /*
 ** Buffer image copying / placing
 */
+
 void						l3d_framebuffer_image_place(t_surface *frame,
 								t_surface *image, int32_t pos_xy[2],
 								float blend_ratio);
@@ -320,5 +348,6 @@ uint32_t					l3d_rgba_to_u32(uint32_t rgba[4]);
 uint32_t					l3d_color_blend_u32(uint32_t color1,
 								uint32_t color2, float ratio);
 void						l3d_u32_to_rgba(uint32_t color, uint32_t rgba[4]);
+uint32_t					l3d_triangle_normal_color(t_triangle *triangle);
 
 #endif

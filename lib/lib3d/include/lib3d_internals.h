@@ -59,6 +59,19 @@ typedef struct				s_image_data
 	uint32_t		bytes_per_pixel;
 }							t_image_data;
 
+typedef struct				s_raster_data
+{
+	float x1;
+	float x2;
+	float x3;
+	float y1;
+	float y2;
+	float y3;
+	float slope_ab;
+	float slope_bc;
+	float slope_ac;
+}							t_raster_data;
+
 /*
 ** OBJ reading
 */

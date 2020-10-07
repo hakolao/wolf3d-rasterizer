@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/02 20:17:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/06 14:56:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hit *hit)
 		l3d_fmax(t[5], t[6]));
 	if (t[8] < 0 || t[7] > t[8])
 		return (false);
-	hit->t = t[7];
+	l3d_bounding_box_hit_record_set(t[7], ray, hit);
 	return (true);
 }
 
@@ -66,7 +66,7 @@ static t_bool	l3d_determine_triangle_hit(t_vec3 hsq[3],
 	afuvt[4] = afuvt[1] * ml_vector3_dot(triangle->ac, hsq[2]);
 	if (afuvt[4] > L3D_EPSILON)
 	{
-		hit->t = afuvt[4];
+		l3d_triangle_hit_record_set(afuvt, ray, triangle, hit);
 		return (true);
 	}
 	return (false);
@@ -144,6 +144,29 @@ t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
 			return (hits_left || hits_right);
 		}
 		return (l3d_kd_triangles_hit(node, ray, t_max, hit));
+	}
+	return (false);
+}
+
+/*
+**	Detects hit between a ray and an infinite plane in 3D. Stores the hit point
+**	in a t_vec3.
+*/
+
+t_bool			l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
+									t_vec3 hit_point)
+{
+	t_vec3 temp;
+	float div;
+	float d;
+
+	ml_vector3_sub(plane->origin, ray->origin, temp);
+	if (fabs((div = ml_vector3_dot(ray->dir, plane->normal))) > L3D_EPSILON)
+	{
+		d = (ml_vector3_dot(temp, plane->normal)) / div;
+		ml_vector3_mul(ray->dir, d, hit_point);
+		ml_vector3_add(hit_point, ray->origin, hit_point);
+		return (true);
 	}
 	return (false);
 }

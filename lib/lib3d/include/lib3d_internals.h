@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:07:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/06 19:21:04 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 12:26:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ typedef struct				s_bmp_file_header
 }							t_bmp_file_header;
 
 # pragma pack(pop)
+
+typedef struct				s_image_data
+{
+	unsigned char	*pixels;
+	uint32_t		width;
+	uint32_t		height;
+	uint32_t		bytes_per_pixel;
+}							t_image_data;
 
 /*
 ** OBJ reading

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:29:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 12:18:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,14 +185,6 @@ typedef struct				s_kd_tree
 	uint32_t		num_nodes;
 	t_kd_node		*root;
 }							t_kd_tree;
-
-typedef struct				s_image
-{
-	char			*pixels;
-	uint32_t		width;
-	uint32_t		height;
-	uint32_t		bytes_per_pixel;
-}							t_image;
 
 typedef struct				s_surface
 {

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-#define BREAKLIMIT 1000//!debug only
 
 static void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits)
 {

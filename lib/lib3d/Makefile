@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/29 14:50:34 by ohakola           #+#    #+#              #
-#    Updated: 2020/10/07 14:34:48 by ohakola          ###   ########.fr        #
+#    Updated: 2020/10/07 14:35:47 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ SOURCES = l3d_triangle.c \
 			l3d_line_draw.c \
 			l3d_image_place.c \
 			l3d_color.c \
-			l3d_image_read.c
+			l3d_image_read.c \
 			l3d_triangle_raster.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))

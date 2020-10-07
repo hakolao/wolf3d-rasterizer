@@ -6,11 +6,16 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:46:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 22:24:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+/*
+** Add objs to scene. ToDo: Also should pair them with textures
+** and position them where they belong.
+*/
 
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
@@ -24,7 +29,6 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.menu_options[2] = "Quit";
 		data.menu_option_count = 3;
 		data.main_camera = NULL;
-		data.objects = NULL;
 		data.num_objects = 0;
 	}
 	else if (scene_id == scene_id_main_game)
@@ -32,7 +36,8 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.objects = l3d_read_obj("assets/icosphere.obj", &data.num_objects);
+		data.objects[0] = l3d_read_obj("assets/icosphere.obj");
+		data.num_objects = 1;
 	}
 	app->active_scene = new_scene(app, &data);
 }
@@ -60,7 +65,8 @@ t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
 	scene->num_objects = data->num_objects;
-	scene->objects = data->objects;
+	ft_memmove(scene->objects, data->objects,
+		sizeof(t_3d_object) * data->num_objects);
 	ml_matrix4_id(scene->world_rotation);
 	ml_matrix4_id(scene->world_scale);
 	ml_matrix4_id(scene->world_translation);
@@ -79,14 +85,9 @@ void			destroy_scene(t_scene *scene)
 {
 	int		i;
 
-	if (scene->objects != NULL)
-	{
-		i = -1;
-		while (++i < (int)scene->num_objects)
-			l3d_3d_object_destroy(scene->objects[i]);
-		free(scene->objects);
-		scene->objects = NULL;
-	}
+	i = -1;
+	while (++i < (int)scene->num_objects)
+		l3d_3d_object_destroy(scene->objects[i]);
 	if (scene->main_camera)
 	{
 		free(scene->main_camera);

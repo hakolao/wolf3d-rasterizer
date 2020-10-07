@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 14:34:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 22:14:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,6 @@ typedef struct				s_obj
 	uint32_t		*triangles;
 	uint32_t		num_triangles;
 }							t_obj;
-
-typedef struct				s_obj_content
-{
-	uint32_t		num_objects;
-	t_obj			objects[L3D_MAX_OBJECTS];
-}							t_obj_content;
 
 /*
 ** Ray with direction and origin. Dir_inv is precalculated for faster
@@ -285,8 +279,7 @@ void						l3d_3d_object_set_vertex(t_vertex *vertex,
 ** OBJ reading
 */
 
-t_3d_object					**l3d_read_obj(const char *filename,
-								uint32_t *num_objects);
+t_3d_object					*l3d_read_obj(const char *filename);
 
 /*
 ** Math utils (could be moved somewhere else...)

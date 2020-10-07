@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:10:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 22:01:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ typedef struct						s_scene_data
 	const char				*menu_options[64];
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
-	t_3d_object				**objects;
+	t_3d_object				*objects[64];
 	uint32_t				num_objects;
 	uint32_t				num_triangles;
 	t_mat4					world_scale;
@@ -152,7 +152,7 @@ typedef struct						s_scene_data
 
 typedef struct						s_scene
 {
-	t_3d_object				**objects;
+	t_3d_object				*objects[64];
 	uint32_t				num_objects;
 	uint32_t				num_triangles;
 	t_camera				*main_camera;

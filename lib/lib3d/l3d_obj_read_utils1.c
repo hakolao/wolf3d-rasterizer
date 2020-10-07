@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 00:41:12 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 22:26:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,11 @@ void					l3d_read_obj_triangle_line(char **str,
 ** Parses a single obj from obj str ref and scroll the string to
 */
 
-void					l3d_obj_parse_single_obj(char **str, t_obj *obj,
-						uint32_t *num_objects)
+void					l3d_obj_parse_single_obj(char **str, t_obj *obj)
 {
 	l3d_obj_content_allocate(obj);
+	while (!(**str == 'v' && *(*str + 1) == ' '))
+		(*str)++;
 	while (**str)
 	{
 		if (**str == 'v' && *(*str + 1) == ' ' &&
@@ -118,27 +119,15 @@ void					l3d_obj_parse_single_obj(char **str, t_obj *obj,
 		}
 		else
 			(*str)++;
-		if (**str == 'o' && *(*str + 1) == ' ')
-			break ;
 	}
-	(*num_objects)++;
 }
 
 /*
 ** Parses obj data from obj string saving all objects into t_obj_content*
 */
 
-void					l3d_obj_str_parse(char *str, t_obj_content *result)
+void					l3d_obj_str_parse(char *str, t_obj *obj)
 {
-	ft_memset(result, 0, sizeof(*result));
-	while (*str)
-	{
-		while (!(*str == 'v' && *(str + 1) == ' '))
-			str++;
-		if (*str)
-		{
-			l3d_obj_parse_single_obj(&str,
-				&result->objects[result->num_objects], &result->num_objects);
-		}
-	}
+	ft_memset(obj, 0, sizeof(*obj));
+	l3d_obj_parse_single_obj(&str, obj);
 }

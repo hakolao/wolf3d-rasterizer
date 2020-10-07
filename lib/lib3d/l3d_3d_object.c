@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 03:13:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 14:31:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,18 @@ void			l3d_3d_object_transform(t_3d_object *obj, t_mat4 transform)
 	j = -1;
 	while (++j < obj->num_triangles)
 		l3d_triangle_update(&obj->triangles[j]);
+}
+
+/*
+** Just a space saving function to set obj data on 3d object
+** (normals, texture coords and position)
+*/
+
+void			l3d_3d_object_set_vertex(t_vertex *vertex,
+					t_vec3 pos, t_vec2 text, t_vec3 normal)
+{
+	ml_vector3_copy(pos, vertex->pos);
+	vertex->color = 0xFFFFFFFF;
+	ml_vector2_copy(text, vertex->uv);
+	ml_vector3_copy(normal, vertex->normal);
 }

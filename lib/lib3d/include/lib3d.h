@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:49:59 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 12:18:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 14:31:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct				s_vertex
 	t_vec4			pos;
 	uint32_t		color;
 	t_vec2			uv;
+	t_vec3			normal;
 }							t_vertex;
 
 /*
@@ -259,6 +260,8 @@ t_3d_object					*l3d_3d_object_create(uint32_t num_vertices,
 								uint32_t num_triangles,
 								uint32_t num_text_coords);
 void						l3d_3d_object_destroy(t_3d_object *object);
+void						l3d_3d_object_set_vertex(t_vertex *vertex,
+							t_vec3 pos, t_vec2 text, t_vec3 normal);
 
 /*
 ** OBJ reading

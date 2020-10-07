@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:15:18 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 14:24:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/07 14:24:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,39 +37,26 @@ static void	clear_frame(t_wolf3d *app)
 	}
 }
 
-// static void	render_active_scene(t_wolf3d *app)
-// {
-// 	int		i;
-// 	int		j;
+static void	render_active_scene(t_wolf3d *app)
+{
+	int		i;
+	int		j;
 
-// 	i = -1;
-// 	while (++i < (int)app->active_scene->num_objects)
-// 	{
-// 		j = -1;
-// 		while (++j < app->active_scene->objects[i]->num_triangles)
-// 			render_triangle(app, &app->active_scene->objects[i]->triangles[j]);
-// 	}
-// }
+	i = -1;
+	while (++i < (int)app->active_scene->num_objects)
+	{
+		j = -1;
+		while (++j < app->active_scene->objects[i]->num_triangles)
+			render_triangle(app, &app->active_scene->objects[i]->triangles[j]);
+	}
+}
 
 void		update_frame_buffer(t_wolf3d *app)
 {
 	clear_frame(app);
 	
-	// if (app->active_scene->main_camera != NULL)
-	// 	render_active_scene(app);
-	uint32_t	*pixels;
-	uint32_t	width;
-	uint32_t	height;
-	l3d_read_bmp_image_32bit_rgba("assets/w3c_home.bmp", &pixels, &width, &height);
-	l3d_framebuffer_image_place(&(t_surface){.h = app->main_window->height,
-		.w = app->main_window->width,
-		.pixels = app->main_window->framebuffer},
-		&(t_surface){.h = height,
-		.w = width,
-		.pixels = pixels},
-		(int32_t[2]){100, 100},
-		1.0);
-	free(pixels);
+	if (app->active_scene->main_camera != NULL)
+		render_active_scene(app);
 	render_ui(app);
 }
 

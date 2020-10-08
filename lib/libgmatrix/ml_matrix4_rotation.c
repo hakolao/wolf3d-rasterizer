@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:43:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 21:28:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void		ml_matrix4_rotation(float rad_x, float rad_y, float rad_z,
 	t_mat4	rotz;
 	t_mat4	tmp;
 
-	ft_memset(res, 0, sizeof(t_mat4));
 	ml_matrix4_rotation_x(rad_x, rotx);
 	ml_matrix4_rotation_y(rad_y, roty);
 	ml_matrix4_rotation_z(rad_z, rotz);

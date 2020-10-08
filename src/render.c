@@ -28,20 +28,17 @@ static void		rendered_triangle_set(t_wolf3d *app,
 					t_triangle *temp, t_vertex vtc[3], t_triangle *triangle)
 {
 	int		k;
-	t_mat4	translation;
-	t_mat4	rotation;
 
 	k = -1;
 	ft_memcpy(temp, triangle, sizeof(t_triangle));
-	ml_matrix4_inverse(app->player.rotation, rotation);
-	ml_matrix4_translation(app->player.pos[0], app->player.pos[1],
-		app->player.pos[2], translation);
 	while (++k < 3)
 	{
 		ft_memcpy(&vtc[k], triangle->vtc[k], sizeof(t_vertex));
 		temp->vtc[k] = &vtc[k];
-		ml_matrix4_mul_vec3(translation, temp->vtc[k]->pos, temp->vtc[k]->pos);
-		ml_matrix4_mul_vec3(rotation, temp->vtc[k]->pos, temp->vtc[k]->pos);
+		ml_matrix4_mul_vec3(app->player.translation,
+			temp->vtc[k]->pos, temp->vtc[k]->pos);
+		ml_matrix4_mul_vec3(app->player.inv_rotation,
+			temp->vtc[k]->pos, temp->vtc[k]->pos);
 	}
 	l3d_triangle_update(temp);
 }

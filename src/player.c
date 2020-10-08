@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 19:31:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 21:17:44 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void			init_player(t_wolf3d *app)
 	app->player.speed = PLAYER_SPEED;
 	app->player.rot_speed = PLAYER_ROTATION_SPEED;
 	ml_matrix4_id(app->player.rotation);
+	ml_matrix4_id(app->player.inv_rotation);
+	ml_matrix4_id(app->player.translation);
 }
 
 
@@ -36,6 +38,7 @@ void			rotate_player(t_wolf3d *app, t_vec3 axes)
 	ml_matrix4_mul_vec3(rotation, app->player.sideways, app->player.sideways);
 	ml_matrix4_mul(app->player.rotation, rotation, new_rotation);
 	ft_memcpy(app->player.rotation, new_rotation, sizeof(t_mat4));
+	ml_matrix4_inverse(app->player.rotation, app->player.inv_rotation);
 }
 
 void			move_player(t_wolf3d *app, t_move dir)
@@ -64,4 +67,6 @@ void			move_player(t_wolf3d *app, t_move dir)
 		ml_vector3_sub(app->player.pos, add, new_pos);
 	}
 	ml_vector3_copy(new_pos, app->player.pos);
+	ml_matrix4_translation(app->player.pos[0], app->player.pos[1],
+		app->player.pos[2], app->player.translation);
 }

@@ -121,7 +121,7 @@ typedef struct						s_camera
 	int						height;
 	float					near_clip;
 	float					far_clip;
-	t_plane					*viewplanes[6];
+	t_plane					viewplanes[6];
 	t_plane					screen;
 }									t_camera;
 

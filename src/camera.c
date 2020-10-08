@@ -12,6 +12,37 @@
 
 #include "wolf3d.h"
 
+/*
+**	Sets camera viewbox using planes. The order is:
+**	Near, far, top, right, bottom, left
+*/
+
+static void set_camera_viewbox(t_wolf3d *app, t_plane *viewplanes)
+{
+	ml_vector3_set(viewplanes[0].origin, 0, 0,
+					app->active_scene->main_camera->near_clip);
+	ml_vector3_set(viewplanes[0].normal, 0, 0, -1);
+	ml_vector3_set(viewplanes[1].origin, 0, 0,
+					app->active_scene->main_camera->far_clip);
+	ml_vector3_set(viewplanes[1].normal, 0, 0, 1);
+	ml_vector3_set(viewplanes[2].origin, 0, -app->main_window->height / 2,
+					app->active_scene->main_camera->near_clip +
+						app->active_scene->main_camera->far_clip / 2);
+	ml_vector3_set(viewplanes[2].normal, 0, 1, 0);
+	ml_vector3_set(viewplanes[3].origin, app->main_window->width / 2, 0,
+					app->active_scene->main_camera->near_clip +
+						app->active_scene->main_camera->far_clip / 2);
+	ml_vector3_set(viewplanes[3].normal, -1, 0, 0);
+	ml_vector3_set(viewplanes[4].origin, 0, app->main_window->height / 2,
+					app->active_scene->main_camera->near_clip +
+						app->active_scene->main_camera->far_clip / 2);
+	ml_vector3_set(viewplanes[4].normal, 0, -1, 0);
+	ml_vector3_set(viewplanes[5].origin, -app->main_window->width / 2, 0,
+					app->active_scene->main_camera->near_clip +
+						app->active_scene->main_camera->far_clip / 2);
+	ml_vector3_set(viewplanes[5].normal, 1, 0, 0);
+}
+
 void			update_camera(t_wolf3d *app)
 {
 	t_camera	*camera;
@@ -26,38 +57,7 @@ void			update_camera(t_wolf3d *app)
 	camera->near_clip = NEAR_CLIP_DIST;
 	ml_vector3_set(camera->screen.origin, 0, 0, -app->main_window->width);
 	ml_vector3_set(camera->screen.normal, 0, 0, 1);
-}
-
-/*
-**	Sets camera viewbox using planes. The order is:
-**	Near, far, top, right, bottom, left
-*/
-
-static void		init_camera_viewbox(t_wolf3d *app, t_plane *viewplanes)
-{
-	ml_vector3_set(viewplanes[0].origin, 0, 0,
-					app->active_scene->main_camera->near_clip);
-	ml_vector3_set(viewplanes[0].normal, 0, 0, -1);
-
-	ml_vector3_set(viewplanes[1].origin, 0, 0,
-					app->active_scene->main_camera->far_clip);
-	ml_vector3_set(viewplanes[1].normal, 0, 0, 1);
-
-	ml_vector3_set(viewplanes[2].origin, 0, 0,
-					app->active_scene->main_camera->near_clip);
-	ml_vector3_set(viewplanes[2].normal, 0, 0, -1);
-
-	ml_vector3_set(viewplanes[3].origin, 0, 0,
-					app->active_scene->main_camera->near_clip);
-	ml_vector3_set(viewplanes[3].normal, 0, 0, -1);
-
-	ml_vector3_set(viewplanes[4].origin, 0, 0,
-					app->active_scene->main_camera->near_clip);
-	ml_vector3_set(viewplanes[4].normal, 0, 0, -1);
-
-	ml_vector3_set(viewplanes[5].origin, 0, 0,
-					app->active_scene->main_camera->near_clip);
-	ml_vector3_set(viewplanes[5].normal, 0, 0, -1);
+	set_camera_viewbox(app, camera->viewplanes);
 }
 
 t_camera		*new_camera()
@@ -67,6 +67,5 @@ t_camera		*new_camera()
 	if (!(camera = (t_camera*)malloc(sizeof(t_camera))))
 		return (NULL);
 	ml_vector3_set_all(camera->origin, 0);
-	init_camera_viewbox(camera->viewplanes);
 	return (camera);
 }

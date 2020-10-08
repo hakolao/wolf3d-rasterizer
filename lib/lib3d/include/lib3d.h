@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 13:20:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 15:37:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct				s_plane
 
 typedef struct				s_material
 {
-	uint32_t	**texture;
+	uint32_t	*texture;
 }							t_material;
 
 /*
@@ -141,6 +141,9 @@ typedef struct				s_3d_object
 	t_triangle		*triangles;
 	int32_t			num_triangles;
 	t_material		material;
+	t_mat4			rotation;
+	t_mat4			scale;
+	t_vec3			position;
 }							t_3d_object;
 
 /*
@@ -271,6 +274,12 @@ void						l3d_bounding_box_set(t_tri_vec *triangles,
 
 void						l3d_3d_object_transform(t_3d_object *obj,
 								t_mat4 transform);
+void						l3d_3d_object_translate(t_3d_object *object,
+								float x, float y, float z);
+void						l3d_3d_object_scale(t_3d_object *object,
+								float x, float y, float z);
+void						l3d_3d_object_rotate(t_3d_object *object,
+								float x, float y, float z);
 t_3d_object					*l3d_3d_object_create(uint32_t num_vertices,
 								uint32_t num_triangles);
 void						l3d_3d_object_destroy(t_3d_object *object);

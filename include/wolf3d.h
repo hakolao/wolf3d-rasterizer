@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 22:01:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 15:08:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,6 @@ typedef struct						s_scene_data
 	t_3d_object				*objects[64];
 	uint32_t				num_objects;
 	uint32_t				num_triangles;
-	t_mat4					world_scale;
-	t_mat4					world_rotation;
-	t_mat4					world_translation;
 }									t_scene_data;
 
 typedef struct						s_scene
@@ -156,7 +153,6 @@ typedef struct						s_scene
 	uint32_t				num_objects;
 	uint32_t				num_triangles;
 	t_camera				*main_camera;
-	t_window				*main_window;
 	t_triangle				*screen_triangles;
 	const char				*menu_options[64];
 	int32_t					menu_option_count;
@@ -282,8 +278,7 @@ void						render_debug_grid(t_wolf3d *app);
 
 void						scene_vertices_init(t_wolf3d *app,
 							t_scene *scene);
-t_scene						*new_scene(t_wolf3d *app,
-										t_scene_data *data);
+t_scene						*new_scene(t_scene_data *data);
 void						destroy_scene(t_scene *scene);
 void						set_active_scene(t_wolf3d *app,
 							t_scene_id to_scene);
@@ -292,7 +287,5 @@ void						debug_scene(t_scene *scene);
 void						update_world_translation(t_scene *scene, t_mat4	new_translation);
 void						update_world_rotation(t_scene *scene, t_mat4 new_rotation);
 void						update_world_scale(t_scene *scene, t_mat4 new_scale);
-void						update_world_rotation_local(t_scene *scene, t_mat4 new_rotation);
-void						rotate_world_local(t_wolf3d *app, t_vec3 axes);
 
 #endif

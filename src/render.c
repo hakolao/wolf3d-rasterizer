@@ -33,8 +33,7 @@ static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	t_plane screen;
 
 	k = -1;
-	ml_vector3_set(screen.origin, 0.0, 0.0,
-					-app->active_scene->main_window->width);
+	ml_vector3_set(screen.origin, 0.0, 0.0, -app->main_window->width);
 	ml_vector3_set(screen.normal, 0.0, 0.0, 1.0);
 	while (++k < 3)
 	{

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 13:19:12 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 15:12:21 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 	error_check(!(object->triangles =
 		malloc(sizeof(t_triangle) * num_triangles)),
 		"Failed to malloc 3d obj triangles");
+	ml_matrix4_id(object->rotation);
+	ml_matrix4_id(object->scale);
+	ml_vector3_set(object->position, 0, 0, 0);
 	return (object);
 }
 
@@ -48,26 +51,6 @@ void			l3d_3d_object_destroy(t_3d_object *object)
 	free(object->vertices);
 	free(object);
 	object = NULL;
-}
-
-/*
-** Multiplies each 3d object vertex with t_mat4 transformation matrix,
-** eg. translation matrix or rotation. And then updates triangle normals &
-** centroids / centers.
-*/
-
-void			l3d_3d_object_transform(t_3d_object *obj, t_mat4 transform)
-{
-	int		i;
-	int		j;
-
-	i = -1;
-	while (++i < obj->num_vertices)
-		ml_matrix4_mul_vec3(transform,
-			obj->vertices[i]->pos, obj->vertices[i]->pos);
-	j = -1;
-	while (++j < obj->num_triangles)
-		l3d_triangle_update(&obj->triangles[j]);
 }
 
 /*

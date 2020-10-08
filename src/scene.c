@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 22:39:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 15:34:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /*
 ** Add objs to scene. ToDo: Also should pair them with textures
 ** and position them where they belong.
+** Set scene & object specific transformations in scene data.
 */
 
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
@@ -38,8 +39,44 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.main_camera = new_camera();
 		data.objects[0] = l3d_read_obj("assets/icosphere.obj");
 		data.num_objects = 1;
+		l3d_3d_object_scale(data.objects[0],
+			app->main_window->width / 5.0,
+			app->main_window->width / 5.0,
+			app->main_window->width / 5.0);
+		l3d_3d_object_translate(data.objects[0],
+			0, 0, -app->main_window->width - 500);
 	}
-	app->active_scene = new_scene(app, &data);
+	app->active_scene = new_scene(&data);
+	if (app->active_scene->main_camera)
+		update_camera(app);
+}
+
+/*
+** Initial transformations are set to id, and they change when player moves.
+*/
+
+t_scene			*new_scene(t_scene_data *data)
+{
+	t_scene		*scene;
+
+	error_check(!(scene = (t_scene*)malloc(sizeof(t_scene))),
+		"Failed to malloc scene");
+	scene->scene_id = data->scene_id;
+	ft_memcpy(scene->menu_options, data->menu_options,
+		sizeof(char*)*data->menu_option_count);
+	scene->menu_option_count = data->menu_option_count;
+	scene->selected_option = 0;
+	scene->main_camera = data->main_camera;
+	scene->num_objects = data->num_objects;
+	if (data->num_objects > 0)
+	{
+		ft_memmove(scene->objects, data->objects,
+			sizeof(t_3d_object) * data->num_objects);
+		ml_matrix4_id(scene->world_rotation);
+		ml_matrix4_id(scene->world_scale);
+		ml_matrix4_id(scene->world_translation);
+	}
+	return (scene);
 }
 
 void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
@@ -48,37 +85,6 @@ void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
 		destroy_scene(app->active_scene);
 	select_scene(app, to_scene);
 	// debug_scene(app->active_scene);
-}
-
-t_scene			*new_scene(t_wolf3d *app, t_scene_data *data)
-{
-	t_scene		*scene;
-
-	error_check(!(scene = (t_scene*)malloc(sizeof(t_scene))),
-		"Failed to malloc scene");
-	scene->main_window = app->main_window;
-	app->active_scene = scene;
-	scene->scene_id = data->scene_id;
-	ft_memcpy(scene->menu_options, data->menu_options,
-		sizeof(char*)*data->menu_option_count);
-	scene->menu_option_count = data->menu_option_count;
-	scene->selected_option = 0;
-	scene->main_camera = data->main_camera;
-	scene->num_objects = data->num_objects;
-	ft_memmove(scene->objects, data->objects,
-		sizeof(t_3d_object) * data->num_objects);
-	ml_matrix4_id(scene->world_rotation);
-	ml_matrix4_id(scene->world_scale);
-	ml_matrix4_id(scene->world_translation);
-	scene->world_scale[0][0] = app->main_window->width / 50.0;
-	scene->world_scale[1][1] = app->main_window->width / 50.0;
-	scene->world_scale[2][2] = app->main_window->width / 50.0;
-	update_world_scale(scene, scene->world_scale);
-	ml_matrix4_translation(0, 0, -app->main_window->width -500, scene->world_translation);
-	update_world_translation(scene, scene->world_translation);
-	if (scene->main_camera)
-		update_camera(app);
-	return (scene);
 }
 
 void			destroy_scene(t_scene *scene)

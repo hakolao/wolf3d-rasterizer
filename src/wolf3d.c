@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:44:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 16:22:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ static void 	main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 
 void 		player_action_handle(t_wolf3d *app, SDL_Event event)
 {
+	if (event.type == SDL_MOUSEMOTION)
+		rotate_player(app, (t_vec3){event.motion.yrel / 5,
+			-event.motion.xrel / 5, 0});
 	if (event.type == SDL_KEYDOWN)
 	{
 		if (event.key.keysym.sym == SDLK_w)
@@ -48,14 +51,6 @@ void 		player_action_handle(t_wolf3d *app, SDL_Event event)
 			move_player(app, move_backward);
 		else if (event.key.keysym.sym == SDLK_d)
 			move_player(app, move_strafe_right);
-		else if (event.key.keysym.sym == SDLK_UP)
-			rotate_player(app, (t_vec3){-1, 0, 0});
-		else if (event.key.keysym.sym == SDLK_DOWN)
-			rotate_player(app, (t_vec3){1, 0, 0});
-		else if (event.key.keysym.sym == SDLK_RIGHT)
-			rotate_player(app, (t_vec3){0, -1, 0});
-		else if (event.key.keysym.sym == SDLK_LEFT)
-			rotate_player(app, (t_vec3){0, 1, 0});
 		else if (event.key.keysym.sym == SDLK_q)
 			l3d_3d_object_rotate(app->active_scene->objects[0], 0, -1, 0);
 		else if (event.key.keysym.sym == SDLK_e)
@@ -123,6 +118,8 @@ void			wolf3d_run(t_wolf3d *app)
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
 	main_window_init(app);
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 	wolf3d_init(app);
 	wolf3d_main_loop(app);
 	wolf3d_cleanup(app);

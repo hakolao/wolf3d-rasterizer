@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:12:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 15:51:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 	ml_matrix4_id(object->rotation);
 	ml_matrix4_id(object->scale);
 	ml_vector3_set(object->position, 0, 0, 0);
+	object->material.texture = NULL;
 	return (object);
 }
 

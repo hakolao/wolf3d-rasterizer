@@ -56,7 +56,8 @@
 
 # define BYTES_PER_PIXEL 8
 
-# define NEAR_CLIP_DIST -10
+# define NEAR_CLIP_DIST 10
+# define FAR_CLIP_DIST 100000
 
 /*
 ** Forward declarations
@@ -119,6 +120,8 @@ typedef struct						s_camera
 	int						width;
 	int						height;
 	float					near_clip;
+	float					far_clip;
+	t_plane					*viewplanes[6];
 }									t_camera;
 
 typedef struct						s_player

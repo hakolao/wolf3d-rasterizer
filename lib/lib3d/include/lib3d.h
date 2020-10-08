@@ -25,8 +25,8 @@
 # define L3D_TRI_VEC_INITIAL_CAPACITY 10
 
 # define L3D_MAX_OBJECTS 32
-# define L3D_MAX_TRIANGLES 10000000
-#define L3D_MAX_VERTICES 10000000
+# define L3D_MAX_TRIANGLES 16384
+#define L3D_MAX_VERTICES 16384
 
 /*
 ** OBJ file temporary structs. They are used in transfering obj data to final

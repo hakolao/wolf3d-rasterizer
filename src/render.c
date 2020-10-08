@@ -85,6 +85,46 @@ void			draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
 }
 
 /*
+**	Check it a vertex is within the viewbox with a signed distance check
+*/
+
+t_bool			vertex_in_box(t_wolf3d *app, t_plane *planes, t_vertex *vertex)
+{
+	int		i;
+	t_vec3	offset_plane_normal;
+
+	i = -1;
+	ml_vector3_add(planes[i].normal, planes->origin, offset_plane_normal);
+	while (++i < 4)
+	{
+		ml_vector3_add(planes[i].normal, planes->origin, offset_plane_normal);
+		if (ml_vector3_dot(offset_plane_normal, vertex->pos) < 0)
+			return (false);
+	}
+	return (true);
+}
+
+/*
+**	Check it a triangle is within the viewbox
+*/
+
+t_bool			triangle_in_view(t_wolf3d *app, t_triangle *triangle)
+{
+	int		i;
+	t_plane	*viewplanes;
+
+	viewplanes = app->active_scene->main_camera->viewplanes;
+	i = -1;
+	while(++i < 3)
+	{
+		if (vertex_in_box(app, viewplanes, triangle->vtc[i]))
+			return (true);
+	}
+	return (false);
+}
+
+
+/*
 ** Checks if any of triangle vertices are behind near clip distance so the
 ** perspective projection does not get distorted and nothing "behind" camera
 ** are drawn. Edit NEAR_CLIP_DIST if needed and you notice that current value

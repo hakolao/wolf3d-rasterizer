@@ -84,7 +84,7 @@ void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
 	if (app->active_scene != NULL)
 		destroy_scene(app->active_scene);
 	select_scene(app, to_scene);
-	debug_scene(app->active_scene);
+	// debug_scene(app->active_scene);
 }
 
 void			destroy_scene(t_scene *scene)

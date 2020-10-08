@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 14:31:10 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 13:19:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 */
 
 t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
-				uint32_t num_triangles, uint32_t num_text_coords)
+					uint32_t num_triangles)
 {
 	t_3d_object	*object;
 
@@ -30,8 +30,6 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 	error_check(!(object->triangles =
 		malloc(sizeof(t_triangle) * num_triangles)),
 		"Failed to malloc 3d obj triangles");
-	error_check(!(object->uvs = malloc(sizeof(t_vec2) * num_text_coords)),
-		"Failed to malloc 3d obj uvs");
 	return (object);
 }
 

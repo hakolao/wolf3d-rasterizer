@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:27:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 22:16:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 13:19:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,7 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj)
 
 	error_check(!(l3d_object = malloc(sizeof(*l3d_object))),
 		"Failed to malloc 3d obj");
-	l3d_object = l3d_3d_object_create(obj->num_vertices,
-		obj->num_triangles, obj->num_v_text_coords);
+	l3d_object = l3d_3d_object_create(obj->num_vertices, obj->num_triangles);
 	obj_to_3d_object(obj, l3d_object);
 	l3d_object->num_triangles = obj->num_triangles;
 	l3d_object->num_vertices = obj->num_vertices;

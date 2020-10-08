@@ -9,3 +9,5 @@ void *init_player(t_wolf3d *app)
 }
 
 When reorganizing functions into files change appropriate functions to static
+
+Program segfaults if trying to read object that has larger triangle count than max

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:22:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 15:44:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ void 		player_action_handle(t_wolf3d *app, SDL_Event event)
 		else if (event.key.keysym.sym == SDLK_d)
 			move_player(app, move_strafe_right);
 		else if (event.key.keysym.sym == SDLK_UP)
-			rotate_player(app, (t_vec3){1, 0, 0});
-		else if (event.key.keysym.sym == SDLK_DOWN)
 			rotate_player(app, (t_vec3){-1, 0, 0});
+		else if (event.key.keysym.sym == SDLK_DOWN)
+			rotate_player(app, (t_vec3){1, 0, 0});
 		else if (event.key.keysym.sym == SDLK_RIGHT)
-			rotate_player(app, (t_vec3){0, 1, 0});
-		else if (event.key.keysym.sym == SDLK_LEFT)
 			rotate_player(app, (t_vec3){0, -1, 0});
+		else if (event.key.keysym.sym == SDLK_LEFT)
+			rotate_player(app, (t_vec3){0, 1, 0});
 		else if (event.key.keysym.sym == SDLK_q)
 			l3d_3d_object_rotate(app->active_scene->objects[0], 0, -1, 0);
 		else if (event.key.keysym.sym == SDLK_e)

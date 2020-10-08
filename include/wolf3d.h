@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 19:47:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 21:13:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ typedef struct						s_player
 	float					speed;
 	float					rot_speed;
 	t_mat4					rotation;
+	t_mat4					inv_rotation;
+	t_mat4					translation;
 }									t_player;
 
 /*

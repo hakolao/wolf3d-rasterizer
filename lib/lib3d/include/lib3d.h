@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 13:19:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 13:20:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ typedef struct				s_3d_object
 	int32_t			num_vertices;
 	t_triangle		*triangles;
 	int32_t			num_triangles;
+	t_material		material;
 }							t_3d_object;
 
 /*

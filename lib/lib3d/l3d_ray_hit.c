@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/06 14:56:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 17:23:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,10 @@ t_bool			l3d_triangle_ray_hit(t_triangle *triangle, t_ray *ray,
 ** triangles materials are see-through.
 */
 
-static t_bool	l3d_kd_triangles_hit(t_kd_node *node, t_ray *ray, float t_max,
-				t_hit *hit)
+static t_bool	l3d_kd_triangles_hit(t_kd_node *node, t_ray *ray,
+					t_hit *hit)
 {
 	t_bool	hit_triangle;
-	t_vec3	dir_add;
 	int		i;
 
 	hit_triangle = false;
@@ -111,14 +110,7 @@ static t_bool	l3d_kd_triangles_hit(t_kd_node *node, t_ray *ray, float t_max,
 	while (++i < (int)node->triangles->size)
 	{
 		if (l3d_triangle_ray_hit(node->triangles->triangles[i], ray, hit))
-		{
 			hit_triangle = true;
-			ml_vector3_mul(ray->dir, hit->t, dir_add);
-			ml_vector3_add(ray->origin, dir_add, hit->hit_point);
-			ml_vector3_copy(node->triangles->triangles[i]->normal,
-				hit->normal);
-			t_max = hit->t;
-		}
 	}
 	return (hit_triangle);
 }
@@ -130,7 +122,7 @@ static t_bool	l3d_kd_triangles_hit(t_kd_node *node, t_ray *ray, float t_max,
 */
 
 t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
-				float t_max, t_hit *hit)
+					t_hit *hit)
 {
 	t_bool	hits_right;
 	t_bool	hits_left;
@@ -139,11 +131,11 @@ t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
 	{
 		if (node->left || node->right)
 		{
-			hits_left = l3d_kd_tree_ray_hit(node->left, ray, t_max, hit);
-			hits_right = l3d_kd_tree_ray_hit(node->right, ray, t_max, hit);
+			hits_left = l3d_kd_tree_ray_hit(node->left, ray, hit);
+			hits_right = l3d_kd_tree_ray_hit(node->right, ray, hit);
 			return (hits_left || hits_right);
 		}
-		return (l3d_kd_triangles_hit(node, ray, t_max, hit));
+		return (l3d_kd_triangles_hit(node, ray, hit));
 	}
 	return (false);
 }

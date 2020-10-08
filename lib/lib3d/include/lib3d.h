@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:37:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 17:23:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ void						l3d_kd_tree_print(t_kd_tree *tree);
 */
 
 t_bool						l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
-								float t_max, t_hit *hit);
+								t_hit *hit);
 t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
 								t_ray *ray, t_hit *hit);
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,

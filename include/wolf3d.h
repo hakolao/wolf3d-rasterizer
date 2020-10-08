@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:08:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 19:47:02 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct						s_camera
 	int						width;
 	int						height;
 	float					near_clip;
+	t_plane					screen;
 }									t_camera;
 
 typedef struct						s_player
@@ -129,6 +130,7 @@ typedef struct						s_player
 	t_vec3					up;
 	float					speed;
 	float					rot_speed;
+	t_mat4					rotation;
 }									t_player;
 
 /*
@@ -158,9 +160,6 @@ typedef struct						s_scene
 	int32_t					menu_option_count;
 	int32_t					selected_option;
 	t_scene_id				scene_id;
-	t_mat4					world_scale;
-	t_mat4					world_rotation;
-	t_mat4					world_translation;
 }									t_scene;
 
 typedef struct						s_wolf3d_debug
@@ -284,8 +283,5 @@ void						set_active_scene(t_wolf3d *app,
 							t_scene_id to_scene);
 t_3d_object					**create_scene1_objects(int32_t *obj_count);
 void						debug_scene(t_scene *scene);
-void						update_world_translation(t_scene *scene, t_mat4	new_translation);
-void						update_world_rotation(t_scene *scene, t_mat4 new_rotation);
-void						update_world_scale(t_scene *scene, t_mat4 new_scale);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:32:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 17:06:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 19:44:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void			update_camera(t_wolf3d *app)
 	camera->width = app->main_window->width;
 	camera->height = app->main_window->height;
 	camera->near_clip = NEAR_CLIP_DIST;
+	ml_vector3_set(camera->screen.origin, 0, 0, -app->main_window->width);
+	ml_vector3_set(camera->screen.normal, 0, 0, 1);
 }
 
 t_camera		*new_camera()

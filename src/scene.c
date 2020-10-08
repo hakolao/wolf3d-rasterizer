@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:43:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/08 19:46:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,6 @@ t_scene			*new_scene(t_scene_data *data)
 	{
 		ft_memmove(scene->objects, data->objects,
 			sizeof(t_3d_object) * data->num_objects);
-		ml_matrix4_id(scene->world_rotation);
-		ml_matrix4_id(scene->world_scale);
-		ml_matrix4_id(scene->world_translation);
 	}
 	return (scene);
 }

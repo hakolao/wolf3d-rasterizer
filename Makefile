@@ -36,8 +36,7 @@ SOURCES = main.c \
 			ui.c \
 			color_utils.c \
 			text.c \
-			debug.c \
-			world.c
+			debug.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

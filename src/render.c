@@ -24,29 +24,50 @@ static void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits)
 	}
 }
 
+static void		rendered_triangle_set(t_wolf3d *app,
+					t_triangle *temp, t_vertex vtc[3], t_triangle *triangle)
+{
+	int		k;
+	t_mat4	translation;
+	t_mat4	rotation;
+
+	k = -1;
+	ft_memcpy(temp, triangle, sizeof(t_triangle));
+	ml_matrix4_inverse(app->player.rotation, rotation);
+	ml_matrix4_translation(app->player.pos[0], app->player.pos[1],
+		app->player.pos[2], translation);
+	while (++k < 3)
+	{
+		ft_memcpy(&vtc[k], triangle->vtc[k], sizeof(t_vertex));
+		temp->vtc[k] = &vtc[k];
+		ml_matrix4_mul_vec3(translation, temp->vtc[k]->pos, temp->vtc[k]->pos);
+		ml_matrix4_mul_vec3(rotation, temp->vtc[k]->pos, temp->vtc[k]->pos);
+	}
+	l3d_triangle_update(temp);
+}
+
 static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle,
 								t_vec2 *points_2d)
 {
-	t_ray	rays[3];	
-	t_vec3	hits[3];
-	int k;
-	t_plane screen;
+	t_ray		rays[3];	
+	t_vec3		hits[3];
+	int			k;
 
 	k = -1;
-	ml_vector3_set(screen.origin, 0.0, 0.0, -app->main_window->width);
-	ml_vector3_set(screen.normal, 0.0, 0.0, 1.0);
 	while (++k < 3)
 	{
 		ml_vector3_set(hits[k], 0.0, 0.0, 0.0);
-		l3d_ray_set(triangle->vtc[k]->pos, (t_vec3){0.0, 0.0, 0.0}, &rays[k]);
-		if (!(l3d_plane_ray_hit(&screen, &rays[k], hits[k])))
-			{
-				ft_printf("Error in screen_intersection: ray from triangle\n"
-							"didn't intersect with screen plane or did in too\n"
-							"small an angle. Pointo of hit set to default 0.\n");
-				ml_vector3_set_all(hits[k], 0);
-			}
+		l3d_ray_set(triangle->vtc[k]->pos, (t_vec3){0, 0, 0}, &rays[k]);
+		if (!(l3d_plane_ray_hit(&app->active_scene->main_camera->screen,
+			&rays[k], hits[k])))
+		{
+			ft_printf("Error in screen_intersection: ray from triangle\n"
+						"didn't intersect with screen plane or did in too\n"
+						"small an angle. Pointo of hit set to default 0.\n");
+			ml_vector3_set_all(hits[k], 0);
+		}
 	}
+	
 	calculate_2d_points(points_2d, hits);
 	return (true);
 }
@@ -117,19 +138,22 @@ static t_bool	is_rendered(t_wolf3d *app, t_triangle *triangle)
 	return (true);
 }
 
-t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
+t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 {
 	t_vec2		points_2d[3];
 	uint32_t	*buffer;
 	uint32_t	dimensions[2];
-	
-	if (!(is_rendered(app, triangle)))
+	t_triangle	render_triangle;
+	t_vertex	vtc[3];
+
+	rendered_triangle_set(app, &render_triangle, vtc, triangle_in);
+	if (!(is_rendered(app, &render_triangle)))
 		return (false);
 	buffer = app->main_window->framebuffer; 
 	dimensions[0] = app->main_window->width;
 	dimensions[1] = app->main_window->height;
-	screen_intersection(app, triangle, points_2d);
-	l3d_triangle_raster(buffer, dimensions, triangle, points_2d);
-	// draw_debug_crosshair_on_corners(app, points_2d);
+	ft_memset(points_2d, 0, sizeof(points_2d));
+	screen_intersection(app, &render_triangle, points_2d);
+	l3d_triangle_raster(buffer, dimensions, &render_triangle, points_2d);
 	return (true);
 }

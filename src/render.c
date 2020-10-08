@@ -30,10 +30,13 @@ static void		rendered_triangle_set(t_wolf3d *app,
 	int		k;
 
 	k = -1;
-	ft_memcpy(temp, triangle, sizeof(t_triangle));
+	temp->is_single_sided = triangle->is_single_sided;
 	while (++k < 3)
 	{
-		ft_memcpy(&vtc[k], triangle->vtc[k], sizeof(t_vertex));
+		vtc[k].color = triangle->vtc[k]->color;
+		ml_vector4_copy(triangle->vtc[k]->pos, vtc[k].pos);
+		ml_vector3_copy(triangle->vtc[k]->normal, vtc[k].normal);
+		ml_vector2_copy(triangle->vtc[k]->uv, vtc[k].uv);
 		temp->vtc[k] = &vtc[k];
 		ml_matrix4_mul_vec3(app->player.translation,
 			temp->vtc[k]->pos, temp->vtc[k]->pos);

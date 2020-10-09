@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 13:11:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 01:50:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/09 13:41:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ void				ml_matrix4_lookat(t_vec3 eye, t_vec3 center, t_vec3 up,
 					t_mat4 res);
 void				ml_matrix4_fps(t_vec3 eye, float pitch, float yaw,
 					t_mat4 res);
+void				ml_matrix4_general_rotation(t_vec4 axis, float rad_angle,
+						t_mat4 res);
 void				ml_matrix4_rotation_x(float rad, t_mat4 res);
 void				ml_matrix4_rotation_y(float rad, t_mat4 res);
 void				ml_matrix4_rotation_z(float rad, t_mat4 res);

@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/09/30 02:04:41 by ohakola          ###   ########.fr        #
+#    Updated: 2020/10/09 13:41:42 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SOURCES = ml_matrix4_id.c \
 			ml_matrix4_mul_vec.c \
 			ml_matrix4_projection.c \
 			ml_matrix4_rotation.c \
+			ml_matrix4_general_rotation.c \
 			ml_matrix4_rotate.c \
 			ml_matrix4_view.c \
 			ml_print1.c \

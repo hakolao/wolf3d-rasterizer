@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:07:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/09 12:41:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@
 /*
 ** Matrix
 */
+const char		*test_matrix_inverse(void);
 
 #endif

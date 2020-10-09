@@ -48,7 +48,7 @@
 */
 
 # define PLAYER_SPEED 5
-# define PLAYER_ROTATION_SPEED 0.1
+# define PLAYER_ROTATION_SPEED 0.01
 
 /*
 **	Frame buffer

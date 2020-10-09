@@ -122,6 +122,7 @@ typedef struct				s_plane
 {
 	t_vec3		origin;
 	t_vec3		normal;
+	float		d;
 }							t_plane;
 
 typedef struct				s_material

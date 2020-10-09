@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/09 13:34:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/09 13:42:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/09 13:51:26 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** an arbitrary t_vec3 angle_deg degrees.
 */
 
-void		ml_matrix4_general_rotation(t_vec4 axis, float rad_angle,
+void		ml_matrix4_general_rotation(t_vec3 axis, float rad_angle,
 				t_mat4 res)
 {
 	ml_matrix4_copy((t_mat4){

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 21:13:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/09 14:42:33 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,10 @@ typedef struct						s_player
 	t_vec3					up;
 	float					speed;
 	float					rot_speed;
-	t_mat4					rotation;
-	t_mat4					inv_rotation;
-	t_mat4					translation;
+	t_mat4					world_rotation;
+	t_mat4					world_translation;
+	float					rot_x;
+	float					rot_y;
 }									t_player;
 
 /*
@@ -219,7 +220,8 @@ float						sin_time(float min, float max, float speed);
 
 void						init_player(t_wolf3d *app);
 void						move_player(t_wolf3d *app, t_move dir);
-void						rotate_player(t_wolf3d *app, t_vec3 axes);
+void						rotate_player_vertical(t_wolf3d *app, float angle);
+void						rotate_player_horizontal(t_wolf3d *app, float angle);
 void						player_action_handle(t_wolf3d *app, SDL_Event event);
 
 /*

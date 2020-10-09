@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 21:25:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/09 14:49:50 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ static void 	main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 void 		player_action_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_MOUSEMOTION)
-		rotate_player(app, (t_vec3){(float)event.motion.yrel * 0.4,
-			-(float)event.motion.xrel * 0.4, 0});
+	{
+		rotate_player_vertical(app, (float)event.motion.yrel * 0.3);
+		rotate_player_horizontal(app, -(float)event.motion.xrel * 0.3);
+	}
 	if (event.type == SDL_KEYDOWN)
 	{
 		if (event.key.keysym.sym == SDLK_w)

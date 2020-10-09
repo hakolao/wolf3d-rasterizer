@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 19:23:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:07:42 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/09 15:09:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_test_state g_test_states[MAX_TESTS];
 
 static void		all_tests(void)
 {
-	(void)g_tests_run;
+	OH_RUN_TEST(test_matrix_inverse);
 }
 
 int				main(void)

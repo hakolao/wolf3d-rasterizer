@@ -38,9 +38,9 @@ static void		rendered_triangle_set(t_wolf3d *app,
 		ml_vector3_copy(triangle->vtc[k]->normal, vtc[k].normal);
 		ml_vector2_copy(triangle->vtc[k]->uv, vtc[k].uv);
 		temp->vtc[k] = &vtc[k];
-		ml_matrix4_mul_vec3(app->player.world_rotation,
-			temp->vtc[k]->pos, temp->vtc[k]->pos);
 		ml_matrix4_mul_vec3(app->player.world_translation,
+			temp->vtc[k]->pos, temp->vtc[k]->pos);
+		ml_matrix4_mul_vec3(app->player.world_rotation,
 			temp->vtc[k]->pos, temp->vtc[k]->pos);
 	}
 	l3d_triangle_update(temp);

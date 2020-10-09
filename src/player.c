@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/09 15:20:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/09 15:30:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ static void		rotate_player(t_wolf3d *app)
 	ml_matrix4_rotation_x(ml_rad(app->player.rot_y), rotation_y);
 	ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
 	ml_matrix4_mul(rotation_x, rotation_y, rotation);
-	ml_matrix4_mul_vec3(rotation, app->player.forward, app->player.forward);
-	ml_matrix4_mul_vec3(rotation, app->player.up, app->player.up);
-	ml_matrix4_mul_vec3(rotation, app->player.sideways, app->player.sideways);
+	ml_matrix4_mul_vec3(rotation_y, app->player.sideways, app->player.sideways);
 	ml_matrix4_inverse(rotation, app->player.world_rotation);
 }
 

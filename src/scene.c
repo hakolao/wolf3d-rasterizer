@@ -18,9 +18,26 @@
 ** Set scene & object specific transformations in scene data.
 */
 
+void			set_texture_to_triangles(t_3d_object *object, uint32_t *texture)
+//!create a better implementation
+{
+	int		i;
+
+	i = -1;
+	while (++i < object->num_triangles)
+	{
+		object->triangles[i].texture = texture;
+		// (void)texture;
+	}
+}
+
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
 	t_scene_data		data;
+	uint32_t			*texture;//!same here
+	uint32_t			width;//!same here
+	uint32_t			height;//!same here
+	texture = (uint32_t *)malloc(sizeof(uint32_t) * 2048 * 2048); //!same here
 
 	data.scene_id = scene_id;
 	if (scene_id == scene_id_main_menu)
@@ -38,6 +55,9 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
 		data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj");
+		l3d_read_bmp_image_32bit_rgba("assets/icosphereUV.bmp",
+									  &texture, &width, &height);
+		set_texture_to_triangles(data.objects[0], texture); //!create a better implementation
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],
 			app->main_window->width / 5.0,

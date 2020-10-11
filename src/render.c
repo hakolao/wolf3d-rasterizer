@@ -109,7 +109,7 @@ void			draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
 **	Check it a vertex is within the viewbox with a signed distance check
 */
 
-t_bool			vertex_in_box(t_plane *planes, t_vertex *vertex)
+t_bool			vertex_between_planes(t_plane *planes, t_vertex *vertex)
 {
 	int		i;
 
@@ -135,7 +135,7 @@ t_bool			triangle_in_view(t_wolf3d *app, t_triangle *triangle)
 	i = -1;
 	while(++i < 3)
 	{
-		if (vertex_in_box(viewplanes, triangle->vtc[i]))
+		if (vertex_between_planes(viewplanes, triangle->vtc[i]))
 			return (true);
 	}
 	return (false);
@@ -182,8 +182,6 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	uint32_t	dimensions[2];
 	t_triangle	render_triangle;
 	t_vertex	vtc[3];
-
-	
 	
 	rendered_triangle_set(app, &render_triangle, vtc, triangle_in);
 	if (!(triangle_in_view(app, &render_triangle)))

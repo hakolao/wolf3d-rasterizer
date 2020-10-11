@@ -112,6 +112,7 @@ typedef struct				s_triangle
 	t_vec3			ab;
 	t_vec3			ac;
 	t_vertex		*ordered_vtc[3];
+	uint32_t		*texture;
 }							t_triangle;
 
 /*
@@ -309,6 +310,15 @@ void						l3d_triangle_raster(uint32_t *buffer,
 												uint32_t *dimensions,
 												t_triangle *triangle,
 												t_vec2 *points_2d);
+void						l3d_calculate_bary_coords(t_vec2 *points_2d,
+														t_vec2 point,
+														float *barycoords);
+void						l3d_interpolate_uv(t_triangle *triangle,
+												float *barycoords,
+												t_vec2 point_uv);
+uint32_t					l3d_sample_texture(uint32_t *texture_data,
+												int width,
+												int height, t_vec2 uv_point);
 
 	/*
 ** Plot pixel

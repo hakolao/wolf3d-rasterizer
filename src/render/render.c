@@ -72,39 +72,6 @@ static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle,
 	return (true);
 }
 
-void			draw_debug_crosshair_on_corners(t_wolf3d *app, t_vec2 *ordered_corners)
-{
-	uint32_t width = app->main_window->width;
-	uint32_t height = app->main_window->height;
-
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[0][0] + width / 2, ordered_corners[0][1] + height / 2},
-							  {ordered_corners[0][0] + width / 2, ordered_corners[0][1] + 20 + height / 2}},
-				  0x00ff00ff);
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[0][0] + width / 2, ordered_corners[0][1] + height / 2},
-							  {ordered_corners[0][0] + 20 + width / 2, ordered_corners[0][1] + height / 2}},
-				  0x00ff00ff);
-
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[1][0] + width / 2, ordered_corners[1][1] + height / 2},
-							  {ordered_corners[1][0] + width / 2, ordered_corners[1][1] + 20 + height / 2}},
-				  0xff0000ff);
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[1][0] + width / 2, ordered_corners[1][1] + height / 2},
-							  {ordered_corners[1][0] + 20 + width / 2, ordered_corners[1][1] + height / 2}},
-				  0xff0000ff);
-
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[2][0] + width / 2, ordered_corners[2][1] + height / 2},
-							  {ordered_corners[2][0] + width / 2, ordered_corners[2][1] + 20 + height / 2}},
-				  0xfff0f0ff);
-	l3d_line_draw(app->main_window->rbuffer, (uint32_t[2]){WIDTH, HEIGHT},
-				  (int[2][2]){{ordered_corners[2][0] + width / 2, ordered_corners[2][1] + height / 2},
-							  {ordered_corners[2][0] + 20 + width / 2, ordered_corners[2][1] + height / 2}},
-				  0xfff0f0ff);
-}
-
 /*
 **	Check it a vertex is within the viewbox with a signed distance check
 */
@@ -190,9 +157,9 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 		return (false);
 	if (!(is_rendered(app, &render_triangle)))
 		return (false);
-	buffer = app->main_window->framebuffer; 
-	dimensions[0] = app->main_window->width;
-	dimensions[1] = app->main_window->height;
+	buffer = app->window->framebuffer; 
+	dimensions[0] = app->window->width;
+	dimensions[1] = app->window->height;
 	ft_memset(points_2d, 0, sizeof(points_2d));
 	screen_intersection(app, &render_triangle, points_2d);
 	l3d_triangle_raster(buffer, dimensions, &render_triangle, points_2d);

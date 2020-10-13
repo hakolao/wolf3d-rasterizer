@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/09 14:49:50 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 18:27:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void 	main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 	}
 }
 
-void 		player_action_handle(t_wolf3d *app, SDL_Event event)
+void 			player_action_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_MOUSEMOTION)
 	{
@@ -64,13 +64,30 @@ void 		player_action_handle(t_wolf3d *app, SDL_Event event)
 	}
 }
 
+static void		wolf3d_resize_dependent_recreate(t_wolf3d *app)
+{
+	window_frame_recreate(app->window);
+	app->window->resized = false;
+	while (app->window->is_hidden)
+		SDL_PollEvent(NULL);
+}
+
+static void		wolf3d_debug_info_capture(t_wolf3d *app)
+{
+	app->info.performance_end = SDL_GetPerformanceCounter();
+	app->info.delta_time =
+		(app->info.performance_end - app->info.performance_start) * 1000.0 /
+		SDL_GetPerformanceFrequency();
+	app->info.fps = window_framerate_capture(app->info.delta_time);
+}
+
 static void		wolf3d_main_loop(t_wolf3d *app)
 {
 	SDL_Event	event;
 
 	while (app->is_running)
 	{
-		app->performance_start = SDL_GetPerformanceCounter();
+		app->info.performance_start = SDL_GetPerformanceCounter();
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
@@ -83,12 +100,13 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			else
 				player_action_handle(app, event);
 		}
-		draw_frame(app);
-		app->performance_end = SDL_GetPerformanceCounter();
-		app->delta_time = (app->performance_end - app->performance_start) *
-			1000.0 / SDL_GetPerformanceFrequency();
-		app->debug_info.fps = capture_framerate(app->delta_time);
-		app->debug_info.avg_delta_time = app->delta_time;
+		if (app->window->resized)
+			wolf3d_resize_dependent_recreate(app);
+		window_frame_clear(app->window);
+		wolf3d_render(app);
+		wolf3d_debug_info_render(app);
+		window_frame_draw(app->window);
+		wolf3d_debug_info_capture(app);
 	}
 }
 
@@ -97,19 +115,20 @@ void		wolf3d_init(t_wolf3d *app)
 	app->active_scene = NULL;
 	app->is_running = true;
 	app->is_debug = true;
-	ft_bzero(&app->debug_info, sizeof(app->debug_info));
 	init_player(app);
 	set_active_scene(app, scene_id_main_menu);
 }
 
 static void		wolf3d_cleanup(t_wolf3d *app)
 {
+	free(app->window->framebuffer);
+	free(app->window->zbuffer);
 	destroy_scene(app->active_scene);
-	SDL_DestroyRenderer(app->main_window->renderer);
-	SDL_DestroyWindow(app->main_window->window);
-	TTF_CloseFont(app->main_window->main_font);
-	TTF_CloseFont(app->main_window->debug_font);
-	free(app->main_window);
+	SDL_DestroyRenderer(app->window->renderer);
+	SDL_DestroyWindow(app->window->window);
+	TTF_CloseFont(app->window->main_font);
+	TTF_CloseFont(app->window->debug_font);
+	free(app->window);
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
@@ -119,7 +138,7 @@ void			wolf3d_run(t_wolf3d *app)
 {
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
-	main_window_init(app);
+	window_create(&app->window);
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	wolf3d_init(app);

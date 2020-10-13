@@ -26,17 +26,17 @@ INCLUDES = -I ./include \
 FLAGS = -Wall -Wextra -Werror -O3
 SOURCES = main.c \
 			wolf3d.c \
-			window.c \
-			draw.c \
 			player.c \
 			camera.c \
 			scene.c \
 			time.c \
-			render.c \
-			ui.c \
-			color_utils.c \
-			text.c \
-			debug.c
+			debug.c \
+			render/render.c \
+			render/scene.c \
+			window/ui.c \
+			window/text.c \
+			window/window.c \
+			window/utils.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
@@ -54,6 +54,8 @@ $(NAME): $(OBJS)
 
 $(DIR_OBJ):
 	@mkdir -p temp
+	@mkdir -p temp/window
+	@mkdir -p temp/render
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INCLUDES) -c -o $@ $<

@@ -6,31 +6,21 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/09 14:42:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 18:18:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
-# include <SDL.h>
-# include <SDL_image.h>
-# include <SDL_ttf.h>
 # include "libft.h"
 # include "libgmatrix.h"
 # include "lib3d.h"
 # include <float.h>
+# include "window.h"
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
-
-# define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
-# define GAME_FONT "assets/pixelated.ttf"
-# define DEBUG_FONT "assets/Roboto-Regular.ttf"
-# define FONT_SIZE 20
-
-# define WIDTH 1280
-# define HEIGHT 720
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the
@@ -49,12 +39,6 @@
 
 # define PLAYER_SPEED 5
 # define PLAYER_ROTATION_SPEED 0.01
-
-/*
-**	Frame buffer
-*/
-
-# define BYTES_PER_PIXEL 8
 
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000
@@ -83,27 +67,6 @@ typedef enum						e_menu_actions
 	menu_action_load_game,
 	menu_action_quit_game
 }									t_menu_actions;
-
-typedef struct						s_window
-{
-	SDL_Renderer			*renderer;
-	SDL_Texture				*frame;
-	uint32_t				*framebuffer;
-	uint32_t				*zbuffer;
-	uint32_t				*rbuffer;
-	uint32_t				rbuf_render_color;
-	TTF_Font				*main_font;
-	TTF_Font				*debug_font;
-	int32_t					width;
-	int32_t					height;
-	int32_t					pitch;
-	t_bool					resized;
-	SDL_Window				*window;
-	uint32_t				window_id;
-	t_bool					is_hidden;
-	void					*parent;
-	uint32_t				framesize;
-}									t_window;
 
 /*
 **	Camera screen distance is the distance of the
@@ -168,39 +131,15 @@ typedef struct						s_scene
 	t_scene_id				scene_id;
 }									t_scene;
 
-typedef struct						s_wolf3d_debug
-{
-	uint32_t				fps;
-	float					avg_delta_time;
-}									t_wolf3d_debug;
-
 typedef struct						s_wolf3d
 {
 	t_bool					is_running;
 	t_bool					is_debug;
-	t_wolf3d_debug			debug_info;
-	t_window				*main_window;
+	t_info					info;
+	t_window				*window;
 	t_scene					*active_scene;
-	uint64_t				performance_start;
-	uint64_t				performance_end;
-	uint64_t				delta_time;
 	t_player				player;
 }									t_wolf3d;
-
-typedef struct						s_text_params
-{
-	const char				*text;
-	SDL_Color				text_color;
-	TTF_Font 				*font;
-	int						*xy;
-	float					blend_ratio;
-}									t_text_params;
-
-typedef struct	s_ir
-{
-	int a;
-	int b;
-}				t_ir;
 
 /*
 **	Function declarations
@@ -235,60 +174,29 @@ void						camera_transform(t_camera *camera,
 void						create_screen_triangles(t_scene *scene);
 
 /*
-** Draw / Render
+** Render to framebuffer
 */
 
-void						draw_frame(t_wolf3d *app);
 t_bool						render_triangle(t_wolf3d *app,
 											t_triangle *triangle);
-int							screen_to_frame_coords(uint32_t width,
-													uint32_t height,
-													int x, int y);
-void						render_ui(t_wolf3d *app);
-
-/*
-** Utils
-*/
-
-void						error_check(int test, const char *message);
-
-/*
-** Window
-*/
-
-void						main_window_init(t_wolf3d *app);
-void						recreate_frame(t_wolf3d *app);
-
-/*
-** Text
-*/
-void						render_text(t_wolf3d *app,
-							t_text_params params);
-void						render_blinking_text(t_wolf3d *app,
-							t_text_params params);
-void						render_centered_blinking_text(t_wolf3d *app,
-							t_text_params params);
-void						render_centered_text(t_wolf3d *app,
-							t_text_params params);
-
-/*
-** Debug information
-*/
-
-uint64_t					capture_framerate(uint64_t delta_time);
-void						render_debug_grid(t_wolf3d *app);
+void						ui_render(t_wolf3d *app);
+void						wolf3d_render(t_wolf3d *app);
 
 /*
 ** Scene
 */
 
 void						scene_vertices_init(t_wolf3d *app,
-							t_scene *scene);
+								t_scene *scene);
 t_scene						*new_scene(t_scene_data *data);
 void						destroy_scene(t_scene *scene);
 void						set_active_scene(t_wolf3d *app,
-							t_scene_id to_scene);
-t_3d_object					**create_scene1_objects(int32_t *obj_count);
+								t_scene_id to_scene);
 void						debug_scene(t_scene *scene);
+
+/*
+** Debug
+*/
+void						wolf3d_debug_info_render(t_wolf3d *app);
 
 #endif

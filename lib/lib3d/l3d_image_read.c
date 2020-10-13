@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 13:33:28 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 14:23:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 19:06:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static void		l3d_read_bmp_image(const char *filename,
 	t_bmp_file_header		header;
 	uint32_t				image_size;
 	void					*buf;
-
 
 	file = read_file(filename);
 	buf = file->buf;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 17:23:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 19:07:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,9 +148,9 @@ t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
 t_bool			l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point)
 {
-	t_vec3 temp;
-	float div;
-	float d;
+	t_vec3		temp;
+	float		div;
+	float		d;
 
 	ml_vector3_sub(plane->origin, ray->origin, temp);
 	if (fabs((div = ml_vector3_dot(ray->dir, plane->normal))) > L3D_EPSILON)

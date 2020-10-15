@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/10/13 19:09:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 18:01:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,12 +239,12 @@ void			l3d_calculate_bary_coords(t_vec2 *triangle_points_2d, t_vec2 point,
 void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
 									t_vec2 point_uv)
 {
-	float	Auv_x = triangle->vtc[0]->uv[0];
-	float	Auv_y = triangle->vtc[0]->uv[1];
-	float	Buv_x = triangle->vtc[1]->uv[0];
-	float	Buv_y = triangle->vtc[1]->uv[1];
-	float	Cuv_x = triangle->vtc[2]->uv[0];
-	float	Cuv_y = triangle->vtc[2]->uv[1];
+	float	Auv_x = triangle->uvs[0][0];
+	float	Auv_y = triangle->uvs[0][1];
+	float	Buv_x = triangle->uvs[1][0];
+	float	Buv_y = triangle->uvs[1][1];
+	float	Cuv_x = triangle->uvs[2][0];
+	float	Cuv_y = triangle->uvs[2][1];
 
 	point_uv[0] = (barycoords[0] * Auv_x + barycoords[1] *
 					Buv_x + barycoords[2] * Cuv_x);

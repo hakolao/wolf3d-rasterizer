@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:27:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 13:19:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 17:59:28 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,14 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 			vn_i = read_obj->triangles[i * 9 + j * 3 + 2] - 1;
 			error_check(obj->vertices[v_i] == NULL && !(obj->vertices[v_i] =
 				malloc(sizeof(t_vertex))), "Failed to malloc vertex");
-			l3d_3d_object_set_vertex(obj->vertices[v_i], read_obj->v[v_i],
-				read_obj->vt[vt_i], read_obj->vt[vn_i]);
+			l3d_3d_object_set_vertex(obj->vertices[v_i], read_obj->v[v_i]);
+			ml_vector2_copy(read_obj->vt[vt_i], obj->triangles[i].uvs[j]);
+			ml_vector3_copy(read_obj->vn[vn_i], obj->triangles[i].normals[j]);
 		}
 		l3d_triangle_set(&obj->triangles[i],
-		obj->vertices[read_obj->triangles[i * 9 + 0 * 3 + 0] - 1],
-		obj->vertices[read_obj->triangles[i * 9 + 1 * 3 + 0] - 1],
-		obj->vertices[read_obj->triangles[i * 9 + 2 * 3 + 0] - 1]);
+			obj->vertices[read_obj->triangles[i * 9 + 0 * 3 + 0] - 1],
+			obj->vertices[read_obj->triangles[i * 9 + 1 * 3 + 0] - 1],
+			obj->vertices[read_obj->triangles[i * 9 + 2 * 3 + 0] - 1]);
 	}
 }
 

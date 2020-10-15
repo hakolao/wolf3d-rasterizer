@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/10/15 18:01:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 20:12:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,29 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 								t_vec2 *ordered_corners, t_vec2 *points_2d)
 {
 	size_t	indices[3];
+	t_vec2	uvs[3];
+
+	ml_vector2_copy(triangle->uvs[0], uvs[0]);
+	ml_vector2_copy(triangle->uvs[1], uvs[1]);
+	ml_vector2_copy(triangle->uvs[2], uvs[2]);
 
 	ft_min_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
 						3, &(indices[0]));
 	vtc[0] = triangle->vtc[indices[0]];
+	// ml_vector2_copy(uvs[indices[0]], triangle->uvs[0]);
 	ml_vector2_copy(points_2d[indices[0]], ordered_corners[0]);
 	ft_max_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
 						3, &(indices[2]));
 	vtc[2] = triangle->vtc[indices[2]];
+	// ml_vector2_copy(uvs[indices[2]], triangle->uvs[2]);
 	ml_vector2_copy(points_2d[indices[2]], ordered_corners[2]);
 	indices[1] = 3 - (indices[0] + indices[2]);
 	vtc[1] = triangle->vtc[indices[1]];
+	// ml_vector2_copy(uvs[indices[1]], triangle->uvs[1]);
 	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
 }
 

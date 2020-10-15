@@ -72,8 +72,8 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	while (x < end_x)
 	{
 		l3d_calculate_bary_coords(triangle->points_2d, (t_vec2){x, y}, barycoords);//! this gives bs
-		//!either the formula is wrong (unlikely) or the points2d are wrong or x and y are wrong
-		clamp_bary(barycoords);
+			//!either the formula is wrong (unlikely) or the points2d are wrong or x and y are wrong
+			clamp_bary(barycoords);
 		l3d_interpolate_uv(triangle, barycoords, point_uv);
 		// if (point_uv[0] > 1.0 || point_uv[1] > 1.0 || point_uv[0] < 0.0 || point_uv[1] < 0.0)
 			// ft_printf("U: %f V: %f", point_uv[0], point_uv[1]);
@@ -83,7 +83,7 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 								   triangle->material->height,
 								   point_uv);
 		// ft_printf("color: %x \n", color);
-		// color = 0xffaaffff;
+		// color = l3d_triangle_normal_color(triangle);
 		l3d_pixel_plot(buffer,
 					   (uint32_t[2]){width, height},
 					   (int[2]){x + width / 2, y + height / 2},
@@ -275,10 +275,11 @@ uint32_t		l3d_sample_texture(uint32_t *texture_data, int width,
 	// 					width * (uv_point[1] * height)))]);
 	float x = uv_point[0] * width;
 	float y = uv_point[1] * height;
-	float index = x + width * y;
+	
 	// if (uv_point[0] > max)
 	// 	max = uv_point[0];
 	// ft_printf("max index: %f\n", max);
+	float index = x + width * y;
 	return (texture_data[(int)floor(index)]);
 	//TODO MAKE AN UV MAP WITH STRIPES/SQUARES AND SEE HOW IT MAPS TO THE OBJECT
 	//TODO COLOR THE BARYCETRIC CENTER OF A TRIANGLE AND SEE IF IT MAPS CORRECTLY

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 18:16:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 16:42:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void		rotate_player(t_wolf3d *app)
 	ml_matrix4_rotation_x(ml_rad(app->player.rot_y), rotation_y);
 	ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
 	ml_matrix4_mul(rotation_x, rotation_y, rotation);
-	ml_matrix4_mul_vec3(rotation_y, app->player.sideways, app->player.sideways);
 	ml_matrix4_inverse(rotation, app->player.world_rotation);
 }
 
@@ -54,25 +53,31 @@ void			rotate_player_horizontal(t_wolf3d *app, float angle)
 void			move_player(t_wolf3d *app, t_move dir)
 {
 	t_vec3		add;
+	t_mat4		rotation_x;
+	t_vec3		forward;
+	t_vec3		sideways;
 
+	ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
+	ml_matrix4_mul_vec3(rotation_x, app->player.forward, forward);
+	ml_matrix4_mul_vec3(rotation_x, app->player.sideways, sideways);
 	if (dir == move_forward)
 	{
-		ml_vector3_mul(app->player.forward, app->player.speed * app->info.delta_time, add);
+		ml_vector3_mul(forward, app->player.speed * app->info.delta_time, add);
 		ml_vector3_add(app->player.pos, add, app->player.pos);
 	}
 	else if (dir == move_backward)
 	{
-		ml_vector3_mul(app->player.forward, -app->player.speed * app->info.delta_time, add);
+		ml_vector3_mul(forward, -app->player.speed * app->info.delta_time, add);
 		ml_vector3_add(app->player.pos, add, app->player.pos);
 	}
 	else if (dir == move_strafe_left)
 	{
-		ml_vector3_mul(app->player.sideways, -app->player.speed * app->info.delta_time, add);
+		ml_vector3_mul(sideways, -app->player.speed * app->info.delta_time, add);
 		ml_vector3_sub(app->player.pos, add, app->player.pos);
 	}
 	else if (dir == move_strafe_right)
 	{
-		ml_vector3_mul(app->player.sideways, app->player.speed * app->info.delta_time, add);
+		ml_vector3_mul(sideways, app->player.speed * app->info.delta_time, add);
 		ml_vector3_sub(app->player.pos, add, app->player.pos);
 	}
 	ml_matrix4_translation(app->player.pos[0], app->player.pos[1],

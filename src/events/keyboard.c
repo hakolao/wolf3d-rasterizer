@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:36:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/15 14:42:04 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 15:41:45 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,19 @@ void		keyboard_state_handle(t_wolf3d *app)
 {
 	if (app->keyboard.state[SDL_SCANCODE_W])
 		move_player(app, move_forward);
-	else if (app->keyboard.state[SDL_SCANCODE_A])
+	if (app->keyboard.state[SDL_SCANCODE_A])
 		move_player(app, move_strafe_left);
-	else if (app->keyboard.state[SDL_SCANCODE_S])
+	if (app->keyboard.state[SDL_SCANCODE_S])
 		move_player(app, move_backward);
-	else if (app->keyboard.state[SDL_SCANCODE_D])
+	if (app->keyboard.state[SDL_SCANCODE_D])
 		move_player(app, move_strafe_right);
-	else if (app->keyboard.state[SDL_SCANCODE_Q])
+	if (app->keyboard.state[SDL_SCANCODE_Q])
 		l3d_3d_object_rotate(app->active_scene->objects[0], 0, -1, 0);
-	else if (app->keyboard.state[SDL_SCANCODE_E])
+	if (app->keyboard.state[SDL_SCANCODE_E])
 		l3d_3d_object_rotate(app->active_scene->objects[0], 0, 1, 0);
-	else if (app->keyboard.state[SDL_SCANCODE_Z])
+	if (app->keyboard.state[SDL_SCANCODE_Z])
 		l3d_3d_object_rotate(app->active_scene->objects[0], -1, 0, 0);
-	else if (app->keyboard.state[SDL_SCANCODE_C])
+	if (app->keyboard.state[SDL_SCANCODE_C])
 		l3d_3d_object_rotate(app->active_scene->objects[0], 1, 0, 0);
 }
 

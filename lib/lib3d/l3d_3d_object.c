@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:51:04 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 17:54:21 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,8 @@ void			l3d_3d_object_destroy(t_3d_object *object)
 ** (normals, texture coords and position)
 */
 
-void			l3d_3d_object_set_vertex(t_vertex *vertex,
-					t_vec3 pos, t_vec2 text, t_vec3 normal)
+void			l3d_3d_object_set_vertex(t_vertex *vertex, t_vec3 pos)
 {
 	ml_vector3_copy(pos, vertex->pos);
 	vertex->color = 0xFFFFFFFF;
-	ml_vector2_copy(text, vertex->uv);
-	ml_vector3_copy(normal, vertex->normal);
 }

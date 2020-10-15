@@ -6,11 +6,25 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 19:05:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 16:27:24 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d.h"
+
+/*
+** Usage:
+**	l3d_framebuffer_image_place(
+**		&(t_surface){
+**			.h = app->window->height,
+**			.w = app->window->width,
+**			.pixels = app->window->framebuffer},
+**		&(t_surface){
+**			.h = height,
+**			.w = width,
+**			.pixels =texture},
+**		(int32_t[2]){50, 50}, 1.0);
+*/
 
 void				l3d_framebuffer_image_place(t_surface *frame,
 					t_surface *image, int32_t pos_xy[2], float blend_ratio)

@@ -26,12 +26,32 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 	ft_max_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
-					  3, &(indices[2]));
+						3, &(indices[2]));
 	vtc[2] = triangle->vtc[indices[2]];
 	ml_vector2_copy(points_2d[indices[2]], ordered_corners[2]);
 	indices[1] = 3 - (indices[0] + indices[2]);
 	vtc[1] = triangle->vtc[indices[1]];
 	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
+}
+
+static void		clamp_bary(float *barycoords)
+{
+	static int i = 0;
+	if (barycoords[0] > 1.0)
+		barycoords[0] = 1.0;
+	if (barycoords[1] > 1.0)
+		barycoords[1] = 1.0;
+	if (barycoords[2] > 1.0)
+		barycoords[2] = 1.0;
+	if (barycoords[0] < 0.0)
+		barycoords[0] = 0.0;
+	if (barycoords[1] < 0.0)
+		barycoords[1] = 0.0;
+	if (barycoords[2] < 0.0)
+		barycoords[2] = 0.0;
+	if (i < 1)
+		ft_printf("barycoords clamped\n");
+	i = 1;
 }
 
 static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
@@ -53,6 +73,7 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	{
 		l3d_calculate_bary_coords(triangle->points_2d, (t_vec2){x, y}, barycoords);//! this gives bs
 		//!either the formula is wrong (unlikely) or the points2d are wrong or x and y are wrong
+		clamp_bary(barycoords);
 		l3d_interpolate_uv(triangle, barycoords, point_uv);
 		// if (point_uv[0] > 1.0 || point_uv[1] > 1.0 || point_uv[0] < 0.0 || point_uv[1] < 0.0)
 			// ft_printf("U: %f V: %f", point_uv[0], point_uv[1]);
@@ -224,7 +245,7 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
 	float	Buv_y = triangle->vtc[1]->uv[1];
 	float	Cuv_x = triangle->vtc[2]->uv[0];
 	float	Cuv_y = triangle->vtc[2]->uv[1];
-	
+
 	point_uv[0] = (barycoords[0] * Auv_x + barycoords[1] *
 					Buv_x + barycoords[2] * Cuv_x);
 	point_uv[1] = (barycoords[0] * Auv_y + barycoords[1] *

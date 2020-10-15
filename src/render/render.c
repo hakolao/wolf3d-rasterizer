@@ -23,7 +23,7 @@ static void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits)
 		points_2d[i][1] = hits[i][1];
 		// if (points_2d[i][0] > WIDTH / 2 || points_2d[i][1] > HEIGHT / 2 ||
 		// 	points_2d[i][0] < -WIDTH / 2 || points_2d[i][1] < -HEIGHT / 2)
-				// ft_printf("points2d out of bounds: x: %f | y: %f\n", points_2d[i][0], points_2d[i][1]);
+		// 		ft_printf("points2d out of bounds: x: %f | y: %f\n", points_2d[i][0], points_2d[i][1]);
 				//!remove print after debug
 	}
 }

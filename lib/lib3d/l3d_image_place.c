@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:10:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 19:05:18 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ void				l3d_framebuffer_image_place(t_surface *frame,
 		while (++x < pos_xy[0] + (int32_t)image->w)
 		{
 			layer_pixel = ((uint32_t*)image->pixels)[(y - pos_xy[1]) *
-					image->w + (x -  pos_xy[0])];
+					image->w + (x - pos_xy[0])];
 			frame_pixel =
 				frame->pixels[y * frame->w + x];
-			if (x < (int32_t)frame->w && y < (int32_t)frame->h && x  >= 0 && y >= 0)
+			if (x < (int32_t)frame->w && y < (int32_t)frame->h &&
+				x >= 0 && y >= 0)
 				frame->pixels[y * (int32_t)frame->w + x] =
 					l3d_color_blend_u32(frame_pixel, layer_pixel, blend_ratio);
 		}

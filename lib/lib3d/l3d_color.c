@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:06:37 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/05 15:06:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 19:03:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ uint32_t		l3d_color_blend_u32(uint32_t color1, uint32_t color2,
 	uint32_t	rgba_color2[4];
 	uint32_t	new_color[4];
 
-	if ( ratio > 1.f )
+	if (ratio > 1.f)
 		ratio = 1.f;
-	else if ( ratio < 0.f )
+	else if (ratio < 0.f)
 		ratio = 0.f;
 	i_ratio = 1.f - ratio;
 	l3d_u32_to_rgba(color1, rgba_color1);
@@ -52,8 +52,8 @@ uint32_t		l3d_color_blend_u32(uint32_t color1, uint32_t color2,
 
 uint32_t		l3d_triangle_normal_color(t_triangle *triangle)
 {
-	t_vec3 normal;
-	uint32_t color;
+	t_vec3		normal;
+	uint32_t	color;
 
 	ml_vector3_normalize(triangle->normal, normal);
 	color = 0x0;

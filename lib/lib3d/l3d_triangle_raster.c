@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   triangle_rasterization.c                           :+:      :+:    :+:   */
+/*   l3d_triangle_raster.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: veilo <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/10/06 17:02:18 by veilo            ###   ########.fr       */
+/*   Updated: 2020/10/13 19:09:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 								t_vec2 *ordered_corners, t_vec2 *points_2d)
 {
-	size_t indices[3];
+	size_t	indices[3];
 
 	ft_min_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
-					  3, &(indices[0]));
+						3, &(indices[0]));
 	vtc[0] = triangle->vtc[indices[0]];
 	ml_vector2_copy(points_2d[indices[0]], ordered_corners[0]);
 	ft_max_double_idx((double[3]){points_2d[0][1],
@@ -51,7 +51,6 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		
 		l3d_calculate_bary_coords(triangle->points_2d, (t_vec2){x, y}, barycoords);//! this gives bs
 		//!either the formula is wrong (unlikely) or the points2d are wrong or x and y are wrong
 		l3d_interpolate_uv(triangle, barycoords, point_uv);
@@ -89,9 +88,9 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 							t_triangle *triangle, t_raster_data *data)
 {
-	float x;
-	float y;
-	float end_x;
+	float	x;
+	float	y;
+	float	end_x;
 
 	y = data->y1;
 	while (y < data->y2)
@@ -111,9 +110,9 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 							t_triangle *triangle, t_raster_data *data)
 {
-	float x;
-	float y;
-	float end_x;
+	float	x;
+	float	y;
+	float	end_x;
 
 	y = data->y2;
 	while (y < data->y3)
@@ -133,8 +132,8 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
 									t_triangle *triangle)
 {
-	t_raster_data data;
-	t_vec2 ordered_points_2d[3];
+	t_raster_data	data;
+	t_vec2			ordered_points_2d[3];
 
 	order_corners_y(triangle, triangle->ordered_vtc, ordered_points_2d,
 					triangle->points_2d);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 21:56:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 15:41:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		set_material_to_triangles(data.objects[0], texture, width, height); //!create a better implementation
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],
-			app->main_window->width / 5.0,
-			app->main_window->width / 5.0,
-			app->main_window->width / 5.0);
+			app->window->width / 5.0,
+			app->window->width / 5.0,
+			app->window->width / 5.0);
 		l3d_3d_object_translate(data.objects[0],
-			0, 0, -app->main_window->width - 500);
+			0, 0, -app->window->width - 500);
 	}
 	app->active_scene = new_scene(&data);
 	if (app->active_scene->main_camera)

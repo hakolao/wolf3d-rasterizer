@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 15:12:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 16:51:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 15:24:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ double					ft_atod(char *str)
 	if (!(*str == '-' || *str == '+' || ft_isdigit(*str)))
 		return (0.0);
 	val = (double)ft_atoi_long(str);
-	sign = val == 0.0 && *str == '-' ? -1 : 1;
+	sign = *str == '-' ? -1 : 1;
 	while (ft_isdigit(*str) || *str == '-' || *str == '+')
 		str++;
+	val *= sign;
 	if (*str && *str == '.')
 		val += fractional_part(str);
 	return (val * sign);

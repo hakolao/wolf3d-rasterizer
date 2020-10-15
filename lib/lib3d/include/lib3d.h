@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 17:23:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 19:06:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 # define L3D_MAX_OBJECTS 32
 # define L3D_MAX_TRIANGLES 16384
-#define L3D_MAX_VERTICES 16384
+# define L3D_MAX_VERTICES 16384
 
 /*
 ** OBJ file temporary structs. They are used in transfering obj data to final
@@ -233,8 +233,9 @@ t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
 								t_ray *ray, t_hit *hit);
 void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
-void						l3d_triangle_hit_record_set(float afuvt[5], t_ray *ray,
-							t_triangle *triangle, t_hit *hit);
+void						l3d_triangle_hit_record_set(float afuvt[5],
+								t_ray *ray,
+								t_triangle *triangle, t_hit *hit);
 void						l3d_bounding_box_hit_record_set(float t,
 								t_ray *ray, t_hit *hit);
 t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
@@ -323,7 +324,8 @@ uint32_t					l3d_sample_texture(uint32_t *texture_data,
 												int width,
 												int height, t_vec2 uv_point);
 
-	/*
+
+/*
 ** Plot pixel
 */
 

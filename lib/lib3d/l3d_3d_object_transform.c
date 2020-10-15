@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 14:59:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/08 15:32:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/13 19:04:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ void			l3d_3d_object_rotate(t_3d_object *object,
 
 	ml_vector3_copy(object->position, old_pos);
 	l3d_3d_object_translate(object,
-		-object->position[0],  -object->position[1],  -object->position[2]);
+		-object->position[0], -object->position[1], -object->position[2]);
 	ml_matrix4_rotation(ml_rad(x), ml_rad(y), ml_rad(z), rotation);
 	l3d_3d_object_transform(object, rotation);
 	ml_matrix4_mul(object->rotation, rotation, new_rotation);
 	ft_memcpy(object->rotation, new_rotation, sizeof(t_mat4));
 	l3d_3d_object_translate(object,
-		old_pos[0],  old_pos[1],  old_pos[2]);
+		old_pos[0], old_pos[1], old_pos[2]);
 	ml_vector3_copy(old_pos, object->position);
 }
 
@@ -78,7 +78,7 @@ void			l3d_3d_object_scale(t_3d_object *object,
 
 	ml_vector3_copy(object->position, old_pos);
 	l3d_3d_object_translate(object,
-		-object->position[0],  -object->position[1],  -object->position[2]);
+		-object->position[0], -object->position[1], -object->position[2]);
 	ml_matrix4_id(scale);
 	scale[0][0] = x;
 	scale[1][1] = y;
@@ -87,6 +87,6 @@ void			l3d_3d_object_scale(t_3d_object *object,
 	ml_matrix4_mul(object->scale, scale, new_scale);
 	ft_memcpy(object->scale, new_scale, sizeof(t_mat4));
 	l3d_3d_object_translate(object,
-		old_pos[0],  old_pos[1],  old_pos[2]);
+		old_pos[0], old_pos[1], old_pos[2]);
 	ml_vector3_copy(old_pos, object->position);
 }

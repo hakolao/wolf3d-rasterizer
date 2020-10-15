@@ -224,8 +224,7 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
 	float	Buv_y = triangle->vtc[1]->uv[1];
 	float	Cuv_x = triangle->vtc[2]->uv[0];
 	float	Cuv_y = triangle->vtc[2]->uv[1];
-	if (point_uv[0] > 1.0 || point_uv [1] > 1.0)
-		ft_printf("uv was over 1 %f %f\n", point_uv[0], point_uv[1]);
+	
 	point_uv[0] = (barycoords[0] * Auv_x + barycoords[1] *
 					Buv_x + barycoords[2] * Cuv_x);
 	point_uv[1] = (barycoords[0] * Auv_y + barycoords[1] *

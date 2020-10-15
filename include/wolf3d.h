@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 18:18:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 14:42:38 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 **	Player control macros
 */
 
-# define PLAYER_SPEED 5
+# define PLAYER_SPEED 2.0
 # define PLAYER_ROTATION_SPEED 0.01
 
 # define NEAR_CLIP_DIST 10
@@ -131,6 +131,18 @@ typedef struct						s_scene
 	t_scene_id				scene_id;
 }									t_scene;
 
+typedef struct						s_mouse
+{
+	int32_t				x;
+	int32_t				y;
+	uint32_t			state;
+}									t_mouse;
+
+typedef struct						s_keyboard
+{
+	const uint8_t		*state;
+}									t_keyboard;
+
 typedef struct						s_wolf3d
 {
 	t_bool					is_running;
@@ -139,11 +151,9 @@ typedef struct						s_wolf3d
 	t_window				*window;
 	t_scene					*active_scene;
 	t_player				player;
+	t_mouse					mouse;
+	t_keyboard				keyboard;
 }									t_wolf3d;
-
-/*
-**	Function declarations
-*/
 
 void						wolf3d_run(t_wolf3d *app);
 
@@ -156,17 +166,26 @@ float						sin_time(float min, float max, float speed);
 /*
 ** Player
 */
-
 void						init_player(t_wolf3d *app);
 void						move_player(t_wolf3d *app, t_move dir);
 void						rotate_player_vertical(t_wolf3d *app, float angle);
 void						rotate_player_horizontal(t_wolf3d *app, float angle);
-void						player_action_handle(t_wolf3d *app, SDL_Event event);
+void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
+
+/*
+** Events
+*/
+void						keyboard_state_set(t_wolf3d *app);
+void						mouse_state_set(t_wolf3d *app);
+void						mouse_state_handle(t_wolf3d *app);
+void						keyboard_state_handle(t_wolf3d *app);
+void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
+void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);
+
 
 /*
 ** Camera
 */
-
 t_camera					*new_camera();
 void						update_camera(t_wolf3d *app);
 void						camera_transform(t_camera *camera,
@@ -176,7 +195,6 @@ void						create_screen_triangles(t_scene *scene);
 /*
 ** Render to framebuffer
 */
-
 t_bool						render_triangle(t_wolf3d *app,
 											t_triangle *triangle);
 void						ui_render(t_wolf3d *app);
@@ -185,7 +203,6 @@ void						wolf3d_render(t_wolf3d *app);
 /*
 ** Scene
 */
-
 void						scene_vertices_init(t_wolf3d *app,
 								t_scene *scene);
 t_scene						*new_scene(t_scene_data *data);
@@ -198,5 +215,6 @@ void						debug_scene(t_scene *scene);
 ** Debug
 */
 void						wolf3d_debug_info_render(t_wolf3d *app);
+void						wolf3d_debug_info_capture(t_wolf3d *app);
 
 #endif

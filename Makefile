@@ -36,7 +36,9 @@ SOURCES = main.c \
 			window/ui.c \
 			window/text.c \
 			window/window.c \
-			window/utils.c
+			window/utils.c \
+			events/mouse.c \
+			events/keyboard.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
@@ -56,6 +58,7 @@ $(DIR_OBJ):
 	@mkdir -p temp
 	@mkdir -p temp/window
 	@mkdir -p temp/render
+	@mkdir -p temp/events
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INCLUDES) -c -o $@ $<

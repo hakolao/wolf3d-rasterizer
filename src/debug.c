@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 18:17:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 18:25:28 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/15 14:42:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,13 @@ void			wolf3d_debug_info_render(t_wolf3d *app)
 		.xy = (int[2]){5, 5},
 		.text_color = (SDL_Color){255, 255, 255, 0}},
 		app->window->debug_font);
+}
+
+void			wolf3d_debug_info_capture(t_wolf3d *app)
+{
+	app->info.performance_end = SDL_GetPerformanceCounter();
+	app->info.delta_time =
+		(app->info.performance_end - app->info.performance_start) * 1000.0 /
+		SDL_GetPerformanceFrequency();
+	app->info.fps = window_framerate_capture(app->info.delta_time);
 }

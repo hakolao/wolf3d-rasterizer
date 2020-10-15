@@ -21,6 +21,10 @@ static void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits)
 	{
 		points_2d[i][0] = hits[i][0];
 		points_2d[i][1] = hits[i][1];
+		if (points_2d[i][0] > WIDTH / 2 || points_2d[i][1] > HEIGHT / 2 ||
+			points_2d[i][0] < -WIDTH / 2 || points_2d[i][1] < -HEIGHT / 2)
+				ft_printf("points2d out of bounds: x: %f | y: %f\n", points_2d[i][0], points_2d[i][1]);
+				//!remove print after debug
 	}
 }
 
@@ -31,6 +35,7 @@ static void		rendered_triangle_set(t_wolf3d *app,
 
 	k = -1;
 	temp->is_single_sided = triangle->is_single_sided;
+	temp->material = triangle->material;
 	while (++k < 3)
 	{
 		vtc[k].color = triangle->vtc[k]->color;
@@ -46,8 +51,7 @@ static void		rendered_triangle_set(t_wolf3d *app,
 	l3d_triangle_update(temp);
 }
 
-static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle,
-								t_vec2 *points_2d)
+static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle)
 {
 	t_ray		rays[3];	
 	t_vec3		hits[3];
@@ -67,8 +71,8 @@ static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle,
 			ml_vector3_set_all(hits[k], 0);
 		}
 	}
-	
-	calculate_2d_points(points_2d, hits);
+	ft_memset(triangle->points_2d, 0, sizeof(float) * 6); // !remove at some point, debug only
+	calculate_2d_points(triangle->points_2d, hits);
 	return (true);
 }
 
@@ -191,8 +195,8 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	buffer = app->main_window->framebuffer; 
 	dimensions[0] = app->main_window->width;
 	dimensions[1] = app->main_window->height;
-	ft_memset(points_2d, 0, sizeof(points_2d));
-	screen_intersection(app, &render_triangle, points_2d);
-	l3d_triangle_raster(buffer, dimensions, &render_triangle, points_2d);
+	ft_memset(points_2d, 0, sizeof(points_2d));//? needed?
+	screen_intersection(app, &render_triangle);
+	l3d_triangle_raster(buffer, dimensions, &render_triangle);
 	return (true);
 }

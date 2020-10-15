@@ -53,8 +53,7 @@ static void	render_active_scene(t_wolf3d *app)
 
 void		update_frame_buffer(t_wolf3d *app)
 {
-	clear_frame(app);
-	
+	clear_frame(app);	
 	if (app->active_scene->main_camera != NULL)
 		render_active_scene(app);
 	render_ui(app);

@@ -31,7 +31,7 @@ void			set_material_to_triangles(t_3d_object *object, uint32_t *texture,
 	while (++i < object->num_triangles)
 	{
 		object->triangles[i].material = &(object->material);
-		object->triangles[i].material->texture = texture;
+		// object->triangles[i].material->texture = texture;
 		// ft_printf("triangle number: %d  texture pointer: %p", i, texture);
 		// (void)texture;
 	}
@@ -41,8 +41,8 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
 	t_scene_data		data;
 	uint32_t			*texture;//!same here
-	uint32_t			width = 2048;//!same here
-	uint32_t			height = 2048;//!same here
+	uint32_t			width = 64;//!same here
+	uint32_t			height = 64;//!same here
 
 	data.scene_id = scene_id;
 	if (scene_id == scene_id_main_menu)
@@ -62,6 +62,8 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.objects[0] = l3d_read_obj("assets/icosphere.obj");
 		l3d_read_bmp_image_32bit_rgba("assets/IcosphereUV_numbers.bmp",
 									  &texture, &width, &height);
+		// l3d_read_bmp_image_32bit_rgba("assets/gradient64.bmp",
+		// 							  &texture, &width, &height);
 		set_material_to_triangles(data.objects[0], texture, width, height); //!create a better implementation
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],

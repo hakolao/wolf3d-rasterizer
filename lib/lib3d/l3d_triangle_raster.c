@@ -41,6 +41,7 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 static void		clamp_bary(float *barycoords)
 {
 	static int i = 0;
+
 	if (barycoords[0] > 1.0)
 		barycoords[0] = 1.0;
 	if (barycoords[1] > 1.0)
@@ -54,39 +55,34 @@ static void		clamp_bary(float *barycoords)
 	if (barycoords[2] < 0.0)
 		barycoords[2] = 0.0;
 	if (i < 1)
-		ft_printf("barycoords clamped\n");
+		ft_printf("baryc clamped\n");
 	i = 1;
 }
 
 static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 							float *limits, t_triangle *triangle)
 {
-	int			width = dimensionswh[0];
-	int			height = dimensionswh[1];
 	int			x;
 	int			y;
 	int			end_x;
-	float		barycoords[3];
-	t_vec2		point_uv;
-	uint32_t	color;
+	float		baryc[3];
+	t_vec2		uv;
 
 	y = floor(limits[2]);
 	x = floor(limits[0]);
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, barycoords);
-		
-		clamp_bary(barycoords);
-		l3d_interpolate_uv(triangle, barycoords, point_uv);
-		color = l3d_sample_texture(triangle->material->texture,
-								   triangle->material->width,
-								   triangle->material->height,
-									point_uv);
+		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
+		clamp_bary(baryc);
+		l3d_interpolate_uv(triangle, baryc, uv);
 		l3d_pixel_plot(buffer,
-					   (uint32_t[2]){width, height},
-					   (int[2]){x + width / 2, y + height / 2},
-					   color);
+					(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+					(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+					l3d_sample_texture(triangle->material->texture,
+										triangle->material->width,
+										triangle->material->height,
+										uv));
 		x++;
 	}
 }
@@ -160,8 +156,9 @@ void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
 **	Calculates the barycentric coordinates for a 2d point
 */
 
-void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d, t_vec2 point,
-										float *barycoords)
+void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
+										t_vec2 point,
+										float *baryc)
 {
 	float	denominator;
 
@@ -169,16 +166,15 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d, t_vec2 point,
 					(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
 					(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
 					(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
-
-	barycoords[0] = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
+	baryc[0] = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
 					(point[0] - triangle_points_2d[2][0]) +
 					(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
 					(point[1] - triangle_points_2d[2][1])) / denominator;
-	barycoords[1] = ((triangle_points_2d[2][1] - triangle_points_2d[0][1]) *
+	baryc[1] = ((triangle_points_2d[2][1] - triangle_points_2d[0][1]) *
 					(point[0] - triangle_points_2d[2][0]) +
 					(triangle_points_2d[0][0] - triangle_points_2d[2][0]) *
 					(point[1] - triangle_points_2d[2][1])) / denominator;
-	barycoords[2] = 1 - barycoords[0] - barycoords[1];
+	baryc[2] = 1 - baryc[0] - baryc[1];
 }
 
 /*
@@ -186,34 +182,21 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d, t_vec2 point,
 **	coordinates
 */
 
-void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
-									t_vec2 point_uv)
+void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
+									t_vec2 uv)
 {
-	float	Auv_x = triangle->uvs[0][0];
-	float Auv_y = triangle->uvs[0][1];
-	float Buv_x = triangle->uvs[1][0];
-	float Buv_y = triangle->uvs[1][1];
-	float Cuv_x = triangle->uvs[2][0];
-	float Cuv_y = triangle->uvs[2][1];
-
-	t_vec3 A;
-	ml_vector3_copy(triangle->vtc[0]->pos, A);
-	t_vec3 B;
-	ml_vector3_copy(triangle->vtc[1]->pos, B);
-	t_vec3 C;
-	ml_vector3_copy(triangle->vtc[2]->pos, C);
-	point_uv[0] = ((barycoords[0] * Auv_x) / A[2] +
-				(barycoords[1] * Buv_x) / B[2] +
-				(barycoords[2] * Cuv_x) / C[2]) /
-				((barycoords[0] * 1) / A[2] +
-				(barycoords[1] * 1) / B[2] +
-				(barycoords[2] * 1) / C[2]);
-	point_uv[1] = ((barycoords[0] * Auv_y) / A[2] +
-				(barycoords[1] * Buv_y) / B[2] +
-				(barycoords[2] * Cuv_y) / C[2]) /
-				((barycoords[0] * 1) / A[2] +
-				(barycoords[1] * 1) / B[2] +
-				(barycoords[2] * 1) / C[2]);
+	uv[0] = ((baryc[0] * triangle->uvs[0][0]) / triangle->vtc[0]->pos[2] +
+				(baryc[1] * triangle->uvs[1][0]) / triangle->vtc[1]->pos[2] +
+				(baryc[2] * triangle->uvs[2][0]) / triangle->vtc[2]->pos[2]) /
+				((baryc[0] * 1) / triangle->vtc[0]->pos[2] +
+				(baryc[1] * 1) / triangle->vtc[1]->pos[2] +
+				(baryc[2] * 1) / triangle->vtc[2]->pos[2]);
+	uv[1] = ((baryc[0] * triangle->uvs[0][1]) / triangle->vtc[0]->pos[2] +
+				(baryc[1] * triangle->uvs[1][1]) / triangle->vtc[1]->pos[2] +
+				(baryc[2] * triangle->uvs[2][1]) / triangle->vtc[2]->pos[2]) /
+				((baryc[0] * 1) / triangle->vtc[0]->pos[2] +
+				(baryc[1] * 1) / triangle->vtc[1]->pos[2] +
+				(baryc[2] * 1) / triangle->vtc[2]->pos[2]);
 }
 
 /*

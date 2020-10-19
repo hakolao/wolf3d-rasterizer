@@ -148,7 +148,6 @@ static t_bool	is_rendered(t_wolf3d *app, t_triangle *triangle)
 
 t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 {
-	t_vec2		points_2d[3];
 	uint32_t	*buffer;
 	uint32_t	dimensions[2];
 	t_triangle	render_triangle;
@@ -162,7 +161,6 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	buffer = app->window->framebuffer; 
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
-	ft_memset(points_2d, 0, sizeof(points_2d));//? needed?
 	screen_intersection(app, &render_triangle);
 	l3d_triangle_raster(buffer, dimensions, &render_triangle);
 	return (true);

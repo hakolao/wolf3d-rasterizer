@@ -254,6 +254,22 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
 	float Cuv_x = 1.0;
 	float Cuv_y = 0.5;
 
+	t_vec3 A;
+	ml_vector3_copy(triangle->vtc[0]->pos, A);
+	t_vec3 B;
+	ml_vector3_copy(triangle->vtc[1]->pos, B);
+	t_vec3 C;
+	ml_vector3_copy(triangle->vtc[2]->pos, C);
+
+	float z = (barycoords[0] * A[2] +
+			   barycoords[1] * B[2] +
+			   barycoords[2] * C[2]);
+	float max = ft_max_double((double[3]){triangle->vtc[0]->pos[2], triangle->vtc[1]->pos[2],
+							  triangle->vtc[2]->pos[2]}, 3);
+	float min = ft_min_double((double[3]){triangle->vtc[0]->pos[2], triangle->vtc[1]->pos[2],
+							  triangle->vtc[2]->pos[2]}, 3);
+	z = 1 / -z;
+
 	// float z = (barycoords[0] * triangle->vtc[0]->pos[2] +
 	// 		   barycoords[1] * triangle->vtc[1]->pos[2] +
 	// 		   barycoords[2] * triangle->vtc[2]->pos[2]);
@@ -262,34 +278,26 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
 	// 									 triangle->vtc[2]->pos[2]}, 3);
 	// z -= minz;
 	// z = fabs(z);
-	t_vec3 A;
-	ml_vector3_copy(triangle->vtc[0]->pos, A);
-	t_vec3 B;
-	ml_vector3_copy(triangle->vtc[1]->pos, B);
-	t_vec3 C;
-	ml_vector3_copy(triangle->vtc[2]->pos, C);
 	
-	float z = (barycoords[0] * A[2] +
-			   barycoords[1] * B[2] +
-			   barycoords[2] * C[2]);
-	// float distance = z - triangle->center[2];
-	float max = ft_max_double((double[3]){triangle->vtc[0]->pos[2], triangle->vtc[1]->pos[2],
-							  triangle->vtc[2]->pos[2]}, 3);
-	float min = ft_min_double((double[3]){triangle->vtc[0]->pos[2], triangle->vtc[1]->pos[2],
-							  triangle->vtc[2]->pos[2]}, 3);
-							  
-	z /= max;
-	// ft_printf("z  %f max %f min %f fraction %f\n", z, max, min, fraction);
-	// float centerz = (triangle->vtc[0]->pos[2] +
-	// 				triangle->vtc[1]->pos[2] +
-	// 				triangle->vtc[2]->pos[2]) / 3;
+	
 
-		// z = fabs(z) / fabs(centerz);
-		// z = fabs(z);
 	// ft_printf("z: %f\n", z);
 
-	point_uv[0] = (barycoords[0] * Auv_x + barycoords[1] * Buv_x + barycoords[2] * Cuv_x) / z;
-	point_uv[1] = (barycoords[0] * Auv_y + barycoords[1] * Buv_y + barycoords[2] * Cuv_y) / z;
+	point_uv[0] = ((barycoords[0] * Auv_x) / A[2] +
+				   (barycoords[1] * Buv_x) / B[2] +
+				   (barycoords[2] * Cuv_x) / C[2]) /
+				  ((barycoords[0] * 1) / A[2] +
+				   (barycoords[1] * 1) / B[2] +
+				   (barycoords[2] * 1) / C[2]);
+
+	point_uv[1] = ((barycoords[0] * Auv_y) / A[2] +
+				   (barycoords[1] * Buv_y) / B[2] +
+				   (barycoords[2] * Cuv_y) / C[2]) /
+				  ((barycoords[0] * 1) / A[2] +
+				   (barycoords[1] * 1) / B[2] +
+				   (barycoords[2] * 1) / C[2]);
+
+	// ft_printf("u %f v %f", point_uv[0], point_uv[1]);
 	(void)triangle;
 	(void)min;
 	(void)max;

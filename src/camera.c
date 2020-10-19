@@ -49,7 +49,7 @@ void			update_camera(t_wolf3d *app)
 	camera->height = app->window->height;
 	camera->near_clip = -NEAR_CLIP_DIST;
 	camera->far_clip = -FAR_CLIP_DIST;
-	ml_vector3_set(camera->screen.origin, 0, 0, -app->window->width);
+	ml_vector3_set(camera->screen.origin, 0, 0, -app->window->width / 2);
 	ml_vector3_set(camera->screen.normal, 0, 0, 1);
 	set_camera_viewbox(app, camera->viewplanes);
 }

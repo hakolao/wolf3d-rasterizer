@@ -75,7 +75,7 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		l3d_calculate_bary_coords(triangle->points_2d, (t_vec2){x, y}, barycoords);
+		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, barycoords);
 		
 		clamp_bary(barycoords);
 		l3d_interpolate_uv(triangle, barycoords, point_uv);
@@ -160,23 +160,24 @@ void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
 **	Calculates the barycentric coordinates for a 2d point
 */
 
-void			l3d_calculate_bary_coords(t_vec2 *triangle_points_2d, t_vec2 point,
-											float *barycoords)
+void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d, t_vec2 point,
+										float *barycoords)
 {
-	float	ax = triangle_points_2d[0][0];
-	float	ay = triangle_points_2d[0][1];
-	float	bx = triangle_points_2d[1][0];
-	float	by = triangle_points_2d[1][1];
-	float	cx = triangle_points_2d[2][0];
-	float	cy = triangle_points_2d[2][1];
-	float	px = point[0];
-	float	py = point[1];
-	float	denominator = ((by - cy) * (ax - cx) + (cx - bx) * (ay - cy));
+	float	denominator;
 
-	barycoords[0] = ((by - cy) * (px - cx) + (cx - bx) * (py - cy)) /
-					denominator;
-	barycoords[1] = ((cy - ay) * (px - cx) + (ax - cx) * (py - cy)) /
-					denominator;
+	denominator = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
+					(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
+					(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
+					(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
+
+	barycoords[0] = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
+					(point[0] - triangle_points_2d[2][0]) +
+					(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
+					(point[1] - triangle_points_2d[2][1])) / denominator;
+	barycoords[1] = ((triangle_points_2d[2][1] - triangle_points_2d[0][1]) *
+					(point[0] - triangle_points_2d[2][0]) +
+					(triangle_points_2d[0][0] - triangle_points_2d[2][0]) *
+					(point[1] - triangle_points_2d[2][1])) / denominator;
 	barycoords[2] = 1 - barycoords[0] - barycoords[1];
 }
 

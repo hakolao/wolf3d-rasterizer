@@ -163,17 +163,17 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
 	float	denominator;
 
 	denominator = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
-					(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
-					(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
-					(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
+				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
+				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
+				(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
 	baryc[0] = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
-					(point[0] - triangle_points_2d[2][0]) +
-					(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
-					(point[1] - triangle_points_2d[2][1])) / denominator;
+				(point[0] - triangle_points_2d[2][0]) +
+				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
+				(point[1] - triangle_points_2d[2][1])) / denominator;
 	baryc[1] = ((triangle_points_2d[2][1] - triangle_points_2d[0][1]) *
-					(point[0] - triangle_points_2d[2][0]) +
-					(triangle_points_2d[0][0] - triangle_points_2d[2][0]) *
-					(point[1] - triangle_points_2d[2][1])) / denominator;
+				(point[0] - triangle_points_2d[2][0]) +
+				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) *
+				(point[1] - triangle_points_2d[2][1])) / denominator;
 	baryc[2] = 1 - baryc[0] - baryc[1];
 }
 
@@ -186,17 +186,17 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 									t_vec2 uv)
 {
 	uv[0] = ((baryc[0] * triangle->uvs[0][0]) / triangle->vtc[0]->pos[2] +
-				(baryc[1] * triangle->uvs[1][0]) / triangle->vtc[1]->pos[2] +
-				(baryc[2] * triangle->uvs[2][0]) / triangle->vtc[2]->pos[2]) /
-				((baryc[0] * 1) / triangle->vtc[0]->pos[2] +
-				(baryc[1] * 1) / triangle->vtc[1]->pos[2] +
-				(baryc[2] * 1) / triangle->vtc[2]->pos[2]);
+			(baryc[1] * triangle->uvs[1][0]) / triangle->vtc[1]->pos[2] +
+			(baryc[2] * triangle->uvs[2][0]) / triangle->vtc[2]->pos[2]) /
+			((baryc[0] * 1) / triangle->vtc[0]->pos[2] +
+			(baryc[1] * 1) / triangle->vtc[1]->pos[2] +
+			(baryc[2] * 1) / triangle->vtc[2]->pos[2]);
 	uv[1] = ((baryc[0] * triangle->uvs[0][1]) / triangle->vtc[0]->pos[2] +
-				(baryc[1] * triangle->uvs[1][1]) / triangle->vtc[1]->pos[2] +
-				(baryc[2] * triangle->uvs[2][1]) / triangle->vtc[2]->pos[2]) /
-				((baryc[0] * 1) / triangle->vtc[0]->pos[2] +
-				(baryc[1] * 1) / triangle->vtc[1]->pos[2] +
-				(baryc[2] * 1) / triangle->vtc[2]->pos[2]);
+			(baryc[1] * triangle->uvs[1][1]) / triangle->vtc[1]->pos[2] +
+			(baryc[2] * triangle->uvs[2][1]) / triangle->vtc[2]->pos[2]) /
+			((baryc[0] * 1) / triangle->vtc[0]->pos[2] +
+			(baryc[1] * 1) / triangle->vtc[1]->pos[2] +
+			(baryc[2] * 1) / triangle->vtc[2]->pos[2]);
 }
 
 /*

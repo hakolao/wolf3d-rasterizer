@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/15 14:43:04 by ohakola           #+#    #+#              #
-#    Updated: 2020/09/30 02:41:34 by ohakola          ###   ########.fr        #
+#    Updated: 2020/10/19 15:37:48 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,9 @@ SOURCES = ft_atoi.c \
 		ft_strnstr.c \
 		ft_toupper.c \
 		ft_memcpy.c \
+		ft_memcpy_utils.c \
 		ft_memccpy.c \
+		ft_memset_utils.c \
 		ft_memset.c \
 		ft_memmove.c \
 		ft_memchr.c \
@@ -86,7 +88,6 @@ SOURCES = ft_atoi.c \
 		ft_lmap_int.c \
 		ft_lmap_double.c \
 		ft_max.c \
-		ft_max_index.c \
 		ft_abs.c \
 		ft_pixel_foreach.c \
 		ft_sort_int_tab.c \
@@ -130,12 +131,14 @@ SOURCES = ft_atoi.c \
 		hash_map/hash_map.c \
 		hash_map/hash_map_delete.c \
 		hash_map/hash_map_delete_free.c \
-		hash_map/hash_map_foreach.c \
+		thread_pool/thread_pool.c \
+		thread_pool/thread_pool_utils.c \
 		ft_rand.c \
 		read_file.c \
 		ft_atod.c \
 		ft_scroll.c \
-		ft_error.c
+		ft_error.c \
+		ft_max_index.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
@@ -152,6 +155,7 @@ $(DIR_OBJ):
 	@mkdir -p temp/ft_printf
 	@mkdir -p temp/ft_dtoa
 	@mkdir -p temp/hash_map
+	@mkdir -p temp/thread_pool
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INC) -c -o $@ $<
@@ -159,9 +163,10 @@ $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 DIR_TESTS = ./tests
 TEST_SRCS =$(wildcard $(DIR_TESTS)/*.c)
 
-test: all
+test:
+	@make re
 	$(CC) -o test_run $(TEST_SRCS) -I$(DIR_TESTS)/include \
-			 -L./ -lft $(FLAGS) $(INC) $(NAME)
+			 -L./ -lft -lpthread $(FLAGS) $(INC) $(NAME)
 	./test_run
 	@/bin/rm -f main.o
 	@/bin/rm -f test_run

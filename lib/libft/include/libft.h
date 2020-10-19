@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 14:42:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/29 15:16:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/16 16:56:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <pthread.h>
 # include "t_bool.h"
 # include "hash_map.h"
+# include "thread_pool.h"
 
 typedef struct	s_list
 {
@@ -168,10 +169,6 @@ double			ft_lmap_double(double nb, double *in_minmax,
 double			ft_abs(double nb);
 double			ft_max_double(double *arr, size_t size);
 int				ft_max_int(int *arr, size_t size);
-double			ft_max_double_idx(double *arr, size_t size, size_t *index);
-int				ft_max_int_idx(int *arr, size_t size, size_t *index);
-double			ft_min_double_idx(double *arr, size_t size, size_t *index);
-int				ft_min_int_idx(int *arr, size_t size, size_t *index);
 double			ft_min_double(double *arr, size_t size);
 int				ft_min_int(int *arr, size_t size);
 void			ft_pixel_foreach(t_pixel_bounds *limits,
@@ -214,5 +211,10 @@ void			ft_scroll_over(char **str, char c);
 void			ft_scroll_to(char **str, char c);
 
 void			error_check(int test, const char *message);
+
+double			ft_max_double_idx(double *arr, size_t size, size_t *index);
+int				ft_max_int_idx(int *arr, size_t size, size_t *index);
+double			ft_min_double_idx(double *arr, size_t size, size_t *index);
+int				ft_min_int_idx(int *arr, size_t size, size_t *index);
 
 #endif

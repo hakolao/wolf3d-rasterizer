@@ -21,24 +21,20 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 	ml_vector2_copy(triangle->uvs[0], uvs[0]);
 	ml_vector2_copy(triangle->uvs[1], uvs[1]);
 	ml_vector2_copy(triangle->uvs[2], uvs[2]);
-
 	ft_min_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
 						3, &(indices[0]));
 	vtc[0] = triangle->vtc[indices[0]];
-	// ml_vector2_copy(uvs[indices[0]], triangle->uvs[0]);
 	ml_vector2_copy(points_2d[indices[0]], ordered_corners[0]);
 	ft_max_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
 						3, &(indices[2]));
 	vtc[2] = triangle->vtc[indices[2]];
-	// ml_vector2_copy(uvs[indices[2]], triangle->uvs[2]);
 	ml_vector2_copy(points_2d[indices[2]], ordered_corners[2]);
 	indices[1] = 3 - (indices[0] + indices[2]);
 	vtc[1] = triangle->vtc[indices[1]];
-	// ml_vector2_copy(uvs[indices[1]], triangle->uvs[1]);
 	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
 }
 
@@ -73,36 +69,30 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	float		barycoords[3];
 	t_vec2		point_uv;
 	uint32_t	color;
-	ft_memset(barycoords, 0, sizeof(float) * 3);
+
 	y = floor(limits[2]);
 	x = floor(limits[0]);
-	float x2 = limits[0];
-	// float y2 = limits[2];
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		// point_uv[0] = x;
-		// point_uv[1] = y;
-		l3d_calculate_bary_coords(triangle->points_2d, (t_vec2){x, y}, barycoords);
+		// ml_vector3_print(triangle->vtc[0]->pos);
+		// ml_vector3_print(triangle->vtc[1]->pos);
+		// ml_vector3_print(triangle->vtc[2]->pos);
+		// ft_printf("x: %d y: %d ", x, y);
+		l3d_calculate_bary_coords(triangle, triangle->points_2d, (t_vec2){x, y}, barycoords);
+		
 		clamp_bary(barycoords);
 		l3d_interpolate_uv(triangle, barycoords, point_uv);
 		color = l3d_sample_texture(triangle->material->texture,
 								   triangle->material->width,
 								   triangle->material->height,
 									point_uv);
-								 //  point_uv);
-		// color = ((int)(255 * barycoords[0])) << 8;
-		// color += ((int)(255 * barycoords[1])) << 16;
-		// color += ((int)(255 * barycoords[2])) << 24;
-		// ft_printf("color: %x\n", color);
 		l3d_pixel_plot(buffer,
 					   (uint32_t[2]){width, height},
 					   (int[2]){x + width / 2, y + height / 2},
 					   color);
-			x++;
-			x2++;
+		x++;
 	}
-		// ft_printf("-------------\n");
 }
 
 static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
@@ -125,7 +115,6 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 						(float[3]){end_x, x + 1, y}, triangle);
 		y++;
 	}
-	// ft_printf("================\n");
 }
 
 static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
@@ -148,7 +137,6 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 						(float[3]){end_x, x + 1, y}, triangle);
 		y++;
 	}
-	// ft_printf("================\n");
 }
 
 void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
@@ -176,7 +164,7 @@ void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
 **	Calculates the barycentric coordinates for a 2d point
 */
 
-void			l3d_calculate_bary_coords(t_vec2 *triangle_points_2d, t_vec2 point,
+void			l3d_calculate_bary_coords(t_triangle *triangle, t_vec2 *triangle_points_2d, t_vec2 point,
 											float *barycoords)
 {
 	// float	ax = triangle_points_2d[0][0];
@@ -208,6 +196,18 @@ void			l3d_calculate_bary_coords(t_vec2 *triangle_points_2d, t_vec2 point,
 	barycoords[0] = u;
 	barycoords[1] = v;
 	barycoords[2] = w;
+	(void)triangle;
+	// t_vec3 X;
+	// t_vec3 Y;
+	// t_vec3 Z;
+	// ml_vector3_sub((t_vec3){point[0], point[1], z}, triangle->vtc[0]->pos, X);
+	// ml_vector3_sub(triangle->vtc[1]->pos, triangle->vtc[0]->pos, Y);
+	// ml_vector3_sub(triangle->vtc[2]->pos, triangle->vtc[0]->pos, Z);
+
+	// ft_printf("z: %f\n", z);
+	// barycoords[1] = (X[1] * Z[2] - X[2] * Z[1]) / (Y[1] * Z[2] - Y[2] * Z[1]);
+	// barycoords[2] = (-X[1] * Y[2] + X[2] * Y[1]) / (Y[1] * Z[2] - Y[2] * Z[1]);
+	// barycoords[0] = 1 - barycoords[1] - barycoords[2];
 
 	//!precalculate at least the denominator
 	// barycoords[0] = ((by - cy) * (px - cx) + (cx - bx) * (py - cy)) /
@@ -240,41 +240,59 @@ void			l3d_calculate_bary_coords(t_vec2 *triangle_points_2d, t_vec2 point,
 void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
 									t_vec2 point_uv)
 {
-	float	Auv_x = triangle->uvs[0][0];
-	float	Auv_y = triangle->uvs[0][1];
-	float	Buv_x = triangle->uvs[1][0];
-	float	Buv_y = triangle->uvs[1][1];
-	float	Cuv_x = triangle->uvs[2][0];
-	float	Cuv_y = triangle->uvs[2][1];
-	// float x = point_uv[0];
-	// float y = point_uv[1];
-	// float	Auv_x = 0.0;
-	// float	Auv_y = 0.0;
-	// float	Buv_x = 1.0;
-	// float	Buv_y = 0.0;
-	// float	Cuv_x = 0.5;
-	// float	Cuv_y = 1.0;
-	// float		difax = fabs(triangle->points_2d[0][0] - x);
-	// float		difbx = fabs(triangle->points_2d[1][0] - x);
-	// float 		difcx = fabs(triangle->points_2d[2][0] - x);
-	// float		difay = fabs(triangle->points_2d[0][1] - y);
-	// float		difby = fabs(triangle->points_2d[1][1] - y);
-	// float 		difcy = fabs(triangle->points_2d[2][1] - y);
-	// float		sumdifx = fabs(difax + difbx + difcx);
-	// float		sumdify = fabs(difay + difby + difcy);
-	// point_uv[0] = Auv_x * (difax / sumdifx) + Buv_x * (difbx / sumdifx) +
-	// 			  Cuv_x * (difcx / sumdifx);
-	// point_uv[1] = Auv_y * (difay / sumdify) + Buv_y * (difby / sumdify) +
-	// 			  Cuv_y * (difcy / sumdify);
-	point_uv[0] = (barycoords[0] * Auv_x + barycoords[1] *
-					Buv_x + barycoords[2] * Cuv_x);
-	point_uv[1] = (barycoords[0] * Auv_y + barycoords[1] *
-					Buv_y + barycoords[2] * Cuv_y);
-	// if (point_uv[0] < 0.0 || point_uv[1] < 0.0)
-	// 	ft_printf("uv was negative\n");//!was negative
+	// float	Auv_x = triangle->uvs[0][0];
+	// float	Auv_y = triangle->uvs[0][1];
+	// float	Buv_x = triangle->uvs[1][0];
+	// float	Buv_y = triangle->uvs[1][1];
+	// float	Cuv_x = triangle->uvs[2][0];
+	// float	Cuv_y = triangle->uvs[2][1];
+
+	float Auv_x = 0.0;
+	float Auv_y = 0.0;
+	float Buv_x = 0.0;
+	float Buv_y = 1.0;
+	float Cuv_x = 1.0;
+	float Cuv_y = 0.5;
+
+	// float z = (barycoords[0] * triangle->vtc[0]->pos[2] +
+	// 		   barycoords[1] * triangle->vtc[1]->pos[2] +
+	// 		   barycoords[2] * triangle->vtc[2]->pos[2]);
+	// float minz = ft_max_double((double[3]){triangle->vtc[0]->pos[2],
+	// 									 triangle->vtc[1]->pos[2],
+	// 									 triangle->vtc[2]->pos[2]}, 3);
+	// z -= minz;
+	// z = fabs(z);
+	t_vec3 A;
+	ml_vector3_copy(triangle->vtc[0]->pos, A);
+	t_vec3 B;
+	ml_vector3_copy(triangle->vtc[1]->pos, B);
+	t_vec3 C;
+	ml_vector3_copy(triangle->vtc[2]->pos, C);
+	
+	float z = (barycoords[0] * A[2] +
+			   barycoords[1] * B[2] +
+			   barycoords[2] * C[2]);
+	// float distance = z - triangle->center[2];
+	float max = ft_max_double((double[3]){triangle->vtc[0]->pos[2], triangle->vtc[1]->pos[2],
+							  triangle->vtc[2]->pos[2]}, 3);
+	float min = ft_min_double((double[3]){triangle->vtc[0]->pos[2], triangle->vtc[1]->pos[2],
+							  triangle->vtc[2]->pos[2]}, 3);
+							  
+	z /= max;
+	// ft_printf("z  %f max %f min %f fraction %f\n", z, max, min, fraction);
+	// float centerz = (triangle->vtc[0]->pos[2] +
+	// 				triangle->vtc[1]->pos[2] +
+	// 				triangle->vtc[2]->pos[2]) / 3;
+
+		// z = fabs(z) / fabs(centerz);
+		// z = fabs(z);
+	// ft_printf("z: %f\n", z);
+
+	point_uv[0] = (barycoords[0] * Auv_x + barycoords[1] * Buv_x + barycoords[2] * Cuv_x) / z;
+	point_uv[1] = (barycoords[0] * Auv_y + barycoords[1] * Buv_y + barycoords[2] * Cuv_y) / z;
 	(void)triangle;
-	(void)point_uv;
-	(void)barycoords;
+	(void)min;
+	(void)max;
 }
 
 /*
@@ -284,57 +302,19 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *barycoords,
 uint32_t		l3d_sample_texture(uint32_t *texture_data, int width,
 									int height, t_vec2 uv_point)
 {
-	// static float max = 0;
-	// ft_printf("U value from texture: %f\n", (float)(uv_point[0]));
-	// ft_printf("V value from texture: %f\n", (float)((uv_point[1])));
-	// if ((int)(floor(uv_point[0] * width +
-	// 				width * (uv_point[1] * height))) > 65536)
-	// {
-	// 	// ft_printf("uvs: %f  %f\n", uv_point[0], uv_point[1]);
-	// 	// ft_printf("x value from texture: %d\n", (int)(uv_point[0] * width));
-	// 	// ft_printf("y value from texture: %d\n", (int)(width * (uv_point[1] * height)));
-	// 	;
-	// }
-	// ft_printf("color in the position: %u\n", texture_data[(int)(floor(uv_point[0] * width +
-	// 					width * (uv_point[1] * height)))]);
-	// static float maxu = 0;
-	// static float maxv = 0;
-	// if (uv_point[0] > maxu)
-	// 	maxu = uv_point[0];
-	// if (uv_point[1] > maxv)
-	// 	maxv = uv_point[1];
-	// ft_printf("U: %f | V: %f\n", maxu, maxv);
-	static float minx = 1000;
 	int x = floor(uv_point[0] * (width - 1));
 	int y = floor(uv_point[1] * (height - 1));
-	if (x < minx)
-		minx = x;
-	
-	
-	// if (uv_point[0] > max)
-	// 	max = uv_point[0];
-	// float index = x + (float)width * y;
 	float index;
 	index = x + width * y;
-	// ft_printf("index: %d\n", (int)floor(index));
-	if (texture_data[(int)floor(index)] == 0x274c18ff)
-	{
-		
-		ft_printf("was color\n");
-		ft_printf("x: %f | y: %f\n", x, y);
-		ft_printf("U: %f | V: %f\n", uv_point[0], uv_point[1]);
-		ft_printf("index: %f\n", index);
-		ft_printf("floored index: %d\n", (int)floor(index));
-		;
-	}
-	// ft_printf("x: %f | y: %f\n", x, y);
-	// ft_printf("indexf d: %f | %d\n", (int)floor(index), index);
+	// int mult = 500;
+	// uint32_t result = (int)(fabs(uv_point[0])/mult * 255) << 8;
+	// result += 255;
+	// result += (int)(fabs(uv_point[0])/mult * 255) << 16;
+	// result += (int)(fabs(uv_point[0]) / mult * 255) << 24;
+	// return (result);
 	return (texture_data[(int)floor(index)]);
 	(void)height;
 	(void)width;
 	(void)x;
 	(void)y;
-	//TODO MAKE AN UV MAP WITH STRIPES/SQUARES AND SEE HOW IT MAPS TO THE OBJECT
-	//TODO COLOR THE BARYCETRIC CENTER OF A TRIANGLE AND SEE IF IT MAPS CORRECTLY
-	//TODO MAP THE CORNERS USING BARYCENTRIC / MAP THE EDGES
 }

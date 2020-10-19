@@ -313,7 +313,7 @@ double						l3d_rand_d(void);
 void						l3d_triangle_raster(uint32_t *buffer,
 												uint32_t *dimensions,
 												t_triangle *triangle);
-void						l3d_calculate_bary_coords(
+void						l3d_calculate_bary_coords(t_triangle *triangle,
 													t_vec2 *triangle_points_2d,
 													t_vec2 point,
 													float *barycoords);

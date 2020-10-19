@@ -60,7 +60,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
 		data.objects[0] = l3d_read_obj("assets/icosphere.obj");
-		l3d_read_bmp_image_32bit_rgba("assets/IcosphereUV_numbers.bmp",
+		l3d_read_bmp_image_32bit_rgba("assets/stripes64.bmp",
 									  &texture, &width, &height);
 		// l3d_read_bmp_image_32bit_rgba("assets/gradient64.bmp",
 		// 							  &texture, &width, &height);

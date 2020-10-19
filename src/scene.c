@@ -71,7 +71,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 			app->window->width / 5.0,
 			app->window->width / 5.0);
 		l3d_3d_object_translate(data.objects[0],
-			0, 0, -app->window->width - 500);
+			0, 0, -app->window->width);
 	}
 	app->active_scene = new_scene(&data);
 	if (app->active_scene->main_camera)

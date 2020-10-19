@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/15 19:39:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 01:16:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/16 19:08:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ const char		*test_hash_map_delete(void)
 	hash_map_delete_free(hash_map, key2);
 	OH_ASSERT("Hash map delete2 is not correct",
 		hash_map_get(hash_map, key2) == NULL);
-	hash_map_destroy(hash_map);
+	hash_map_destroy_free(hash_map);
 	return (0);
 }
 

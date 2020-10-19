@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/15 17:54:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/19 16:31:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 	error_check(!(object->triangles =
 		malloc(sizeof(t_triangle) * num_triangles)),
 		"Failed to malloc 3d obj triangles");
+	error_check(!(object->material = malloc(sizeof(t_material))),
+		"Failed to malloc 3d obj material");
 	ml_matrix4_id(object->rotation);
 	ml_matrix4_id(object->scale);
 	ml_vector3_set(object->position, 0, 0, 0);
-	object->material.texture = NULL;
+	ft_memset(object->material, 0, sizeof(t_material));
 	return (object);
 }
 
@@ -49,6 +51,7 @@ void			l3d_3d_object_destroy(t_3d_object *object)
 	i = -1;
 	while (++i < object->num_vertices)
 		free(object->vertices[i]);
+	free(object->material);
 	free(object->vertices);
 	free(object);
 	object = NULL;

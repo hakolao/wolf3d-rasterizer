@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/12 15:53:35 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/17 23:16:10 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/16 19:20:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,14 @@ t_hash_table		*hash_map_create(int size)
 	if (!(table = malloc(sizeof(t_hash_table))))
 	{
 		ft_dprintf(2, "Failed to malloc hash table\n");
+		exit(EXIT_FAILURE);
 		return (NULL);
 	}
 	table->size = size;
 	if (!(table->list = malloc(sizeof(t_hash_node*) * size)))
 	{
 		ft_dprintf(2, "Failed to malloc hash table list\n");
-		free(table);
+		exit(EXIT_FAILURE);
 		return (NULL);
 	}
 	i = -1;
@@ -69,8 +70,6 @@ void				hash_map_add(t_hash_table *table, int key, void *val)
 		return ;
 	pos = hash_map_hash(table, key);
 	list = table->list[pos];
-	if (!(new_node = malloc(sizeof(t_hash_node))))
-		return (void)(ft_dprintf(2, "Failed to malloc new node\n"));
 	temp = list;
 	while (temp)
 	{
@@ -81,6 +80,8 @@ void				hash_map_add(t_hash_table *table, int key, void *val)
 		}
 		temp = temp->next;
 	}
+	if (!(new_node = malloc(sizeof(t_hash_node))))
+		return (void)(ft_dprintf(2, "Failed to malloc new node\n"));
 	new_node->key = key;
 	new_node->val = val;
 	new_node->next = list;

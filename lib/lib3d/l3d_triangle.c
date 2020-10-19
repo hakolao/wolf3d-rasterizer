@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 14:55:40 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/02 20:11:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/19 16:30:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,14 @@ void				l3d_triangle_normal_update(t_triangle *triangle)
 ** Sets triangle values
 */
 
-void				l3d_triangle_set(t_triangle *triangle,
-					t_vertex *vtc1, t_vertex *vtc2, t_vertex *vtc3)
+void				l3d_triangle_set(t_triangle *triangle, t_vertex *vtc[3],
+						t_3d_object *obj)
 {
+	triangle->material = obj->material;
 	triangle->is_single_sided = L3D_SINGLE_SIDED;
-	triangle->vtc[0] = vtc1;
-	triangle->vtc[1] = vtc2;
-	triangle->vtc[2] = vtc3;
+	triangle->vtc[0] = vtc[0];
+	triangle->vtc[1] = vtc[1];
+	triangle->vtc[2] = vtc[2];
 	l3d_triangle_centroid_update(triangle);
 	l3d_triangle_normal_update(triangle);
 }

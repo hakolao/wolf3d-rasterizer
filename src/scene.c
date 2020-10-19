@@ -6,43 +6,15 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/15 18:03:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/19 16:35:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-/*
-** Add objs to scene. ToDo: Also should pair them with textures
-** and position them where they belong.
-** Set scene & object specific transformations in scene data.
-*/
-
-void			set_material_to_triangles(t_3d_object *object, uint32_t *texture,
-											uint32_t width, uint32_t height)
-//!create a better implementation
-{
-	int		i;
-
-	i = -1;
-	object->material.texture = texture;
-	object->material.height = height;
-	object->material.width = width;
-	while (++i < object->num_triangles)
-	{
-		object->triangles[i].material = &(object->material);
-		object->triangles[i].material->texture = texture;
-		// ft_printf("triangle number: %d  texture pointer: %p", i, texture);
-		// (void)texture;
-	}
-}
-
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
 	t_scene_data		data;
-	uint32_t			*texture;//!same here
-	uint32_t			width = 2048;//!same here
-	uint32_t			height = 2048;//!same here
 
 	data.scene_id = scene_id;
 	if (scene_id == scene_id_main_menu)
@@ -59,10 +31,8 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.objects[0] = l3d_read_obj("assets/icosphere.obj");
-		l3d_read_bmp_image_32bit_rgba("assets/IcosphereUV_numbers.bmp",
-									  &texture, &width, &height);
-		set_material_to_triangles(data.objects[0], texture, width, height); //!create a better implementation
+		data.objects[0] = l3d_read_obj("assets/icosphere.obj",
+			"assets/IcosphereUV_numbers.bmp");
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],
 			app->window->width / 5.0,

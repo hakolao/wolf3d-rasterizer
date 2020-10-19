@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:27:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/15 17:59:28 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/19 16:34:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 			ml_vector2_copy(read_obj->vt[vt_i], obj->triangles[i].uvs[j]);
 			ml_vector3_copy(read_obj->vn[vn_i], obj->triangles[i].normals[j]);
 		}
-		l3d_triangle_set(&obj->triangles[i],
+		l3d_triangle_set(&obj->triangles[i], (t_vertex*[3]){
 			obj->vertices[read_obj->triangles[i * 9 + 0 * 3 + 0] - 1],
 			obj->vertices[read_obj->triangles[i * 9 + 1 * 3 + 0] - 1],
-			obj->vertices[read_obj->triangles[i * 9 + 2 * 3 + 0] - 1]);
+			obj->vertices[read_obj->triangles[i * 9 + 2 * 3 + 0] - 1]}, obj);
 	}
 }
 
@@ -82,13 +82,17 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 ** array. Saves the number of objects to inputed num_objects ref.
 */
 
-static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj)
+static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
 {
 	t_3d_object	*l3d_object;
 
-	error_check(!(l3d_object = malloc(sizeof(*l3d_object))),
-		"Failed to malloc 3d obj");
 	l3d_object = l3d_3d_object_create(obj->num_vertices, obj->num_triangles);
+	if (texture)
+	{
+		l3d_object->material->texture = texture->pixels;
+		l3d_object->material->width = texture->w;
+		l3d_object->material->height = texture->h;
+	}
 	obj_to_3d_object(obj, l3d_object);
 	l3d_object->num_triangles = obj->num_triangles;
 	l3d_object->num_vertices = obj->num_vertices;
@@ -102,15 +106,25 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj)
 ** is not returned.
 */
 
-t_3d_object				*l3d_read_obj(const char *filename)
+t_3d_object				*l3d_read_obj(const char *filename, const char *txtfile)
 {
 	t_file_contents	*obj_file;
+	t_surface		texture;
+	t_surface		*texture_ptr;
 	t_obj			obj;
 
-	error_check(!(obj_file = read_file(filename)), "Failed to read file");
+	error_check(!(obj_file = read_file(filename)), "Failed read obj file");
+	if (txtfile == NULL)
+		texture_ptr = NULL;
+	else
+	{
+		l3d_read_bmp_image_32bit_rgba(txtfile,
+			&texture.pixels, &texture.w, &texture.h);
+		texture_ptr = &texture;
+	}
 	l3d_obj_str_parse((char*)obj_file->buf, &obj);
 	if (!l3d_is_valid_obj(&obj))
 		return (NULL);
 	destroy_file_contents(obj_file);
-	return (l3d_3d_object_from_obj(&obj));
+	return (l3d_3d_object_from_obj(&obj, texture_ptr));
 }

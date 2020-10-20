@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/10/15 20:12:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/20 17:23:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 
 static void		clamp_bary(float *barycoords)
 {
-	static int i = 0;
-
 	if (barycoords[0] > 1.0)
 		barycoords[0] = 1.0;
 	else if (barycoords[0] < 0.0)
@@ -54,9 +52,6 @@ static void		clamp_bary(float *barycoords)
 		barycoords[2] = 1.0;
 	else if (barycoords[2] < 0.0)
 		barycoords[2] = 0.0;
-	if (i < 1)
-		ft_printf("baryc clamped\n");
-	i = 1;
 }
 
 static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
@@ -73,6 +68,11 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
+		if (x < -(int)dimensionswh[0] / 2 || x > (int)dimensionswh[0] / 2)
+		{
+			x++;
+			continue ;
+		}
 		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
 		clamp_bary(baryc);
 		l3d_interpolate_uv(triangle, baryc, uv);
@@ -97,6 +97,11 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 	y = data->y1;
 	while (y < data->y2)
 	{
+		if (y < -(int)dimensionswh[1] / 2 || y > (int)dimensionswh[1] / 2)
+		{
+			y++;
+			continue ;
+		}
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
@@ -119,6 +124,11 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 	y = data->y2;
 	while (y < data->y3)
 	{
+		if (y < -(int)dimensionswh[1] / 2 || y > (int)dimensionswh[1] / 2)
+		{
+			y++;
+			continue ;
+		}
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)

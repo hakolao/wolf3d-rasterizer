@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/15 14:42:38 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/20 17:24:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
+
+# define NUM_THREADS 6
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the
@@ -131,18 +133,6 @@ typedef struct						s_scene
 	t_scene_id				scene_id;
 }									t_scene;
 
-typedef struct						s_mouse
-{
-	int32_t				x;
-	int32_t				y;
-	uint32_t			state;
-}									t_mouse;
-
-typedef struct						s_keyboard
-{
-	const uint8_t		*state;
-}									t_keyboard;
-
 typedef struct						s_wolf3d
 {
 	t_bool					is_running;
@@ -153,7 +143,17 @@ typedef struct						s_wolf3d
 	t_player				player;
 	t_mouse					mouse;
 	t_keyboard				keyboard;
+	t_thread_pool			*thread_pool;
 }									t_wolf3d;
+
+/*
+** For threading
+*/
+typedef struct						s_triangle_work
+{
+	t_wolf3d				*app;
+	t_triangle				*triangle;
+}									t_triangle_work;
 
 void						wolf3d_run(t_wolf3d *app);
 

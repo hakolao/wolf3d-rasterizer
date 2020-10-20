@@ -38,25 +38,20 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
 }
 
-static void		clamp_bary(float *barycoords)
+void		clamp_bary(float *barycoords)
 {
-	static int i = 0;
-
 	if (barycoords[0] > 1.0)
 		barycoords[0] = 1.0;
-	else if (barycoords[0] < 0.0)
+	if (barycoords[0] < 0.0)
 		barycoords[0] = 0.0;
 	if (barycoords[1] > 1.0)
 		barycoords[1] = 1.0;
-	else if (barycoords[1] < 0.0)
+	if (barycoords[1] < 0.0)
 		barycoords[1] = 0.0;
 	if (barycoords[2] > 1.0)
 		barycoords[2] = 1.0;
-	else if (barycoords[2] < 0.0)
+	if (barycoords[2] < 0.0)
 		barycoords[2] = 0.0;
-	if (i < 1)
-		ft_printf("baryc clamped\n");
-	i = 1;
 }
 
 static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
@@ -73,18 +68,31 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
-		clamp_bary(baryc);
-		l3d_interpolate_uv(triangle, baryc, uv);
+		// if (x < -(int)dimensionswh[0] / 2 || x > (int)dimensionswh[0] / 2 ||
+		// 	y < -(int)dimensionswh[1] / 2 || y > (int)dimensionswh[1] / 2)
+		// {
+		// 	x++;
+		// 	continue;
+		// }
+		// l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
+		// clamp_bary(baryc);
+		// l3d_interpolate_uv(triangle, baryc, uv);
+		// l3d_pixel_plot(buffer,
+		// 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+		// 			(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+		// 			l3d_sample_texture(triangle->material->texture,
+		// 								triangle->material->width,
+		// 								triangle->material->height,
+		// 								uv));
 		l3d_pixel_plot(buffer,
-					(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-					(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-					l3d_sample_texture(triangle->material->texture,
-										triangle->material->width,
-										triangle->material->height,
-										uv));
+					   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+					   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+					   0xffaaffff);
 		x++;
 	}
+	(void)triangle;
+	(void)baryc;
+	(void)uv;
 }
 
 static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
@@ -160,12 +168,19 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
 										t_vec2 point,
 										float *baryc)
 {
-	float	inv_denom;
+	float denom = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
+				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
+				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
+				(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
 
+	float	inv_denom;
+	if (fabs(denom) < L3D_EPSILON)
+		ft_printf("denom: %f\n", denom);
 	inv_denom = 1 / ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
 				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
 				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
 				(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
+
 	baryc[0] = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
 				(point[0] - triangle_points_2d[2][0]) +
 				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
@@ -198,7 +213,7 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 			((baryc[0] * 1) * az +
 			(baryc[1] * 1) * bz +
 			(baryc[2] * 1) * cz);
-	uv[1] = ((baryc[0] * triangle->uvs[0][1]) * az +
+	uv[1] = 1 - ((baryc[0] * triangle->uvs[0][1]) * az +
 			(baryc[1] * triangle->uvs[1][1]) * bz +
 			(baryc[2] * triangle->uvs[2][1]) * cz) /
 			((baryc[0] * 1) * az +
@@ -206,16 +221,22 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 			(baryc[2] * 1) * cz);
 }
 
-/*
+	/*
 **	Samples the texture with given uv_coordinates
 **	x = (floor(U * (width - 1))); //TODO Check later if the -1 offset is needed
 **	y = (floor(V * (height - 1)));
 **	index = x + width * y;
 */
 
-uint32_t		l3d_sample_texture(uint32_t *texture_data, int width,
-									int height, t_vec2 uv_point)
+	uint32_t
+	l3d_sample_texture(uint32_t * texture_data, int width,
+					   int height, t_vec2 uv_point)
 {
-	return (texture_data[(int)floor((floor(uv_point[0] * (width - 1))) +
-						width * (floor(uv_point[1] * (height - 1))))]);
+	int	index;
+
+	index = (int)floor((floor(uv_point[0] * (width))) +
+							width * (floor(uv_point[1] * (height))));
+	if (index >= width * height)
+		index = width * height - 1;
+	return (texture_data[index]);
 }

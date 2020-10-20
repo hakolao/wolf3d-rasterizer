@@ -40,13 +40,13 @@ static void		rotate_player(t_wolf3d *app)
 
 void			rotate_player_vertical(t_wolf3d *app, float angle)
 {
-	app->player.rot_y += app->player.rot_speed * app->info.delta_time * angle;
+	app->player.rot_y += app->player.rot_speed * angle;
 	rotate_player(app);
 }
 
 void			rotate_player_horizontal(t_wolf3d *app, float angle)
 {
-	app->player.rot_x += app->player.rot_speed * app->info.delta_time * angle;
+	app->player.rot_x += app->player.rot_speed * angle;
 	rotate_player(app);
 }
 

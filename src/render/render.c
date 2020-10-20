@@ -120,21 +120,21 @@ t_bool			triangle_in_view(t_wolf3d *app, t_triangle *triangle)
 ** is not enough.
 */
 
-static t_bool 	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
+t_bool			triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 {
-	if (triangle->vtc[0]->pos[2] < camera->near_clip &&
-		triangle->vtc[1]->pos[2] < camera->near_clip &&
+	if (triangle->vtc[0]->pos[2] < camera->near_clip ||
+		triangle->vtc[1]->pos[2] < camera->near_clip ||
 		triangle->vtc[2]->pos[2] < camera->near_clip)
-		return (false);
+			return (false);
 	return (true);
 }
 
-static t_bool	is_triangle_facing(t_triangle *triangle, t_vec3 dir)
+t_bool			is_triangle_facing(t_triangle *triangle, t_vec3 dir)
 {
 	return (ml_vector3_dot(triangle->normal, dir) <= 0);
 }
 
-static t_bool	is_rendered(t_wolf3d *app, t_triangle *triangle)
+t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 {
 	t_vec3 dir;
 	
@@ -142,8 +142,51 @@ static t_bool	is_rendered(t_wolf3d *app, t_triangle *triangle)
 		return (false);
 	ml_vector3_sub(triangle->center, app->active_scene->main_camera->origin, dir);
 	if (!is_triangle_facing(triangle, dir))
+	{
+		ft_printf("is not facing camera\n");
 		return (false);
+	}
 	return (true);
+}
+
+t_bool			is_point_behind_near(float near, t_vec3 point)
+{
+	if (point[2] > near)
+		return (true);
+	return (false);
+}
+
+int				is_triangle_clipping(t_wolf3d *app, t_triangle *triangle)
+{
+	int		i;
+	float near = app->active_scene->main_camera->near_clip;
+
+	i = -1;
+	while(++i < 3)
+	{
+		if (is_point_behind_near(near, triangle->vtc[i]->pos))
+		{
+			
+			if (!(is_point_behind_near(near, triangle->vtc[(i + 1) % 3]->pos)) &&
+				!(is_point_behind_near(near, triangle->vtc[(i + 2) % 3]->pos)))
+			{
+				//case A;
+				// ft_printf("one is behind two are not\n");
+				return (1);
+			}
+		}
+		if (!(is_point_behind_near(near, triangle->vtc[i]->pos)))
+		{
+			if (is_point_behind_near(near, triangle->vtc[(i + 1) % 3]->pos) &&
+				is_point_behind_near(near, triangle->vtc[(i + 2) % 3]->pos))
+			{
+				//case B;
+				// ft_printf("two are behind one is not\n");
+				return (2);
+			}
+		}
+	}
+	return (0);
 }
 
 t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
@@ -154,10 +197,11 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	t_vertex	vtc[3];
 	
 	rendered_triangle_set(app, &render_triangle, vtc, triangle_in);
-	if (!(triangle_in_view(app, &render_triangle)))
-		return (false);
+	// if (!(triangle_in_view(app, &render_triangle)))
+	// 	return (false);
 	if (!(is_rendered(app, &render_triangle)))
 		return (false);
+	is_triangle_clipping(app, &render_triangle);
 	buffer = app->window->framebuffer; 
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 17:10:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/20 17:25:50 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/20 17:41:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void		render_active_scene(t_wolf3d *app)
 		j = -1;
 		while (++j < app->active_scene->objects[i]->num_triangles)
 		{
-			error_check(!(work = malloc(sizeof(t_triangle_work)), 
+			error_check(!(work = malloc(sizeof(t_triangle_work))), 
 				"Failed to malloc triangle work");
 			work->app = app;
 			work->triangle = app->active_scene->objects[i]->triangles + j;

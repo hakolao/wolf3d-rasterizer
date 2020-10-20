@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/20 17:23:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/20 17:42:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 			app->window->width / 5.0,
 			app->window->width / 5.0);
 		l3d_3d_object_translate(data.objects[0],
-			0, 0, -app->window->width - 500);
+			0, 0, -app->window->width + 500);
 	}
 	app->active_scene = new_scene(&data);
 	if (app->active_scene->main_camera)

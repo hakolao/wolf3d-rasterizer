@@ -68,26 +68,26 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		// if (x < -(int)dimensionswh[0] / 2 || x > (int)dimensionswh[0] / 2 ||
-		// 	y < -(int)dimensionswh[1] / 2 || y > (int)dimensionswh[1] / 2)
-		// {
-		// 	x++;
-		// 	continue;
-		// }
-		// l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
-		// clamp_bary(baryc);
-		// l3d_interpolate_uv(triangle, baryc, uv);
-		// l3d_pixel_plot(buffer,
-		// 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-		// 			(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-		// 			l3d_sample_texture(triangle->material->texture,
-		// 								triangle->material->width,
-		// 								triangle->material->height,
-		// 								uv));
+		if (x < -(int)dimensionswh[0] / 2 || x > (int)dimensionswh[0] / 2 ||
+			y < -(int)dimensionswh[1] / 2 || y > (int)dimensionswh[1] / 2)
+		{
+			x++;
+			continue;
+		}
+		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
+		clamp_bary(baryc);
+		l3d_interpolate_uv(triangle, baryc, uv);
 		l3d_pixel_plot(buffer,
-					   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-					   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-					   0xffaaffff);
+					(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+					(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+					l3d_sample_texture(triangle->material->texture,
+										triangle->material->width,
+										triangle->material->height,
+										uv));
+		// l3d_pixel_plot(buffer,
+		// 			   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+		// 			   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+		// 			   0xffaaffff);
 		x++;
 	}
 	(void)triangle;

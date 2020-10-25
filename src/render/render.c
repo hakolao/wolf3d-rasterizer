@@ -67,7 +67,6 @@ static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle)
 			ml_vector3_set_all(hits[k], 0);
 		}
 	}
-	ft_memset(triangle->points_2d, 0, sizeof(float) * 6); // !remove at some point, debug only
 	calculate_2d_points(triangle->points_2d, hits);
 	return (true);
 }
@@ -255,13 +254,7 @@ t_bool			create_two_clipped_triangles(t_triangle *triangle,
 	l3d_ray_set(dir2, triangle->vtc[(indices[0] + 2) % 3]->pos, &ray2);
 	l3d_plane_ray_hit(plane, &ray1, hits[0]);
 	l3d_plane_ray_hit(plane, &ray2, hits[1]);
-	ft_printf("-----------------------\nhits and vertices\n");
-	ml_vector3_print(hits[0]);
-	ml_vector3_print(hits[1]);
-	ml_vector3_print(triangle->vtc[indices[0]]->pos);
-	ml_vector3_print(triangle->vtc[(indices[0] + 1) % 3]->pos);
-	ml_vector3_print(triangle->vtc[(indices[0] + 2) % 3]->pos);
-	ft_printf("-----------------------\n");
+
 	//??copy first triangle using hit from ab(?)
 	ml_vector3_copy(triangle->vtc[(indices[0] + 1) % 3]->pos, result_tris[0].vtc[0]->pos);
 	ml_vector3_copy(hits[1], result_tris[0].vtc[2]->pos);
@@ -328,7 +321,7 @@ t_bool			create_one_clipped_triangle(t_triangle *triangle,
 	return (true);
 }
 
-t_bool			clip_triangle(t_triangle *triangle, t_plane *plane,
+int			clip_triangle(t_triangle *triangle, t_plane *plane,
 								t_triangle *result_triangles)
 {
 	// t_triangle	*clip1;
@@ -348,18 +341,18 @@ t_bool			clip_triangle(t_triangle *triangle, t_plane *plane,
 	{
 		if (!(create_two_clipped_triangles(triangle, plane, indices,
 											result_triangles)))
-			return (false);
-		return (true);
+			return (0);
+		return (2);
 	}
 	else if (clip_case == 1)
 	{
 		if (!(create_one_clipped_triangle(triangle, plane, indices,
 											result_triangles)))
-			return (false);
-		return (true);
+			return (0);
+		return (1);
 	}
 	else
-		return (false);
+		return (0);
 }
 
 void			set_clipped_triangles(t_vertex *vtc, t_triangle *source,
@@ -421,9 +414,9 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	uint32_t	*buffer;
 	uint32_t	dimensions[2];
 	t_triangle	render_triangle;
-	t_triangle	clipped_triangles[2];
+	// t_triangle	clipped_triangles[2];
 	t_vertex	vtc[9];
-
+	
 	buffer = app->window->framebuffer;
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
@@ -432,23 +425,28 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	// 	return (false);
 	// if (!(is_rendered(app, &render_triangle)))
 	// 	return (false);
-	set_clipped_triangles(vtc, &render_triangle, clipped_triangles);
-	if (clip_triangle(&render_triangle,
-					&app->active_scene->main_camera->viewplanes[0],
-					clipped_triangles))
-	{
-		ft_printf("clip triangle\n");
-		screen_intersection(app, &clipped_triangles[0]);
-		screen_intersection(app, &clipped_triangles[1]);
-		l3d_triangle_raster(buffer, dimensions, &clipped_triangles[0]);
-		l3d_triangle_raster(buffer, dimensions, &clipped_triangles[1]);
-	}
-	else
-	{
-		print_clipped_triangles(clipped_triangles);
+	// set_clipped_triangles(vtc, &render_triangle, clipped_triangles);
+	// if (clip_triangle(&render_triangle,
+	// 				&app->active_scene->main_camera->viewplanes[0],
+	// 				clipped_triangles))
+	// {//! 2 triangle clipping seems to work bar uvs but 1 triangle clipping doesnt
+	// 	ft_printf("clip triangle\n");
+	// 	screen_intersection(app, &clipped_triangles[0]);
+	// 	screen_intersection(app, &clipped_triangles[1]);
+	// 	uint64_t tick = SDL_GetPerformanceCounter();
+	// 	l3d_triangle_raster(buffer, dimensions, &clipped_triangles[0]);
+	// 	l3d_triangle_raster(buffer, dimensions, &clipped_triangles[1]);
+	// 	tick = (SDL_GetPerformanceCounter() - tick) * 1000 / SDL_GetPerformanceFrequency();
+	// 	ft_printf("rendering ticks: %u\n", tick);
+	// 	return (true);
+	// }
+	// else
+	// {
+		// ft_printf("HERE++++++++++++++++++++++++\n");
+		// print_clipped_triangles(clipped_triangles);
 		screen_intersection(app, &render_triangle);
 		l3d_triangle_raster(buffer, dimensions, &render_triangle);
-	}
+	// }
 	return (true);
 }
 // t_vertex *vtc[3];

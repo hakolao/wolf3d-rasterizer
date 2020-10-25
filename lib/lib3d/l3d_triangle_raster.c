@@ -68,26 +68,24 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < -(int)dimensionswh[0] / 2 || x > (int)dimensionswh[0] / 2 ||
-			y < -(int)dimensionswh[1] / 2 || y > (int)dimensionswh[1] / 2)
-		{
-			x++;
-			continue;
-		}
-		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
-		clamp_bary(baryc);
-		l3d_interpolate_uv(triangle, baryc, uv);
-		l3d_pixel_plot(buffer,
-					(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-					(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-					l3d_sample_texture(triangle->material->texture,
-										triangle->material->width,
-										triangle->material->height,
-										uv));
+		if (x < -(int)dimensionswh[0] / 2 - 1)
+			x = -(int)dimensionswh[0] / 2 - 1;
+		else if (x > (int)dimensionswh[0] / 2 + 1)
+			break ;
+		// l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
+		// clamp_bary(baryc);
+		// l3d_interpolate_uv(triangle, baryc, uv);
 		// l3d_pixel_plot(buffer,
-		// 			   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-		// 			   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-		// 			   0xffaaffff);
+		// 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+		// 			(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+		// 			l3d_sample_texture(triangle->material->texture,
+		// 								triangle->material->width,
+		// 								triangle->material->height,
+		// 								uv));
+		l3d_pixel_plot(buffer,
+					   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+					   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+					   0xffaaffff);
 		x++;
 	}
 	(void)triangle;
@@ -101,10 +99,13 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 	float	x;
 	float	y;
 	float	end_x;
-
 	y = data->y1;
 	while (y < data->y2)
 	{
+		if (y < -(int)dimensionswh[1] / 2 - 1)
+			y = -(int)dimensionswh[1] / 2 - 1;
+		else if (y > (int)dimensionswh[1] / 2 + 1)
+			break;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
@@ -123,10 +124,13 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 	float	x;
 	float	y;
 	float	end_x;
-
 	y = data->y2;
 	while (y < data->y3)
 	{
+		if (y < -(int)dimensionswh[1] / 2 - 1)
+			y = -(int)dimensionswh[1] / 2 - 1;
+		else if (y > (int)dimensionswh[1] / 2 + 1)
+			break;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)

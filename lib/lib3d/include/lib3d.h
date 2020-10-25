@@ -121,7 +121,6 @@ typedef struct				s_triangle
 	t_vertex		*ordered_vtc[3];
 	t_material		*material;
 	t_vec2			points_2d[3];
-	uint32_t		debug_color;
 }							t_triangle;
 
 /*

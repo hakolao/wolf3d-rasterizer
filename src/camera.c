@@ -20,7 +20,7 @@
 static void set_camera_viewbox(t_wolf3d *app, t_plane *viewplanes)
 {
 	viewplanes[0].d = NEAR_CLIP_DIST;
-	ml_vector3_set(viewplanes[0].origin, 0, 0, -NEAR_CLIP_DIST);
+	ml_vector3_set(viewplanes[0].origin, 0, 0, -NEAR_CLIP_DIST);//!change back to * 1
 	ml_vector3_set(viewplanes[0].normal, 0, 0, -1);
 
 	viewplanes[1].d = FAR_CLIP_DIST;

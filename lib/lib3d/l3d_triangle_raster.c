@@ -72,25 +72,26 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 			x = -(int)dimensionswh[0] / 2 - 1;
 		else if (x > (int)dimensionswh[0] / 2 + 1)
 			break ;
-		// l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
-		// clamp_bary(baryc);
-		// l3d_interpolate_uv(triangle, baryc, uv);
-		// l3d_pixel_plot(buffer,
-		// 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-		// 			(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-		// 			l3d_sample_texture(triangle->material->texture,
-		// 								triangle->material->width,
-		// 								triangle->material->height,
-		// 								uv));
+		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
+		clamp_bary(baryc);//!this causes a seam artifact when clipping triangles
+		l3d_interpolate_uv(triangle, baryc, uv);
 		l3d_pixel_plot(buffer,
-					   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-					   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-					   triangle->debug_color);
+					(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+					(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+					l3d_sample_texture(triangle->material->texture,
+										triangle->material->width,
+										triangle->material->height,
+										uv));
+		// l3d_pixel_plot(buffer,
+		// 			   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+		// 			   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+		// 			   0xffaaffff);
 		x++;
 	}
 	(void)triangle;
 	(void)baryc;
 	(void)uv;
+	(void)buffer;
 }
 
 static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,

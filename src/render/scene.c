@@ -18,11 +18,14 @@ static void	render_active_scene(t_wolf3d *app)
 	int		j;
 
 	i = -1;
+	j = -1;
 	while (++i < (int)app->active_scene->num_objects)
 	{
 		j = -1;
-		while (++j < app->active_scene->objects[i]->num_triangles)
+		while (++j < app->active_scene->objects[0]->num_triangles)
+		{	
 			render_triangle(app, &app->active_scene->objects[i]->triangles[j]);
+		}
 	}
 }
 

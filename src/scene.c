@@ -31,17 +31,15 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		// data.objects[0] = l3d_read_obj("assets/icosphere.obj",
-		// 				"assets/IcosphereUV_large.bmp");
-		data.objects[0] = l3d_read_obj("assets/level0/long_triangle.obj",
-									   "assets/level0/brick_512.bmp");
+		data.objects[0] = l3d_read_obj("assets/icosphere.obj",
+						"assets/IcosphereUV_large.bmp");
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],
-			app->window->width / 15.0,
-			app->window->width / 15.0,
-			app->window->width / 15.0);
+			app->window->width / 5.0,
+			app->window->width / 5.0,
+			app->window->width / 5.0);
 		l3d_3d_object_translate(data.objects[0],
-			0, 500, -app->window->width);
+			0, 0, -app->window->width);
 	}
 	app->active_scene = new_scene(&data);
 	if (app->active_scene->main_camera)

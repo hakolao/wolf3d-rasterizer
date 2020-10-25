@@ -47,7 +47,7 @@ static void		rendered_triangle_set(t_wolf3d *app,
 	l3d_triangle_update(temp);
 }
 
-static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle)
+t_bool			screen_intersection(t_wolf3d *app, t_triangle *triangle)
 {
 	t_ray		rays[3];	
 	t_vec3		hits[3];
@@ -63,7 +63,9 @@ static t_bool	screen_intersection(t_wolf3d *app, t_triangle *triangle)
 		{
 			ft_printf("Error in screen_intersection: ray from triangle\n"
 						"didn't intersect with screen plane or did in too\n"
-						"small an angle. Pointo of hit set to default 0.\n");
+						"small an angle. Pointo of hit set to default 0.\n"
+						"Might happen due to degenerate or badly defined\n"
+						"triangles.\n");
 			ml_vector3_set_all(hits[k], 0);
 		}
 	}
@@ -117,11 +119,11 @@ t_bool			triangle_in_view(t_wolf3d *app, t_triangle *triangle)
 
 t_bool			triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 {
-	if (triangle->vtc[0]->pos[2] < camera->near_clip ||
-		triangle->vtc[1]->pos[2] < camera->near_clip ||
-		triangle->vtc[2]->pos[2] < camera->near_clip)
-			return (false);
-	return (true);
+	if (triangle->vtc[0]->pos[2] > camera->near_clip &&
+		triangle->vtc[1]->pos[2] > camera->near_clip &&
+		triangle->vtc[2]->pos[2] > camera->near_clip)
+			return (true);
+	return (false);
 }
 
 t_bool			is_triangle_facing(t_triangle *triangle, t_vec3 dir)
@@ -163,7 +165,7 @@ t_bool			is_point_behind_near(t_plane *near, t_vec3 point)
 */
 
 int				is_triangle_clipping(t_triangle *triangle, t_plane *plane,
-									int *point_indices)
+  									int *point_indices)
 {
 	int		i;
 	t_plane *near = plane;
@@ -180,6 +182,7 @@ int				is_triangle_clipping(t_triangle *triangle, t_plane *plane,
 				//case A;
 				ft_printf("one is behind two are not\n");
 				point_indices[0] = i;
+				ft_printf("indices0: %d\n", point_indices[0]);
 				return (2);
 			}
 		}
@@ -192,6 +195,8 @@ int				is_triangle_clipping(t_triangle *triangle, t_plane *plane,
 				ft_printf("two are behind one is not\n");
 				point_indices[0] = (i + 1) % 3;
 				point_indices[1] = (i + 2) % 3;
+				ft_printf("indices0: %d\n", point_indices[0]);
+				ft_printf("indices1: %d\n", point_indices[1]);
 				return (1);
 			}
 		}
@@ -199,27 +204,32 @@ int				is_triangle_clipping(t_triangle *triangle, t_plane *plane,
 	return (0);
 }
 
+
 t_bool			interpolate_clipped_uv(t_triangle *triangle, int *limits,
 										t_vec3 hit, t_vec2 result)
 {
 	int		i;
-	float	fraction;
+	// float	fraction;
 
-	fraction = 0.0;
+	double fraction = 0.0;
 	i = -1;
+	ft_printf("limits: %d  %d\n", limits[0], limits[1]);
 	while (++i < 3)
 	{
 		if (fabs(triangle->vtc[limits[0]]->pos[i] -
 				triangle->vtc[limits[1]]->pos[i]) > L3D_EPSILON)
 		{
+			ft_printf("i: %d\n", i);
 			fraction = fabs(hit[i] - triangle->vtc[limits[0]]->pos[i]) /
 						fabs(triangle->vtc[limits[0]]->pos[i] -
 						triangle->vtc[limits[1]]->pos[i]);
 			ft_printf("fraction: %f\n", fraction);
-			result[0] = triangle->uvs[limits[0]][0] * fraction +
-						triangle->uvs[limits[1]][0] * (1 - fraction);
-			result[1] = triangle->uvs[limits[0]][1] * fraction +
-						triangle->uvs[limits[1]][1] * (1 - fraction);
+			ft_printf("original uvs: %f  %f\n", triangle->uvs[limits[0]][0], triangle->uvs[limits[1]][0]);
+			result[0] = triangle->uvs[limits[0]][0] * (1 - fraction) +
+						triangle->uvs[limits[1]][0] * (fraction);
+
+			result[1] = triangle->uvs[limits[0]][1] * (1 - fraction) +
+						triangle->uvs[limits[1]][1] * (fraction);
 			ft_printf("interpolated uv: %f  %f\n", result[0], result[1]);
 			return (true);
 		}
@@ -248,22 +258,21 @@ t_bool			create_two_clipped_triangles(t_triangle *triangle,
 
 	ml_vector3_sub(triangle->vtc[indices[0]]->pos,
 					triangle->vtc[(indices[0] + 1) % 3]->pos, dir1);
-	ml_vector3_sub(triangle->vtc[indices[0] % 3]->pos,
+	ml_vector3_sub(triangle->vtc[indices[0]]->pos,
 					triangle->vtc[(indices[0] + 2) % 3]->pos, dir2);
-	l3d_ray_set(dir1, triangle->vtc[(indices[0] + 1) % 3]->pos, &ray1);
-	l3d_ray_set(dir2, triangle->vtc[(indices[0] + 2) % 3]->pos, &ray2);
+
+	l3d_ray_set(dir1, triangle->vtc[indices[0]]->pos, &ray1);
+	l3d_ray_set(dir2, triangle->vtc[indices[0]]->pos, &ray2);
 	l3d_plane_ray_hit(plane, &ray1, hits[0]);
 	l3d_plane_ray_hit(plane, &ray2, hits[1]);
 
-	//??copy first triangle using hit from ab(?)
 	ml_vector3_copy(triangle->vtc[(indices[0] + 1) % 3]->pos, result_tris[0].vtc[0]->pos);
-	ml_vector3_copy(hits[1], result_tris[0].vtc[2]->pos);
 	ml_vector3_copy(hits[0], result_tris[0].vtc[1]->pos);
+	ml_vector3_copy(triangle->vtc[(indices[0] + 2) % 3]->pos, result_tris[0].vtc[2]->pos);
 
-	//??copy second triangle using hit from ac(?)
 	ml_vector3_copy(triangle->vtc[(indices[0] + 2) % 3]->pos, result_tris[1].vtc[0]->pos);
-	ml_vector3_copy(hits[1], result_tris[1].vtc[1]->pos);
-	ml_vector3_copy(triangle->vtc[(indices[0] + 1) % 3]->pos, result_tris[1].vtc[2]->pos);
+	ml_vector3_copy(hits[0], result_tris[1].vtc[1]->pos);
+	ml_vector3_copy(hits[1], result_tris[1].vtc[2]->pos);
 
 	if (!(interpolate_clipped_uv(triangle, (int[2]){indices[0],
 									(indices[0] + 1) % 3}, hits[0], uvs[0])))
@@ -273,13 +282,11 @@ t_bool			create_two_clipped_triangles(t_triangle *triangle,
 		return (false);
 	ml_vector2_copy(triangle->uvs[(indices[0] + 1) % 3], result_tris[0].uvs[0]);
 	ml_vector2_copy(uvs[0], result_tris[0].uvs[1]);
-	ml_vector2_copy(uvs[1], result_tris[0].uvs[2]);
-	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris[1].uvs[0]);
-	ml_vector2_copy(uvs[1], result_tris[1].uvs[1]);
-	ml_vector2_copy(uvs[0], result_tris[1].uvs[2]);
+	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris[0].uvs[2]);
 
-	result_tris[0].debug_color = 0xff0000ff;
-	result_tris[1].debug_color = 0x00aaaaff;
+	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris[1].uvs[0]);
+	ml_vector2_copy(uvs[0], result_tris[1].uvs[1]); 
+	ml_vector2_copy(uvs[1], result_tris[1].uvs[2]);
 	return true;
 }
 
@@ -295,57 +302,47 @@ t_bool			create_one_clipped_triangle(t_triangle *triangle,
 	t_vec3	dir2;
 
 	ft_printf("create one clipped triangle\n");
-	ml_vector3_sub(triangle->vtc[(indices[0] + 1) % 3]->pos,
+	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
 					triangle->vtc[indices[0]]->pos, dir1);
 	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
-					triangle->vtc[indices[0]]->pos, dir2);
-	l3d_ray_set(dir1, triangle->vtc[indices[0]]->pos, &ray1);
-	l3d_ray_set(dir2, triangle->vtc[indices[0]]->pos, &ray2);
+					triangle->vtc[(indices[0] + 1) % 3]->pos, dir2);
+
+	l3d_ray_set(dir1, triangle->vtc[(indices[0] + 2) % 3]->pos, &ray1);
+	l3d_ray_set(dir2, triangle->vtc[(indices[0] + 2) % 3]->pos, &ray2);
+
 	l3d_plane_ray_hit(plane, &ray1, hits[0]);
 	l3d_plane_ray_hit(plane, &ray2, hits[1]);
-	ml_vector3_copy(triangle->vtc[indices[0]]->pos, result_tris[0].vtc[0]->pos);
+
+	ml_vector3_copy(triangle->vtc[(indices[0] + 2) % 3]->pos, result_tris[0].vtc[0]->pos);
 	ml_vector3_copy(hits[0], result_tris[0].vtc[1]->pos);
 	ml_vector3_copy(hits[1], result_tris[0].vtc[2]->pos);
 	if (!(interpolate_clipped_uv(triangle, (int[2]){indices[0],
-									(indices[0] + 1) % 3}, hits[0], uvs[0])))
+									(indices[0] + 2) % 3}, hits[0], uvs[0])))
 		return (false);
-	if (!(interpolate_clipped_uv(triangle, (int[2]){indices[0],
+	if (!(interpolate_clipped_uv(triangle, (int[2]){(indices[0] + 1) % 3,
 									(indices[0] + 2) % 3}, hits[1], uvs[1])))
 		return (false);
-	ml_vector2_copy(triangle->uvs[indices[0]], result_tris->uvs[0]);
+	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris->uvs[0]);
 	ml_vector2_copy(uvs[0], result_tris[0].uvs[1]);
 	ml_vector2_copy(uvs[1], result_tris[0].uvs[2]);
-	// int i = -1;
-	// while(++i < 3)
-	// {
-	// 	ml_vector3_print(result_tris->vtc[i]->pos);
-	// }
-	result_tris[0].debug_color = 0xffaaaaff;
 	return (true);
 }
 
-int			clip_triangle(t_triangle *triangle, t_plane *plane,
+int				clip_triangle(t_triangle *triangle, t_plane *plane,
 								t_triangle *result_triangles)
 {
-	// t_triangle	*clip1;
-	// t_triangle	*clip2;//will be part of result as input
 	int			clip_case;
 	int			indices[2];
 
 	indices[0] = 4;
 	indices[1] = 4;
-	//?? 1. Determine the clipping case
-	//?? 2. Calculate clipping points on plane
-	//?? 3. Interpolate vertex attributes to new points
-	//?? 4. Form triangle(s) from new points
-	//?? 5. Call render for new triangle(s)
 	clip_case = is_triangle_clipping(triangle, plane, indices);
 	if (clip_case == 2)
 	{
 		if (!(create_two_clipped_triangles(triangle, plane, indices,
 											result_triangles)))
 			return (0);
-		ft_printf("clip case 2\n");
+		// ft_printf("clip case 2\n");
 		return (2);
 	}
 	else if (clip_case == 1)
@@ -353,11 +350,16 @@ int			clip_triangle(t_triangle *triangle, t_plane *plane,
 		if (!(create_one_clipped_triangle(triangle, plane, indices,
 											result_triangles)))
 			return (0);
-		ft_printf("clip case 1\n");
+		// ft_printf("clip case 1\n");
 		return (1);
 	}
 	else
 		return (0);
+	//?? 1. Determine the clipping case
+	//?? 2. Calculate clipping points on plane
+	//?? 3. Interpolate vertex attributes to new points
+	//?? 4. Form triangle(s) from new points
+	//?? 5. Call render for new triangle(s)
 }
 
 void			set_clipped_triangles(t_vertex *vtc, t_triangle *source,
@@ -426,19 +428,17 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
 	rendered_triangle_set(app, &render_triangle, vtc, triangle_in);
-	// if (!(triangle_in_view(app, &render_triangle)))
-	// 	return (false);
-	// if (!(is_rendered(app, &render_triangle)))
-	// 	return (false);
+	if (!(triangle_in_view(app, &render_triangle)))
+		return (false);
+	if (!(is_rendered(app, &render_triangle)))
+		return (false);
 	set_clipped_triangles(vtc, &render_triangle, clipped_triangles);
-	render_triangle.debug_color = 0xffaa00ff;
-	//!remove^ 
-
+	//!^make to set only once per frame	//!if possible
 	if (clip_triangle(&render_triangle,
 					&app->active_scene->main_camera->viewplanes[0],
 					clipped_triangles))
 	{
-		ft_printf("clip triangle\n");
+		// ft_printf("clip triangle\n");
 		screen_intersection(app, &clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[1]);
 		l3d_triangle_raster(buffer, dimensions, &clipped_triangles[0]);
@@ -447,11 +447,13 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	}
 	else
 	{
-		// ft_printf("HERE++++++++++++++++++++++++\n");
-		// print_clipped_triangles(clipped_triangles);
 		screen_intersection(app, &render_triangle);
 		l3d_triangle_raster(buffer, dimensions, &render_triangle);
 	}
+	(void)render_triangle;
+	(void)vtc;
+	(void)triangle_in;
+	(void)rendered_triangle_set;
 	return (true);
 }
 // t_vertex *vtc[3];

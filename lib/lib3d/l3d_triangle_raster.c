@@ -85,7 +85,7 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 		l3d_pixel_plot(buffer,
 					   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 					   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-					   0xffaaffff);
+					   triangle->debug_color);
 		x++;
 	}
 	(void)triangle;

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 18:03:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/20 17:14:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,19 @@ typedef struct						s_window
 	uint32_t				window_id;
 	t_bool					is_hidden;
 }									t_window;
+
+
+typedef struct						s_mouse
+{
+	int32_t				x;
+	int32_t				y;
+	uint32_t			state;
+}									t_mouse;
+
+typedef struct						s_keyboard
+{
+	const uint8_t		*state;
+}									t_keyboard;
 
 /*
 ** Window

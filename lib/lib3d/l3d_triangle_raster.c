@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/10/15 20:12:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/20 17:54:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
 	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
 }
 
-void		clamp_bary(float *barycoords)
+void			clamp_bary(float *barycoords)
 {
 	if (barycoords[0] > 1.0)
 		barycoords[0] = 1.0;

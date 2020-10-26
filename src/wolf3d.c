@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/15 14:42:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/20 17:15:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void		wolf3d_init(t_wolf3d *app)
 
 static void		wolf3d_cleanup(t_wolf3d *app)
 {
+	thread_pool_destroy(app->thread_pool);
 	free(app->window->framebuffer);
 	free(app->window->zbuffer);
 	destroy_scene(app->active_scene);
@@ -79,6 +80,7 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 
 void			wolf3d_run(t_wolf3d *app)
 {
+	app->thread_pool = thread_pool_create(NUM_THREADS);
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
 	window_create(&app->window);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 18:54:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 20:04:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void		apply_rotation_to_world(t_wolf3d *app, t_mat4 reset, t_mat4 new)
 	i = -1;
 	while (++i < (int32_t)	app->active_scene->num_objects)
 		l3d_3d_object_transform(app->active_scene->objects[i], new);
-	l3d_kd_tree_create_or_update(&app->active_scene->collision_tree,
+	l3d_kd_tree_create_or_update(&app->active_scene->bullet_tree,
 		app->active_scene->triangle_ref,
 		app->active_scene->num_triangles);
 }
@@ -96,6 +96,6 @@ void			move_player(t_wolf3d *app, t_move dir)
 	i = -1;
 	while (++i < (int32_t)	app->active_scene->num_objects)
 		l3d_3d_object_translate(app->active_scene->objects[i], add[0], add[1], -add[2]);
-	l3d_kd_tree_create_or_update(&app->active_scene->collision_tree,
+	l3d_kd_tree_create_or_update(&app->active_scene->bullet_tree,
 		app->active_scene->triangle_ref, app->active_scene->num_triangles);
 }

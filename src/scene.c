@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 15:39:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 20:04:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,13 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
 	scene->num_objects = data->num_objects;
-	scene->collision_tree = NULL;
+	scene->bullet_tree = NULL;
 	if (data->num_objects > 0)
 	{
 		ft_memmove(scene->objects, data->objects,
 			sizeof(t_3d_object) * data->num_objects);
 		scene_set_triangle_refs(scene);
-		l3d_kd_tree_create_or_update(&scene->collision_tree,
+		l3d_kd_tree_create_or_update(&scene->bullet_tree,
 			scene->triangle_ref, scene->num_triangles);
 	}
 	return (scene);

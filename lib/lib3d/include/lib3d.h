@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 18:45:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 19:34:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ typedef struct				s_obj
 }							t_obj;
 
 /*
+** Basic vertex struct with position, color and texture coordinates.
+*/
+
+typedef struct				s_vertex
+{
+	t_vec4			pos;
+	uint32_t		color;
+}							t_vertex;
+
+/*
 ** Ray with direction and origin. Dir_inv is precalculated for faster
 ** bounding box intersection calculations.
 */
@@ -65,44 +75,6 @@ typedef struct				s_material
 	uint32_t	height;
 }							t_material;
 
-/*
-** Ray hit is saved to this hit record struct. Add params if needed.
-** For example material information could be saved here.
-*/
-
-typedef struct				s_hit
-{
-	float			t;
-	float			u;
-	float			v;
-	t_vec3			normal;
-	t_vec3			hit_point;
-	t_material		*material;
-}							t_hit;
-
-/*
-** Basic vertex struct with position, color and texture coordinates.
-*/
-
-typedef struct				s_vertex
-{
-	t_vec4			pos;
-	uint32_t		color;
-}							t_vertex;
-
-/*
-** Bounding box AAABBB. Minimum and maximum coordinates are used in
-** bounding box ray intersection calculations.
-** center and size are useful in kd_tree / bvh structs.
-*/
-
-typedef struct				s_box3d
-{
-	t_vec3			center;
-	t_vec3			size;
-	float			xyz_min[3];
-	float			xyz_max[3];
-}							t_box3d;
 
 /*
 ** Triangle contains pointers to vertices (which get transformed over time)
@@ -123,6 +95,35 @@ typedef struct				s_triangle
 	t_material		*material;
 	t_vec2			points_2d[3];
 }							t_triangle;
+
+/*
+** Ray hit is saved to this hit record struct. Add params if needed.
+** For example material information could be saved here.
+*/
+
+typedef struct				s_hit
+{
+	float			t;
+	float			u;
+	float			v;
+	t_vec3			normal;
+	t_vec3			hit_point;
+	t_triangle		*triangle;
+}							t_hit;
+
+/*
+** Bounding box AAABBB. Minimum and maximum coordinates are used in
+** bounding box ray intersection calculations.
+** center and size are useful in kd_tree / bvh structs.
+*/
+
+typedef struct				s_box3d
+{
+	t_vec3			center;
+	t_vec3			size;
+	float			xyz_min[3];
+	float			xyz_max[3];
+}							t_box3d;
 
 /*
 **	Describes an infinite plane in 3D. Origin is any point that is on the plane

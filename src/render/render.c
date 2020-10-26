@@ -164,8 +164,8 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
 	rendered_triangle_set(app, &render_triangle, vtc, triangle_in);
-	if (!(triangle_in_view(app, &render_triangle)))
-		return (false);
+	// if (!(triangle_in_view(app, &render_triangle)))
+	// 	return (false);
 	if (!(is_rendered(app, &render_triangle)))
 		return (false);
 	l3d_set_clipped_triangles(vtc, &render_triangle, clipped_triangles);

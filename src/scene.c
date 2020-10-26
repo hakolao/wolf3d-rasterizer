@@ -35,7 +35,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		// 				"assets/IcosphereUV_large.bmp");
 		// data.objects[0] = l3d_read_obj("assets/level0/long_triangle.obj",
 		// 							   "assets/level0/brick_512.bmp");
-		data.objects[0] = l3d_read_obj("assets/level0/sandbox.obj",
+		data.objects[0] = l3d_read_obj("assets/level0/maze00.obj",
 									   "assets/level0/brick_512.bmp");
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],

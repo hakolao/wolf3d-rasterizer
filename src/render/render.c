@@ -191,14 +191,3 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	(void)rendered_triangle_set;
 	return (true);
 }
-// t_vertex *vtc[3];
-// t_vec2 uvs[3];
-// t_vec3 normals[3];
-// t_vec3 center;
-// t_vec3 normal;
-// t_bool is_single_sided;
-// t_vec3 ab;
-// t_vec3 ac;
-// t_vertex *ordered_vtc[3];
-// t_material *material;
-// t_vec2 points_2d[3];

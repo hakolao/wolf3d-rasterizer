@@ -24,29 +24,6 @@ static void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits)
 	}
 }
 
-static void		rendered_triangle_set(t_wolf3d *app,
-					t_triangle *temp, t_vertex vtc[3], t_triangle *triangle)
-{
-	int		k;
-
-	k = -1;
-	temp->is_single_sided = triangle->is_single_sided;
-	temp->material = triangle->material;
-	while (++k < 3)
-	{
-		vtc[k].color = triangle->vtc[k]->color;
-		ml_vector4_copy(triangle->vtc[k]->pos, vtc[k].pos);
-		ml_vector3_copy(triangle->normals[k], temp->normals[k]);
-		ml_vector2_copy(triangle->uvs[k], temp->uvs[k]);
-		temp->vtc[k] = &vtc[k];
-		ml_matrix4_mul_vec3(app->player.world_translation,
-			temp->vtc[k]->pos, temp->vtc[k]->pos);
-		ml_matrix4_mul_vec3(app->player.world_rotation,
-			temp->vtc[k]->pos, temp->vtc[k]->pos);
-	}
-	l3d_triangle_update(temp);
-}
-
 t_bool			screen_intersection(t_wolf3d *app, t_triangle *triangle)
 {
 	t_ray		rays[3];	
@@ -397,27 +374,24 @@ void			print_clipped_triangles(t_triangle *triangles)
 	}
 }
 
-t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
+t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle)
 {
 	uint32_t	*buffer;
 	uint32_t	dimensions[2];
-	t_triangle	render_triangle;
 	t_triangle	clipped_triangles[2];
 	t_vertex	vtc[9];
 	
 	buffer = app->window->framebuffer;
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
-	rendered_triangle_set(app, &render_triangle, vtc, triangle_in);
-	if (!(triangle_in_view(app, &render_triangle)))
+	if (!(triangle_in_view(app, triangle)))
 		return (false);
-	if (!(is_rendered(app, &render_triangle)))
+	if (!(is_rendered(app, triangle)))
 		return (false);
-	set_clipped_triangles(vtc, &render_triangle, clipped_triangles);
+	set_clipped_triangles(vtc, triangle, clipped_triangles);
 	//!^make to set only once per frame	//!if possible
-	if (clip_triangle(&render_triangle,
-					&app->active_scene->main_camera->viewplanes[0],
-					clipped_triangles))
+	if (clip_triangle(triangle,
+			&app->active_scene->main_camera->viewplanes[0], clipped_triangles))
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[1]);
@@ -427,23 +401,8 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	}
 	else
 	{
-		screen_intersection(app, &render_triangle);
-		l3d_triangle_raster(buffer, dimensions, &render_triangle);
+		screen_intersection(app, triangle);
+		l3d_triangle_raster(buffer, dimensions, triangle);
 	}
-	(void)render_triangle;
-	(void)vtc;
-	(void)triangle_in;
-	(void)rendered_triangle_set;
 	return (true);
 }
-// t_vertex *vtc[3];
-// t_vec2 uvs[3];
-// t_vec3 normals[3];
-// t_vec3 center;
-// t_vec3 normal;
-// t_bool is_single_sided;
-// t_vec3 ab;
-// t_vec3 ac;
-// t_vertex *ordered_vtc[3];
-// t_material *material;
-// t_vec2 points_2d[3];

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/19 16:28:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 18:45:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,13 @@ typedef struct				s_ray
 	t_vec3			dir_inv;
 }							t_ray;
 
+typedef struct				s_material
+{
+	uint32_t	*texture;
+	uint32_t	width;
+	uint32_t	height;
+}							t_material;
+
 /*
 ** Ray hit is saved to this hit record struct. Add params if needed.
 ** For example material information could be saved here.
@@ -70,6 +77,7 @@ typedef struct				s_hit
 	float			v;
 	t_vec3			normal;
 	t_vec3			hit_point;
+	t_material		*material;
 }							t_hit;
 
 /*
@@ -95,13 +103,6 @@ typedef struct				s_box3d
 	float			xyz_min[3];
 	float			xyz_max[3];
 }							t_box3d;
-
-typedef struct				s_material
-{
-	uint32_t	*texture;
-	uint32_t	width;
-	uint32_t	height;
-}							t_material;
 
 /*
 ** Triangle contains pointers to vertices (which get transformed over time)

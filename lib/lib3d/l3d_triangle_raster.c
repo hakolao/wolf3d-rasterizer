@@ -42,16 +42,28 @@ void		clamp_bary(float *barycoords)
 {
 	if (barycoords[0] > 1.0)
 		barycoords[0] = 1.0;
-	if (barycoords[0] < 0.0)
+	else if (barycoords[0] < 0.0)
 		barycoords[0] = 0.0;
 	if (barycoords[1] > 1.0)
 		barycoords[1] = 1.0;
-	if (barycoords[1] < 0.0)
+	else if (barycoords[1] < 0.0)
 		barycoords[1] = 0.0;
 	if (barycoords[2] > 1.0)
 		barycoords[2] = 1.0;
-	if (barycoords[2] < 0.0)
+	else if (barycoords[2] < 0.0)
 		barycoords[2] = 0.0;
+}
+
+void			clamp_uv(t_vec2 uv)
+{
+	if (uv[0] > 1.0)
+		uv[0] = 1.0;
+	else if (uv[0] < 0.0)
+		uv[0] = 0.0;
+	if (uv[1] > 1.0)
+		uv[1] = 1.0;
+	else if (uv[1] < 0.0)
+		uv[1] = 0.0;
 }
 
 static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
@@ -73,8 +85,9 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 		else if (x > (int)dimensionswh[0] / 2 + 1)
 			break ;
 		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
-		clamp_bary(baryc);//!this causes a seam artifact when clipping triangles
+		// clamp_bary(baryc);//!this causes a seam artifact when clipping triangles
 		l3d_interpolate_uv(triangle, baryc, uv);
+		clamp_uv(uv);
 		l3d_pixel_plot(buffer,
 					(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 					(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
@@ -82,16 +95,8 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 										triangle->material->width,
 										triangle->material->height,
 										uv));
-		// l3d_pixel_plot(buffer,
-		// 			   (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-		// 			   (int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
-		// 			   0xffaaffff);
 		x++;
 	}
-	(void)triangle;
-	(void)baryc;
-	(void)uv;
-	(void)buffer;
 }
 
 static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
@@ -100,6 +105,7 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 	float	x;
 	float	y;
 	float	end_x;
+
 	y = data->y1;
 	while (y < data->y2)
 	{
@@ -125,6 +131,7 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 	float	x;
 	float	y;
 	float	end_x;
+
 	y = data->y2;
 	while (y < data->y3)
 	{
@@ -173,14 +180,16 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
 										t_vec2 point,
 										float *baryc)
 {
-	float denom = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
-				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
-				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
-				(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
+	float denom;
+	float inv_denom;
 
-	float	inv_denom;
+	denom = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
+			(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
+			(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
+			(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
+
 	if (fabs(denom) < L3D_EPSILON)
-		ft_printf("denom: %f\n", denom);
+		denom = (denom / fabs(denom)) * L3D_EPSILON;
 	inv_denom = 1 / ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
 				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
 				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
@@ -233,9 +242,8 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 **	index = x + width * y;
 */
 
-	uint32_t
-	l3d_sample_texture(uint32_t * texture_data, int width,
-					   int height, t_vec2 uv_point)
+uint32_t		l3d_sample_texture(uint32_t * texture_data, int width,
+									int height, t_vec2 uv_point)
 {
 	int	index;
 

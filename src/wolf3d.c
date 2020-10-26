@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 16:07:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 16:40:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,12 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 	while (app->is_running)
 	{
 		app->info.performance_start = SDL_GetPerformanceCounter();
+		// Needed to ensure mouse events work right...:S
+		if (SDL_GetMouseFocus() == app->window->window)
+			SDL_WarpMouseInWindow(app->window->window,
+				app->window->width / 2, app->window->height / 2);
 		mouse_state_set(app);
-		mouse_state_handle(app);
+		mouse_state_handle(app);	
 		keyboard_state_set(app);
 		keyboard_state_handle(app);
 		while (SDL_PollEvent(&event))
@@ -84,9 +88,9 @@ void			wolf3d_run(t_wolf3d *app)
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
 	window_create(&app->window);
+	wolf3d_init(app);
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-	wolf3d_init(app);
 	wolf3d_main_loop(app);
 	wolf3d_cleanup(app);
 }

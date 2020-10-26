@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 16:11:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 16:51:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 void					mouse_state_set(t_wolf3d *app)
 {
 	SDL_PumpEvents();
-	if (SDL_GetMouseFocus() != app->window->window)
-		return ;
 	app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 }
 
@@ -26,20 +24,24 @@ void					mouse_state_handle(t_wolf3d *app)
 	t_mat4	rotation_y;
 	t_vec3	tmp;
 	t_vec3	forward;
+	t_ray	ray;
+	t_hit	hit;
 	
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
-		ft_printf("Yo %d %d %d\n",
-			(app->mouse.state & SDL_BUTTON_LMASK),
-			app->mouse.y,
-			app->mouse.x);
-		if ((app->mouse.state & SDL_BUTTON_LMASK))
+		if ((SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_LMASK))
 		{
 			ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
-			ml_matrix4_rotation_y(ml_rad(app->player.rot_y), rotation_y);
+			ml_matrix4_rotation_x(ml_rad(app->player.rot_y), rotation_y);
 			ml_matrix4_mul_vec3(rotation_x, app->player.forward, tmp);
-			ml_matrix4_mul_vec3(rotation_x, tmp, forward);
-			ml_vector3_print(forward);
+			ml_matrix4_mul_vec3(rotation_y, tmp, forward);
+			ml_vector3_mul(forward, -1, forward);
+			l3d_ray_set(forward, app->player.pos, &ray);
+			if (l3d_kd_tree_ray_hit(app->active_scene->collision_tree->root, &ray, &hit))
+			{
+				ft_printf("Hits\n");
+				ml_vector3_print(hit.hit_point);
+			}
 		}
 	}
 }

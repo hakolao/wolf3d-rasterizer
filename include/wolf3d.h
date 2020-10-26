@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/20 17:51:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 16:07:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ typedef struct						s_scene
 {
 	t_3d_object				*objects[64];
 	uint32_t				num_objects;
+	t_kd_tree				*collision_tree;
+	t_triangle				*triangle_ref[16384];
 	uint32_t				num_triangles;
 	t_camera				*main_camera;
 	t_triangle				*screen_triangles;
@@ -170,7 +172,6 @@ void						init_player(t_wolf3d *app);
 void						move_player(t_wolf3d *app, t_move dir);
 void						rotate_player_vertical(t_wolf3d *app, float angle);
 void						rotate_player_horizontal(t_wolf3d *app, float angle);
-void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
 
 /*
 ** Events

@@ -6,11 +6,34 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/20 17:42:37 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 15:39:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static void		scene_set_triangle_refs(t_scene *scene)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		num_triangles;
+
+	i = -1;
+	num_triangles = 0;
+	k = 0;
+	while (++i < (int)scene->num_objects)
+	{
+		j = -1;
+		while (++j < scene->objects[i]->num_triangles)
+		{
+			scene->triangle_ref[k] = &scene->objects[i]->triangles[j];
+			num_triangles++;
+			k++;
+		}
+	}
+	scene->num_triangles = num_triangles;
+}
 
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
@@ -31,10 +54,8 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
+		data.objects[0] = l3d_read_obj("assets/icosphere.obj",
 						"assets/IcosphereUV_large.bmp");
-		// data.objects[0] = l3d_read_obj("assets/level0/long_triangle.obj",
-		// 							   "assets/level0/brick_512.bmp");
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],
 			app->window->width / 5.0,
@@ -65,10 +86,14 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
 	scene->num_objects = data->num_objects;
+	scene->collision_tree = NULL;
 	if (data->num_objects > 0)
 	{
 		ft_memmove(scene->objects, data->objects,
 			sizeof(t_3d_object) * data->num_objects);
+		scene_set_triangle_refs(scene);
+		l3d_kd_tree_create_or_update(&scene->collision_tree,
+			scene->triangle_ref, scene->num_triangles);
 	}
 	return (scene);
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/20 17:15:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/26 16:07:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 				app->is_debug = !app->is_debug;
 			if (app->active_scene->scene_id == scene_id_main_menu)
 				main_menu_event_handle(app, event);
-			else if (event.type == SDL_MOUSEMOTION)
+			if (event.type == SDL_MOUSEMOTION)
 				mouse_motion_handle(app, event);
 		}
 		if (app->window->resized)

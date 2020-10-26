@@ -31,6 +31,10 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
+		// data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
+		// 				"assets/IcosphereUV_large.bmp");
+		// data.objects[0] = l3d_read_obj("assets/level0/long_triangle.obj",
+		// 							   "assets/level0/brick_512.bmp");
 		data.objects[0] = l3d_read_obj("assets/level0/sandbox.obj",
 									   "assets/level0/brick_512.bmp");
 		data.num_objects = 1;

@@ -267,10 +267,24 @@ void						l3d_triangle_centroid_update(t_triangle *triangle);
 void						l3d_triangle_normal_update(t_triangle *triangle);
 
 /*
+**	Triangle clipping
+*/
+
+int							l3d_clip_triangle(t_triangle *triangle,
+											t_plane *plane,
+											t_triangle *result_triangles);
+void						l3d_set_clipped_triangles(t_vertex *vtc,
+													t_triangle *source,
+													t_triangle *dest_tris);
+int							l3d_triangle_clipping_case(t_triangle *triangle,
+														t_plane *plane,
+														int *point_indices);
+
+	/*
 ** Bounding box
 */
 
-t_axis						l3d_bounding_box_longest_axis(t_box3d bounding_box);
+	t_axis l3d_bounding_box_longest_axis(t_box3d bounding_box);
 void						l3d_bounding_box_set(t_tri_vec *triangles,
 								t_box3d *res);
 

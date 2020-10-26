@@ -37,7 +37,8 @@ SOURCES = l3d_triangle.c \
 			l3d_image_place.c \
 			l3d_color.c \
 			l3d_image_read.c \
-			l3d_triangle_raster.c
+			l3d_triangle_raster.c \
+			l3d_triangle_clipping.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

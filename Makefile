@@ -38,7 +38,7 @@ SOURCES = main.c \
 			window/window.c \
 			window/utils.c \
 			events/mouse.c \
-			events/keyboard.c
+			events/keyboard.c \
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

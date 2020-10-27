@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/10/20 17:54:08 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/27 15:32:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,36 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 	}
 }
 
-static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
+static void		scan_z_line(uint32_t *zbuffer, uint32_t *dimensionswh,
+							float *limits, t_triangle *triangle)
+{
+	int			x;
+	int			y;
+	int			end_x;
+	float		baryc[3];
+	int			z_val;
+
+	y = floor(limits[2]);
+	x = floor(limits[0]);
+	end_x = floor(limits[1]);
+	while (x < end_x)
+	{
+		if (x < -(int)dimensionswh[0] / 2 - 1)
+			x = -(int)dimensionswh[0] / 2 - 1;
+		else if (x > (int)dimensionswh[0] / 2 + 1)
+			break ;
+		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
+		z_val = (int)floor(baryc[0] * triangle->vtc[0]->pos[2] +
+			baryc[1] * triangle->vtc[1]->pos[2] +
+			baryc[2] * triangle->vtc[2]->pos[2]);
+		l3d_pixel_plot(zbuffer, (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+			(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
+			z_val);
+		x++;
+	}
+}
+
+static void		raster_upper(uint32_t *buf, uint32_t *dims,
 							t_triangle *triangle, t_raster_data *data)
 {
 	float	x;
@@ -109,23 +138,33 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 	y = data->y1;
 	while (y < data->y2)
 	{
-		if (y < -(int)dimensionswh[1] / 2 - 1)
-			y = -(int)dimensionswh[1] / 2 - 1;
-		else if (y > (int)dimensionswh[1] / 2 + 1)
+		if (y < -(int)dims[1] / 2 - 1)
+			y = -(int)dims[1] / 2 - 1;
+		else if (y > (int)dims[1] / 2 + 1)
 			break;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
-		if (x < end_x)
-			scan_line(buffer, dimensionswh,
-						(float[3]){x, end_x + 1, y}, triangle);
+		if (!data->is_zbuffer)
+		{
+			if (x < end_x)
+				scan_line(buf, dims, (float[3]){x, end_x + 1, y}, triangle);
+			else
+				scan_line(buf, dims, (float[3]){end_x, x + 1, y}, triangle);
+		}
 		else
-			scan_line(buffer, dimensionswh,
-						(float[3]){end_x, x + 1, y}, triangle);
+		{
+			if (x < end_x)
+				scan_z_line(buf, dims, (float[3]){x, end_x + 1, y}, triangle);
+			else
+				scan_z_line(buf, dims, (float[3]){end_x, x + 1, y}, triangle);
+		}
+		
+
 		y++;
 	}
 }
 
-static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
+static void		raster_lower(uint32_t *buf, uint32_t *dims,
 							t_triangle *triangle, t_raster_data *data)
 {
 	float	x;
@@ -135,20 +174,50 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 	y = data->y2;
 	while (y < data->y3)
 	{
-		if (y < -(int)dimensionswh[1] / 2 - 1)
-			y = -(int)dimensionswh[1] / 2 - 1;
-		else if (y > (int)dimensionswh[1] / 2 + 1)
+		if (y < -(int)dims[1] / 2 - 1)
+			y = -(int)dims[1] / 2 - 1;
+		else if (y > (int)dims[1] / 2 + 1)
 			break;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
-		if (x < end_x)
-			scan_line(buffer, dimensionswh,
-						(float[3]){x, end_x + 1, y}, triangle);
+		if (!data->is_zbuffer)
+		{
+			if (x < end_x)
+				scan_line(buf, dims, (float[3]){x, end_x + 1, y}, triangle);
+			else
+				scan_line(buf, dims, (float[3]){end_x, x + 1, y}, triangle);
+		}
 		else
-			scan_line(buffer, dimensionswh,
-						(float[3]){end_x, x + 1, y}, triangle);
+		{
+			if (x < end_x)
+				scan_z_line(buf, dims, (float[3]){x, end_x + 1, y}, triangle);
+			else
+				scan_z_line(buf, dims, (float[3]){end_x, x + 1, y}, triangle);
+		}
 		y++;
 	}
+}
+
+void			l3d_triangle_set_zbuffer(uint32_t *buffer, uint32_t *dimensions,
+									t_triangle *triangle)
+{
+	t_raster_data	data;
+	t_vec2			ordered_points_2d[3];
+
+	order_corners_y(triangle, triangle->ordered_vtc, ordered_points_2d,
+					triangle->points_2d);
+	data.x1 = floor(ordered_points_2d[0][0]);
+	data.x2 = floor(ordered_points_2d[1][0]);
+	data.x3 = floor(ordered_points_2d[2][0]);
+	data.y1 = floor(ordered_points_2d[0][1]);
+	data.y2 = floor(ordered_points_2d[1][1]);
+	data.y3 = floor(ordered_points_2d[2][1]);
+	data.slope_bc = (data.x3 - data.x2) / (data.y3 - data.y2);
+	data.slope_ac = (data.x3 - data.x1) / (data.y3 - data.y1);
+	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);
+	data.is_zbuffer = true;
+	raster_upper(buffer, dimensions, triangle, &data);
+	raster_lower(buffer, dimensions, triangle, &data);
 }
 
 void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
@@ -168,6 +237,7 @@ void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
 	data.slope_bc = (data.x3 - data.x2) / (data.y3 - data.y2);
 	data.slope_ac = (data.x3 - data.x1) / (data.y3 - data.y1);
 	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);
+	data.is_zbuffer = false;
 	raster_upper(buffer, dimensions, triangle, &data);
 	raster_lower(buffer, dimensions, triangle, &data);
 }

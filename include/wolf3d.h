@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 20:04:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/27 16:04:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@
 
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000
+
+typedef enum						e_render_pass
+{
+	rpass_rasterize,
+	rpass_zbuffer
+}									t_render_pass;
 
 /*
 ** Forward declarations
@@ -189,15 +195,13 @@ void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);
 */
 t_camera					*new_camera();
 void						update_camera(t_wolf3d *app);
-void						camera_transform(t_camera *camera,
-							t_vec4 vertex, t_vec4 res);
-void						create_screen_triangles(t_scene *scene);
 
 /*
 ** Render to framebuffer
 */
-t_bool						render_triangle(t_wolf3d *app,
-											t_triangle *triangle);
+t_bool						screen_intersection(t_wolf3d *app,
+								t_triangle *triangle);
+t_bool						is_rendered(t_wolf3d *app, t_triangle *triangle);
 void						ui_render(t_wolf3d *app);
 void						wolf3d_render(t_wolf3d *app);
 

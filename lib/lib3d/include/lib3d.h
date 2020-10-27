@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/27 15:32:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/27 16:22:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,10 +327,10 @@ double						l3d_rand_d(void);
 **	Triangle rasterization
 */
 
-void						l3d_triangle_raster(uint32_t *buffer,
+void						l3d_triangle_raster(uint32_t *buffers[2],
 												uint32_t *dimensions,
 												t_triangle *triangle);
-void						l3d_triangle_set_zbuffer(uint32_t *buffer,
+void						l3d_triangle_set_zbuffer(uint32_t *buffers[2],
 												uint32_t *dimensions,
 												t_triangle *triangle);
 void						l3d_calculate_barycoords(
@@ -349,10 +349,13 @@ uint32_t					l3d_sample_texture(uint32_t *texture_data,
 ** Plot pixel
 */
 
-							void l3d_pixel_plot(uint32_t *buffer,
+void						l3d_pixel_plot(uint32_t *buffer,
 												uint32_t dimensions_wh[2],
 												int32_t xy[2],
 												uint32_t color);
+uint32_t					l3d_pixel_get(uint32_t *buffer,
+												uint32_t dimensions_wh[2],
+												int32_t xy[2]);
 
 /*
 ** Line draw

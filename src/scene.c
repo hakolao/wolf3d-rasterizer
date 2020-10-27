@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 20:11:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/27 17:25:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		// data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
+		// data.objects[0] = l3d_read_obj("assets/icosphere.obj",
 		// 				"assets/IcosphereUV_large.bmp");
 		// data.objects[0] = l3d_read_obj("assets/level0/long_triangle.obj",
 		// 							   "assets/level0/brick_512.bmp");

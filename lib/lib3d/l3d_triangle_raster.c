@@ -67,23 +67,26 @@ void			clamp_uv(t_vec2 uv)
 }
 
 static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
-							float *limits, t_triangle *triangle)
+							float *limits, t_triangle *triangle, int *count)
 {
 	int			x;
 	int			y;
 	int			end_x;
 	float		baryc[3];
 	t_vec2		uv;
-
 	y = floor(limits[2]);
 	x = floor(limits[0]);
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < -(int)dimensionswh[0] / 2 - 1)
-			x = -(int)dimensionswh[0] / 2 - 1;
-		else if (x > (int)dimensionswh[0] / 2 + 1)
+		if (x < -(int)dimensionswh[0] / 2)
+		{
+			x = -(int)dimensionswh[0] / 2;
+			continue;
+		}
+		else if (x > (int)dimensionswh[0] / 2)
 			break ;
+		(*count)++;
 		l3d_calculate_barycoords(triangle->points_2d, (t_vec2){x, y}, baryc);
 		// clamp_bary(baryc);//!this causes a seam artifact when clipping triangles
 		l3d_interpolate_uv(triangle, baryc, uv);
@@ -92,15 +95,15 @@ static void		scan_line(uint32_t *buffer, uint32_t *dimensionswh,
 					(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 					(int[2]){x + dimensionswh[0] / 2, y + dimensionswh[1] / 2},
 					l3d_sample_texture(triangle->material->texture,
-										triangle->material->width,
-										triangle->material->height,
-										uv));
+									triangle->material->width,
+									triangle->material->height,
+									uv));
 		x++;
 	}
 }
 
 static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
-							t_triangle *triangle, t_raster_data *data)
+							t_triangle *triangle, t_raster_data *data, int *count)
 {
 	float	x;
 	float	y;
@@ -109,24 +112,27 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 	y = data->y1;
 	while (y < data->y2)
 	{
-		if (y < -(int)dimensionswh[1] / 2 - 1)
-			y = -(int)dimensionswh[1] / 2 - 1;
-		else if (y > (int)dimensionswh[1] / 2 + 1)
+		if (y < -(int)(dimensionswh[1] / 2))
+		{
+			y = -(int)dimensionswh[1] / 2;
+			continue;
+		}
+		else if (y > (int)(dimensionswh[1] / 2))
 			break;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
 			scan_line(buffer, dimensionswh,
-						(float[3]){x, end_x + 1, y}, triangle);
+						(float[3]){x, end_x + 1, y}, triangle, count);
 		else
 			scan_line(buffer, dimensionswh,
-						(float[3]){end_x, x + 1, y}, triangle);
+						(float[3]){end_x, x + 1, y}, triangle, count);
 		y++;
 	}
 }
 
 static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
-							t_triangle *triangle, t_raster_data *data)
+							t_triangle *triangle, t_raster_data *data, int *count)
 {
 	float	x;
 	float	y;
@@ -135,18 +141,21 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 	y = data->y2;
 	while (y < data->y3)
 	{
-		if (y < -(int)dimensionswh[1] / 2 - 1)
-			y = -(int)dimensionswh[1] / 2 - 1;
-		else if (y > (int)dimensionswh[1] / 2 + 1)
+		if (y < -(int)(dimensionswh[1] / 2))
+		{
+			y = -(int)dimensionswh[1] / 2;
+			continue;
+		}
+		else if (y > (int)(dimensionswh[1] / 2))
 			break;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
 			scan_line(buffer, dimensionswh,
-						(float[3]){x, end_x + 1, y}, triangle);
+						(float[3]){x, end_x + 1, y}, triangle, count);
 		else
 			scan_line(buffer, dimensionswh,
-						(float[3]){end_x, x + 1, y}, triangle);
+						(float[3]){end_x, x + 1, y}, triangle, count);
 		y++;
 	}
 }
@@ -156,6 +165,7 @@ void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
 {
 	t_raster_data	data;
 	t_vec2			ordered_points_2d[3];
+	static int count = 0;
 
 	order_corners_y(triangle, triangle->ordered_vtc, ordered_points_2d,
 					triangle->points_2d);
@@ -168,8 +178,10 @@ void			l3d_triangle_raster(uint32_t *buffer, uint32_t *dimensions,
 	data.slope_bc = (data.x3 - data.x2) / (data.y3 - data.y2);
 	data.slope_ac = (data.x3 - data.x1) / (data.y3 - data.y1);
 	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);
-	raster_upper(buffer, dimensions, triangle, &data);
-	raster_lower(buffer, dimensions, triangle, &data);
+	raster_upper(buffer, dimensions, triangle, &data, &count);
+	raster_lower(buffer, dimensions, triangle, &data, &count);
+	ft_printf("count: %d\n", count);
+	count = 0;
 }
 
 /*
@@ -189,12 +201,11 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
 			(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
 
 	if (fabs(denom) < L3D_EPSILON)
-		denom = (denom / fabs(denom)) * L3D_EPSILON;
-	inv_denom = 1 / ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
-				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
-				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
-				(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
+	{
 
+		denom =  denom < 0 ? -1.0 * L3D_EPSILON : L3D_EPSILON;
+	}
+	inv_denom = 1 / denom;
 	baryc[0] = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
 				(point[0] - triangle_points_2d[2][0]) +
 				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *

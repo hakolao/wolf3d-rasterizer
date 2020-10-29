@@ -123,7 +123,7 @@ static void		raster_upper(uint32_t *buffer, uint32_t *dimensionswh,
 		if (x < end_x)
 			scan_line(buffer, dimensionswh,
 						(float[3]){x, end_x + 1, y}, triangle);
-		else
+		else if (x > end_x)
 			scan_line(buffer, dimensionswh,
 						(float[3]){end_x, x + 1, y}, triangle);
 		y++;
@@ -152,7 +152,7 @@ static void		raster_lower(uint32_t *buffer, uint32_t *dimensionswh,
 		if (x < end_x)
 			scan_line(buffer, dimensionswh,
 						(float[3]){x, end_x + 1, y}, triangle);
-		else
+		else if (x > end_x)
 			scan_line(buffer, dimensionswh,
 						(float[3]){end_x, x + 1, y}, triangle);
 		y++;

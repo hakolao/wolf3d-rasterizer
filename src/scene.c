@@ -33,18 +33,20 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.main_camera = new_camera();
 		// data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
 		// 				"assets/IcosphereUV_large.bmp");
-		data.objects[0] = l3d_read_obj("assets/models/corner_top_left/corner_top_left_floor.obj",
+		// data.objects[0] = l3d_read_obj("assets/models/corner_top_left/corner_top_left_ceiling.obj",
+		// 							   "assets/level0/brick_512.bmp");
+		data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_test2.obj",
 									   "assets/level0/brick_512.bmp");
 		// data.objects[0] = l3d_read_obj("assets/level0/maze00.obj",
 		// 							   "assets/level0/brick_512.bmp");
 		data.num_objects = 1;
 		l3d_3d_object_scale(data.objects[0],
-			app->window->width / 5.0,
-			app->window->width / 5.0,
-			app->window->width / 5.0);
+			app->window->width / 1.0,
+			app->window->width / 1.0,
+			app->window->width / 1.0);
 		l3d_3d_object_rotate(data.objects[0], 0, 0, 0);
 		l3d_3d_object_translate(data.objects[0],
-			0, 0, -app->window->width);
+			0, PLAYER_HEIGHT, -app->window->width);
 	}
 	app->active_scene = new_scene(&data);
 	if (app->active_scene->main_camera)

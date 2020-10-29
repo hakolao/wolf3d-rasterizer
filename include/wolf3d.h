@@ -39,8 +39,9 @@
 **	Player control macros
 */
 
-# define PLAYER_SPEED 2.0
+# define PLAYER_SPEED 6.0
 # define PLAYER_ROTATION_SPEED 0.2
+# define PLAYER_HEIGHT WIDTH
 
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000

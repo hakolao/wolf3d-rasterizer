@@ -74,43 +74,6 @@ t_bool			screen_intersection(t_wolf3d *app, t_triangle *triangle)
 }
 
 /*
-**	Check it a vertex is within the viewbox with a signed distance check
-*/
-
-t_bool			vertex_between_planes(t_plane *planes, t_vertex *vertex)
-{
-	int		i;
-
-	i = -1;
-	while (++i < 6)
-	{
-		if (ml_vector3_dot(planes[i].normal, vertex->pos) + planes[i].d <= 0)
-			return (false);
-	}
-	return (true);
-}
-
-/*
-**	Check it a triangle is within the viewbox
-*/
-
-t_bool			triangle_in_view(t_wolf3d *app, t_triangle *triangle)
-{
-	int		i;
-	t_plane	*viewplanes;
-
-	viewplanes = app->active_scene->main_camera->viewplanes;
-	i = -1;
-	while(++i < 3)
-	{
-		if (vertex_between_planes(viewplanes, triangle->vtc[i]))
-			return (true);
-	}
-	return (false);
-}
-
-
-/*
 ** Checks if any of triangle vertices are behind near clip distance so the
 ** perspective projection does not get distorted and nothing "behind" camera
 ** are drawn. Edit NEAR_CLIP_DIST if needed and you notice that current value
@@ -136,12 +99,12 @@ t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 	t_vec3 dir;
 	
 	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
-		return (false);
+			return (false);
 	ml_vector3_sub(triangle->center, app->active_scene->main_camera->origin, dir);
-	if (!is_triangle_facing(triangle, dir))
-	{
-		return (false);
-	}
+	// if (!is_triangle_facing(triangle, dir))
+	// {
+	// 	return (false);
+	// }
 	return (true);
 }
 
@@ -164,8 +127,6 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
 	rendered_triangle_set(app, &render_triangle, vtc, triangle_in);
-	// if (!(triangle_in_view(app, &render_triangle)))
-	// 	return (false);
 	if (!(is_rendered(app, &render_triangle)))
 		return (false);
 	l3d_set_clipped_triangles(vtc, &render_triangle, clipped_triangles);
@@ -185,9 +146,6 @@ t_bool			render_triangle(t_wolf3d *app, t_triangle *triangle_in)
 		screen_intersection(app, &render_triangle);
 		l3d_triangle_raster(buffer, dimensions, &render_triangle);
 	}
-	(void)render_triangle;
-	(void)vtc;
-	(void)triangle_in;
-	(void)rendered_triangle_set;
+
 	return (true);
 }

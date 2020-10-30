@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/30 16:29:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/30 16:56:53 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,31 +26,24 @@ void			init_player(t_wolf3d *app)
 	ml_matrix4_id(app->player.world_translation);
 }
 
-static void		apply_rotation_to_world(t_wolf3d *app, t_mat4 reset, t_mat4 new)
-{
-	int32_t	i;
-
-	i = -1;
-	while (++i < (int32_t)	app->active_scene->num_objects)
-		l3d_3d_object_transform(app->active_scene->objects[i], reset);
-	i = -1;
-	while (++i < (int32_t)	app->active_scene->num_objects)
-		l3d_3d_object_transform(app->active_scene->objects[i], new);
-}
-
 static void		rotate_player(t_wolf3d *app)
 {
 	t_mat4	rotation_y;
 	t_mat4	rotation_x;
 	t_mat4	rotation;
 	t_mat4	reset_rotation;
+	t_mat4	transform;
+	int32_t	i;
 
 	ml_matrix4_rotation_x(ml_rad(app->player.rot_y), rotation_y);
 	ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
 	ml_matrix4_mul(rotation_x, rotation_y, rotation);
 	ml_matrix4_inverse(app->player.world_rotation, reset_rotation);
 	ml_matrix4_inverse(rotation, app->player.world_rotation);
-	apply_rotation_to_world(app, reset_rotation, app->player.world_rotation);
+	ml_matrix4_mul(app->player.world_rotation, reset_rotation, transform);
+	i = -1;
+	while (++i < (int32_t)	app->active_scene->num_objects)
+		l3d_3d_object_transform(app->active_scene->objects[i], transform);
 }
 
 void			rotate_player_vertical(t_wolf3d *app, float angle)

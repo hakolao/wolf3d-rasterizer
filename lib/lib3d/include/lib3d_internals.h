@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:07:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/07 22:13:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/27 15:17:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,16 @@ typedef struct				s_image_data
 
 typedef struct				s_raster_data
 {
-	float x1;
-	float x2;
-	float x3;
-	float y1;
-	float y2;
-	float y3;
-	float slope_ab;
-	float slope_bc;
-	float slope_ac;
+	float	x1;
+	float	x2;
+	float	x3;
+	float	y1;
+	float	y2;
+	float	y3;
+	float	slope_ab;
+	float	slope_bc;
+	float	slope_ac;
+	t_bool	is_zbuffer;
 }							t_raster_data;
 
 /*

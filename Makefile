@@ -32,7 +32,7 @@ SOURCES = main.c \
 			time.c \
 			debug.c \
 			render/render.c \
-			render/scene.c \
+			render/render_utils.c \
 			window/ui.c \
 			window/text.c \
 			window/window.c \

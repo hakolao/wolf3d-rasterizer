@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 20:04:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/30 16:45:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,23 @@ void					mouse_state_set(t_wolf3d *app)
 {
 	SDL_PumpEvents();
 	app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
+}
+
+static void				interpolate_uv(t_triangle *triangle, float *baryc,
+									t_vec2 uv)
+{
+	uv[0] = (baryc[0] * triangle->uvs[0][0] +
+		baryc[1] * triangle->uvs[1][0] +
+		baryc[2] * triangle->uvs[2][0]) /
+			(baryc[0] +
+			baryc[1] +
+			baryc[2]);
+	uv[1] = 1 - (baryc[0] * triangle->uvs[0][1] +
+		baryc[1] * triangle->uvs[1][1] +
+		baryc[2] * triangle->uvs[2][1]) /
+			(baryc[0] * 1 +
+			baryc[1] * 1 +
+			baryc[2] * 1);
 }
 
 static void				draw_object_hit(t_hit *hit)
@@ -29,7 +46,7 @@ static void				draw_object_hit(t_hit *hit)
 	ml_vector2_copy(hit->triangle->vtc[1]->pos, points2d[1]);
 	ml_vector2_copy(hit->triangle->vtc[2]->pos, points2d[2]);
 	l3d_calculate_barycoords(points2d, hit->hit_point, barycoords);
-	l3d_interpolate_uv(hit->triangle, barycoords, uv);
+	interpolate_uv(hit->triangle, barycoords, uv);
 	index = (int)(uv[1] * hit->triangle->material->height) *
 		hit->triangle->material->width +
 		(int)(uv[0] * hit->triangle->material->width);
@@ -44,7 +61,7 @@ void					mouse_state_handle(t_wolf3d *app)
 	t_vec3	forward;
 	t_ray	ray;
 	t_hit	hit;
-	
+
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
 		if ((SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_LMASK))

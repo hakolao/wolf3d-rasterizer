@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 16:40:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/30 16:38:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@ static void		wolf3d_resize_dependent_recreate(t_wolf3d *app)
 	app->window->resized = false;
 	while (app->window->is_hidden)
 		SDL_PollEvent(NULL);
+}
+
+static void		update_kd_tree_work(void *params)
+{
+	t_wolf3d	*app;
+
+	app = params;
+	l3d_kd_tree_create_or_update(&app->active_scene->bullet_tree,
+		app->active_scene->triangle_ref, app->active_scene->num_triangles);
 }
 
 static void		wolf3d_main_loop(t_wolf3d *app)
@@ -32,7 +41,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			SDL_WarpMouseInWindow(app->window->window,
 				app->window->width / 2, app->window->height / 2);
 		mouse_state_set(app);
-		mouse_state_handle(app);	
+		mouse_state_handle(app);
 		keyboard_state_set(app);
 		keyboard_state_handle(app);
 		while (SDL_PollEvent(&event))
@@ -47,6 +56,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			if (event.type == SDL_MOUSEMOTION)
 				mouse_motion_handle(app, event);
 		}
+		thread_pool_add_work(app->thread_pool, update_kd_tree_work, app);
 		if (app->window->resized)
 			wolf3d_resize_dependent_recreate(app);
 		window_frame_clear(app->window);

@@ -113,22 +113,22 @@ typedef struct						s_scene_data
 {
 	int						level;
 	t_scene_id				scene_id;
-	const char				*menu_options[64];
+	const char				*menu_options[128];
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
-	t_3d_object				*objects[64];
+	t_3d_object				*objects[128];
 	uint32_t				num_objects;
 	uint32_t				num_triangles;
 }									t_scene_data;
 
 typedef struct						s_scene
 {
-	t_3d_object				*objects[64];
+	t_3d_object				*objects[128];
 	uint32_t				num_objects;
 	uint32_t				num_triangles;
 	t_camera				*main_camera;
 	t_triangle				*screen_triangles;
-	const char				*menu_options[64];
+	const char				*menu_options[128];
 	int32_t					menu_option_count;
 	int32_t					selected_option;
 	t_scene_id				scene_id;

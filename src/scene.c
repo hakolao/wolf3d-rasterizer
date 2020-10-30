@@ -35,18 +35,28 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		// 				"assets/IcosphereUV_large.bmp");
 		// data.objects[0] = l3d_read_obj("assets/models/corner_top_left/corner_top_left_ceiling.obj",
 		// 							   "assets/level0/brick_512.bmp");
-		data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_test2.obj",
+		data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_floor.obj",
+									   "assets/level0/brick_512.bmp");
+		data.objects[1] = l3d_read_obj("assets/models/turn_right/turn_right_wall.obj",
+									   "assets/level0/brick_512.bmp");
+		data.objects[2] = l3d_read_obj("assets/models/turn_right/turn_right_ceiling.obj",
+									   "assets/level0/brick_512.bmp");
+		data.objects[3] = l3d_read_obj("assets/models/corner_bot_right/corner_bot_right_ceiling.obj",
 									   "assets/level0/brick_512.bmp");
 		// data.objects[0] = l3d_read_obj("assets/level0/maze00.obj",
 		// 							   "assets/level0/brick_512.bmp");
-		data.num_objects = 1;
-		l3d_3d_object_scale(data.objects[0],
-			app->window->width / 1.0,
-			app->window->width / 1.0,
-			app->window->width / 1.0);
-		l3d_3d_object_rotate(data.objects[0], 0, 0, 0);
-		l3d_3d_object_translate(data.objects[0],
-			0, PLAYER_HEIGHT, -app->window->width);
+		data.num_objects = 4;
+		int i = -1;
+		while (++i < (int)data.num_objects)
+		{
+		l3d_3d_object_scale(data.objects[i],
+							app->window->width / 1.0,
+							app->window->width / 1.0,
+							app->window->width / 1.0);
+		l3d_3d_object_rotate(data.objects[i], 0, 0, 0);
+		l3d_3d_object_translate(data.objects[i],
+			0, PLAYER_HEIGHT, 0);
+		}
 	}
 	app->active_scene = new_scene(&data);
 	if (app->active_scene->main_camera)
@@ -73,7 +83,7 @@ t_scene			*new_scene(t_scene_data *data)
 	if (data->num_objects > 0)
 	{
 		ft_memmove(scene->objects, data->objects,
-			sizeof(t_3d_object) * data->num_objects);
+			sizeof(t_3d_object*) * data->num_objects);
 	}
 	return (scene);
 }

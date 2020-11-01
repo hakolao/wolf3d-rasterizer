@@ -64,6 +64,12 @@ int				l3d_triangle_clipping_case(t_triangle *triangle, t_plane *plane,
 	return (0);
 }
 
+/*
+**	Interpolates uv coordinates for the new vertices of the clipped triangle
+**	Uses the z coordinate (i = 2) to interpolate because that is the most likely
+**	one to have proper values for linear interpolation. X causes glitches.
+*/
+
 static t_bool		l3d_interpolate_clipped_uv(t_triangle *triangle, int *limits,
 											t_vec3 hit, t_vec2 result)
 {
@@ -71,26 +77,23 @@ static t_bool		l3d_interpolate_clipped_uv(t_triangle *triangle, int *limits,
 	double fraction;
 
 	fraction = 0.0;
-	i = -1;
-	while (++i < 3)
+	i = 2;
+	if (fabs(triangle->vtc[limits[0]]->pos[i] -
+			 triangle->vtc[limits[1]]->pos[i]) < L3D_EPSILON)
 	{
-		if (fabs(triangle->vtc[limits[0]]->pos[i] -
-				 triangle->vtc[limits[1]]->pos[i]) > L3D_EPSILON)
-		{
-			fraction = fabs(hit[i] - triangle->vtc[limits[0]]->pos[i]) /
-					   fabs(triangle->vtc[limits[0]]->pos[i] -
-							triangle->vtc[limits[1]]->pos[i]);
-			result[0] = triangle->uvs[limits[0]][0] * (1 - fraction) +
-						triangle->uvs[limits[1]][0] * (fraction);
-
-			result[1] = triangle->uvs[limits[0]][1] * (1 - fraction) +
-						triangle->uvs[limits[1]][1] * (fraction);
-			return (true);
-		}
+		ft_printf("!this should never happen but it will if the triangle vertices"
+				  "are degenerate\n");
+		return (false);
 	}
-	ft_printf("!this should never happen but it will if the triangle vertices"
-			  "are degenerate\n");
-	return (false);
+	fraction = fabs(hit[i] - triangle->vtc[limits[0]]->pos[i]) /
+				fabs(triangle->vtc[limits[0]]->pos[i] -
+					triangle->vtc[limits[1]]->pos[i]);
+	result[0] = triangle->uvs[limits[0]][0] * (1 - fraction) +
+				triangle->uvs[limits[1]][0] * (fraction);
+
+	result[1] = triangle->uvs[limits[0]][1] * (1 - fraction) +
+				triangle->uvs[limits[1]][1] * (fraction);
+	return (true);
 }
 
 /*
@@ -202,7 +205,9 @@ int				l3d_clip_triangle(t_triangle *triangle, t_plane *plane,
 		return (1);
 	}
 	else
+	{
 		return (0);
+	}
 }
 
 

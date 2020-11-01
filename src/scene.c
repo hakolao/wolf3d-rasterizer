@@ -54,21 +54,21 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
-						"assets/IcosphereUV_large.bmp");
-		// data.objects[0] = l3d_read_obj("assets/models/corner_top_left/corner_top_left_ceiling.obj",
-		// 							   "assets/level0/brick_512.bmp");
-		// data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_floor.obj",
-		// 							   "assets/level0/brick_512.bmp");
-		// data.objects[1] = l3d_read_obj("assets/models/turn_right/turn_right_wall.obj",
-		// 							   "assets/level0/brick_512.bmp");
-		// data.objects[2] = l3d_read_obj("assets/models/turn_right/turn_right_ceiling.obj",
-		// 							   "assets/level0/brick_512.bmp");
+		// data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
+		// 				"assets/IcosphereUV_large.bmp");
+		data.objects[0] = l3d_read_obj("assets/models/corner_top_left/corner_top_left_ceiling.obj",
+									   "assets/level0/brick_512.bmp");
+		// data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_floor_test.obj",
+		// 							   "assets/textures/hexagons_003/Tiles_Hexagons_003_basecolor.bmp");
+		data.objects[1] = l3d_read_obj("assets/models/turn_right/turn_right_wall.obj",
+									   "assets/level0/brick_512.bmp");
+		data.objects[2] = l3d_read_obj("assets/models/turn_right/turn_right_ceiling.obj",
+									   "assets/level0/brick_512.bmp");
 		// data.objects[3] = l3d_read_obj("assets/models/corner_bot_right/corner_bot_right_ceiling.obj",
 		// 							   "assets/level0/brick_512.bmp");
-		// data.objects[0] = l3d_read_obj("assets/level0/maze00.obj",
+		// data.objects[3] = l3d_read_obj("assets/level0/maze00.obj",
 		// 							   "assets/level0/brick_512.bmp");
-		data.num_objects = 1;
+		data.num_objects = 3;
 		int i = -1;
 		while (++i < (int)data.num_objects)
 		{

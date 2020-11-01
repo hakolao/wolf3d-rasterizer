@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/30 16:59:12 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/10/27 16:22:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # define L3D_EPSILON 0.0000001
 # define L3D_SINGLE_SIDED 1
 # define L3D_MAX_KD_TREE_DEPTH 10
-# define L3D_MIN_KD_NODE_NUM_TRIANGLES 8
-# define L3D_TRI_VEC_INITIAL_CAPACITY 32
+# define L3D_MIN_KD_NODE_NUM_TRIANGLES 2
+# define L3D_TRI_VEC_INITIAL_CAPACITY 10
 
 # define L3D_MAX_OBJECTS 32
 # define L3D_MAX_TRIANGLES 16384

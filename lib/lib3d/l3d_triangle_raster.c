@@ -82,18 +82,20 @@ static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
 	int32_t		offset_xy[2];
 	int32_t		z_val;
 
+	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
+	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	l3d_interpolate_uv(triangle, baryc, uv);
-	clamp_uv(uv);
-	offset_xy[0] = xy[0] + dimensionswh[0] / 2;
-	offset_xy[1] = xy[1] + dimensionswh[1] / 2;
 	zpixel = l3d_pixel_get(buffers[1], dimensionswh, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
 	if ((int32_t)zpixel >= z_val)
+	{
+		l3d_interpolate_uv(triangle, baryc, uv);
+		clamp_uv(uv);
 		l3d_pixel_plot(buffers[0],
 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 			offset_xy, l3d_sample_texture(triangle->material->texture,
-				triangle->material->width, triangle->material->height, uv));
+					triangle->material->width, triangle->material->height, uv));
+	}
 }
 
 static void		scan_line(uint32_t *buffers[2], uint32_t *dimensionswh,
@@ -108,12 +110,12 @@ static void		scan_line(uint32_t *buffers[2], uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < -(int)dimensionswh[0] / 2)
+		if (x < -(int)dimensionswh[0] * 0.5)
 		{
-			x = -(int)dimensionswh[0] / 2;
+			x = -(int)dimensionswh[0] * 0.5;
 			continue;
 		}
-		else if (x > (int)dimensionswh[0] / 2)
+		else if (x > (int)dimensionswh[0] * 0.5)
 			break;
 		draw_pixel(buffers, dimensionswh, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -129,8 +131,8 @@ static void		draw_zpixel(uint32_t *zbuffer, uint32_t *dimensionswh,
 	int32_t		z_val;
 
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	offset_xy[0] = xy[0] + dimensionswh[0] / 2;
-	offset_xy[1] = xy[1] + dimensionswh[1] / 2;
+	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
+	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
 	pixel = l3d_pixel_get(zbuffer, dimensionswh, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
 	if ((int32_t)pixel >= z_val)
@@ -150,12 +152,12 @@ static void		scan_z_line(uint32_t *zbuffer, uint32_t *dimensionswh,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < -(int)dimensionswh[0] / 2)
+		if (x < -(int)dimensionswh[0] * 0.5)
 		{
-			x = -(int)dimensionswh[0] / 2;
+			x = -(int)dimensionswh[0] * 0.5;
 			continue;
 		}
-		else if (x > (int)dimensionswh[0] / 2)
+		else if (x > (int)dimensionswh[0] * 0.5)
 			break;
 		draw_zpixel(zbuffer, dimensionswh, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -172,12 +174,12 @@ static void		raster_upper(uint32_t *bufs[2], uint32_t *dims,
 	y = data->y1;
 	while (y < data->y2)
 	{
-		if (y < -(int)(dims[1] / 2))
+		if (y < -(int)(dims[1] * 0.5))
 		{
-			y = -(int)dims[1] / 2;
+			y = -(int)dims[1] * 0.5;
 			continue;
 		}
-		else if (y > (int)(dims[1] / 2))
+		else if (y > (int)(dims[1] * 0.5))
 			break;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
@@ -209,12 +211,12 @@ static void		raster_lower(uint32_t *bufs[2], uint32_t *dims,
 	y = data->y2;
 	while (y < data->y3)
 	{
-		if (y < -(int)(dims[1] / 2))
+		if (y < -(int)(dims[1] * 0.5))
 		{
-			y = -(int)dims[1] / 2;
+			y = -(int)dims[1] * 0.5;
 			continue;
 		}
-		else if (y > (int)(dims[1] / 2))
+		else if (y > (int)(dims[1] * 0.5))
 			break;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
@@ -298,7 +300,6 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
 
 	if (fabs(denom) < L3D_EPSILON)
 	{
-
 		denom =  denom < 0 ? -1.0 * L3D_EPSILON : L3D_EPSILON;
 	}
 	inv_denom = 1 / denom;

@@ -96,7 +96,6 @@ static void		render_scene(t_wolf3d *app, t_render_pass pass)
 	int				i;
 	int				j;
 	t_triangle		*triangle;
-
 	i = -1;
 	while (++i < (int)app->active_scene->num_objects)
 	{
@@ -115,7 +114,7 @@ void			wolf3d_render(t_wolf3d *app)
 {	
 	if (app->active_scene->main_camera != NULL)
 	{
-		render_scene(app, rpass_zbuffer);
+		// render_scene(app, rpass_zbuffer);
 		render_scene(app, rpass_rasterize);
 	}
 	ui_render(app);

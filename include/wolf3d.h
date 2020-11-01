@@ -22,7 +22,7 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
-# define NUM_THREADS 4
+# define NUM_THREADS 6
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the

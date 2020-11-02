@@ -114,7 +114,7 @@ void			wolf3d_render(t_wolf3d *app)
 {	
 	if (app->active_scene->main_camera != NULL)
 	{
-		// render_scene(app, rpass_zbuffer);
+		render_scene(app, rpass_zbuffer);
 		render_scene(app, rpass_rasterize);
 	}
 	ui_render(app);

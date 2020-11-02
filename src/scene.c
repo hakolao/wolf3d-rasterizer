@@ -56,14 +56,18 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.main_camera = new_camera();
 		// data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
 		// 				"assets/IcosphereUV_large.bmp");
-		data.objects[0] = l3d_read_obj("assets/models/corner_top_left/corner_top_left_ceiling.obj",
+		data.objects[0] = l3d_read_obj("assets/models/corners/corner_top_left_floor.obj",
 									   "assets/level0/brick_512.bmp");
-		// data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_floor_test.obj",
-		// 							   "assets/textures/hexagons_003/Tiles_Hexagons_003_basecolor.bmp");
-		data.objects[1] = l3d_read_obj("assets/models/turn_right/turn_right_wall.obj",
+		data.objects[1] = l3d_read_obj("assets/models/corners/corner_top_left_wall.obj",
 									   "assets/level0/brick_512.bmp");
-		data.objects[2] = l3d_read_obj("assets/models/turn_right/turn_right_ceiling.obj",
+		data.objects[2] = l3d_read_obj("assets/models/corners/corner_top_left_ceiling.obj",
 									   "assets/level0/brick_512.bmp");
+		// data.objects[0] = l3d_read_obj("assets/models/turn_left/turn_left_floor.obj",
+		// 							   "assets/level0/brick_512.bmp");
+		// data.objects[1] = l3d_read_obj("assets/models/turn_left/turn_left_wall.obj",
+		// 							   "assets/level0/brick_512.bmp");
+		// data.objects[2] = l3d_read_obj("assets/models/turn_left/turn_left_ceiling.obj",
+		// 							   "assets/level0/brick_512.bmp");
 		// data.objects[3] = l3d_read_obj("assets/models/corner_bot_right/corner_bot_right_ceiling.obj",
 		// 							   "assets/level0/brick_512.bmp");
 		// data.objects[3] = l3d_read_obj("assets/level0/maze00.obj",
@@ -78,7 +82,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 							app->window->width / 1.0);
 		l3d_3d_object_rotate(data.objects[i], 0, 0, 0);
 		l3d_3d_object_translate(data.objects[i],
-			0, PLAYER_HEIGHT, 0);
+			0, PLAYER_HEIGHT * 1.5, 0);
 		}
 	}
 	app->active_scene = new_scene(&data);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/10/27 17:24:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/02 18:18:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ void			clamp_uv(t_vec2 uv)
 		uv[1] = 0.0;
 }
 
-static int32_t	calculate_z_val(float baryc[3], t_triangle *triangle)
+static uint32_t	calculate_z_val(float baryc[3], t_triangle *triangle)
 {
-	return (-1 * (baryc[0] * triangle->vtc[0]->pos[2] +
-			baryc[1] * triangle->vtc[1]->pos[2] +
-			baryc[2] * triangle->vtc[2]->pos[2]));
+	return ((baryc[0] * triangle->vtc_distance[0] +
+			baryc[1] * triangle->vtc_distance[1] +
+			baryc[2] * triangle->vtc_distance[2]));
 }
 
 static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,

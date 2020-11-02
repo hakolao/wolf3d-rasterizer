@@ -13,6 +13,17 @@
 #include "wolf3d.h"
 
 /*
+** Why? cos why not...
+*/
+
+static void		update_triangle_vertex_distances(t_triangle *triangle)
+{
+	triangle->vtc_distance[0] = ml_vector3_mag(triangle->vtc[0]->pos);
+	triangle->vtc_distance[1] = ml_vector3_mag(triangle->vtc[1]->pos);
+	triangle->vtc_distance[2] = ml_vector3_mag(triangle->vtc[2]->pos);
+}
+
+/*
 **	Renders a triangle with given render function.
 **	Also creates temporary clipping triangles
 **	if the triangle intersects with the camera near plane.
@@ -42,17 +53,21 @@ static void		render_triangle(t_wolf3d *app,
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[1]);
+		update_triangle_vertex_distances(&clipped_triangles[0]);
+		update_triangle_vertex_distances(&clipped_triangles[1]);
 		render_f(buffers, dimensions, &clipped_triangles[0]);
 		render_f(buffers, dimensions, &clipped_triangles[1]);
 	}
 	else if (test_clip ==1)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
+		update_triangle_vertex_distances(&clipped_triangles[0]);
 		render_f(buffers, dimensions, &clipped_triangles[0]);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
+		update_triangle_vertex_distances(triangle);
 		render_f(buffers, dimensions, triangle);
 	}
 }

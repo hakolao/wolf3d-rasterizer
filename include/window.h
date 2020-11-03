@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 16:07:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/03 15:07:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,18 @@ typedef struct				s_info
 	uint64_t				performance_end;
 }							t_info;
 
+typedef struct				s_wolf3d_buffers
+{
+	uint32_t				*framebuffer;
+	uint32_t				*zbuffer;
+	t_vec3					*barybuffer;
+}							t_wolf3d_buffers;
+
 typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
-	uint32_t				*framebuffer;
-	uint32_t				*zbuffer;
+	t_wolf3d_buffers		*buffers;
 	TTF_Font				*main_font;
 	TTF_Font				*debug_font;
 	int32_t					width;

@@ -42,8 +42,8 @@ static void		render_triangle(t_wolf3d *app,
 	t_vertex	vtc[9];
 	int32_t		test_clip;
 	
-	buffers[0] = app->window->framebuffer;
-	buffers[1] = app->window->zbuffer;
+	buffers[0] = app->window->buffers->framebuffer;
+	buffers[1] = app->window->buffers->zbuffer;
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
 	l3d_set_clipped_triangles(vtc, triangle, clipped_triangles);

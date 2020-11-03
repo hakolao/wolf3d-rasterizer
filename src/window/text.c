@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/03 14:04:30 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 18:02:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/03 15:09:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void				window_text_render(t_window *window,
 	surface = text_surface(window, params, font);
 	l3d_framebuffer_image_place(&(t_surface){.h = window->height,
 		.w = window->width,
-		.pixels = window->framebuffer},
+		.pixels = window->buffers->framebuffer},
 		&(t_surface){.h = surface->h,
 		.w = surface->w,
 		.pixels = surface->pixels}, params.xy, params.blend_ratio);
@@ -51,7 +51,7 @@ void				window_text_render_centered(t_window *window,
 	surface = text_surface(window, params, font);
 	l3d_framebuffer_image_place(&(t_surface){.h = window->height,
 		.w = window->width,
-		.pixels = window->framebuffer},
+		.pixels = window->buffers->framebuffer},
 		&(t_surface){.h = surface->h,
 		.w = surface->w,
 		.pixels = surface->pixels},

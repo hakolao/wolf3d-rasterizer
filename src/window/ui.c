@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 16:55:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/03 15:10:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ static void		ui_main_menu_render(t_wolf3d *app)
 
 static void		ui_main_game_render(t_wolf3d *app)
 {
-	l3d_line_draw(app->window->framebuffer,
+	l3d_line_draw(app->window->buffers->framebuffer,
 		(uint32_t[2]){app->window->width, app->window->height},
 		(int32_t[2][2]){{app->window->width / 2 - 10, app->window->height / 2},
 		{app->window->width / 2 + 10, app->window->height / 2}}, 0xFFFFFFFF);
-	l3d_line_draw(app->window->framebuffer,
+	l3d_line_draw(app->window->buffers->framebuffer,
 		(uint32_t[2]){app->window->width, app->window->height},
 		(int32_t[2][2]){{app->window->width / 2, app->window->height / 2 - 10},
 		{app->window->width / 2, app->window->height / 2 + 10}}, 0xFFFFFFFF);

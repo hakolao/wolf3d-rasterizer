@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/27 17:13:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/03 15:11:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,21 @@ void			window_frame_clear(t_window *window)
 	color = 0x000000FF;
 	while (i < window->width * window->height)
 	{
-		window->framebuffer[i] = color;
-		window->framebuffer[i + 1] = color;
-		window->framebuffer[i + 2] = color;
-		window->framebuffer[i + 3] = color;
-		window->zbuffer[i] = INT32_MAX;
-		window->zbuffer[i + 1] = INT32_MAX;
-		window->zbuffer[i + 2] = INT32_MAX;
-		window->zbuffer[i + 3] = INT32_MAX;
+		window->buffers->framebuffer[i] = color;
+		window->buffers->framebuffer[i + 1] = color;
+		window->buffers->framebuffer[i + 2] = color;
+		window->buffers->framebuffer[i + 3] = color;
+		window->buffers->zbuffer[i] = INT32_MAX;
+		window->buffers->zbuffer[i + 1] = INT32_MAX;
+		window->buffers->zbuffer[i + 2] = INT32_MAX;
+		window->buffers->zbuffer[i + 3] = INT32_MAX;
 		i += 4;
 	}
 }
 
 void			window_frame_draw(t_window *window)
 {
-	SDL_UpdateTexture(window->frame, NULL, window->framebuffer,
+	SDL_UpdateTexture(window->frame, NULL, window->buffers->framebuffer,
 		window->width * 4);
 	SDL_RenderCopy(window->renderer, window->frame, NULL, NULL);
 	SDL_RenderPresent(window->renderer);
@@ -75,16 +75,24 @@ void			window_frame_recreate(t_window *window)
 		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, window->width,
 		window->height);
 	error_check(window->frame == NULL, SDL_GetError());
-	if (window->framebuffer != NULL)
-		free(window->framebuffer);
-	error_check(!(window->framebuffer = malloc(sizeof(uint32_t) *
+	if (window->buffers != NULL)
+	{
+		free(window->buffers->barybuffer);
+		free(window->buffers->framebuffer);
+		free(window->buffers->zbuffer);
+		free(window->buffers);
+	}
+	error_check(!(window->buffers = malloc(sizeof(t_wolf3d_buffers))),
+		"Failed to malloc wolf3d buffers struct");
+	error_check(!(window->buffers->framebuffer = malloc(sizeof(uint32_t) *
 		window->width * window->height)),
 		"Failed to malloc framebuffer in resize");
-	if (window->zbuffer != NULL)
-		free(window->zbuffer);
-	error_check(!(window->zbuffer = malloc(sizeof(uint32_t) *
+	error_check(!(window->buffers->zbuffer = malloc(sizeof(uint32_t) *
 		window->width * window->height)),
 		"Failed to malloc zbuffer in resize");
+	error_check(!(window->buffers->barybuffer = malloc(sizeof(t_vec3) *
+		window->width * window->height)),
+		"Failed to malloc barybuffer in resize");
 	if (window->main_font != NULL)
 		TTF_CloseFont(window->main_font);
 	window->main_font = TTF_OpenFont(GAME_FONT, FONT_SIZE);
@@ -112,8 +120,7 @@ void			window_create(t_window **window_ref)
 	window->window_id = SDL_GetWindowID(window->window);
 	window->is_hidden = false;
 	window->frame = NULL;
-	window->framebuffer = NULL;
-	window->zbuffer = NULL;
+	window->buffers = NULL;
 	window->main_font = NULL;
 	window->debug_font = NULL;
 	window_frame_recreate(window);

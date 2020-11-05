@@ -82,6 +82,8 @@ static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
 	int32_t		offset_xy[2];
 	int32_t		z_val;
 
+	t_vec2		uv_limits;
+	
 	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
 	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
@@ -91,10 +93,13 @@ static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
 	{
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
+		uv_limits[0] = 0.1;
+		uv_limits[1] = 0.1;
 		l3d_pixel_plot(buffers[0],
 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 			offset_xy, l3d_sample_texture(triangle->material->texture,
-					triangle->material->width, triangle->material->height, uv));
+					(int[2]){triangle->material->width,
+					triangle->material->height}, uv));
 	}
 }
 
@@ -343,21 +348,28 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 			(baryc[2] * 1) * cz);
 }
 
-	/*
+/*
 **	Samples the texture with given uv_coordinates
-**	x = (floor(U * (width - 1))); //TODO Check later if the -1 offset is needed
-**	y = (floor(V * (height - 1)));
+**	x = (floor(U * (width)));
+**	y = (floor(V * (height)));
 **	index = x + width * y;
 */
 
-uint32_t		l3d_sample_texture(uint32_t * texture_data, int width,
-									int height, t_vec2 uv_point)
+uint32_t		l3d_sample_texture(uint32_t *texture_data, int *dimensions,
+									t_vec2 uv_point)
 {
-	int	index;
-
-	index = (int)floor((floor(uv_point[0] * (width))) +
-							width * (floor(uv_point[1] * (height))));
-	if (index >= width * height)
-		index = width * height - 1;
+	int		index;
+	float	x;
+	float	y;
+	
+	x = floor(uv_point[0] * dimensions[0]);
+	y = floor(uv_point[1] * dimensions[1]);
+	if (x >= dimensions[0])
+		x = dimensions[0] - 1;
+	index = (int)x + (int)(y * dimensions[0]);
+	if (index >= dimensions[0] * dimensions[1])
+		index = dimensions[0] * dimensions[1] - 1;
+	else if (index < 0)
+		index = 0;
 	return (texture_data[index]);
 }

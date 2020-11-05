@@ -342,8 +342,7 @@ void						l3d_interpolate_uv(t_triangle *triangle,
 												float *barycoords,
 												t_vec2 point_uv);
 uint32_t					l3d_sample_texture(uint32_t *texture_data,
-												int width,
-												int height, t_vec2 uv_point);
+											int *dimensions, t_vec2 uv_point);
 
 
 /*

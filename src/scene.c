@@ -56,23 +56,23 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.main_camera = new_camera();
 		// data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
 		// 				"assets/IcosphereUV_large.bmp");
-		data.objects[0] = l3d_read_obj("assets/models/corners/corner_ceiling.obj",
-									   "assets/textures/test_texture_small.bmp");
-		data.objects[1] = l3d_read_obj("assets/models/corners/corner_walls.obj",
-									   "assets/textures/test_texture_small.bmp");
-		data.objects[2] = l3d_read_obj("assets/models/corners/corner_floor.obj",
-									   "assets/textures/test_texture_small.bmp");
-		// data.objects[0] = l3d_read_obj("assets/models/turn_left/turn_left_floor.obj",
-		// 							   "assets/level0/brick_512.bmp");
-		// data.objects[1] = l3d_read_obj("assets/models/turn_left/turn_left_wall.obj",
-		// 							   "assets/level0/brick_512.bmp");
-		// data.objects[2] = l3d_read_obj("assets/models/turn_left/turn_left_ceiling.obj",
-		// 							   "assets/level0/brick_512.bmp");
+		// data.objects[0] = l3d_read_obj("assets/models/corners/corner_ceiling.obj",
+		// 							   "assets/textures/test_texture_small.bmp");
+		// data.objects[1] = l3d_read_obj("assets/models/corners/corner_walls.obj",
+		// 							   "assets/textures/test_texture_small.bmp");
+		// data.objects[2] = l3d_read_obj("assets/models/corners/corner_floor.obj",
+		// 							   "assets/textures/test_texture_small.bmp");
+		data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_test.obj",
+									   "assets/textures/test_texture.bmp");
+		// data.objects[1] = l3d_read_obj("assets/models/turn_right/turn_right_wall.obj",
+		// 							   "assets/textures/test_texture_small.bmp");
+		// data.objects[2] = l3d_read_obj("assets/models/turn_right/turn_right_ceiling.obj",
+		// 							   "assets/textures/test_texture_small.bmp");
 		// data.objects[3] = l3d_read_obj("assets/models/corner_bot_right/corner_bot_right_ceiling.obj",
 		// 							   "assets/level0/brick_512.bmp");
 		// data.objects[3] = l3d_read_obj("assets/level0/maze00.obj",
 		// 							   "assets/level0/brick_512.bmp");
-		data.num_objects = 3;
+		data.num_objects = 1;
 		int i = -1;
 		// data.objects[0]->material->texture = 
 		while (++i < (int)data.num_objects)

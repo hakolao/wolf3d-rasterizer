@@ -81,8 +81,6 @@ static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
 	t_vec2		uv;
 	int32_t		offset_xy[2];
 	int32_t		z_val;
-
-	t_vec2		uv_limits;
 	
 	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
 	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
@@ -91,10 +89,9 @@ static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
 	z_val = calculate_z_val(baryc, triangle);
 	if ((int32_t)zpixel >= z_val)
 	{
+		clamp_bary(baryc); //!if visual glitches occur on edges, this is the reason
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
-		uv_limits[0] = 0.1;
-		uv_limits[1] = 0.1;
 		l3d_pixel_plot(buffers[0],
 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 			offset_xy, l3d_sample_texture(triangle->material->texture,
@@ -365,8 +362,10 @@ uint32_t		l3d_sample_texture(uint32_t *texture_data, int *dimensions,
 	x = floor(uv_point[0] * dimensions[0]);
 	y = floor(uv_point[1] * dimensions[1]);
 	if (x >= dimensions[0])
-		x = dimensions[0] - 1;
-	index = (int)x + (int)(y * dimensions[0]);
+		x = (float)(dimensions[0] - 1);
+	if (y >= dimensions[1])
+		y = (float)(dimensions[1] - 1);
+	index = (int)floor(x) + (int)(floor(y * dimensions[0]));
 	if (index >= dimensions[0] * dimensions[1])
 		index = dimensions[0] * dimensions[1] - 1;
 	else if (index < 0)

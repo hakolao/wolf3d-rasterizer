@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/15 16:27:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/03 15:10:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 **		&(t_surface){
 **			.h = app->window->height,
 **			.w = app->window->width,
-**			.pixels = app->window->framebuffer},
+**			.pixels = app->window->buffers->framebuffer},
 **		&(t_surface){
 **			.h = height,
 **			.w = width,

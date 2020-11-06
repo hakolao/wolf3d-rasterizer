@@ -72,21 +72,49 @@ static void		render_triangle(t_wolf3d *app,
 	}
 }
 
+static void		set_render_triangle(t_wolf3d *app,
+									t_triangle *r_triangle,
+									t_triangle *triangle, t_vertex *vtc)
+{
+	int32_t		i;
+
+	ft_memcpy(r_triangle, triangle, sizeof(t_triangle));
+	i = -1;
+	while (++i < 3)
+	{
+		r_triangle->vtc[i] = &vtc[i];
+		ml_vector3_copy(triangle->vtc[i]->pos, r_triangle->vtc[i]->pos);
+		ml_matrix4_mul_vec3(app->player.inv_translation, r_triangle->vtc[i]->pos,
+			r_triangle->vtc[i]->pos);
+		ml_matrix4_mul_vec3(app->player.inv_rotation,
+			r_triangle->vtc[i]->pos, r_triangle->vtc[i]->pos);
+	}
+	l3d_triangle_update(r_triangle);
+}
+
 static void		rasterize_work(void *params)
 {
 	t_triangle_work	*work;
+	t_triangle		r_triangle;
+	t_vertex		vtc[3];
 
 	work = params;
-	render_triangle(work->app, l3d_triangle_raster, work->triangle);
+	set_render_triangle(work->app, &r_triangle, work->triangle, vtc);
+	if (is_rendered(work->app, &r_triangle))
+		render_triangle(work->app, l3d_triangle_raster, &r_triangle);
 	free(work);
 }
 
 static void		zbuffer_work(void *params)
 {
 	t_triangle_work	*work;
+	t_triangle		r_triangle;
+	t_vertex		vtc[3];
 
 	work = params;
-	render_triangle(work->app, l3d_triangle_set_zbuffer, work->triangle);
+	set_render_triangle(work->app, &r_triangle, work->triangle, vtc);
+	if (is_rendered(work->app, &r_triangle))
+		render_triangle(work->app, l3d_triangle_set_zbuffer, &r_triangle);
 	free(work);
 }
 
@@ -118,8 +146,7 @@ static void		render_scene(t_wolf3d *app, t_render_pass pass)
 		while (++j < app->active_scene->objects[i]->num_triangles)
 		{
 			triangle = app->active_scene->objects[i]->triangles + j;
-			if (is_rendered(app, triangle))
-				add_triangle_work(app, pass, triangle);
+			add_triangle_work(app, pass, triangle);
 		}
 	}
 	thread_pool_wait(app->thread_pool);

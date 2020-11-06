@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 15:49:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 16:52:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,26 @@ static void				draw_object_hit(t_hit *hit)
 	float 	uv[2];
 	float	barycoords[3];
 	int32_t	index;
+	int32_t	i;
 
-	ml_vector2_copy(hit->triangle->vtc[0]->pos, points2d[0]);
-	ml_vector2_copy(hit->triangle->vtc[1]->pos, points2d[1]);
-	ml_vector2_copy(hit->triangle->vtc[2]->pos, points2d[2]);
+	i = -1;
+	while (++i < 3)
+	{
+		ml_vector3_copy(hit->triangle->vtc[i]->pos, points2d[i]);
+		ml_vector3_print(points2d[i]);
+	}
 	l3d_calculate_barycoords(points2d, hit->hit_point, barycoords);
+	ml_vector3_print(hit->hit_point);
 	interpolate_uv(hit->triangle, barycoords, uv);
 	index = (int32_t)(uv[1] * hit->triangle->material->height) *
 		hit->triangle->material->width +
 		(int32_t)(uv[0] * hit->triangle->material->width);
+	ft_printf("index :%d\n", index);
 	if (index < 0 || index >= (int32_t)hit->triangle->material->width *
 		(int32_t)hit->triangle->material->height)
 		return ;
 	hit->triangle->material->texture[index] = 0xFFFFFFFF;
+	hit->triangle->
 }
 
 void					determine_closest_triangle_hit(t_hits *hits,
@@ -63,17 +70,18 @@ void					determine_closest_triangle_hit(t_hits *hits,
 	t_hit	*hit;
 
 	head = hits;
-	*closest = (t_hit*)head->content;
-	if (!*closest)
-		return ;
+	*closest = NULL;
 	while (head->next)
 	{
 		hit = (t_hit*)head->content;
-		if (hit && hit->triangle != NULL && hit->t < (*closest)->t)
+		if (*closest == NULL && hit != NULL && hit->t > 0.0 && hit->triangle)
+			*closest = hit;
+		if (hit != NULL && hit->triangle != NULL && hit->t > 0.0 &&
+			hit->t <= (*closest)->t)
 			*closest = hit;
 		head = head->next;
 	}
-	if (!(*closest)->triangle)
+	if (*closest && !(*closest)->triangle)
 		*closest = NULL;
 }
 
@@ -93,7 +101,10 @@ void					mouse_state_handle(t_wolf3d *app)
 			{
 				determine_closest_triangle_hit(hits, &closest_triangle_hit);
 				if (closest_triangle_hit != NULL)
+				{
+					ft_printf("t: %f\n", closest_triangle_hit->t);
 					draw_object_hit(closest_triangle_hit);
+				}
 				l3d_delete_hits(hits);	
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 15:52:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 16:32:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ t_bool			l3d_triangle_ray_hit(t_triangle *triangle, t_ray *ray,
 {
 	t_vec3	hsq[3];
 
-	if (ml_vector3_dot(ray->dir, triangle->normal) > 0 &&
-		triangle->is_single_sided)
-		return (false);
+	// if (ml_vector3_dot(ray->dir, triangle->normal) > 0 &&
+	// 	triangle->is_single_sided)
+	// 	return (false);
 	ml_vector3_cross(ray->dir, triangle->ac, hsq[0]);
 	return (l3d_determine_triangle_hit(hsq, triangle, ray, hits));
 }

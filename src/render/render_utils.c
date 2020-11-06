@@ -40,10 +40,10 @@ static t_bool	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 	return (false);
 }
 
-// static t_bool	is_triangle_facing(t_triangle *triangle, t_vec3 dir)
-// {
-// 	return (ml_vector3_dot(triangle->normal, dir) <= 0);
-// }
+static t_bool	is_triangle_facing(t_triangle *triangle, t_vec3 dir)
+{
+	return (ml_vector3_dot(triangle->normal, dir) <= 0);
+}
 
 t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 {
@@ -52,10 +52,10 @@ t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
 		return (false);
 	ml_vector3_sub(triangle->center, app->active_scene->main_camera->origin, dir);
-	// if (!is_triangle_facing(triangle, dir))
-	// {
-	// 	return (false);
-	// }
+	if (!is_triangle_facing(triangle, dir))
+	{
+		return (false);
+	}
 	return (true);
 }
 

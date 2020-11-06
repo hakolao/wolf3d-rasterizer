@@ -68,6 +68,9 @@ void			clamp_uv(t_vec2 uv)
 
 static uint32_t	calculate_z_val(float baryc[3], t_triangle *triangle)
 {
+	// return ((baryc[0] * triangle->vtc_distance[0] +
+	// 		baryc[1] * triangle->vtc_distance[1] +
+	// 		baryc[2] * triangle->vtc_distance[2]));
 	return ((baryc[0] * triangle->vtc_distance[0] +
 			baryc[1] * triangle->vtc_distance[1] +
 			baryc[2] * triangle->vtc_distance[2]));
@@ -89,7 +92,7 @@ static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
 	z_val = calculate_z_val(baryc, triangle);
 	if ((int32_t)zpixel >= z_val)
 	{
-		clamp_bary(baryc); //!if visual glitches occur on edges, this is the reason
+		
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
 		l3d_pixel_plot(buffers[0],

@@ -63,7 +63,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		// data.objects[2] = l3d_read_obj("assets/models/corners/corner_floor.obj",
 		// 							   "assets/textures/test_texture_small.bmp");
 		data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_test.obj",
-									   "assets/textures/test_texture.bmp");
+									   "assets/textures/test_texture_small.bmp");
 		// data.objects[1] = l3d_read_obj("assets/models/turn_right/turn_right_wall.obj",
 		// 							   "assets/textures/test_texture_small.bmp");
 		// data.objects[2] = l3d_read_obj("assets/models/turn_right/turn_right_ceiling.obj",
@@ -83,7 +83,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 							app->window->width / 1.0);
 		l3d_3d_object_rotate(data.objects[i], 0, 0, 0);
 		l3d_3d_object_translate(data.objects[i],
-			0, PLAYER_HEIGHT * 1.5, 0);
+			0, PLAYER_HEIGHT * 1, 0);
 		}
 	}
 	app->active_scene = new_scene(&data);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 17:10:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/27 17:24:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 13:35:02 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@ t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 		return (false);
 	ml_vector3_sub(triangle->center, app->active_scene->main_camera->origin, dir);
 	if (!is_triangle_facing(triangle, dir))
-	{
 		return (false);
-	}
 	return (true);
 }
 

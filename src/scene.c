@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/30 16:57:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 14:13:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,24 +54,8 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		// data.objects[0] = l3d_read_obj("assets/icosphere_massive.obj",
-		// 				"assets/IcosphereUV_large.bmp");
-		// data.objects[0] = l3d_read_obj("assets/models/corners/corner_ceiling.obj",
-		// 							   "assets/textures/test_texture_small.bmp");
-		// data.objects[1] = l3d_read_obj("assets/models/corners/corner_walls.obj",
-		// 							   "assets/textures/test_texture_small.bmp");
-		// data.objects[2] = l3d_read_obj("assets/models/corners/corner_floor.obj",
-		// 							   "assets/textures/test_texture_small.bmp");
 		data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_test.obj",
 									   "assets/textures/test_texture_small.bmp");
-		// data.objects[1] = l3d_read_obj("assets/models/turn_right/turn_right_wall.obj",
-		// 							   "assets/textures/test_texture_small.bmp");
-		// data.objects[2] = l3d_read_obj("assets/models/turn_right/turn_right_ceiling.obj",
-		// 							   "assets/textures/test_texture_small.bmp");
-		// data.objects[3] = l3d_read_obj("assets/models/corner_bot_right/corner_bot_right_ceiling.obj",
-		// 							   "assets/level0/brick_512.bmp");
-		// data.objects[3] = l3d_read_obj("assets/level0/maze00.obj",
-		// 							   "assets/level0/brick_512.bmp");
 		data.num_objects = 1;
 		int i = -1;
 		// data.objects[0]->material->texture = 

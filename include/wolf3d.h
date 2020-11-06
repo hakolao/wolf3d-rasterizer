@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 13:32:10 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 13:54:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
-# define NUM_THREADS 6
+# define NUM_THREADS 4
 
 /*
 **	The view scale will scale the camera and raycasting in relation to the

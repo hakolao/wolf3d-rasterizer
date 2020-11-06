@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 16:32:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 17:06:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,14 +139,13 @@ static void		l3d_delete_hit(void *hit, size_t size)
 	(void)size;
 	if (hit != NULL)
 		free(hit);
-	hit = NULL;
 }
 
-void			l3d_delete_hits(t_hits *hits)
+void			l3d_delete_hits(t_hits **hits)
 {
-	if (hits == NULL)
+	if (*hits == NULL)
 	 	return ;
-	ft_lstdel(&hits, l3d_delete_hit);
+	ft_lstdel(hits, l3d_delete_hit);
 }
 
 /*

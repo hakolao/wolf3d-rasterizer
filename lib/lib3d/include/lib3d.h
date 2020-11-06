@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 16:52:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 17:08:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ typedef struct				s_triangle
 	t_vertex		*ordered_vtc[3];
 	t_material		*material;
 	t_vec2			points_2d[3];
-	float			vtc_distance[3];
+	float			vtc_distance[3];	
 }							t_triangle;
 
 /*
@@ -245,7 +245,7 @@ void						l3d_bounding_box_hit_record_set(float t,
 								t_ray *ray, t_hits **hits);
 t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point);
-void						l3d_delete_hits(t_hits *hits);
+void						l3d_delete_hits(t_hits **hits);
 
 /*
 ** Triangle vector

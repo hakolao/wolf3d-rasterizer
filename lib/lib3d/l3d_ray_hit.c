@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 19:07:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 15:52:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 ** https://tavianator.com/2011/ray_box.html
 */
 
-t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hit *hit)
+t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hits **hits)
 {
 	float	t[9];
 
@@ -36,7 +36,7 @@ t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hit *hit)
 		l3d_fmax(t[5], t[6]));
 	if (t[8] < 0 || t[7] > t[8])
 		return (false);
-	l3d_bounding_box_hit_record_set(t[7], ray, hit);
+	l3d_bounding_box_hit_record_set(t[7], ray, hits);
 	return (true);
 }
 
@@ -47,7 +47,7 @@ t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hit *hit)
 */
 
 static t_bool	l3d_determine_triangle_hit(t_vec3 hsq[3],
-				t_triangle *triangle, t_ray *ray, t_hit *hit)
+				t_triangle *triangle, t_ray *ray, t_hits **hits)
 {
 	float	afuvt[5];
 
@@ -66,7 +66,7 @@ static t_bool	l3d_determine_triangle_hit(t_vec3 hsq[3],
 	afuvt[4] = afuvt[1] * ml_vector3_dot(triangle->ac, hsq[2]);
 	if (afuvt[4] > L3D_EPSILON)
 	{
-		l3d_triangle_hit_record_set(afuvt, ray, triangle, hit);
+		l3d_triangle_hit_record_set(afuvt, ray, triangle, hits);
 		return (true);
 	}
 	return (false);
@@ -80,7 +80,7 @@ static t_bool	l3d_determine_triangle_hit(t_vec3 hsq[3],
 */
 
 t_bool			l3d_triangle_ray_hit(t_triangle *triangle, t_ray *ray,
-				t_hit *hit)
+				t_hits **hits)
 {
 	t_vec3	hsq[3];
 
@@ -88,7 +88,7 @@ t_bool			l3d_triangle_ray_hit(t_triangle *triangle, t_ray *ray,
 		triangle->is_single_sided)
 		return (false);
 	ml_vector3_cross(ray->dir, triangle->ac, hsq[0]);
-	return (l3d_determine_triangle_hit(hsq, triangle, ray, hit));
+	return (l3d_determine_triangle_hit(hsq, triangle, ray, hits));
 }
 
 /*
@@ -100,7 +100,7 @@ t_bool			l3d_triangle_ray_hit(t_triangle *triangle, t_ray *ray,
 */
 
 static t_bool	l3d_kd_triangles_hit(t_kd_node *node, t_ray *ray,
-					t_hit *hit)
+					t_hits **hits)
 {
 	t_bool	hit_triangle;
 	int		i;
@@ -109,10 +109,44 @@ static t_bool	l3d_kd_triangles_hit(t_kd_node *node, t_ray *ray,
 	i = -1;
 	while (++i < (int)node->triangles->size)
 	{
-		if (l3d_triangle_ray_hit(node->triangles->triangles[i], ray, hit))
+		if (l3d_triangle_ray_hit(node->triangles->triangles[i], ray, hits))
 			hit_triangle = true;
 	}
 	return (hit_triangle);
+}
+
+static t_bool	l3d_kd_tree_ray_hit_recursive(t_kd_node *node, t_ray *ray,
+					t_hits **hits)
+{
+	t_bool	hits_right;
+	t_bool	hits_left;
+
+	if (l3d_bounding_box_ray_hit(&node->bounding_box, ray, hits))
+	{
+		if (node->left || node->right)
+		{
+			hits_left = l3d_kd_tree_ray_hit_recursive(node->left, ray, hits);
+			hits_right = l3d_kd_tree_ray_hit_recursive(node->right, ray, hits);
+			return (hits_left || hits_right);
+		}
+		return (l3d_kd_triangles_hit(node, ray, hits));
+	}
+	return (false);
+}
+
+static void		l3d_delete_hit(void *hit, size_t size)
+{
+	(void)size;
+	if (hit != NULL)
+		free(hit);
+	hit = NULL;
+}
+
+void			l3d_delete_hits(t_hits *hits)
+{
+	if (hits == NULL)
+	 	return ;
+	ft_lstdel(&hits, l3d_delete_hit);
 }
 
 /*
@@ -122,22 +156,12 @@ static t_bool	l3d_kd_triangles_hit(t_kd_node *node, t_ray *ray,
 */
 
 t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
-					t_hit *hit)
+					t_hits **hits)
 {
-	t_bool	hits_right;
-	t_bool	hits_left;
-
-	if (l3d_bounding_box_ray_hit(&node->bounding_box, ray, hit))
-	{
-		if (node->left || node->right)
-		{
-			hits_left = l3d_kd_tree_ray_hit(node->left, ray, hit);
-			hits_right = l3d_kd_tree_ray_hit(node->right, ray, hit);
-			return (hits_left || hits_right);
-		}
-		return (l3d_kd_triangles_hit(node, ray, hit));
-	}
-	return (false);
+	*hits = NULL;
+	if (!l3d_kd_tree_ray_hit_recursive(node, ray, hits))
+		return (false);
+	return (true);
 }
 
 /*

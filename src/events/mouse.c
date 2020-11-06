@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 14:07:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 15:49:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,45 @@ static void				draw_object_hit(t_hit *hit)
 	hit->triangle->material->texture[index] = 0xFFFFFFFF;
 }
 
+void					determine_closest_triangle_hit(t_hits *hits,
+														t_hit **closest)
+{
+	t_hits	*head;
+	t_hit	*hit;
+
+	head = hits;
+	*closest = (t_hit*)head->content;
+	if (!*closest)
+		return ;
+	while (head->next)
+	{
+		hit = (t_hit*)head->content;
+		if (hit && hit->triangle != NULL && hit->t < (*closest)->t)
+			*closest = hit;
+		head = head->next;
+	}
+	if (!(*closest)->triangle)
+		*closest = NULL;
+}
+
 void					mouse_state_handle(t_wolf3d *app)
 {
 	t_ray	ray;
-	t_hit	hit;
+	t_hits	*hits;
+	t_hit	*closest_triangle_hit;
 
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
 		if ((SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_LMASK))
 		{
+			hits = NULL;
 			l3d_ray_set(app->player.forward, app->player.pos, &ray);
-			if (l3d_kd_tree_ray_hit(app->active_scene->bullet_tree->root, &ray, &hit))
+			if (l3d_kd_tree_ray_hit(app->active_scene->bullet_tree->root, &ray, &hits))
 			{
-				if (hit.triangle->material->texture)
-					draw_object_hit(&hit);
+				determine_closest_triangle_hit(hits, &closest_triangle_hit);
+				if (closest_triangle_hit != NULL)
+					draw_object_hit(closest_triangle_hit);
+				l3d_delete_hits(hits);	
 			}
 		}
 	}

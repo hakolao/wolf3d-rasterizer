@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/02 18:14:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 15:34:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ typedef struct				s_hit
 	t_vec3			hit_point;
 	t_triangle		*triangle;
 }							t_hit;
+
+typedef t_list				t_hits;
 
 /*
 ** Bounding box AAABBB. Minimum and maximum coordinates are used in
@@ -230,19 +232,20 @@ void						l3d_kd_tree_print(t_kd_tree *tree);
 */
 
 t_bool						l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
-								t_hit *hit);
+								t_hits **hits);
 t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
-								t_ray *ray, t_hit *hit);
+								t_ray *ray, t_hits **hits);
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
-								t_ray *ray, t_hit *hit);
+								t_ray *ray, t_hits **hits);
 void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
 void						l3d_triangle_hit_record_set(float afuvt[5],
 								t_ray *ray,
-								t_triangle *triangle, t_hit *hit);
+								t_triangle *triangle, t_hits **hits);
 void						l3d_bounding_box_hit_record_set(float t,
-								t_ray *ray, t_hit *hit);
+								t_ray *ray, t_hits **hits);
 t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point);
+void						l3d_delete_hits(t_hits *hits);
 
 /*
 ** Triangle vector

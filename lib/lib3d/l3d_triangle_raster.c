@@ -66,36 +66,33 @@ void			clamp_uv(t_vec2 uv)
 		uv[1] = 0.0;
 }
 
-static uint32_t	calculate_z_val(float baryc[3], t_triangle *triangle)
+static float	calculate_z_val(float baryc[3], t_triangle *triangle)
 {
-	// return ((baryc[0] * triangle->vtc_distance[0] +
-	// 		baryc[1] * triangle->vtc_distance[1] +
-	// 		baryc[2] * triangle->vtc_distance[2]));
-	return ((baryc[0] * triangle->vtc_distance[0] +
-			baryc[1] * triangle->vtc_distance[1] +
-			baryc[2] * triangle->vtc_distance[2]));
+	return (((baryc[0] * triangle->vtc_zvalue[0] +
+			baryc[1] * triangle->vtc_zvalue[1] +
+			baryc[2] * triangle->vtc_zvalue[2])));
 }
 
-static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
+static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 							int xy[2], t_triangle *triangle)
 {
-	uint32_t	zpixel;
+	float		zpixel;
 	float		baryc[3];
 	t_vec2		uv;
 	int32_t		offset_xy[2];
-	int32_t		z_val;
+	float		z_val;
 	
 	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
 	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	zpixel = l3d_pixel_get(buffers[1], dimensionswh, offset_xy);
+	zpixel = l3d_pixel_get_float(buffers->zbuffer, dimensionswh, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
-	if ((int32_t)zpixel >= z_val)
+	if (z_val <= zpixel)
 	{
 		
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
-		l3d_pixel_plot(buffers[0],
+		l3d_pixel_plot(buffers->framebuffer,
 			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 			offset_xy, l3d_sample_texture(triangle->material->texture,
 					(int[2]){triangle->material->width,
@@ -103,7 +100,7 @@ static void		draw_pixel(uint32_t *buffers[2], uint32_t *dimensionswh,
 	}
 }
 
-static void		scan_line(uint32_t *buffers[2], uint32_t *dimensionswh,
+static void		scan_line(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 							float *limits, t_triangle *triangle)
 {
 	int			x;
@@ -127,25 +124,25 @@ static void		scan_line(uint32_t *buffers[2], uint32_t *dimensionswh,
 	}
 }
 
-static void		draw_zpixel(uint32_t *zbuffer, uint32_t *dimensionswh,
+static void		draw_zpixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 							int xy[2], t_triangle *triangle)
 {
-	uint32_t	pixel;
+	float		pixel;
 	float		baryc[3];
 	int32_t		offset_xy[2];
-	int32_t		z_val;
+	float		z_val;
 
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
 	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
 	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
-	pixel = l3d_pixel_get(zbuffer, dimensionswh, offset_xy);
+	pixel = l3d_pixel_get_float(buffers->zbuffer, dimensionswh, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
-	if ((int32_t)pixel >= z_val)
-		l3d_pixel_plot(zbuffer, (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+	if (z_val <= pixel)
+		l3d_pixel_plot_float(buffers->zbuffer, (uint32_t[2]){dimensionswh[0], dimensionswh[1]},
 			offset_xy, z_val);
 }
 
-static void		scan_z_line(uint32_t *zbuffer, uint32_t *dimensionswh,
+static void		scan_z_line(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 							float *limits, t_triangle *triangle)
 {
 	int			x;
@@ -164,12 +161,12 @@ static void		scan_z_line(uint32_t *zbuffer, uint32_t *dimensionswh,
 		}
 		else if (x > (int)dimensionswh[0] * 0.5)
 			break;
-		draw_zpixel(zbuffer, dimensionswh, (int32_t[2]){x, y}, triangle);
+		draw_zpixel(buffers, dimensionswh, (int32_t[2]){x, y}, triangle);
 		x++;
 	}
 }
 
-static void		raster_upper(uint32_t *bufs[2], uint32_t *dims,
+static void		raster_upper(t_l3d_buffers *bufs, uint32_t *dims,
 							t_triangle *tri, t_raster_data *data)
 {
 	float	x;
@@ -198,15 +195,15 @@ static void		raster_upper(uint32_t *bufs[2], uint32_t *dims,
 		else
 		{
 			if (x < end_x)
-				scan_z_line(bufs[1], dims, (float[3]){x, end_x + 1, y}, tri);
+				scan_z_line(bufs, dims, (float[3]){x, end_x + 1, y}, tri);
 			else if (x > end_x)
-				scan_z_line(bufs[1], dims, (float[3]){end_x, x + 1, y}, tri);
+				scan_z_line(bufs, dims, (float[3]){end_x, x + 1, y}, tri);
 		}
 		y++;
 	}
 }
 
-static void		raster_lower(uint32_t *bufs[2], uint32_t *dims,
+static void		raster_lower(t_l3d_buffers *bufs, uint32_t *dims,
 							t_triangle *tri, t_raster_data *data)
 {
 	float	x;
@@ -235,15 +232,15 @@ static void		raster_lower(uint32_t *bufs[2], uint32_t *dims,
 		else
 		{
 			if (x < end_x)
-				scan_z_line(bufs[1], dims, (float[3]){x, end_x + 1, y}, tri);
+				scan_z_line(bufs, dims, (float[3]){x, end_x + 1, y}, tri);
 			else if (x > end_x)
-				scan_z_line(bufs[1], dims, (float[3]){end_x, x + 1, y}, tri);
+				scan_z_line(bufs, dims, (float[3]){end_x, x + 1, y}, tri);
 		}
 		y++;
 	}
 }
 
-void			l3d_triangle_set_zbuffer(uint32_t *buffers[2], uint32_t *dimensions,
+void			l3d_triangle_set_zbuffer(t_l3d_buffers *buffers, uint32_t *dimensions,
 									t_triangle *triangle)
 {
 	t_raster_data	data;
@@ -265,7 +262,7 @@ void			l3d_triangle_set_zbuffer(uint32_t *buffers[2], uint32_t *dimensions,
 	raster_lower(buffers, dimensions, triangle, &data);
 }
 
-void			l3d_triangle_raster(uint32_t *buffers[2], uint32_t *dimensions,
+void			l3d_triangle_raster(t_l3d_buffers *buffers, uint32_t *dimensions,
 									t_triangle *triangle)
 {
 	t_raster_data	data;

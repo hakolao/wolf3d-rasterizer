@@ -77,22 +77,18 @@ void			window_frame_recreate(t_window *window)
 	error_check(window->frame == NULL, SDL_GetError());
 	if (window->buffers != NULL)
 	{
-		free(window->buffers->barybuffer);
 		free(window->buffers->framebuffer);
 		free(window->buffers->zbuffer);
 		free(window->buffers);
 	}
-	error_check(!(window->buffers = malloc(sizeof(t_wolf3d_buffers))),
+	error_check(!(window->buffers = malloc(sizeof(t_l3d_buffers))),
 		"Failed to malloc wolf3d buffers struct");
-	error_check(!(window->buffers->framebuffer = malloc(sizeof(uint32_t) *
+	error_check(!(window->buffers->framebuffer = (uint32_t*)malloc(sizeof(uint32_t) *
 		window->width * window->height)),
 		"Failed to malloc framebuffer in resize");
-	error_check(!(window->buffers->zbuffer = malloc(sizeof(uint32_t) *
+	error_check(!(window->buffers->zbuffer = (float*)malloc(sizeof(float) *
 		window->width * window->height)),
 		"Failed to malloc zbuffer in resize");
-	error_check(!(window->buffers->barybuffer = malloc(sizeof(t_vec3) *
-		window->width * window->height)),
-		"Failed to malloc barybuffer in resize");
 	if (window->main_font != NULL)
 		TTF_CloseFont(window->main_font);
 	window->main_font = TTF_OpenFont(GAME_FONT, FONT_SIZE);

@@ -71,6 +71,7 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 	thread_pool_destroy(app->thread_pool);
 	free(app->window->buffers->framebuffer);
 	free(app->window->buffers->zbuffer);
+	free(app->window->buffers);
 	destroy_scene(app->active_scene);
 	SDL_DestroyRenderer(app->window->renderer);
 	SDL_DestroyWindow(app->window->window);

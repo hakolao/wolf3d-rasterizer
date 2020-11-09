@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/03 15:07:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:26:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,34 @@ typedef struct						s_keyboard
 	const uint8_t		*state;
 }									t_keyboard;
 
+typedef struct						s_button
+{
+	uint32_t				id;
+	t_vec2					pos;
+	uint32_t				width;
+	uint32_t				height;
+	t_surface				*texture;
+	t_surface				*texture_down;
+	t_bool					is_down;
+	t_bool					is_hovered;
+	void					(*on_click)(void *);
+	void					(*on_hover)(void *);
+	void					*on_click_params;
+	void					*on_hover_params;
+	t_window				*window;
+}									t_button;
+
+typedef struct						s_button_group
+{
+	t_vec2					pos;
+	t_button				**buttons;
+	uint32_t				num_buttons;
+	uint32_t				space_between;
+	t_bool					is_horizontal;
+	t_bool					is_selector;
+	uint32_t				selected_index;
+}									t_button_group;
+
 /*
 ** Window
 */
@@ -103,5 +131,41 @@ void						window_text_render_centered(t_window *window,
 void						window_fps_draw(t_window *window,
 								uint32_t fps, uint64_t delta_time);
 uint32_t					window_framerate_capture(uint32_t time_since_start);
+
+/*
+** Buttons
+*/
+void						button_group_destroy(t_button_group *button_group);
+void						button_group_update_position(
+								t_button_group *button_group,
+								t_vec2 pos);
+void						button_group_set_horizontal(
+								t_button_group *button_group);
+t_button_group				*button_group_create(t_button **buttons,
+								uint32_t num_buttons);
+void						button_destroy(t_button *button);
+void						button_update_position(t_button *button,
+								t_vec2 pos);
+void						button_set_handles(t_button *button,
+								void (*on_click)(void *),
+								void (*on_hover)(void *));
+void						button_set_texture(t_button *button,
+								t_surface *texture,
+								t_surface *texture_down);
+t_button					*button_create(t_window *window, uint32_t id);
+void						button_set_handle_params(t_button *button,
+								void *on_click_params,
+								void *on_hover_params);
+void						button_render(t_button *button);
+void						button_group_render(t_button_group *button_group);
+void						button_group_set_space_between(
+								t_button_group *button_group,
+								int32_t space_between);
+void						button_group_events_handle(t_button_group *button_group,
+								t_mouse mouse, SDL_Event event);
+void						button_events_handle(t_button *button,
+								t_mouse mouse, SDL_Event event);
+void						button_group_set_selector(t_button_group *button_group,
+								int32_t	selected_index);
 
 #endif

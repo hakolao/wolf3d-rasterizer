@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 18:59:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:36:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ typedef struct						s_map_editor
 	t_mouse					mouse;
 	t_keyboard				keyboard;
 	t_thread_pool			*thread_pool;
+	t_button_group			*select_menu;
 }									t_map_editor;
 
 /*
@@ -239,6 +240,6 @@ void						wolf3d_debug_info_capture(t_wolf3d *app);
 ** Map Editor
 */
 
-int							map_editor_main(void);
+void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
 
 #endif

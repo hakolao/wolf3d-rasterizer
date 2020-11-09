@@ -45,7 +45,13 @@ MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			window/ui.c \
 			window/text.c \
 			window/window.c \
-			window/utils.c	
+			window/utils.c	\
+			window/buttons/button_events.c \
+			window/buttons/button_group_utils.c \
+			window/buttons/button_group.c \
+			window/buttons/button_utils.c \
+			window/buttons/button.c
+			
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
 MAP_EDITOR_OBJS = $(addprefix $(DIR_OBJ)/,$(MAP_EDITOR_SOURCES:.c=.o))
@@ -75,6 +81,7 @@ $(MAP_EDITOR_NAME): $(MAP_EDITOR_OBJS)
 $(DIR_OBJ):
 	@mkdir -p temp
 	@mkdir -p temp/window
+	@mkdir -p temp/window/buttons
 	@mkdir -p temp/render
 	@mkdir -p temp/events
 	@mkdir -p temp/map_editor
@@ -95,6 +102,7 @@ fclean: clean
 	@make -C $(LIB3D) fclean
 	@make -C $(LIBGMATRIX) fclean
 	@/bin/rm -f $(NAME)
+	@/bin/rm -f $(MAP_EDITOR_NAME)
 
 re: fclean all
 

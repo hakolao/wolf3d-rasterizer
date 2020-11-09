@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 14:59:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/14 18:09:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:00:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int main(void)
 {
 	t_wolf3d	app;
-	
+
 	wolf3d_run(&app);
 	return (EXIT_SUCCESS);
 }

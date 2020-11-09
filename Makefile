@@ -40,8 +40,15 @@ SOURCES = main.c \
 			events/mouse.c \
 			events/keyboard.c \
 
-SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
+MAP_EDITOR_NAME = wolf3d_editor
+MAP_EDITOR_SOURCES = map_editor/map_editor.c \
+			window/ui.c \
+			window/text.c \
+			window/window.c \
+			window/utils.c	
+
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
+MAP_EDITOR_OBJS = $(addprefix $(DIR_OBJ)/,$(MAP_EDITOR_SOURCES:.c=.o))
 
 all: $(DIR_OBJ) $(NAME)
 
@@ -54,11 +61,23 @@ $(NAME): $(OBJS)
 	$(CC) $(FLAGS) $(LIBS) -o $@ $^
 	@printf "\033[32;1mDone. Run: ./$(NAME)\n\033[0m"
 
+map_editor: $(DIR_OBJ) $(MAP_EDITOR_NAME)
+
+$(MAP_EDITOR_NAME): $(MAP_EDITOR_OBJS)
+	@printf "\033[32;1mCompiling libs...\n\033[0m"
+	make -C $(LIBFT)
+	make -C $(LIB3D)
+	make -C $(LIBGMATRIX)
+	@printf "\033[32;1mCompiling map_editor...\n\033[0m"
+	$(CC) $(FLAGS) $(LIBS) -o $@ $^
+	@printf "\033[32;1mDone. Run: ./$(MAP_EDITOR_NAME)\n\033[0m"
+
 $(DIR_OBJ):
 	@mkdir -p temp
 	@mkdir -p temp/window
 	@mkdir -p temp/render
 	@mkdir -p temp/events
+	@mkdir -p temp/map_editor
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INCLUDES) -c -o $@ $<
@@ -68,6 +87,7 @@ clean:
 	@make -C $(LIB3D) clean
 	@make -C $(LIBGMATRIX) clean
 	@/bin/rm -f $(OBJS)
+	@/bin/rm -f $(MAP_EDITOR_OBJS)
 	@/bin/rm -rf $(DIR_OBJ)
 
 fclean: clean

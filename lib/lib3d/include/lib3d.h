@@ -93,7 +93,7 @@ typedef struct				s_triangle
 	t_vertex		*ordered_vtc[3];
 	t_material		*material;
 	t_vec2			points_2d[3];
-	float			vtc_distance[3];	
+	float			vtc_zvalue[3];	
 }							t_triangle;
 
 typedef struct			s_l3d_buffers

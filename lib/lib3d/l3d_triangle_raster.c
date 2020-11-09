@@ -68,9 +68,9 @@ void			clamp_uv(t_vec2 uv)
 
 static float	calculate_z_val(float baryc[3], t_triangle *triangle)
 {
-	return (((baryc[0] * triangle->vtc_distance[0] +
-			baryc[1] * triangle->vtc_distance[1] +
-			baryc[2] * triangle->vtc_distance[2])));
+	return (((baryc[0] * triangle->vtc_zvalue[0] +
+			baryc[1] * triangle->vtc_zvalue[1] +
+			baryc[2] * triangle->vtc_zvalue[2])));
 }
 
 static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,

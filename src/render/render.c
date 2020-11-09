@@ -16,14 +16,11 @@
 ** Why? cos why not...
 */
 
-static void		update_triangle_vertex_distances(t_triangle *triangle)
+static void		update_triangle_vertex_zvalues(t_triangle *triangle)
 {
-	// triangle->vtc_distance[0] = 1 / ml_vector3_mag(triangle->vtc[0]->pos);
-	// triangle->vtc_distance[1] = 1 / ml_vector3_mag(triangle->vtc[1]->pos);
-	// triangle->vtc_distance[2] = 1 / ml_vector3_mag(triangle->vtc[2]->pos);
-	triangle->vtc_distance[0] = 1 / triangle->vtc[0]->pos[2];
-	triangle->vtc_distance[1] = 1 / triangle->vtc[1]->pos[2];
-	triangle->vtc_distance[2] = 1 / triangle->vtc[2]->pos[2];
+	triangle->vtc_zvalue[0] = 1 / triangle->vtc[0]->pos[2];
+	triangle->vtc_zvalue[1] = 1 / triangle->vtc[1]->pos[2];
+	triangle->vtc_zvalue[2] = 1 / triangle->vtc[2]->pos[2];
 }
 
 /*
@@ -56,21 +53,21 @@ static void		render_triangle(t_wolf3d *app,
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[1]);
-		update_triangle_vertex_distances(&clipped_triangles[0]);
-		update_triangle_vertex_distances(&clipped_triangles[1]);
+		update_triangle_vertex_zvalues(&clipped_triangles[0]);
+		update_triangle_vertex_zvalues(&clipped_triangles[1]);
 		render_f(app->window->buffers, dimensions, &clipped_triangles[0]);
 		render_f(app->window->buffers, dimensions, &clipped_triangles[1]);
 	}
 	else if (test_clip ==1)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
-		update_triangle_vertex_distances(&clipped_triangles[0]);
+		update_triangle_vertex_zvalues(&clipped_triangles[0]);
 		render_f(app->window->buffers, dimensions, &clipped_triangles[0]);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
-		update_triangle_vertex_distances(triangle);
+		update_triangle_vertex_zvalues(triangle);
 		render_f(app->window->buffers, dimensions, triangle);
 	}
 }

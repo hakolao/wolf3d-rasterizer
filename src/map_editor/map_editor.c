@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:34:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:56:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static void		main_loop(t_map_editor *app)
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
+			button_group_events_handle(app->select_menu, app->mouse, event);
 		}
 		if (app->window->resized)
 			resize_dependent_recreate(app);
@@ -69,6 +70,7 @@ int				main(void)
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
 	window_create(&app.window);
+	map_editor_menu_create(&app);
 	main_loop(&app);
 	cleanup(&app);
 	return (EXIT_SUCCESS);

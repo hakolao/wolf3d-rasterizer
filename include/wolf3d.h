@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:36:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:52:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,5 +241,6 @@ void						wolf3d_debug_info_capture(t_wolf3d *app);
 */
 
 void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
+void						map_editor_menu_create(t_map_editor *app);
 
 #endif

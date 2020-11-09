@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/17 13:09:18 by ohakola           #+#    #+#              #
-#    Updated: 2020/11/03 15:50:53 by ohakola          ###   ########.fr        #
+#    Updated: 2020/11/09 19:42:16 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,9 @@ SOURCES = ml_matrix4_id.c \
 			ml_vector2_mag.c \
 			ml_vector2_sub.c \
 			ml_vector2_normalize.c \
+			ml_vector2_mul.c \
+			ml_vector2_dot.c \
+			ml_vector2_add.c \
 			ml_matrix4_translation.c \
 			ml_matrix4_copy.c
 

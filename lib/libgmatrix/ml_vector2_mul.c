@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   ml_vector2_mul.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:08:05 by ohakola          ###   ########.fr       */
+/*   Created: 2020/10/12 16:47:53 by ohakola           #+#    #+#             */
+/*   Updated: 2020/10/12 16:48:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
+#include "libgmatrix.h"
 
-/*
-** Vector
-*/
+void		ml_vector2_mul(t_vec2 v1, float k, t_vec2 res)
+{
+	size_t		i;
 
-/*
-** Matrix
-*/
-
-#endif
+	i = -1;
+	while (++i < 2)
+		res[i] = v1[i] * k;
+}

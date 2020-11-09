@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 13:11:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/09 13:51:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:40:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ void				ml_vector2_print(t_vec2 v);
 float				ml_vector2_mag(t_vec2 v);
 void				ml_vector2_sub(t_vec2 v1, t_vec2 v2, t_vec2 res);
 void				ml_vector2_normalize(t_vec2 v, t_vec2 res);
+void				ml_vector2_mul(t_vec2 v1, float k, t_vec2 res);
+float				ml_vector2_dot(t_vec2 v1, t_vec2 v2);
+void				ml_vector2_add(t_vec2 v1, t_vec2 v2, t_vec2 res);
 
 void				ml_vector3_add(t_vec3 v1, t_vec3 v2, t_vec3 res);
 void				ml_vector3_sub(t_vec3 v1, t_vec3 v2, t_vec3 res);
@@ -85,12 +88,12 @@ void				ml_matrix4_lookat(t_vec3 eye, t_vec3 center, t_vec3 up,
 					t_mat4 res);
 void				ml_matrix4_fps(t_vec3 eye, float pitch, float yaw,
 					t_mat4 res);
-void				ml_matrix4_general_rotation(t_vec3 axis, float rad_angle,
-						t_mat4 res);
 void				ml_matrix4_rotation_x(float rad, t_mat4 res);
 void				ml_matrix4_rotation_y(float rad, t_mat4 res);
 void				ml_matrix4_rotation_z(float rad, t_mat4 res);
 void				ml_matrix4_rotation(float rad_x, float rad_y, float rad_z,
+					t_mat4 res);
+void				ml_matrix4_general_rotation(t_vec3 axis, float rad_angle,
 					t_mat4 res);
 void				ml_matrix4_rotate_x(t_mat4 m, float rad, t_mat4 res);
 void				ml_matrix4_rotate_y(t_mat4 m, float rad, t_mat4 res);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 19:27:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:33:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:52:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void			on_menu_button_hover(void *params)
 	(void)params;
 }
 
-void				pixel_physics_menu_create(t_map_editor *app)
+void				map_editor_menu_create(t_map_editor *app)
 {
 	int32_t		i;
 	const char	*options[3];
@@ -47,7 +47,7 @@ void				pixel_physics_menu_create(t_map_editor *app)
 	t_surface	**down_surfaces;
 	SDL_Surface	*tmp_surface;
 
-	num_buttons = 4;
+	num_buttons = 3;
 	options[0] = "Floor";
 	options[1] = "Wall";
 	options[2] = "Enemy";
@@ -62,12 +62,12 @@ void				pixel_physics_menu_create(t_map_editor *app)
 	{
 		tmp_surface = surface_from_font(app->window,
 			(t_text_params){.text = options[i], .blend_ratio = 1.0,
-			.text_color = (SDL_Color){255, 0, 0, 255}});
+			.text_color = (SDL_Color){255, 0, 0, 255}}, app->window->main_font);
 		surfaces[i] = convert_sdl_surface_to_t_surface(tmp_surface);
 		SDL_FreeSurface(tmp_surface);
 		tmp_surface = surface_from_font(app->window,
 			(t_text_params){.text = options[i], .blend_ratio = 1.0,
-			.text_color = (SDL_Color){255, 255, 255, 255}});
+			.text_color = (SDL_Color){255, 255, 255, 255}},  app->window->main_font);
 		down_surfaces[i] = convert_sdl_surface_to_t_surface(tmp_surface);
 		SDL_FreeSurface(tmp_surface);
 		buttons[i] = button_create(app->window, i);
@@ -75,8 +75,6 @@ void				pixel_physics_menu_create(t_map_editor *app)
 		button_set_handles(buttons[i],
 			on_menu_button_click, on_menu_button_hover);
 		button_set_handle_params(buttons[i], app, app);
-		SDL_FreeSurface(surfaces[i]);
-		SDL_FreeSurface(down_surfaces[i]);
 	}
 	app->select_menu = button_group_create(buttons, num_buttons);
 	button_group_set_space_between(app->select_menu, 5);

@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   ml_vector2_dot.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 19:23:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 02:08:05 by ohakola          ###   ########.fr       */
+/*   Created: 2020/10/12 16:59:02 by ohakola           #+#    #+#             */
+/*   Updated: 2020/10/12 16:59:24 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
+#include "libgmatrix.h"
 
-/*
-** Vector
-*/
+float		ml_vector2_dot(t_vec2 v1, t_vec2 v2)
+{
+	size_t		i;
+	float		res;
 
-/*
-** Matrix
-*/
-
-#endif
+	i = -1;
+	res = 0;
+	while (++i < 2)
+		res += v1[i] * v2[i];
+	return (res);
+}

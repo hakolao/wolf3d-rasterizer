@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:26:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:46:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,8 @@ void						window_text_render(t_window *window,
 								t_text_params params, TTF_Font *font);
 void						window_text_render_centered(t_window *window,
 								t_text_params params, TTF_Font *font);
-
+SDL_Surface					*surface_from_font(t_window *window, t_text_params params,
+								TTF_Font *font);
 /*
 ** Utils
 */

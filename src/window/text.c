@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/03 14:04:30 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/03 15:09:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/09 19:50:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static SDL_Surface	*text_surface(t_window *window, t_text_params params,
+SDL_Surface			*surface_from_font(t_window *window, t_text_params params,
 						TTF_Font *font)
 {
 	SDL_Surface		*text_surface;
@@ -33,7 +33,7 @@ void				window_text_render(t_window *window,
 {
 	SDL_Surface	*surface;
 
-	surface = text_surface(window, params, font);
+	surface = surface_from_font(window, params, font);
 	l3d_framebuffer_image_place(&(t_surface){.h = window->height,
 		.w = window->width,
 		.pixels = window->buffers->framebuffer},
@@ -48,7 +48,7 @@ void				window_text_render_centered(t_window *window,
 {
 	SDL_Surface	*surface;
 
-	surface = text_surface(window, params, font);
+	surface = surface_from_font(window, params, font);
 	l3d_framebuffer_image_place(&(t_surface){.h = window->height,
 		.w = window->width,
 		.pixels = window->buffers->framebuffer},

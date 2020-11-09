@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 14:07:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 17:27:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,58 +18,50 @@ void					mouse_state_set(t_wolf3d *app)
 	app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 }
 
-static void				interpolate_uv(t_triangle *triangle, float *baryc,
-									t_vec2 uv)
+void					determine_closest_triangle_hit(t_hits *hits,
+														t_hit **closest)
 {
-	uv[0] = (baryc[0] * triangle->uvs[0][0] +
-		baryc[1] * triangle->uvs[1][0] +
-		baryc[2] * triangle->uvs[2][0]) /
-			(baryc[0] +
-			baryc[1] +
-			baryc[2]);
-	uv[1] = 1 - (baryc[0] * triangle->uvs[0][1] +
-		baryc[1] * triangle->uvs[1][1] +
-		baryc[2] * triangle->uvs[2][1]) /
-			(baryc[0] * 1 +
-			baryc[1] * 1 +
-			baryc[2] * 1);
-}
+	t_hits	*head;
+	t_hit	*hit;
 
-static void				draw_object_hit(t_hit *hit)
-{
-	t_vec2 	points2d[3];
-	float 	uv[2];
-	float	barycoords[3];
-	int32_t	index;
-
-	ml_vector2_copy(hit->triangle->vtc[0]->pos, points2d[0]);
-	ml_vector2_copy(hit->triangle->vtc[1]->pos, points2d[1]);
-	ml_vector2_copy(hit->triangle->vtc[2]->pos, points2d[2]);
-	l3d_calculate_barycoords(points2d, hit->hit_point, barycoords);
-	interpolate_uv(hit->triangle, barycoords, uv);
-	index = (int32_t)(uv[1] * hit->triangle->material->height) *
-		hit->triangle->material->width +
-		(int32_t)(uv[0] * hit->triangle->material->width);
-	if (index < 0 || index >= (int32_t)hit->triangle->material->width *
-		(int32_t)hit->triangle->material->height)
-		return ;
-	hit->triangle->material->texture[index] = 0xFFFFFFFF;
+	head = hits;
+	*closest = NULL;
+	while (head->next)
+	{
+		hit = (t_hit*)head->content;
+		if (*closest == NULL && hit != NULL && hit->t > 0.0 && hit->triangle)
+			*closest = hit;
+		if (hit != NULL && hit->triangle != NULL && hit->t > 0.0 &&
+			hit->t <= (*closest)->t)
+			*closest = hit;
+		head = head->next;
+	}
+	if (*closest && !(*closest)->triangle)
+		*closest = NULL;
 }
 
 void					mouse_state_handle(t_wolf3d *app)
 {
 	t_ray	ray;
-	t_hit	hit;
+	t_vec3	origin;
+	t_vec3	add;
+	t_hits	*hits;
+	t_hit	*closest_triangle_hit;
 
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
 		if ((SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_LMASK))
 		{
-			l3d_ray_set(app->player.forward, app->player.pos, &ray);
-			if (l3d_kd_tree_ray_hit(app->active_scene->bullet_tree->root, &ray, &hit))
+			hits = NULL;
+			ml_vector3_mul(app->player.forward, NEAR_CLIP_DIST, add);
+			ml_vector3_add(app->player.pos, add, origin);
+			l3d_ray_set(app->player.forward, origin, &ray);
+			if (l3d_kd_tree_ray_hit(app->active_scene->bullet_tree->root, &ray, &hits))
 			{
-				if (hit.triangle->material->texture)
-					draw_object_hit(&hit);
+				determine_closest_triangle_hit(hits, &closest_triangle_hit);
+				if (closest_triangle_hit != NULL)
+					ft_printf("Hit triangle T: %f\n", closest_triangle_hit->t);
+				l3d_delete_hits(&hits);		
 			}
 		}
 	}

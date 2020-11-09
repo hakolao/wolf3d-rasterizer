@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 22:24:15 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/26 19:24:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/06 16:24:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,41 @@ void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray)
 }
 
 void						l3d_triangle_hit_record_set(float afuvt[5],
-								t_ray *ray, t_triangle *triangle, t_hit *hit)
+								t_ray *ray, t_triangle *triangle, t_hits **hits)
 {
 	t_vec3	add;
+	t_hit	hit;
 
-	hit->t = afuvt[4];
-	hit->u = afuvt[2];
-	hit->v = afuvt[3];
-	ml_vector3_mul(ray->dir, hit->t, add);
-	ml_vector3_add(ray->origin, add, hit->hit_point);
-	ml_vector3_copy(triangle->normal, hit->normal);
-	hit->triangle = triangle;
+	if (afuvt[4] < 0)
+		return ;
+	ft_memset(&hit, 0, sizeof(t_hit));
+	hit.t = afuvt[4];
+	hit.u = afuvt[2];
+	hit.v = afuvt[3];
+	ml_vector3_mul(ray->dir, hit.t, add);
+	ml_vector3_add(ray->origin, add, hit.hit_point);
+	ml_vector3_copy(triangle->normal, hit.normal);
+	hit.triangle = triangle;
+	if (*hits == NULL)
+		*hits = ft_lstnew(&hit, sizeof(t_hit));
+	else
+		ft_lstadd(hits, ft_lstnew(&hit, sizeof(t_hit)));
 }
 
 void						l3d_bounding_box_hit_record_set(float t,
-								t_ray *ray, t_hit *hit)
+								t_ray *ray, t_hits **hits)
 {
+	t_hit	hit;
 	t_vec3	add;
 
-	hit->t = t;
-	ml_vector3_mul(ray->dir, hit->t, add);
-	ml_vector3_add(ray->origin, add, hit->hit_point);
+	if (t < 0)
+		return ;
+	ft_memset(&hit, 0, sizeof(t_hit));
+	hit.t = t;
+	ml_vector3_mul(ray->dir, hit.t, add);
+	ml_vector3_add(ray->origin, add, hit.hit_point);
+	if (*hits == NULL)
+		*hits = ft_lstnew(&hit, sizeof(t_hit));
+	else
+		ft_lstadd(hits, ft_lstnew(&hit, sizeof(t_hit)));
 }

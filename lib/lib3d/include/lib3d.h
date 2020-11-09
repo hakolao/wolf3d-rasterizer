@@ -75,7 +75,6 @@ typedef struct				s_material
 	uint32_t	height;
 }							t_material;
 
-
 /*
 ** Triangle contains pointers to vertices (which get transformed over time)
 ** Center and normal should be updated if vertices are transformed.
@@ -96,6 +95,12 @@ typedef struct				s_triangle
 	t_vec2			points_2d[3];
 	float			vtc_distance[3];	
 }							t_triangle;
+
+typedef struct			s_l3d_buffers
+{
+	uint32_t		*framebuffer;
+	float			*zbuffer;
+}						t_l3d_buffers;
 
 /*
 ** Ray hit is saved to this hit record struct. Add params if needed.
@@ -162,10 +167,10 @@ typedef struct				s_3d_object
 
 typedef enum				e_axis
 {
-	l3d_axis_x,
-	l3d_axis_y,
-	l3d_axis_z,
-	l3d_axis_none,
+					l3d_axis_x,
+					l3d_axis_y,
+					l3d_axis_z,
+					l3d_axis_none,
 }							t_axis;
 
 /*
@@ -290,7 +295,7 @@ int							l3d_triangle_clipping_case(t_triangle *triangle,
 ** Bounding box
 */
 
-	t_axis l3d_bounding_box_longest_axis(t_box3d bounding_box);
+t_axis 						l3d_bounding_box_longest_axis(t_box3d bounding_box);
 void						l3d_bounding_box_set(t_tri_vec *triangles,
 								t_box3d *res);
 
@@ -331,10 +336,10 @@ double						l3d_rand_d(void);
 **	Triangle rasterization
 */
 
-void						l3d_triangle_raster(uint32_t *buffers[2],
+void						l3d_triangle_raster(t_l3d_buffers *buffers,
 												uint32_t *dimensions,
 												t_triangle *triangle);
-void						l3d_triangle_set_zbuffer(uint32_t *buffers[2],
+void						l3d_triangle_set_zbuffer(t_l3d_buffers *buffers,
 												uint32_t *dimensions,
 												t_triangle *triangle);
 void						l3d_calculate_barycoords(
@@ -359,6 +364,10 @@ void						l3d_pixel_plot(uint32_t *buffer,
 uint32_t					l3d_pixel_get(uint32_t *buffer,
 												uint32_t dimensions_wh[2],
 												int32_t xy[2]);
+float						l3d_pixel_get_float(float *buffer, uint32_t dimensions_wh[2],
+												int32_t xy[2]);
+void						l3d_pixel_plot_float(float *buffer, uint32_t dimensions_wh[2],
+												int32_t xy[2], float value);
 
 /*
 ** Line draw

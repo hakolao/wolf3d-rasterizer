@@ -49,18 +49,11 @@ typedef struct				s_info
 	uint64_t				performance_end;
 }							t_info;
 
-typedef struct				s_wolf3d_buffers
-{
-	uint32_t				*framebuffer;
-	uint32_t				*zbuffer;
-	t_vec3					*barybuffer;
-}							t_wolf3d_buffers;
-
 typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
-	t_wolf3d_buffers		*buffers;
+	t_l3d_buffers			*buffers;
 	TTF_Font				*main_font;
 	TTF_Font				*debug_font;
 	int32_t					width;

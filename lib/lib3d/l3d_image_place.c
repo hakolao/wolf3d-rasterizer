@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 18:12:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:17:21 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_surface			*l3d_image_scaled(t_surface *image,
 	int32_t		x;
 	int32_t		y;
 	t_surface	*image_out;
+	int32_t		i;
 
 	error_check(!(image_out = malloc(sizeof(t_surface))),
 		"Failed to malloc surface");
@@ -75,9 +76,10 @@ t_surface			*l3d_image_scaled(t_surface *image,
 		x = -1;
 		while (++x < (int32_t)image_out->w)
 		{
+			i = (int32_t)((float)y * scale_y) * image->w + 
+				(int32_t)((float)x * scale_x);
 			image_out->pixels[y * image_out->w + x] =
-				image->pixels[y * (int32_t)scale_y * image->w +
-					x * (int32_t)scale_x];
+				image->pixels[i];
 		}
 	}
 	return (image_out);

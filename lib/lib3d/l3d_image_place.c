@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/03 15:10:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 15:40:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,34 @@ void				l3d_framebuffer_image_place(t_surface *frame,
 					l3d_color_blend_u32(frame_pixel, layer_pixel, blend_ratio);
 		}
 	}
+}
+
+t_surface			*l3d_image_scaled(t_surface *image,
+										int32_t dest_x, int32_t dest_y)
+{
+	float		scale_x;
+	float		scale_y;
+	int32_t		x;
+	int32_t		y;
+	t_surface	*image_out;
+
+	error_check(!(image_out = malloc(sizeof(t_surface))),
+		"Failed to malloc surface");
+	error_check(!(image_out->pixels =
+		malloc(sizeof(uint32_t) * dest_x * dest_y)), "Failed to malloc pixels");
+	image_out->w = dest_x;
+	image_out->h = dest_y;
+	scale_x = (float)image->w / (float)dest_x;
+	scale_y = (float)image->h / (float)dest_y;
+	y = -1;
+	while (++y < image_out->h)
+	{
+		x = -1;
+		while (++x < image_out->w)
+		{
+			image_out->pixels[y * image_out->w + x] =
+				image->pixels[y * scale_y * image->w + x * scale_x];
+		}
+	}
+	return (image_out);
 }

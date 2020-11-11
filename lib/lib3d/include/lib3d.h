@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 17:08:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 15:40:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,6 +395,8 @@ void						l3d_read_bmp_image_32bit_rgba(const char *filename,
 void						l3d_framebuffer_image_place(t_surface *frame,
 								t_surface *image, int32_t pos_xy[2],
 								float blend_ratio);
+t_surface					*l3d_image_scaled(t_surface *image,
+								int32_t dest_x, int32_t dest_y);
 
 /*
 ** Color utils

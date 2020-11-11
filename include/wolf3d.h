@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 17:23:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 17:50:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,13 +158,11 @@ typedef enum						e_cell_features
 {
 	c_floor = 1,
 	c_floor_start = 1 << 1,
-	c_ceiling = 1 << 2,
-	c_wall_up = 1 << 3,
-	c_wall_right = 1 << 4,
-	c_wall_down = 1 << 5,
-	c_wall_left = 1 << 6,
-	c_enemy = 1 << 7,
-	c_clear = 1 << 8,
+	c_wall_up = 1 << 2,
+	c_wall_right = 1 << 3,
+	c_wall_down = 1 << 4,
+	c_wall_left = 1 << 5,
+	c_clear = 1 << 6,
 }									t_cell_features;
 
 typedef struct						s_wolf3d_map

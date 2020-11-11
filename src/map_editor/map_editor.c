@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 17:33:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:12:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void		handle_feature_placement(t_map_editor *app)
 		app->mouse_grid_pos[1] < 0 ||
 		app->mouse_grid_pos[1] >= app->map->size)
 		return ;
+	ft_printf("Selected feature: %d\n", app->selected_feature);
 	if (app->selected_feature == c_floor_start)
 	{
 		i = -1;		

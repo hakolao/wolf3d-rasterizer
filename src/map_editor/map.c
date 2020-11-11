@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 17:33:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 18:12:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,16 @@ static void		rescale_image_assets(t_map_editor *app)
 	float		size;
 	int32_t		i;
 	t_surface	*curr_image;
-	t_surface	*scaled_image;
 
-	size = (float)app->map->render_size / (float)app->map->size;
+	size = (int32_t)app->map->render_size / app->map->size + 1;
 	i = -1;
 	while (++i < app->num_images)
 	{
 		curr_image = hash_map_get(app->map_images, app->image_keys[i]);
-		scaled_image = l3d_image_scaled(curr_image, size, size);
+		hash_map_add(app->map_images, app->image_keys[i], 
+			l3d_image_scaled(curr_image, size, size));
 		free(curr_image->pixels);
 		free(curr_image);
-		hash_map_add(app->map_images, app->image_keys[i], scaled_image);
 	}
 }
 
@@ -86,7 +85,7 @@ void			init_map(t_map_editor *app, int size)
 		"Failed to malloc map");
 	error_check(!(app->map->grid = malloc(sizeof(uint32_t) * size * size)),
 		"Failed to malloc map grid");
-	ft_memset(app->map, 0, sizeof(uint32_t));
+	ft_memset(app->map->grid, 0, sizeof(uint32_t) * size * size);
 	app->map->size = size;
 	init_image_assets(app);
 	rescale_map(app);
@@ -116,10 +115,47 @@ static void		map_grid_render(t_map_editor *app, t_vec2 pos, uint32_t color)
 	}
 }
 
+static void		map_features_render(t_map_editor *app)
+{
+	int32_t		x;
+	int32_t		y;
+	uint32_t	feature_flag;
+	int32_t		i;
+	t_surface	*image;
+
+	y = -1;
+	while (++y < app->map->size)
+	{
+		x = -1;
+		while (++x < app->map->size)
+		{
+			i = -1;
+			while (++i < app->num_images)
+			{
+				feature_flag = 1 << i;
+				if (app->map->grid[y * app->map->size + x] & feature_flag)
+				{
+					image = hash_map_get(app->map_images, feature_flag);
+					l3d_framebuffer_image_place(
+						&(t_surface){.h = app->window->height,
+							.w = app->window->width,
+						.pixels = app->window->buffers->framebuffer},
+						image,
+						(int32_t[2]){
+							app->grid_pos[0] + x * app->map->cell_render_size,
+							app->grid_pos[1] + y * app->map->cell_render_size,
+						}, 1.0);
+				}
+			}				
+		}
+	}
+}
+
 void			map_render(t_map_editor *app, t_vec2 pos)
 {
 	uint32_t	color;
 
 	color = 0xFFFFFFFF;
-	map_grid_render(app, pos, color);
+	map_features_render(app);
+	map_grid_render(app, pos, color);	
 }

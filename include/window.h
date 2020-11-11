@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:46:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 15:07:17 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@
 # define GAME_FONT "assets/pixelated.ttf"
 # define DEBUG_FONT "assets/Roboto-Regular.ttf"
 # define FONT_SIZE 20
-
-# define WIDTH 1280
-# define HEIGHT 720
 
 /*
 **	Frame buffer
@@ -110,7 +107,8 @@ typedef struct						s_button_group
 ** Window
 */
 
-void						window_create(t_window **window_ref);
+void						window_create(t_window **window_ref,
+								int32_t width, int32_t height);
 void						window_frame_recreate(t_window *window);
 void						window_frame_draw(t_window *window);
 void						window_frame_clear(t_window *window);

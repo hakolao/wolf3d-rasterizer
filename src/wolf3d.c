@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 14:00:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 15:06:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void			wolf3d_run(t_wolf3d *app)
 	app->thread_pool = thread_pool_create(NUM_THREADS);
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
-	window_create(&app->window);
+	window_create(&app->window, WIDTH, HEIGHT);
 	wolf3d_init(app);
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);

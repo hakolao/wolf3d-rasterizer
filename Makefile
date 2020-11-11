@@ -42,6 +42,7 @@ SOURCES = main.c \
 
 MAP_EDITOR_NAME = wolf3d_editor
 MAP_EDITOR_SOURCES = map_editor/map_editor.c \
+			map_editor/map.c \
 			map_editor/menu.c \
 			window/ui.c \
 			window/text.c \
@@ -71,10 +72,6 @@ $(NAME): $(OBJS)
 map_editor: $(DIR_OBJ) $(MAP_EDITOR_NAME)
 
 $(MAP_EDITOR_NAME): $(MAP_EDITOR_OBJS)
-	@printf "\033[32;1mCompiling libs...\n\033[0m"
-	make -C $(LIBFT)
-	make -C $(LIB3D)
-	make -C $(LIBGMATRIX)
 	@printf "\033[32;1mCompiling map_editor...\n\033[0m"
 	$(CC) $(FLAGS) $(LIBS) -o $@ $^
 	@printf "\033[32;1mDone. Run: ./$(MAP_EDITOR_NAME)\n\033[0m"

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/03 15:11:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 15:06:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,16 +99,17 @@ void			window_frame_recreate(t_window *window)
 	error_check(window->debug_font == NULL, TTF_GetError());
 }
 
-void			window_create(t_window **window_ref)
+void			window_create(t_window **window_ref,
+					int32_t width, int32_t height)
 {
 	t_window *window;
 
 	error_check((window = (t_window*)malloc(sizeof(t_window))) == NULL,
 		"Window malloc failed");
 	window->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
-	window->width = WIDTH;
-	window->height = HEIGHT;
+		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_RESIZABLE);
+	window->width = width;
+	window->height = height;
 	error_check(window->window == NULL, SDL_GetError());
 	window->renderer =
 		SDL_CreateRenderer(window->window, -1, SDL_RENDERER_SOFTWARE);

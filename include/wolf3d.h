@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:52:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 15:10:31 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,11 @@
 
 # define NUM_THREADS 4
 
-/*
-**	The view scale will scale the camera and raycasting in relation to the
-**	world and objects. So that bigger scale will effectively scale the "world"
-**	smaller in the camera view without affecting the actual world.
-*/
+# define WIDTH 1280
+# define HEIGHT 720
+# define MAP_EDITOR_WIDTH 1024
+# define MAP_EDITOR_HEIGHT 1024
 
-# define VIEW_SCALE 1
-# define FPS 60
 # define NAME "Wolf3D"
 # define SCREEN_INTERSECT_MAX FLT_MAX
 
@@ -157,6 +154,23 @@ typedef struct						s_wolf3d
 	t_thread_pool			*thread_pool;
 }									t_wolf3d;
 
+typedef enum						e_cell_features
+{
+	c_wall_up = 1,
+	c_wall_right = 1 << 1,
+	c_wall_down = 1 << 2,
+	c_wall_left = 1 << 3,
+	c_enemy = 1 << 4,
+	c_start_location = 1 << 5,
+}									t_cell_features;
+
+typedef struct						s_wolf3d_map
+{
+	int32_t					size;
+	int32_t					render_size;
+	uint32_t				*grid;
+}									t_wolf3d_map;
+
 typedef struct						s_map_editor
 {
 	t_bool					is_running;
@@ -166,6 +180,7 @@ typedef struct						s_map_editor
 	t_keyboard				keyboard;
 	t_thread_pool			*thread_pool;
 	t_button_group			*select_menu;
+	t_wolf3d_map			*map;
 }									t_map_editor;
 
 /*
@@ -242,5 +257,7 @@ void						wolf3d_debug_info_capture(t_wolf3d *app);
 
 void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
 void						map_editor_menu_create(t_map_editor *app);
+void						init_map(t_map_editor *app, int size);
+void						map_render(t_map_editor *app, t_vec2 pos);
 
 #endif

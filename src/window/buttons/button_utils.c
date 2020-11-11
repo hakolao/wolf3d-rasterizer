@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 11:57:08 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:43:46 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 16:59:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ void			button_set_texture(t_button *button, t_surface *texture,
 	button->height = texture->h;
 }
 
-void			button_set_handles(t_button *button, void (*on_click)(void *),
-					void (*on_hover)(void *))
+void			button_set_handles(t_button *button,
+					void (*on_click)(t_button *, void *),
+					void (*on_hover)(t_button *, void *))
 {
 	button->on_click = on_click;
 	button->on_hover = on_hover;

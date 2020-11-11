@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 11:58:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/09 19:26:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 16:59:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,16 @@ t_bool			button_is_clicked(t_button *button, t_mouse mouse,
 	{
 		if (event.button.button == SDL_BUTTON_LEFT)
 		{
-			button->on_click(button->on_click_params);
+			if (button->on_click != NULL)
+				button->on_click(button, button->on_click_params);
 			res = true;
 			button->is_down = true;
 			button->is_hovered = false;
 		}
 		else if (!button->is_down)
 		{
-			button->on_hover(button->on_hover_params);
+			if (button->on_hover != NULL)
+				button->on_hover(button, button->on_hover_params);
 			button->is_hovered = true;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 16:52:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 17:31:49 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,35 @@ static void		update_mouse_grid_pos(t_map_editor *app)
 		app->mouse_grid_pos);
 }
 
+static void		handle_feature_placement(t_map_editor *app)
+{
+	int32_t	i;
+
+	ml_vector2_print(app->mouse_grid_pos);
+	if (app->mouse_grid_pos[0] < 0 ||
+		app->mouse_grid_pos[0] >= app->map->size ||
+		app->mouse_grid_pos[1] < 0 ||
+		app->mouse_grid_pos[1] >= app->map->size)
+		return ;
+	if (app->selected_feature == c_floor_start)
+	{
+		i = -1;		
+		while (++i < app->map->size * app->map->size)
+		{
+			if (app->map->grid[i] & c_floor_start)
+				app->map->grid[i] ^= c_floor_start;
+		}
+	}
+	else if (app->selected_feature == c_clear)
+	{
+		app->map->grid[(int32_t)app->mouse_grid_pos[1] *
+			app->map->size + (int32_t)app->mouse_grid_pos[0]] = 0;
+		return ;
+	}
+	app->map->grid[(int32_t)app->mouse_grid_pos[1] *
+		app->map->size + (int32_t)app->mouse_grid_pos[0]] |= app->selected_feature;
+}
+
 static void		main_loop(t_map_editor *app)
 {
 	SDL_Event	event;
@@ -41,12 +70,14 @@ static void		main_loop(t_map_editor *app)
 		app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 		app->keyboard.state = SDL_GetKeyboardState(NULL);
 		update_mouse_grid_pos(app);
+		if (app->mouse.state & SDL_BUTTON_LMASK)
+			handle_feature_placement(app);
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
-			button_group_events_handle(app->select_menu, app->mouse, event);
+			button_group_events_handle(app->select_menu, app->mouse, event);				
 		}
 		if (app->window->resized)
 			resize_dependent_recreate(app);
@@ -61,6 +92,18 @@ static void		main_loop(t_map_editor *app)
 
 static void		cleanup(t_map_editor *app)
 {
+	int32_t		i;
+	t_surface	*image;
+
+	i = -1;
+	while (++i < app->num_images)
+	{
+		image = hash_map_get(app->map_images, app->image_keys[i]);
+		free(image->pixels);
+		free(image);
+	}
+	hash_map_destroy(app->map_images);
+	free(app->map->grid);
 	free(app->map);
 	button_group_destroy(app->select_menu);
 	thread_pool_destroy(app->thread_pool);

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 15:07:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 17:16:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,9 @@ typedef struct						s_keyboard
 	const uint8_t		*state;
 }									t_keyboard;
 
-typedef struct						s_button
+typedef struct s_button				t_button;
+
+struct								s_button
 {
 	uint32_t				id;
 	t_vec2					pos;
@@ -85,12 +87,12 @@ typedef struct						s_button
 	t_surface				*texture_down;
 	t_bool					is_down;
 	t_bool					is_hovered;
-	void					(*on_click)(void *);
-	void					(*on_hover)(void *);
+	void					(*on_click)(t_button *, void *);
+	void					(*on_hover)(t_button *, void *);
 	void					*on_click_params;
 	void					*on_hover_params;
 	t_window				*window;
-}									t_button;
+};
 
 typedef struct						s_button_group
 {
@@ -146,8 +148,8 @@ void						button_destroy(t_button *button);
 void						button_update_position(t_button *button,
 								t_vec2 pos);
 void						button_set_handles(t_button *button,
-								void (*on_click)(void *),
-								void (*on_hover)(void *));
+								void (*on_click)(t_button *, void *),
+								void (*on_hover)(t_button *, void *));
 void						button_set_texture(t_button *button,
 								t_surface *texture,
 								t_surface *texture_down);

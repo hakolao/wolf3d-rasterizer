@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 16:51:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 17:33:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void			init_image_assets(t_map_editor *app)
 		&surfaces[4]->pixels, &surfaces[4]->w, &surfaces[4]->h);
 	l3d_read_bmp_image_32bit_rgba("assets/map_editor/wall_left.bmp",
 		&surfaces[5]->pixels, &surfaces[5]->w, &surfaces[5]->h);
+	free(surfaces);
 }
 
 void			rescale_map(t_map_editor *app)
@@ -81,8 +82,10 @@ void			rescale_map(t_map_editor *app)
 
 void			init_map(t_map_editor *app, int size)
 {
-	error_check(!(app->map = malloc(sizeof(uint32_t) * size * size)),
-		"Failed ot malloc map");
+	error_check(!(app->map = malloc(sizeof(t_wolf3d_map))),
+		"Failed to malloc map");
+	error_check(!(app->map->grid = malloc(sizeof(uint32_t) * size * size)),
+		"Failed to malloc map grid");
 	ft_memset(app->map, 0, sizeof(uint32_t));
 	app->map->size = size;
 	init_image_assets(app);

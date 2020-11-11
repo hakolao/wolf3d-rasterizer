@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 19:27:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 16:37:33 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 17:16:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,45 @@ t_surface			*convert_sdl_surface_to_t_surface(SDL_Surface *src)
 	return (dst);
 }
 
-static void			on_menu_button_click(void *params)
+static void			on_menu_button_click(t_button *self, void *params)
 {
-	(void)params;
-}
+	t_map_editor	*app;
 
-static void			on_menu_button_hover(void *params)
-{
-	(void)params;
+	app = params;
+	if (self->id == 0)
+		app->selected_feature = c_floor;
+	else if (self->id == 1)
+		app->selected_feature = c_floor_start;
+	else if (self->id == 2)
+		app->selected_feature = c_wall_up;
+	else if (self->id == 3)
+		app->selected_feature = c_wall_right;
+	else if (self->id == 4)
+		app->selected_feature = c_wall_down;
+	else if (self->id == 5)
+		app->selected_feature = c_wall_left;
+	else if (self->id == 6)
+		app->selected_feature = c_clear;
 }
 
 void				map_editor_menu_create(t_map_editor *app)
 {
 	int32_t		i;
-	const char	*options[3];
+	const char	*options[7];
 	t_button	**buttons;
 	uint32_t	num_buttons;
 	t_surface	**surfaces;
 	t_surface	**down_surfaces;
 	SDL_Surface	*tmp_surface;
 
-	num_buttons = 3;
+	num_buttons = 7;
 	options[0] = "Floor";
-	options[1] = "Wall";
-	options[2] = "Enemy";
+	options[1] = "Start";
+	options[2] = "WallUp";
+	options[3] = "WallRight";
+	options[4] = "WallDown";
+	options[5] = "WallLeft";
+	options[6] = "Clear";
 	error_check(!(buttons = malloc(sizeof(t_button*) * num_buttons)),
 		"Failed to malloc buttons in menu creation");
 	error_check(!(surfaces = malloc(sizeof(t_surface*) * num_buttons)),
@@ -73,12 +88,14 @@ void				map_editor_menu_create(t_map_editor *app)
 		buttons[i] = button_create(app->window, i);
 		button_set_texture(buttons[i], surfaces[i], down_surfaces[i]);
 		button_set_handles(buttons[i],
-			on_menu_button_click, on_menu_button_hover);
-		button_set_handle_params(buttons[i], app, app);
+			on_menu_button_click, NULL);
+		button_set_handle_params(buttons[i], app, NULL);
 	}
 	app->select_menu = button_group_create(buttons, num_buttons);
 	button_group_set_space_between(app->select_menu, 5);
+	// Select first feature:
 	button_group_set_selector(app->select_menu, 0);
+	app->select_menu->buttons[0]->on_click(app->select_menu->buttons[0], app);
 	free(surfaces);
 	free(down_surfaces);
 }

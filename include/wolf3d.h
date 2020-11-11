@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 16:51:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 17:23:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ typedef enum						e_cell_features
 	c_wall_down = 1 << 5,
 	c_wall_left = 1 << 6,
 	c_enemy = 1 << 7,
+	c_clear = 1 << 8,
 }									t_cell_features;
 
 typedef struct						s_wolf3d_map
@@ -189,6 +190,7 @@ typedef struct						s_map_editor
 	int32_t					num_images;
 	t_vec2					grid_pos;
 	t_vec2					mouse_grid_pos;
+	t_cell_features			selected_feature;
 }									t_map_editor;
 
 /*

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 15:10:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 16:51:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,18 +156,21 @@ typedef struct						s_wolf3d
 
 typedef enum						e_cell_features
 {
-	c_wall_up = 1,
-	c_wall_right = 1 << 1,
-	c_wall_down = 1 << 2,
-	c_wall_left = 1 << 3,
-	c_enemy = 1 << 4,
-	c_start_location = 1 << 5,
+	c_floor = 1,
+	c_floor_start = 1 << 1,
+	c_ceiling = 1 << 2,
+	c_wall_up = 1 << 3,
+	c_wall_right = 1 << 4,
+	c_wall_down = 1 << 5,
+	c_wall_left = 1 << 6,
+	c_enemy = 1 << 7,
 }									t_cell_features;
 
 typedef struct						s_wolf3d_map
 {
 	int32_t					size;
-	int32_t					render_size;
+	float					render_size;
+	float					cell_render_size;
 	uint32_t				*grid;
 }									t_wolf3d_map;
 
@@ -181,6 +184,11 @@ typedef struct						s_map_editor
 	t_thread_pool			*thread_pool;
 	t_button_group			*select_menu;
 	t_wolf3d_map			*map;
+	t_hash_table			*map_images;
+	uint32_t				image_keys[32];
+	int32_t					num_images;
+	t_vec2					grid_pos;
+	t_vec2					mouse_grid_pos;
 }									t_map_editor;
 
 /*
@@ -197,7 +205,6 @@ void						wolf3d_run(t_wolf3d *app);
 /*
 ** Time
 */
-void						cap_framerate(t_wolf3d *app);
 float						sin_time(float min, float max, float speed);
 
 /*
@@ -259,5 +266,6 @@ void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
 void						map_editor_menu_create(t_map_editor *app);
 void						init_map(t_map_editor *app, int size);
 void						map_render(t_map_editor *app, t_vec2 pos);
+void						rescale_map(t_map_editor *app);
 
 #endif

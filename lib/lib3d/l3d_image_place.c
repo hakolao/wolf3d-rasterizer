@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 15:40:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 16:39:15 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,14 @@ t_surface			*l3d_image_scaled(t_surface *image,
 	scale_x = (float)image->w / (float)dest_x;
 	scale_y = (float)image->h / (float)dest_y;
 	y = -1;
-	while (++y < image_out->h)
+	while (++y < (int32_t)image_out->h)
 	{
 		x = -1;
-		while (++x < image_out->w)
+		while (++x < (int32_t)image_out->w)
 		{
 			image_out->pixels[y * image_out->w + x] =
-				image->pixels[y * scale_y * image->w + x * scale_x];
+				image->pixels[y * (int32_t)scale_y * image->w +
+					x * (int32_t)scale_x];
 		}
 	}
 	return (image_out);

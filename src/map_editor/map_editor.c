@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 15:11:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 16:52:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,19 @@ static void		resize_dependent_recreate(t_map_editor *app)
 {
 	window_frame_recreate(app->window);
 	app->window->resized = false;
+	rescale_map(app);
 	while (app->window->is_hidden)
 		SDL_PollEvent(NULL);
+}
+
+static void		update_mouse_grid_pos(t_map_editor *app)
+{
+	ml_vector2_copy((t_vec2){
+		(int32_t)((app->mouse.x - app->grid_pos[0]) /
+			app->map->cell_render_size),
+		(int32_t)((app->mouse.y - app->grid_pos[1]) /
+			app->map->cell_render_size)},
+		app->mouse_grid_pos);
 }
 
 static void		main_loop(t_map_editor *app)
@@ -29,6 +40,7 @@ static void		main_loop(t_map_editor *app)
 		app->info.performance_start = SDL_GetPerformanceCounter();
 		app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 		app->keyboard.state = SDL_GetKeyboardState(NULL);
+		update_mouse_grid_pos(app);
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
@@ -79,6 +91,9 @@ int				main(int argc, char **argv)
 	{
 		size = (int)ft_abs(ft_atoi(argv[1]));
 		init_map(&app, size);
+	} else
+	{
+		init_map(&app, 15);
 	}
 	main_loop(&app);
 	cleanup(&app);

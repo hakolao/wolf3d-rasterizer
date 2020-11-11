@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 17:31:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/11 17:33:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static void		handle_feature_placement(t_map_editor *app)
 {
 	int32_t	i;
 
-	ml_vector2_print(app->mouse_grid_pos);
 	if (app->mouse_grid_pos[0] < 0 ||
 		app->mouse_grid_pos[0] >= app->map->size ||
 		app->mouse_grid_pos[1] < 0 ||

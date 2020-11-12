@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 16:19:42 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 17:05:58 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ static void		resize_dependent_recreate(t_map_editor *app)
 static void		update_mouse_grid_pos(t_map_editor *app)
 {
 	ml_vector2_copy((t_vec2){
-		(int32_t)((app->mouse.x - app->grid_pos[0]) /
-			app->map->cell_render_size),
-		(int32_t)((app->mouse.y - app->grid_pos[1]) /
-			app->map->cell_render_size)},
+		ft_floor(((float)(app->mouse.x - app->grid_pos[0]) /
+			app->map->cell_render_size)),
+		ft_floor(((float)(app->mouse.y - app->grid_pos[1]) /
+			app->map->cell_render_size))},
 		app->mouse_grid_pos);
 }
 

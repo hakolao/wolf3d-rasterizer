@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 19:27:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 16:19:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 17:09:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,19 @@ static void			save_map(t_map_editor *app)
 	char			filename[128];
 	char			bytes[4];
 	int32_t			i;
-	int32_t			j;
 
 	ft_sprintf(new_filename, "maps/wolf3d_map_t%u", SDL_GetTicks());
 	ft_sprintf(filename, "%s", app->filename ? app->filename : new_filename);
-	if ((fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0644)) == -1 &&
+	if ((fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1 &&
 		ft_dprintf(2, "Failed to open file %s\n", filename))
 		exit(EXIT_FAILURE);
 	i = -1;
 	while (++i < app->map->size * app->map->size)
 	{
 		ft_memcpy(bytes, &app->map->grid[i], sizeof(uint32_t));
-		j = -1;
-		while (++j < 4)
-			write(fd, &bytes[j], 1);
+		write(fd, &bytes, 4);
 	}
+	ft_printf("Saved %s\n", filename);
 	if ((fd = close(fd)) == -1 &&
 		ft_dprintf(2, "Failed to close file %s\n", filename))
 		exit(EXIT_FAILURE);

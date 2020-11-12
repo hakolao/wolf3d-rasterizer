@@ -61,17 +61,21 @@ MAP_EDITOR_OBJS = $(addprefix $(DIR_OBJ)/,$(MAP_EDITOR_SOURCES:.c=.o))
 all: $(DIR_OBJ) $(NAME)
 
 $(NAME): $(OBJS)
-	@printf "\033[32;1mCompiling libs...\n\033[0m"
-	make -C $(LIBFT)
-	make -C $(LIB3D)
-	make -C $(LIBGMATRIX)
+	@make libs
 	@printf "\033[32;1mCompiling app...\n\033[0m"
 	$(CC) $(FLAGS) $(LIBS) -o $@ $^
 	@printf "\033[32;1mDone. Run: ./$(NAME)\n\033[0m"
 
+libs:
+	@printf "\033[32;1mCompiling libs...\n\033[0m"
+	make -C $(LIBFT)
+	make -C $(LIB3D)
+	make -C $(LIBGMATRIX)
+
 map_editor: $(DIR_OBJ) $(MAP_EDITOR_NAME)
 
 $(MAP_EDITOR_NAME): $(MAP_EDITOR_OBJS)
+	@make libs
 	@printf "\033[32;1mCompiling map_editor...\n\033[0m"
 	$(CC) $(FLAGS) $(LIBS) -o $@ $^
 	@printf "\033[32;1mDone. Run: ./$(MAP_EDITOR_NAME)\n\033[0m"

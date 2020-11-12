@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 15:22:28 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 16:19:42 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ static void		main_loop(t_map_editor *app)
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
-			button_group_events_handle(app->select_menu, app->mouse, event);				
+			button_group_events_handle(app->select_menu, app->mouse, event);
+			button_group_events_handle(app->save_menu, app->mouse, event);
 		}
 		if (app->window->resized)
 			resize_dependent_recreate(app);
@@ -94,6 +95,8 @@ static void		cleanup(t_map_editor *app)
 	int32_t		i;
 	t_surface	*image;
 
+	if (app->filename != NULL)
+		ft_strdel(&app->filename);
 	i = -1;
 	while (++i < app->num_images)
 	{
@@ -121,21 +124,22 @@ static void		cleanup(t_map_editor *app)
 int				main(int argc, char **argv)
 {
 	t_map_editor	app;
-	int				size;
 	
 	app.thread_pool = thread_pool_create(NUM_THREADS);
 	app.is_running = true;
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
 	window_create(&app.window, MAP_EDITOR_WIDTH, MAP_EDITOR_HEIGHT);
-	map_editor_menu_create(&app);
+	map_editor_draw_menu_create(&app);
+	map_editor_save_menu_create(&app);
 	if (argc == 2)
 	{
-		size = (int)ft_abs(ft_atoi(argv[1]));
-		init_map(&app, size);
+		app.filename = ft_strdup(argv[1]);
+		init_map(&app, MAP_SIZE);
 	} else
 	{
-		init_map(&app, 15);
+		app.filename = NULL;
+		init_map(&app, MAP_SIZE);
 	}
 	main_loop(&app);
 	cleanup(&app);

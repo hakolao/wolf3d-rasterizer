@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 18:12:22 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 15:56:24 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,19 @@ void			rescale_map(t_map_editor *app)
 
 void			init_map(t_map_editor *app, int size)
 {
+	t_file_contents	*file;
+	
 	error_check(!(app->map = malloc(sizeof(t_wolf3d_map))),
 		"Failed to malloc map");
 	error_check(!(app->map->grid = malloc(sizeof(uint32_t) * size * size)),
 		"Failed to malloc map grid");
-	ft_memset(app->map->grid, 0, sizeof(uint32_t) * size * size);
+	if (app->filename == NULL || (!(file = read_file(app->filename))))
+		ft_memset(app->map->grid, 0, sizeof(uint32_t) * size * size);
+	else
+	{
+		ft_memcpy(app->map->grid, file->buf, file->size);
+		destroy_file_contents(file);
+	}
 	app->map->size = size;
 	init_image_assets(app);
 	rescale_map(app);

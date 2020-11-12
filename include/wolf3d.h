@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 17:50:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 15:47:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
+
+# define MAP_SIZE 15
 
 # define NUM_THREADS 4
 
@@ -182,6 +184,7 @@ typedef struct						s_map_editor
 	t_keyboard				keyboard;
 	t_thread_pool			*thread_pool;
 	t_button_group			*select_menu;
+	t_button_group			*save_menu;
 	t_wolf3d_map			*map;
 	t_hash_table			*map_images;
 	uint32_t				image_keys[32];
@@ -189,6 +192,7 @@ typedef struct						s_map_editor
 	t_vec2					grid_pos;
 	t_vec2					mouse_grid_pos;
 	t_cell_features			selected_feature;
+	char					*filename;
 }									t_map_editor;
 
 /*
@@ -262,8 +266,9 @@ void						wolf3d_debug_info_capture(t_wolf3d *app);
 ** Map Editor
 */
 
+void						map_editor_save_menu_create(t_map_editor *app);
 void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
-void						map_editor_menu_create(t_map_editor *app);
+void						map_editor_draw_menu_create(t_map_editor *app);
 void						init_map(t_map_editor *app, int size);
 void						map_render(t_map_editor *app, t_vec2 pos);
 void						rescale_map(t_map_editor *app);

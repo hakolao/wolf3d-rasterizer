@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 16:25:03 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 18:12:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,74 @@ static void		scene_set_triangle_refs(t_scene *scene)
 	scene->num_triangles = num_triangles;
 }
 
+/*
+** // ToDo: Clean up bois!
+*/
+
+static void		read_map_to_scene(t_wolf3d *app,
+						t_scene *scene, const char *map_filename)
+{
+	t_file_contents	*file;
+	int32_t			x;
+	int32_t			y;
+	float			unit_size;
+	uint32_t		cell;
+	int32_t			obj_i;
+	
+	error_check(!(scene->map = malloc(sizeof(t_wolf3d_map))),
+		"Failed to malloc map");
+	error_check(!(scene->map->grid =
+		malloc(sizeof(uint32_t) * MAP_SIZE * MAP_SIZE)),
+		"Failed to malloc map grid");
+	if (!(file = read_file(map_filename)))
+		exit(EXIT_FAILURE);
+	ft_memcpy(scene->map->grid, file->buf, file->size);
+	destroy_file_contents(file);
+	scene->map->size = MAP_SIZE;
+	unit_size = app->window->width;
+	y = -1;
+	obj_i = 0;
+	while (++y < MAP_SIZE)
+	{
+		x = -1;
+		while (++x < MAP_SIZE)
+		{
+			cell = scene->map->grid[y * MAP_SIZE + x];
+			if ((cell & c_floor_start))
+			{
+				ml_vector3_print((t_vec3){(float)y * unit_size - (float)unit_size / 2.0, 0,
+					-(float)x * unit_size - (float)unit_size / 2.0});
+				init_player(app,
+					(t_vec3){(float)y * unit_size - (float)unit_size / 2.0, 0,
+					(float)x * unit_size - (float)unit_size / 2.0});
+			}
+			if ((cell & c_floor))
+			{
+				scene->objects[obj_i] =
+					l3d_read_obj("assets/models/room_tiles/room_floor.obj",
+								"assets/textures/test_texture_small.bmp");
+				l3d_3d_object_scale(scene->objects[obj_i],
+									app->window->width / 1.0,
+									app->window->width / 1.0,
+									app->window->width / 1.0);
+				l3d_3d_object_translate(scene->objects[obj_i],
+					y * unit_size - unit_size / 2.0, PLAYER_HEIGHT * 1,
+					-x * unit_size - unit_size / 2.0);
+				obj_i++;
+			}
+			// ToDo Read other parts too, walls etc. Clean up.
+		}
+	}
+	scene->bullet_tree = NULL;
+	scene->num_objects = obj_i;
+	if (scene->num_objects > 0)
+	{
+		scene_set_triangle_refs(scene);
+		l3d_kd_tree_create_or_update(&scene->bullet_tree,
+			scene->triangle_ref, scene->num_triangles);
+	}
+}
+
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
 	t_scene_data		data;
@@ -47,30 +115,18 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.menu_options[2] = "Quit";
 		data.menu_option_count = 3;
 		data.main_camera = NULL;
-		data.num_objects = 0;
+		data.map_filename = NULL;
 	}
 	else if (scene_id == scene_id_main_game)
 	{
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.objects[0] = l3d_read_obj("assets/models/turn_right/turn_right_test.obj",
-									   "assets/textures/test_texture_small.bmp");
-		data.num_objects = 1;
-		int i = -1;
-		// data.objects[0]->material->texture = 
-		while (++i < (int)data.num_objects)
-		{
-		l3d_3d_object_scale(data.objects[i],
-							app->window->width / 1.0,
-							app->window->width / 1.0,
-							app->window->width / 1.0);
-		l3d_3d_object_rotate(data.objects[i], 0, 0, 0);
-		l3d_3d_object_translate(data.objects[i],
-			0, PLAYER_HEIGHT * 1, 0);
-		}
+		data.map_filename = ft_strdup("maps/okko");
 	}
 	app->active_scene = new_scene(&data);
+	if (data.map_filename)
+		read_map_to_scene(app, app->active_scene, data.map_filename);
 	if (app->active_scene->main_camera)
 		update_camera(app);
 }
@@ -91,16 +147,8 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->menu_option_count = data->menu_option_count;
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
-	scene->num_objects = data->num_objects;
-	scene->bullet_tree = NULL;
-	if (data->num_objects > 0)
-	{
-		ft_memmove(scene->objects, data->objects,
-		sizeof(t_3d_object*) * data->num_objects);
-		scene_set_triangle_refs(scene);
-		l3d_kd_tree_create_or_update(&scene->bullet_tree,
-			scene->triangle_ref, scene->num_triangles);
-	}
+	scene->map_filename = data->map_filename;
+	scene->map = NULL;
 	return (scene);
 }
 
@@ -116,6 +164,13 @@ void			destroy_scene(t_scene *scene)
 {
 	int		i;
 
+	if (scene->map_filename != NULL)
+		ft_strdel(&scene->map_filename);
+	if (scene->map != NULL)
+	{
+		free(scene->map->grid);
+		free(scene->map);
+	}
 	i = -1;
 	while (++i < (int)scene->num_objects)
 		l3d_3d_object_destroy(scene->objects[i]);

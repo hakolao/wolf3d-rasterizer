@@ -6,18 +6,18 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 13:34:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 18:03:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void			init_player(t_wolf3d *app)
+void			init_player(t_wolf3d *app, t_vec3 pos)
 {
-	ft_memcpy(&app->player.pos, &(t_vec3){0, 0, 0}, sizeof(t_vec3));
-	ft_memcpy(&app->player.forward, &(t_vec3){0, 0, -1}, sizeof(t_vec3));
-	ft_memcpy(&app->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
-	ft_memcpy(&app->player.sideways, &(t_vec3){1, 0, 0}, sizeof(t_vec3));
+	ft_memcpy(app->player.pos, pos, sizeof(t_vec3));
+	ft_memcpy(app->player.forward, &(t_vec3){0, 0, -1}, sizeof(t_vec3));
+	ft_memcpy(app->player.up, &(t_vec3){0, 1, 0}, sizeof(t_vec3));
+	ft_memcpy(app->player.sideways, &(t_vec3){1, 0, 0}, sizeof(t_vec3));
 	app->player.speed = PLAYER_SPEED;
 	app->player.rot_speed = PLAYER_ROTATION_SPEED;
 	app->player.rot_x = 0;

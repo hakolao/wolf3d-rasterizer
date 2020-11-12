@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 15:47:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/12 17:57:45 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@
 
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000
+
+# define MAX_NUM_OBJECTS 1024
+# define MAX_NUM_TRIANGLES 65536
 
 typedef enum						e_render_pass
 {
@@ -112,6 +115,14 @@ typedef struct						s_player
 	t_mat4					inv_translation;
 }									t_player;
 
+typedef struct						s_wolf3d_map
+{
+	int32_t					size;
+	float					render_size;
+	float					cell_render_size;
+	uint32_t				*grid;
+}									t_wolf3d_map;
+
 /*
 **	Typedefs related to app and scene management
 */
@@ -123,17 +134,16 @@ typedef struct						s_scene_data
 	const char				*menu_options[128];
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
-	t_3d_object				*objects[128];
-	uint32_t				num_objects;
-	uint32_t				num_triangles;
+	char					*map_filename;
 }									t_scene_data;
 
 typedef struct						s_scene
 {
-	t_3d_object				*objects[128];
+	t_wolf3d_map			*map;
+	t_3d_object				*objects[MAX_NUM_OBJECTS];
 	uint32_t				num_objects;
 	t_kd_tree				*bullet_tree;
-	t_triangle				*triangle_ref[16384];
+	t_triangle				*triangle_ref[MAX_NUM_TRIANGLES];
 	uint32_t				num_triangles;
 	t_camera				*main_camera;
 	t_triangle				*screen_triangles;
@@ -141,6 +151,7 @@ typedef struct						s_scene
 	int32_t					menu_option_count;
 	int32_t					selected_option;
 	t_scene_id				scene_id;
+	char					*map_filename;
 }									t_scene;
 
 typedef struct						s_wolf3d
@@ -166,14 +177,6 @@ typedef enum						e_cell_features
 	c_wall_left = 1 << 5,
 	c_clear = 1 << 6,
 }									t_cell_features;
-
-typedef struct						s_wolf3d_map
-{
-	int32_t					size;
-	float					render_size;
-	float					cell_render_size;
-	uint32_t				*grid;
-}									t_wolf3d_map;
 
 typedef struct						s_map_editor
 {
@@ -214,7 +217,7 @@ float						sin_time(float min, float max, float speed);
 /*
 ** Player
 */
-void						init_player(t_wolf3d *app);
+void						init_player(t_wolf3d *app, t_vec3 pos);
 void						move_player(t_wolf3d *app, t_move dir);
 void						rotate_player_vertical(t_wolf3d *app, float angle);
 void						rotate_player_horizontal(t_wolf3d *app, float angle);

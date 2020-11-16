@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_editor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 17:05:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:56:01 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void		handle_feature_placement(t_map_editor *app)
 		return ;
 	if (app->selected_feature == c_floor_start)
 	{
-		i = -1;		
+		i = -1;
 		while (++i < app->map->size * app->map->size)
 		{
 			if (app->map->grid[i] & c_floor_start)
@@ -124,7 +124,7 @@ static void		cleanup(t_map_editor *app)
 int				main(int argc, char **argv)
 {
 	t_map_editor	app;
-	
+
 	app.thread_pool = thread_pool_create(NUM_THREADS);
 	app.is_running = true;
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());

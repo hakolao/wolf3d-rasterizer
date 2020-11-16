@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ml_matrix4_rotation.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 17:43:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 01:49:35 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:55:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

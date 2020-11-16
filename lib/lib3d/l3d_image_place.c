@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_image_place.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 18:17:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:53:12 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_surface			*l3d_image_scaled(t_surface *image,
 		x = -1;
 		while (++x < (int32_t)image_out->w)
 		{
-			i = (int32_t)((float)y * scale_y) * image->w + 
+			i = (int32_t)((float)y * scale_y) * image->w +
 				(int32_t)((float)x * scale_x);
 			image_out->pixels[y * image_out->w + x] =
 				image->pixels[i];

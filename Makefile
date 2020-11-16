@@ -53,7 +53,7 @@ MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			window/buttons/button_group.c \
 			window/buttons/button_utils.c \
 			window/buttons/button.c
-			
+
 
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
 MAP_EDITOR_OBJS = $(addprefix $(DIR_OBJ)/,$(MAP_EDITOR_SOURCES:.c=.o))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   button_group_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 11:58:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/20 12:42:44 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:56:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void			button_group_update_position(t_button_group *button_group,
 	t_vec2		button_pos;
 	int32_t		width_sum;
 	int32_t		height_sum;
-	
+
 	ml_vector2_copy(pos, button_group->pos);
 	i = -1;
 	width_sum = 0;

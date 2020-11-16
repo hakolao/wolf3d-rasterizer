@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_line_draw.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 16:10:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 17:41:31 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:53:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

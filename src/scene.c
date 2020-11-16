@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 18:12:39 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:57:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void		read_map_to_scene(t_wolf3d *app,
 	float			unit_size;
 	uint32_t		cell;
 	int32_t			obj_i;
-	
+
 	error_check(!(scene->map = malloc(sizeof(t_wolf3d_map))),
 		"Failed to malloc map");
 	error_check(!(scene->map->grid =
@@ -70,8 +70,6 @@ static void		read_map_to_scene(t_wolf3d *app,
 			cell = scene->map->grid[y * MAP_SIZE + x];
 			if ((cell & c_floor_start))
 			{
-				ml_vector3_print((t_vec3){(float)y * unit_size - (float)unit_size / 2.0, 0,
-					-(float)x * unit_size - (float)unit_size / 2.0});
 				init_player(app,
 					(t_vec3){(float)y * unit_size - (float)unit_size / 2.0, 0,
 					(float)x * unit_size - (float)unit_size / 2.0});

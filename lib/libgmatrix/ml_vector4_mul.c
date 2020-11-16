@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ml_vector4_mul.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 16:52:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/25 16:56:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:55:48 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ml_vector2_normalize.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/11 13:11:34 by veilo             #+#    #+#             */
-/*   Updated: 2020/09/30 01:39:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:55:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

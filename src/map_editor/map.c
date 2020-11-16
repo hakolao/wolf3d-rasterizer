@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 15:56:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:56:03 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void		rescale_image_assets(t_map_editor *app)
 	while (++i < app->num_images)
 	{
 		curr_image = hash_map_get(app->map_images, app->image_keys[i]);
-		hash_map_add(app->map_images, app->image_keys[i], 
+		hash_map_add(app->map_images, app->image_keys[i],
 			l3d_image_scaled(curr_image, size, size));
 		free(curr_image->pixels);
 		free(curr_image);
@@ -82,7 +82,7 @@ void			rescale_map(t_map_editor *app)
 void			init_map(t_map_editor *app, int size)
 {
 	t_file_contents	*file;
-	
+
 	error_check(!(app->map = malloc(sizeof(t_wolf3d_map))),
 		"Failed to malloc map");
 	error_check(!(app->map->grid = malloc(sizeof(uint32_t) * size * size)),
@@ -154,7 +154,7 @@ static void		map_features_render(t_map_editor *app)
 							app->grid_pos[1] + y * app->map->cell_render_size,
 						}, 1.0);
 				}
-			}				
+			}
 		}
 	}
 }
@@ -165,5 +165,5 @@ void			map_render(t_map_editor *app, t_vec2 pos)
 
 	color = 0xFFFFFFFF;
 	map_features_render(app);
-	map_grid_render(app, pos, color);	
+	map_grid_render(app, pos, color);
 }

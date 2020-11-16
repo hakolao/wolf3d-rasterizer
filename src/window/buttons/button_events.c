@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   button_events.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 11:58:12 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 17:00:00 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:56:15 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

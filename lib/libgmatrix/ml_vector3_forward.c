@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ml_vector3_forward.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/16 16:57:53 by ohakola           #+#    #+#             */
-/*   Updated: 2020/08/16 19:10:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:55:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

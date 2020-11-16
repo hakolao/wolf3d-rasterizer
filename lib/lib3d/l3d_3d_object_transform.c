@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_3d_object_transform.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 14:59:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 19:04:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:53:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

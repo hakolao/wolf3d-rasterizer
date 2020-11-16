@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 17:10:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 13:35:02 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:56:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static t_bool	is_triangle_facing(t_triangle *triangle, t_vec3 dir)
 t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 {
 	t_vec3 dir;
-	
+
 	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
 		return (false);
 	ml_vector3_sub(triangle->center, app->active_scene->main_camera->origin, dir);
@@ -59,7 +59,7 @@ t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 
 t_bool			screen_intersection(t_wolf3d *app, t_triangle *triangle)
 {
-	t_ray		rays[3];	
+	t_ray		rays[3];
 	t_vec3		hits[3];
 	int			k;
 

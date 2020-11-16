@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_triangle_raster.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/11/02 18:18:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:52:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 	t_vec2		uv;
 	int32_t		offset_xy[2];
 	float		z_val;
-	
+
 	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
 	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
@@ -89,7 +89,7 @@ static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 	z_val = calculate_z_val(baryc, triangle);
 	if (z_val <= zpixel)
 	{
-		
+
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
 		l3d_pixel_plot(buffers->framebuffer,
@@ -358,7 +358,7 @@ uint32_t		l3d_sample_texture(uint32_t *texture_data, int *dimensions,
 	int		index;
 	float	x;
 	float	y;
-	
+
 	x = floor(uv_point[0] * dimensions[0]);
 	y = floor(uv_point[1] * dimensions[1]);
 	if (x >= dimensions[0])

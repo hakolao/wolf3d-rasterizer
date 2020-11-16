@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
+#    By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/29 14:50:34 by ohakola           #+#    #+#              #
-#    Updated: 2020/11/03 15:50:40 by ohakola          ###   ########.fr        #
+#    Updated: 2020/11/16 13:53:38 by ohakola+vei      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

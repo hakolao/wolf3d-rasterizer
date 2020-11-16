@@ -41,7 +41,7 @@ static void		render_triangle(t_wolf3d *app,
 	t_triangle	clipped_triangles[2];
 	t_vertex	vtc[9];
 	int32_t		test_clip;
-	
+
 	// buffers[0] = app->window->buffers->framebuffer;
 	// buffers[1] = app->window->buffers->zbuffer;
 	dimensions[0] = app->window->width;
@@ -153,7 +153,7 @@ static void		render_scene(t_wolf3d *app, t_render_pass pass)
 }
 
 void			wolf3d_render(t_wolf3d *app)
-{	
+{
 	if (app->active_scene->main_camera != NULL)
 	{
 		render_scene(app, rpass_zbuffer);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   button_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 11:57:08 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 16:59:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:56:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void			button_render(t_button *button)
 				.h = button->window->height,
 				.w = button->window->width,
 				.pixels = button->window->buffers->framebuffer},
-			button->texture_down ? button->texture_down : button->texture, 
+			button->texture_down ? button->texture_down : button->texture,
 			(int32_t[2]){button->pos[0], button->pos[1]},
 				button->is_hovered ? 0.5 : 1.0);
 	else
@@ -66,7 +66,7 @@ void			button_render(t_button *button)
 				.h = button->window->height,
 				.w = button->window->width,
 				.pixels = button->window->buffers->framebuffer},
-			button->texture, 
+			button->texture,
 			(int32_t[2]){button->pos[0], button->pos[1]},
-			button->is_hovered ? 0.5 : 1.0);	
+			button->is_hovered ? 0.5 : 1.0);
 }

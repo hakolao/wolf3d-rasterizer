@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_obj_read_utils1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/13 19:00:51 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:53:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/06 17:27:12 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 13:55:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void					mouse_state_handle(t_wolf3d *app)
 				determine_closest_triangle_hit(hits, &closest_triangle_hit);
 				if (closest_triangle_hit != NULL)
 					ft_printf("Hit triangle T: %f\n", closest_triangle_hit->t);
-				l3d_delete_hits(&hits);		
+				l3d_delete_hits(&hits);
 			}
 		}
 	}

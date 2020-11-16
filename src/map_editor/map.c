@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:03 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/16 17:39:13 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,21 +138,22 @@ static void		map_features_render(t_map_editor *app)
 		while (++x < app->map->size)
 		{
 			i = -1;
-			while (++i < app->num_images)
+			while (++i < 32)
 			{
 				feature_flag = 1 << i;
-				if (app->map->grid[y * app->map->size + x] & feature_flag)
+				if ((app->map->grid[y * app->map->size + x] & feature_flag))
 				{
 					image = hash_map_get(app->map_images, feature_flag);
-					l3d_framebuffer_image_place(
-						&(t_surface){.h = app->window->height,
-							.w = app->window->width,
-						.pixels = app->window->buffers->framebuffer},
-						image,
-						(int32_t[2]){
-							app->grid_pos[0] + x * app->map->cell_render_size,
-							app->grid_pos[1] + y * app->map->cell_render_size,
-						}, 1.0);
+					if (image != NULL)
+						l3d_framebuffer_image_place(
+							&(t_surface){.h = app->window->height,
+								.w = app->window->width,
+							.pixels = app->window->buffers->framebuffer},
+							image,
+							(int32_t[2]){
+								(int32_t)app->grid_pos[0] + x * app->map->cell_render_size,
+								(int32_t)app->grid_pos[1] + y * app->map->cell_render_size,
+							}, 1.0);
 				}
 			}
 		}

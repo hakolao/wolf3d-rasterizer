@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 15:14:22 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/16 17:34:41 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,16 +167,51 @@ typedef struct						s_wolf3d
 	t_thread_pool			*thread_pool;
 }									t_wolf3d;
 
+/*
+** Map features used to draw the map in map editor
+*/
+
+typedef enum						e_map_features
+{
+	m_clear = 0,
+	m_room = 1,
+	m_start = 1 << 2,
+	m_enemy = 1 << 7,
+}									t_map_features;
+
+/*
+** Cell features saved into map & read from map file
+*/
+
 typedef enum						e_cell_features
 {
-	c_floor = 1,
-	c_floor_start = 1 << 1,
-	c_wall_up = 1 << 2,
-	c_wall_right = 1 << 3,
-	c_wall_down = 1 << 4,
-	c_wall_left = 1 << 5,
-	c_clear = 1 << 6,
+	// Save first bit for whether cell is room or not. If not, nothing else
+	// can exist there (see update_map_cell_features)
+	c_floor = 1 << 1,
+	c_floor_start = 1 << 2,
+	c_wall_up = 1 << 3,
+	c_wall_right = 1 << 4,
+	c_wall_down = 1 << 5,
+	c_wall_left = 1 << 6,
 }									t_cell_features;
+
+
+/*
+** Combination of cell features that form pieces based on neighbor
+** cells
+*/
+
+typedef enum						e_map_prefabs
+{
+	p_corr_vert = c_floor | c_wall_right | c_wall_left,
+	p_corr_horz = c_floor | c_wall_up | c_wall_down,
+	p_dead_up = c_floor | c_wall_left | c_wall_up | c_wall_right,
+	p_dead_right = c_floor | c_wall_up | c_wall_right | c_wall_down,
+	p_dead_down = c_floor | c_wall_right | c_wall_down | c_wall_left,
+	p_dead_left = c_floor | c_wall_down | c_wall_left | c_wall_right,
+	p_dead_all = c_floor | c_wall_up | c_wall_right | c_wall_down | c_wall_left,
+	p_middle_floor = c_floor
+}									t_map_prefabs;
 
 typedef struct						s_map_editor
 {
@@ -194,7 +229,7 @@ typedef struct						s_map_editor
 	int32_t					num_images;
 	t_vec2					grid_pos;
 	t_vec2					mouse_grid_pos;
-	t_cell_features			selected_feature;
+	t_map_features			selected_feature;
 	char					*filename;
 }									t_map_editor;
 

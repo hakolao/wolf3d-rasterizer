@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 19:27:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/16 17:11:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,13 @@ static void			on_menu_button_click(t_button *self, void *params)
 
 	app = params;
 	if (self->id == 0)
-		app->selected_feature = c_floor;
+		app->selected_feature = m_room;
 	else if (self->id == 1)
-		app->selected_feature = c_floor_start;
+		app->selected_feature = m_start;
 	else if (self->id == 2)
-		app->selected_feature = c_wall_up;
+		app->selected_feature = m_enemy;
 	else if (self->id == 3)
-		app->selected_feature = c_wall_right;
-	else if (self->id == 4)
-		app->selected_feature = c_wall_down;
-	else if (self->id == 5)
-		app->selected_feature = c_wall_left;
-	else if (self->id == 6)
-		app->selected_feature = c_clear;
+		app->selected_feature = m_clear;
 }
 
 static void			save_map(t_map_editor *app)
@@ -135,21 +129,18 @@ void				map_editor_save_menu_create(t_map_editor *app)
 void				map_editor_draw_menu_create(t_map_editor *app)
 {
 	int32_t		i;
-	const char	*options[7];
+	const char	*options[4];
 	t_button	**buttons;
 	uint32_t	num_buttons;
 	t_surface	**surfaces;
 	t_surface	**down_surfaces;
 	SDL_Surface	*tmp_surface;
 
-	num_buttons = 7;
-	options[0] = "Floor";
+	num_buttons = 4;
+	options[0] = "Room";
 	options[1] = "Start";
-	options[2] = "WallUp";
-	options[3] = "WallRight";
-	options[4] = "WallDown";
-	options[5] = "WallLeft";
-	options[6] = "Clear";
+	options[2] = "Enemy";
+	options[3] = "Clear";
 	error_check(!(buttons = malloc(sizeof(t_button*) * num_buttons)),
 		"Failed to malloc buttons in menu creation");
 	error_check(!(surfaces = malloc(sizeof(t_surface*) * num_buttons)),

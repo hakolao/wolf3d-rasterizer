@@ -6,100 +6,11 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:57:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/16 14:14:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-static void		scene_set_triangle_refs(t_scene *scene)
-{
-	int		i;
-	int		j;
-	int		k;
-	int		num_triangles;
-
-	i = -1;
-	num_triangles = 0;
-	k = 0;
-	while (++i < (int)scene->num_objects)
-	{
-		j = -1;
-		while (++j < scene->objects[i]->num_triangles)
-		{
-			scene->triangle_ref[k] = &scene->objects[i]->triangles[j];
-			num_triangles++;
-			k++;
-		}
-	}
-	scene->num_triangles = num_triangles;
-}
-
-/*
-** // ToDo: Clean up bois!
-*/
-
-static void		read_map_to_scene(t_wolf3d *app,
-						t_scene *scene, const char *map_filename)
-{
-	t_file_contents	*file;
-	int32_t			x;
-	int32_t			y;
-	float			unit_size;
-	uint32_t		cell;
-	int32_t			obj_i;
-
-	error_check(!(scene->map = malloc(sizeof(t_wolf3d_map))),
-		"Failed to malloc map");
-	error_check(!(scene->map->grid =
-		malloc(sizeof(uint32_t) * MAP_SIZE * MAP_SIZE)),
-		"Failed to malloc map grid");
-	if (!(file = read_file(map_filename)))
-		exit(EXIT_FAILURE);
-	ft_memcpy(scene->map->grid, file->buf, file->size);
-	destroy_file_contents(file);
-	scene->map->size = MAP_SIZE;
-	unit_size = app->window->width;
-	y = -1;
-	obj_i = 0;
-	while (++y < MAP_SIZE)
-	{
-		x = -1;
-		while (++x < MAP_SIZE)
-		{
-			cell = scene->map->grid[y * MAP_SIZE + x];
-			if ((cell & c_floor_start))
-			{
-				init_player(app,
-					(t_vec3){(float)y * unit_size - (float)unit_size / 2.0, 0,
-					(float)x * unit_size - (float)unit_size / 2.0});
-			}
-			if ((cell & c_floor))
-			{
-				scene->objects[obj_i] =
-					l3d_read_obj("assets/models/room_tiles/room_floor.obj",
-								"assets/textures/test_texture_small.bmp");
-				l3d_3d_object_scale(scene->objects[obj_i],
-									app->window->width / 1.0,
-									app->window->width / 1.0,
-									app->window->width / 1.0);
-				l3d_3d_object_translate(scene->objects[obj_i],
-					y * unit_size - unit_size / 2.0, PLAYER_HEIGHT * 1,
-					-x * unit_size - unit_size / 2.0);
-				obj_i++;
-			}
-			// ToDo Read other parts too, walls etc. Clean up.
-		}
-	}
-	scene->bullet_tree = NULL;
-	scene->num_objects = obj_i;
-	if (scene->num_objects > 0)
-	{
-		scene_set_triangle_refs(scene);
-		l3d_kd_tree_create_or_update(&scene->bullet_tree,
-			scene->triangle_ref, scene->num_triangles);
-	}
-}
 
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {

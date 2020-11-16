@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/12 17:57:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/16 14:14:39 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,8 @@ void						destroy_scene(t_scene *scene);
 void						set_active_scene(t_wolf3d *app,
 								t_scene_id to_scene);
 void						debug_scene(t_scene *scene);
+void						read_map_to_scene(t_wolf3d *app,
+								t_scene *scene, const char *map_filename);
 
 /*
 ** Debug

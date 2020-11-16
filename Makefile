@@ -29,6 +29,7 @@ SOURCES = main.c \
 			player.c \
 			camera.c \
 			scene.c \
+			scene_map.c \
 			time.c \
 			debug.c \
 			render/render.c \

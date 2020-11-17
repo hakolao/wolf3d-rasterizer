@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 17:34:41 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 15:07:46 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,8 +208,16 @@ typedef enum						e_map_prefabs
 	p_dead_up = c_floor | c_wall_left | c_wall_up | c_wall_right,
 	p_dead_right = c_floor | c_wall_up | c_wall_right | c_wall_down,
 	p_dead_down = c_floor | c_wall_right | c_wall_down | c_wall_left,
-	p_dead_left = c_floor | c_wall_down | c_wall_left | c_wall_right,
+	p_dead_left = c_floor | c_wall_down | c_wall_left | c_wall_up,
 	p_dead_all = c_floor | c_wall_up | c_wall_right | c_wall_down | c_wall_left,
+	p_wall_up = c_floor | c_wall_up,
+	p_wall_right = c_floor | c_wall_right,
+	p_wall_down = c_floor | c_wall_down,
+	p_wall_left = c_floor | c_wall_left,
+	p_corner_se = c_floor | c_wall_down | c_wall_right,
+	p_corner_sw = c_floor | c_wall_down | c_wall_left,
+	p_corner_nw = c_floor | c_wall_up | c_wall_left,
+	p_corner_ne = c_floor | c_wall_up | c_wall_right,
 	p_middle_floor = c_floor
 }									t_map_prefabs;
 
@@ -312,5 +320,6 @@ void						map_editor_draw_menu_create(t_map_editor *app);
 void						init_map(t_map_editor *app, int size);
 void						map_render(t_map_editor *app, t_vec2 pos);
 void						rescale_map(t_map_editor *app);
+void						update_map_cell_features(t_map_editor *app);
 
 #endif

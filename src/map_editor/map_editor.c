@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 18:16:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 14:54:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,50 +29,6 @@ static void		update_mouse_grid_pos(t_map_editor *app)
 		ft_floor(((float)(app->mouse.y - app->grid_pos[1]) /
 			app->map->cell_render_size))},
 		app->mouse_grid_pos);
-}
-
-static uint32_t	*cell_at(t_map_editor *app, int32_t x, int32_t y)
-{
-	int32_t		cell_index;
-
-	if ((y < 0 || y >= app->map->size || x < 0 || x >= app->map->size))
-		return (NULL);
-	cell_index = y * app->map->size + x;
-	return (app->map->grid[cell_index]);
-}
-
-static void		get_neighbbors(t_map_editor *app, int32_t x, int32_t y,
-								int32_t neighbors[9], uint32_t *cell)
-{
-	neighbors[0] = cell_at(app, x - 1, y - 1);
-	neighbors[1] = cell_at(app, x, y - 1);
-	neighbors[2] = cell_at(app, x + 1, y - 1);
-	neighbors[3] = cell_at(app, x - 1, y);
-	neighbors[4] = cell;
-	neighbors[5] = cell_at(app, x + 1, y);
-	neighbors[6] = cell_at(app, x - 1, y + 1);
-	neighbors[7] = cell_at(app, x, y + 1);
-	neighbors[8] = cell_at(app, x + 1, y + 1);
-}
-
-static void		update_map_cell_features(t_map_editor *app)
-{
-	int32_t		y;
-	int32_t		x;
-	uint32_t	*cell;
-	int32_t		neighbors[8];
-
-	y = -1;
-	while (++y < app->map->size)
-	{
-		x = -1;
-		while (++x < app->map->size)
-		{
-			cell = &app->map->grid[y * app->map->size + x];
-			get_neighbbors(app, x, y, neighbors, cell);
-			// Check against piece patterns & set cells
-		}
-	}
 }
 
 static void		handle_feature_placement(t_map_editor *app)
@@ -100,6 +56,7 @@ static void		handle_feature_placement(t_map_editor *app)
 		*cell = m_clear;
 	else if (app->selected_feature == m_room)
 		*cell |= m_room;
+	update_map_cell_features(app);
 }
 
 static void		main_loop(t_map_editor *app)
@@ -112,14 +69,15 @@ static void		main_loop(t_map_editor *app)
 		app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 		app->keyboard.state = SDL_GetKeyboardState(NULL);
 		update_mouse_grid_pos(app);
-		if (app->mouse.state & SDL_BUTTON_LMASK)
-			handle_feature_placement(app);
-		update_map_cell_features(app);
+		// if ((app->mouse.state & SDL_BUTTON_LMASK))
+		// 	handle_feature_placement(app);
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
+			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button & SDL_BUTTON_LMASK))
+				handle_feature_placement(app);
 			button_group_events_handle(app->select_menu, app->mouse, event);
 			button_group_events_handle(app->save_menu, app->mouse, event);
 		}

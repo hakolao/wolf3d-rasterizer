@@ -45,6 +45,7 @@ MAP_EDITOR_NAME = wolf3d_editor
 MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			map_editor/map.c \
 			map_editor/menu.c \
+			map_editor/cells.c \
 			window/ui.c \
 			window/text.c \
 			window/window.c \

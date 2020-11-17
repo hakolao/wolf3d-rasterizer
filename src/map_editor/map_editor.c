@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/17 16:18:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 16:37:58 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void		handle_feature_placement(t_map_editor *app)
 		return ;
 	cell = &app->map->grid[(int32_t)app->mouse_grid_pos[1] *
 		app->map->size + (int32_t)app->mouse_grid_pos[0]];
-	if (app->selected_feature == m_start && (*cell & m_room))
+	if (app->selected_feature == m_start)
 	{
 		i = -1;
 		while (++i < app->map->size * app->map->size)
@@ -51,6 +51,8 @@ static void		handle_feature_placement(t_map_editor *app)
 			if (app->map->grid[i] & m_start)
 				app->map->grid[i] ^= m_start;
 		}
+		*cell |= m_room;
+		*cell |= m_start;
 	}
 	else if (app->selected_feature == m_clear)
 		*cell = m_clear;

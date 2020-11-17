@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/17 15:07:46 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 16:32:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define HEIGHT 720
 # define MAP_EDITOR_WIDTH 1280
 # define MAP_EDITOR_HEIGHT 720
+# define OPTIONAL_PATTERN 2
 
 # define NAME "Wolf3D"
 # define SCREEN_INTERSECT_MAX FLT_MAX
@@ -321,5 +322,15 @@ void						init_map(t_map_editor *app, int size);
 void						map_render(t_map_editor *app, t_vec2 pos);
 void						rescale_map(t_map_editor *app);
 void						update_map_cell_features(t_map_editor *app);
+t_bool						modify_surround_pattern(uint32_t *cell,
+								int32_t rooms[9]);
+t_bool						modify_wall_pattern(uint32_t *cell,
+								int32_t rooms[9]);
+t_bool						modify_corridor_pattern(uint32_t *cell,
+								int32_t rooms[9]);
+t_bool						modify_corner_pattern(uint32_t *cell,
+								int32_t rooms[9]);
+t_bool						modify_dead_end_pattern(uint32_t *cell,
+								int32_t rooms[9]);
 
 #endif

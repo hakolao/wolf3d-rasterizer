@@ -46,6 +46,7 @@ MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			map_editor/map.c \
 			map_editor/menu.c \
 			map_editor/cells.c \
+			map_editor/patterns.c \
 			window/ui.c \
 			window/text.c \
 			window/window.c \

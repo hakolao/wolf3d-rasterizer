@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/17 14:54:59 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 16:18:32 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,13 @@ static void		main_loop(t_map_editor *app)
 		app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 		app->keyboard.state = SDL_GetKeyboardState(NULL);
 		update_mouse_grid_pos(app);
-		// if ((app->mouse.state & SDL_BUTTON_LMASK))
-		// 	handle_feature_placement(app);
+		if ((app->mouse.state & SDL_BUTTON_LMASK))
+			handle_feature_placement(app);
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
 				event.key.keysym.sym == SDLK_ESCAPE))
 				app->is_running = false;
-			if (event.type == SDL_MOUSEBUTTONDOWN && (event.button.button & SDL_BUTTON_LMASK))
-				handle_feature_placement(app);
 			button_group_events_handle(app->select_menu, app->mouse, event);
 			button_group_events_handle(app->save_menu, app->mouse, event);
 		}

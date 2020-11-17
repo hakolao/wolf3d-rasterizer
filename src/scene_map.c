@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/16 14:49:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 18:07:14 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,6 @@ static void		set_scene_collision_tree(t_scene *scene, uint32_t num_objects)
 	}
 }
 
-static void		place_floor(t_scene *scene, int32_t obj_i,
-							float unit_size, int32_t xy[2])
-{
-	scene->objects[obj_i] =
-		l3d_read_obj("assets/models/room_tiles/room_floor.obj",
-					"assets/textures/test_texture_small.bmp");
-	l3d_3d_object_scale(scene->objects[obj_i], unit_size, unit_size, unit_size);
-	l3d_3d_object_translate(scene->objects[obj_i],
-		xy[1] * unit_size - unit_size / 2.0, PLAYER_HEIGHT * 1,
-		-xy[0] * unit_size - unit_size / 2.0);
-}
-
-static void		place_player(t_wolf3d *app, float unit_size, int32_t xy[2])
-{
-	init_player(app,
-		(t_vec3){(float)xy[1] * unit_size - (float)unit_size / 2.0, 0,
-		(float)xy[0] * unit_size - (float)unit_size / 2.0});
-}
-
 static void		read_and_init_scene_map(t_scene *scene,
 					const char *map_filename)
 {
@@ -81,6 +62,72 @@ static void		read_and_init_scene_map(t_scene *scene,
 	ft_memcpy(scene->map->grid, file->buf, file->size);
 	destroy_file_contents(file);
 	scene->map->size = MAP_SIZE;
+}
+
+static void		place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
+{
+	init_player(app,
+		(t_vec3){(float)xy_rot[1] * (2 * unit_size) - unit_size, 0,
+		(float)xy_rot[0] *  (2 * unit_size) - unit_size});
+	rotate_player_horizontal(app, xy_rot[2]);
+}
+
+static void		place_dead_end_inaccessible(t_scene *scene, int32_t *obj_i,
+							float unit_size, int32_t xy_rot[3])
+{
+	(void)scene;
+	(void)obj_i;
+	(void)unit_size;
+	(void)xy_rot;
+}
+
+static void		place_dead_end(t_scene *scene, int32_t *obj_i,
+							float unit_size, int32_t xy_rot[3])
+{
+	(void)scene;
+	(void)obj_i;
+	(void)unit_size;
+	(void)xy_rot;
+}
+
+static void		place_corridor(t_scene *scene, int32_t *obj_i,
+							float unit_size, int32_t xy_rot[3])
+{
+	(void)scene;
+	(void)obj_i;
+	(void)unit_size;
+	(void)xy_rot;
+}
+
+static void		place_wall(t_scene *scene, int32_t *obj_i,
+							float unit_size, int32_t xy_rot[3])
+{
+	(void)scene;
+	(void)obj_i;
+	(void)unit_size;
+	(void)xy_rot;
+}
+
+static void		place_corner(t_scene *scene, int32_t *obj_i,
+							float unit_size, int32_t xy_rot[3])
+{
+	(void)scene;
+	(void)obj_i;
+	(void)unit_size;
+	(void)xy_rot;
+}
+
+static void		place_floor(t_scene *scene, int32_t *obj_i,
+							float unit_size, int32_t xy_rot[3])
+{
+	scene->objects[*obj_i] =
+		l3d_read_obj("assets/models/room_tiles/room_floor.obj",
+					"assets/textures/test_texture_small.bmp");
+	l3d_3d_object_scale(scene->objects[*obj_i], unit_size, unit_size, unit_size);
+	l3d_3d_object_translate(scene->objects[*obj_i],
+		(float)xy_rot[1] * (2 * unit_size), PLAYER_HEIGHT * 1,
+		-(float)xy_rot[0] * (2 * unit_size));
+	(*obj_i)++;
 }
 
 void			read_map_to_scene(t_wolf3d *app,
@@ -100,12 +147,42 @@ void			read_map_to_scene(t_wolf3d *app,
 		while (++x < MAP_SIZE)
 		{
 			cell = scene->map->grid[y * MAP_SIZE + x];
-			if ((cell & c_floor_start))
-				place_player(app, app->window->width, (int32_t[2]){x, y});
-			if ((cell & c_floor))
-				place_floor(scene, obj_i++, app->window->width,
-					(int32_t[2]){x, y});
-			// ToDo Read other parts too, walls etc. Clean up.
+			if (!(cell & m_room))
+				continue; 
+			if ((cell & m_start))
+				place_player(app, app->window->width, (int32_t[3]){x, y, -140});
+			if ((cell & p_dead_up) == p_dead_up)
+				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
+			else if ((cell & p_dead_right) == p_dead_right)
+				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
+			else if ((cell & p_dead_down) == p_dead_down)
+				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 180});
+			else if ((cell & p_dead_left) == p_dead_left)
+				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 270});
+			else if ((cell & p_corr_horz) == p_corr_horz)
+				place_corridor(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
+			else if ((cell & p_corr_vert) == p_corr_vert)
+				place_corridor(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
+			else if ((cell & p_wall_up) == p_wall_up)
+				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
+			else if ((cell & p_wall_right) == p_wall_right)
+				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
+			else if ((cell & p_wall_down) == p_wall_down)
+				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 180});
+			else if ((cell & p_wall_left) == p_wall_left)
+				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 270});
+			else if ((cell & p_corner_se) == p_corner_se)
+				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
+			else if ((cell & p_corner_sw) == p_corner_sw)
+				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
+			else if ((cell & p_corner_nw) == p_corner_nw)
+				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 180});
+			else if ((cell & p_corner_ne) == p_corner_ne)
+				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 270});
+			else if ((cell & p_dead_all) == p_dead_all)
+				place_dead_end_inaccessible(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
+			else if ((cell & p_middle_floor) == p_middle_floor)
+				place_floor(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
 		}
 	}
 	set_scene_collision_tree(scene, obj_i);

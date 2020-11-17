@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 18:05:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void			init_player(t_wolf3d *app, t_vec3 pos)
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
 	ml_matrix4_id(app->player.inv_translation);
+	move_player(app, move_forward);
 }
 
 static void		rotate_player(t_wolf3d *app)

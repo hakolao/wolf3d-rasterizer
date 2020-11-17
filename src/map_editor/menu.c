@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 19:27:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 17:11:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/17 17:42:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void			save_map(t_map_editor *app)
 	while (++i < app->map->size * app->map->size)
 	{
 		ft_memcpy(bytes, &app->map->grid[i], sizeof(uint32_t));
-		write(fd, &bytes, 4);
+		write(fd, &bytes, sizeof(uint32_t));
 	}
 	ft_printf("Saved %s\n", filename);
 	if ((fd = close(fd)) == -1 &&

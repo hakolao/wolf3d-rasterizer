@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 17:56:35 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/16 18:16:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,63 +31,28 @@ static void		update_mouse_grid_pos(t_map_editor *app)
 		app->mouse_grid_pos);
 }
 
-static int32_t	cell_at(t_map_editor *app, int32_t x, int32_t y)
+static uint32_t	*cell_at(t_map_editor *app, int32_t x, int32_t y)
 {
 	int32_t		cell_index;
 
 	if ((y < 0 || y >= app->map->size || x < 0 || x >= app->map->size))
-		return (-1);
+		return (NULL);
 	cell_index = y * app->map->size + x;
 	return (app->map->grid[cell_index]);
 }
 
 static void		get_neighbbors(t_map_editor *app, int32_t x, int32_t y,
-								int32_t neighbors[8])
+								int32_t neighbors[9], uint32_t *cell)
 {
-	neighbors[0] = cell_at(app, x, y - 1);
-	neighbors[1] = cell_at(app, x + 1, y - 1);
-	neighbors[2] = cell_at(app, x + 1, y);
-	neighbors[3] = cell_at(app, x + 1, y + 1);
-	neighbors[4] = cell_at(app, x, y + 1);
-	neighbors[5] = cell_at(app, x - 1, y + 1);
-	neighbors[6] = cell_at(app, x - 1, y);
-	neighbors[7] = cell_at(app, x - 1, y - 1);
-}
-
-static t_bool	neighbors_empty(int32_t neighbors[8])
-{
-	int32_t	i;
-	t_bool	neighbor_exists;
-	t_bool	neighbor_is_room;
-
-	i = -1;
-	while (++i < 8)
-	{
-		neighbor_exists = (int32_t)neighbors[i] != -1;
-		neighbor_is_room = (neighbors[i] & m_room);
-		if (neighbor_exists && neighbor_is_room)
-		{
-			return (false);
-		}
-	}
-	return (true);
-}
-
-static t_bool	neighbors_all_room(int32_t neighbors[8])
-{
-	int32_t	i;
-	t_bool	neighbor_exists;
-	t_bool	neighbor_is_room;
-
-	i = -1;
-	while (++i < 8)
-	{
-		neighbor_exists = (int32_t)neighbors[i] != -1;
-		neighbor_is_room = (neighbors[i] & m_room);
-		if (neighbor_exists && !neighbor_is_room)
-			return (false);
-	}
-	return (true);
+	neighbors[0] = cell_at(app, x - 1, y - 1);
+	neighbors[1] = cell_at(app, x, y - 1);
+	neighbors[2] = cell_at(app, x + 1, y - 1);
+	neighbors[3] = cell_at(app, x - 1, y);
+	neighbors[4] = cell;
+	neighbors[5] = cell_at(app, x + 1, y);
+	neighbors[6] = cell_at(app, x - 1, y + 1);
+	neighbors[7] = cell_at(app, x, y + 1);
+	neighbors[8] = cell_at(app, x + 1, y + 1);
 }
 
 static void		update_map_cell_features(t_map_editor *app)
@@ -104,18 +69,8 @@ static void		update_map_cell_features(t_map_editor *app)
 		while (++x < app->map->size)
 		{
 			cell = &app->map->grid[y * app->map->size + x];
-			if (!(*cell & m_room))
-				continue ;
-			get_neighbbors(app, x, y, neighbors);
-			if (neighbors_empty(neighbors))
-			{
-				*cell |= p_dead_all;
-			}
-			else if (neighbors_all_room(neighbors))
-			{
-				*cell ^= (p_dead_all & *cell);
-				*cell |= p_middle_floor;
-			}
+			get_neighbbors(app, x, y, neighbors, cell);
+			// Check against piece patterns & set cells
 		}
 	}
 }

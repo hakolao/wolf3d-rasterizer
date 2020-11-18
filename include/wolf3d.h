@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/17 16:35:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/18 15:53:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,10 @@ typedef enum						e_cell_features
 	c_wall_right = 1 << 4,
 	c_wall_down = 1 << 5,
 	c_wall_left = 1 << 6,
+	c_corner_nw = 1 << 7,
+	c_corner_ne = 1 << 8,
+	c_corner_se = 1 << 9,
+	c_corner_sw = 1 << 10,
 }									t_cell_features;
 
 

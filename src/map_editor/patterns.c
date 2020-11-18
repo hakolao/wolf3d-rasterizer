@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 16:30:56 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/18 18:11:45 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/18 18:15:22 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,10 @@ static t_bool	modify_middle_floor_corner_blocks(uint32_t *cell, int32_t rooms[9]
 		*cell |= c_block_ne | c_block_se;
 	else if (rooms_eq_pattern(rooms, (int32_t[9]){0, 1, 1, 1, 1, 1, 0, 1, 1}))
 		*cell |= c_block_nw | c_block_sw;
+	else if (rooms_eq_pattern(rooms, (int32_t[9]){1, 1, 0, 1, 1, 1, 0, 1, 1}))
+		*cell |= c_block_sw | c_block_ne;
+	else if (rooms_eq_pattern(rooms, (int32_t[9]){0, 1, 1, 1, 1, 1, 1, 1, 0}))
+		*cell |= c_block_nw | c_block_se;
 	else if (rooms_eq_pattern(rooms, (int32_t[9]){1, 1, 1, 1, 1, 1, 0, 1, 1}))
 		*cell |= c_block_sw;
 	else if (rooms_eq_pattern(rooms, (int32_t[9]){1, 1, 1, 1, 1, 1, 1, 1, 0}))

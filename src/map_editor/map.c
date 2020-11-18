@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/18 15:52:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/18 17:05:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ void			init_image_assets(t_map_editor *app)
 	app->image_keys[3] = c_wall_right;
 	app->image_keys[4] = c_wall_down;
 	app->image_keys[5] = c_wall_left;
-	app->image_keys[6] = c_corner_nw;
-	app->image_keys[7] = c_corner_ne;
-	app->image_keys[8] = c_corner_se;
-	app->image_keys[9] = c_corner_sw;
+	app->image_keys[6] = c_block_nw;
+	app->image_keys[7] = c_block_ne;
+	app->image_keys[8] = c_block_se;
+	app->image_keys[9] = c_block_sw;
 	i = -1;
 	while (++i < app->num_images)
 	{
@@ -69,13 +69,13 @@ void			init_image_assets(t_map_editor *app)
 		&surfaces[4]->pixels, &surfaces[4]->w, &surfaces[4]->h);
 	l3d_read_bmp_image_32bit_rgba("assets/map_editor/wall_left.bmp",
 		&surfaces[5]->pixels, &surfaces[5]->w, &surfaces[5]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/corner_nw.bmp",
+	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_nw.bmp",
 		&surfaces[6]->pixels, &surfaces[6]->w, &surfaces[6]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/corner_ne.bmp",
+	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_ne.bmp",
 		&surfaces[7]->pixels, &surfaces[7]->w, &surfaces[7]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/corner_se.bmp",
+	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_se.bmp",
 		&surfaces[8]->pixels, &surfaces[8]->w, &surfaces[8]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/corner_sw.bmp",
+	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_sw.bmp",
 		&surfaces[9]->pixels, &surfaces[9]->w, &surfaces[9]->h);
 	free(surfaces);
 }

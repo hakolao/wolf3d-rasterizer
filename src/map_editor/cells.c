@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 13:57:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/17 16:33:39 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/18 17:37:54 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ void			update_map_cell_features(t_map_editor *app)
 			if (!(*cell & m_room))
 				continue ;
 			get_neighbor_rooms(app, x, y, rooms, cell);
-			*cell ^= (p_dead_all & *cell);
+			*cell ^= (p_all & *cell);
 			if (modify_dead_end_pattern(cell, rooms) ||
 				modify_corner_pattern(cell, rooms) ||
 				modify_corridor_pattern(cell, rooms) ||
 				modify_wall_pattern(cell, rooms) ||
 				modify_surround_pattern(cell, rooms))
-				continue ;
+				;
 		}
 	}
 }

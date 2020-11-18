@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 16:30:56 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/17 16:33:56 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/18 17:39:08 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,115 @@ t_bool			modify_wall_pattern(uint32_t *cell, int32_t rooms[9])
 	return (false);
 }
 
+static t_bool	modify_middle_floor_corner_blocks(uint32_t *cell, int32_t rooms[9])
+{
+	if (rooms_equal_pattern(rooms,
+		(int32_t[9]){0, 1, 0,
+					1, 1, 1,
+					0, 1, 0}))
+	{
+		*cell |= c_block_ne | c_block_nw | c_block_se | c_block_sw;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){0, 1, 1,
+					1, 1, 1,
+					0, 1, 0}))
+	{
+		*cell |= c_block_nw | c_block_se | c_block_sw;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){0, 1, 0,
+					1, 1, 1,
+					0, 1, 1}))
+	{
+		*cell |= c_block_ne | c_block_nw | c_block_sw;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){0, 1, 0,
+					1, 1, 1,
+					1, 1, 0}))
+	{
+		*cell |= c_block_ne | c_block_nw | c_block_se;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){1, 1, 0,
+					1, 1, 1,
+					0, 1, 0}))
+	{
+		*cell |= c_block_ne | c_block_sw | c_block_se;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){1, 1, 1,
+					1, 1, 1,
+					0, 1, 0}))
+	{
+		*cell |= c_block_sw | c_block_se;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){0, 1, 0,
+					1, 1, 1,
+					1, 1, 1}))
+	{
+		*cell |= c_block_nw | c_block_ne;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){1, 1, 0,
+					1, 1, 1,
+					1, 1, 0}))
+	{
+		*cell |= c_block_ne | c_block_se;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){0, 1, 1,
+					1, 1, 1,
+					0, 1, 1}))
+	{
+		*cell |= c_block_nw | c_block_sw;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){1, 1, 1,
+					1, 1, 1,
+					0, 1, 1}))
+	{
+		*cell |= c_block_sw;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){1, 1, 1,
+					1, 1, 1,
+					1, 1, 0}))
+	{
+		*cell |= c_block_se;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){1, 1, 0,
+					1, 1, 1,
+					1, 1, 1}))
+	{
+		*cell |= c_block_ne;
+		return (true);
+	}
+	else if (rooms_equal_pattern(rooms,
+		(int32_t[9]){0, 1, 1,
+					1, 1, 1,
+					1, 1, 1}))
+	{
+		*cell |= c_block_nw;
+		return (true);
+	}
+	return (false);
+}
+
 t_bool			modify_surround_pattern(uint32_t *cell, int32_t rooms[9])
 {
 	if (rooms_equal_pattern(rooms,
@@ -135,11 +244,12 @@ t_bool			modify_surround_pattern(uint32_t *cell, int32_t rooms[9])
 		*cell |= p_dead_all;
 		return (true);
 	}
-	else if (rooms_equal_pattern(rooms,
-		(int32_t[9]){2, 1, 2, 1, 1, 1, 2, 1, 2}))
+	else if (modify_middle_floor_corner_blocks(cell, rooms) ||
+			rooms_equal_pattern(rooms, (int32_t[9]){2, 1, 2, 1, 1, 1, 2, 1, 2}))
 	{
 		*cell |= p_middle_floor;
 		return (true);
 	}
 	return (false);
 }
+

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 19:29:23 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 20:02:41 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,10 @@ typedef struct						s_scene_data
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
 	char					*map_filename;
-	t_hash_table			*textures;
-	t_hash_table			*texture_files;
-	t_hash_table			*models;
-	t_hash_table			*model_files;
+	char					*texture_files[32];
+	char					*model_files[32];
+	uint32_t				asset_keys[32];
+	uint32_t				num_models;
 }									t_scene_data;
 
 typedef struct						s_scene

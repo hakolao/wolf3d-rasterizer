@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 21:09:24 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 22:45:32 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,25 @@ static void		set_main_scene_assets(t_scene *scene, t_scene_data *data)
 	}
 }
 
+/*
+** Fill assets here (3d model & texture pairs) and their corresponding
+** feature keys.
+** set_main_scene_assets sets these to the scene into a hashmap that the
+** procedural generator can then access & copy from.
+*/
+
 static void		set_main_scene_data_assets(t_scene_data *data)
 {
-	data->texture_files[0] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[1] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[2] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[3] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[4] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[5] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[6] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[7] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[8] = "assets/textures/test_texture_small.bmp";
-	data->texture_files[9] = "assets/textures/test_texture_small.bmp";
+	data->texture_files[0] = "assets/textures/test_texture.bmp";
+	data->texture_files[1] = "assets/textures/test_texture.bmp";
+	data->texture_files[2] = "assets/textures/test_texture.bmp";
+	data->texture_files[3] = "assets/textures/test_texture.bmp";
+	data->texture_files[4] = "assets/textures/test_texture.bmp";
+	data->texture_files[5] = "assets/textures/test_texture.bmp";
+	data->texture_files[6] = "assets/textures/test_texture.bmp";
+	data->texture_files[7] = "assets/textures/test_texture.bmp";
+	data->texture_files[8] = "assets/textures/test_texture.bmp";
+	data->texture_files[9] = "assets/textures/test_texture.bmp";
 	data->model_files[0] = "assets/models/room_tiles/room_floor.obj";
 	data->model_files[1] = "assets/models/room_tiles/room_floor.obj";
 	data->model_files[2] = "assets/models/room_tiles/room_floor.obj";

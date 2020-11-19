@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/19 22:39:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 22:44:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ static void				instantiate_cell_features(t_wolf3d *app,
 		}
 	}
 }
+
+/*
+** Based on map data, generates map 3d objects from scene's model table.
+** Models are copied and instantiated.
+*/
 
 void			read_map_to_scene(t_wolf3d *app,
 						t_scene *scene, const char *map_filename)

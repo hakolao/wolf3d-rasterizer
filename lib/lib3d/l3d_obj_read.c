@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:27:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 19:51:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 21:49:52 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,13 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 			ml_vector2_copy(read_obj->vt[vt_i], obj->triangles[i].uvs[j]);
 			ml_vector3_copy(read_obj->vn[vn_i], obj->triangles[i].normals[j]);
 		}
+		obj->triangles[i].vtc_indices[0] = read_obj->triangles[i * 9 + 0 * 3 + 0] - 1;
+		obj->triangles[i].vtc_indices[1] = read_obj->triangles[i * 9 + 1 * 3 + 0] - 1;
+		obj->triangles[i].vtc_indices[2] = read_obj->triangles[i * 9 + 2 * 3 + 0] - 1;
 		l3d_triangle_set(&obj->triangles[i], (t_vertex*[3]){
-			obj->vertices[read_obj->triangles[i * 9 + 0 * 3 + 0] - 1],
-			obj->vertices[read_obj->triangles[i * 9 + 1 * 3 + 0] - 1],
-			obj->vertices[read_obj->triangles[i * 9 + 2 * 3 + 0] - 1]}, obj);
+			obj->vertices[obj->triangles[i].vtc_indices[0]],
+			obj->vertices[obj->triangles[i].vtc_indices[1]],
+			obj->vertices[obj->triangles[i].vtc_indices[2]]}, obj);
 	}
 }
 

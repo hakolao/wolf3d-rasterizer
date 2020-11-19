@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 19:11:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 22:21:52 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct				s_material
 typedef struct				s_triangle
 {
 	t_vertex		*vtc[3];
+	uint32_t		vtc_indices[3];
 	t_vec2			uvs[3];
 	t_vec3			normals[3];
 	t_vec3			center;
@@ -316,6 +317,9 @@ t_3d_object					*l3d_3d_object_create(uint32_t num_vertices,
 void						l3d_3d_object_destroy(t_3d_object *object);
 void						l3d_3d_object_set_vertex(t_vertex *vertex,
 								t_vec3 pos);
+t_3d_object					*l3d_3d_object_copy(t_3d_object *src);
+void						l3d_3d_object_debug_print(t_3d_object *obj);
+
 
 /*
 ** OBJ reading

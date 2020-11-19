@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 20:11:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 21:09:24 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@ static void		set_main_scene_assets(t_scene *scene, t_scene_data *data)
 {
 	int32_t		i;
 	uint32_t	key;
-	char		*filename;
 
 	scene->models = hash_map_create(data->num_models);
 	scene->textures = hash_map_create(data->num_models);
 	i = -1;
-	while (i < (int32_t)data->num_models)
+	while (++i < (int32_t)data->num_models)
 	{
 		key = data->asset_keys[i];
 		hash_map_add(scene->textures, key,
-			l3d_read_bmp_image_32bit_rgba_surface(filename));
+			l3d_read_bmp_image_32bit_rgba_surface(data->texture_files[i]));
 		hash_map_add(scene->models, key,
-			l3d_read_obj(filename, hash_map_get(scene->textures, key)));
+			l3d_read_obj(data->model_files[i],
+				hash_map_get(scene->textures, key)));
 	}
 }
 
@@ -145,7 +145,7 @@ void			destroy_scene(t_scene *scene)
 	if (scene->textures)
 	{
 		i = -1;
-		while (i < (int32_t)sizeof(uint32_t) * 4)
+		while (++i < (int32_t)sizeof(uint32_t) * 4)
 		{
 			key = 1 << i;
 			if ((texture = hash_map_get(scene->textures, key)))

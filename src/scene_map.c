@@ -6,13 +6,13 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/19 19:50:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 22:39:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		scene_set_triangle_refs(t_scene *scene)
+static void				scene_set_triangle_refs(t_scene *scene)
 {
 	int		i;
 	int		j;
@@ -35,7 +35,7 @@ static void		scene_set_triangle_refs(t_scene *scene)
 	scene->num_triangles = num_triangles;
 }
 
-static void		set_scene_collision_tree(t_scene *scene, uint32_t num_objects)
+static void				set_scene_collision_tree(t_scene *scene, uint32_t num_objects)
 {
 	scene->bullet_tree = NULL;
 	scene->num_objects = num_objects;
@@ -47,8 +47,8 @@ static void		set_scene_collision_tree(t_scene *scene, uint32_t num_objects)
 	}
 }
 
-static void		read_and_init_scene_map(t_scene *scene,
-					const char *map_filename)
+static void				read_and_init_scene_map(t_scene *scene,
+							const char *map_filename)
 {
 	t_file_contents	*file;
 
@@ -64,7 +64,7 @@ static void		read_and_init_scene_map(t_scene *scene,
 	scene->map->size = MAP_SIZE;
 }
 
-static void		place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
+static void				place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
 {
 	init_player(app,
 		(t_vec3){(float)xy_rot[1] * (2 * unit_size) - unit_size, 0,
@@ -72,38 +72,39 @@ static void		place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
 	rotate_player_horizontal(app, xy_rot[2]);
 }
 
-static void		instantiate_3d_model(t_3d_object *new_obj, t_3d_object *model,
+static t_3d_object		*instantiate_3d_model(t_3d_object *model,
 							float unit_size, int32_t xy[2])
 {
-	new_obj = l3d_3d_object_create(model->num_vertices, model->num_triangles);
-	ft_memcpy(new_obj, model, sizeof(*model));
-	l3d_3d_object_scale(new_obj,
-		unit_size, unit_size,
-		unit_size);
+	t_3d_object	*new_obj;
+
+	new_obj = l3d_3d_object_copy(model);
+	l3d_3d_object_scale(new_obj, unit_size, unit_size, unit_size);
 	l3d_3d_object_translate(new_obj,
 		(float)xy[1] * (2 * unit_size), PLAYER_HEIGHT * 1,
 		-(float)xy[0] * (2 * unit_size));
+	return (new_obj);
 }
 
-static void		instantiate_cell_features(t_wolf3d *app,
-					uint32_t cell, int32_t *obj_i, int32_t xy[2])
+static void				instantiate_cell_features(t_wolf3d *app,
+							uint32_t cell, int32_t *obj_i, int32_t xy[2])
 {
 	t_3d_object		*model;
-	uint32_t		model_key;
+	int32_t			i;
+	uint32_t		key;
 
-	model_key = 1;
-	while (model_key != UINT32_MAX)
+	i = -1;
+	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{
-		if ((cell & model_key))
+		key = 1 << i;
+		if ((cell & key))
 		{
-			if ((model = hash_map_get(app->active_scene->models, model_key)))
+			if ((model = hash_map_get(app->active_scene->models, key)))
 			{
-				instantiate_3d_model(app->active_scene->objects[*obj_i],
-					model, app->window->width, xy);
-				obj_i++;
+				app->active_scene->objects[*obj_i] =
+					instantiate_3d_model(model, app->window->width, xy);
+				(*obj_i)++;
 			}
 		}
-		model_key <<= 1;
 	}
 }
 

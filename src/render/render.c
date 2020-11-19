@@ -36,14 +36,11 @@ static void		render_triangle(t_wolf3d *app,
 												t_triangle *tri),
 								t_triangle *triangle)
 {
-	// uint32_t	*buffers[2];
 	uint32_t	dimensions[2];
 	t_triangle	clipped_triangles[2];
 	t_vertex	vtc[9];
 	int32_t		test_clip;
 
-	// buffers[0] = app->window->buffers->framebuffer;
-	// buffers[1] = app->window->buffers->zbuffer;
 	dimensions[0] = app->window->width;
 	dimensions[1] = app->window->height;
 	l3d_set_clipped_triangles(vtc, triangle, clipped_triangles);
@@ -139,6 +136,7 @@ static void		render_scene(t_wolf3d *app, t_render_pass pass)
 	int				i;
 	int				j;
 	t_triangle		*triangle;
+
 	i = -1;
 	while (++i < (int)app->active_scene->num_objects)
 	{

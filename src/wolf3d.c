@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 01:49:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 01:51:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 		if (app->window->resized)
 			wolf3d_resize_dependent_recreate(app);
 		window_frame_clear(app->window);
+		// Show loading screen when assets are loading (in scene selection)
 		if (app->is_loading)
 		{
 			loading_render(app);

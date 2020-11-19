@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 20:02:41 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 00:02:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,10 @@ typedef struct						s_wolf3d
 {
 	t_bool					is_running;
 	t_bool					is_debug;
+	t_bool					is_loading;
 	t_info					info;
 	t_window				*window;
+	t_scene_id				next_scene_id;
 	t_scene					*active_scene;
 	t_player				player;
 	t_mouse					mouse;
@@ -301,19 +303,19 @@ t_bool						screen_intersection(t_wolf3d *app,
 t_bool						is_rendered(t_wolf3d *app, t_triangle *triangle);
 void						ui_render(t_wolf3d *app);
 void						wolf3d_render(t_wolf3d *app);
-
+void						loading_render(t_wolf3d *app);
 /*
 ** Scene
 */
 void						scene_vertices_init(t_wolf3d *app,
 								t_scene *scene);
 t_scene						*new_scene(t_scene_data *data);
-void						destroy_scene(t_scene *scene);
-void						set_active_scene(t_wolf3d *app,
-								t_scene_id to_scene);
+void						destroy_scene(void *scene);
+void						select_next_scene(t_wolf3d *app);
 void						debug_scene(t_scene *scene);
-void						read_map_to_scene(t_wolf3d *app,
-								t_scene *scene, const char *map_filename);
+void						generate_scene_objects(t_wolf3d *app,
+								t_scene *scene);
+void						read_and_init_scene_map(t_scene *scene);
 
 /*
 ** Debug

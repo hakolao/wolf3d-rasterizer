@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:07:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 00:02:46 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define LIB3D_INTERNALS_H
 
 # include "lib3d.h"
-
-# define L3D_MAX_BMP_WIDTH 65536
 
 /*
 ** Make sure file header data alignment is correct

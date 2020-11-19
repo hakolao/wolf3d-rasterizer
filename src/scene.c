@@ -6,13 +6,13 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 22:45:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 00:31:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		set_main_scene_assets(t_scene *scene, t_scene_data *data)
+static void		load_scene_assets(t_scene *scene, t_scene_data *data)
 {
 	int32_t		i;
 	uint32_t	key;
@@ -73,12 +73,14 @@ static void		set_main_scene_data_assets(t_scene_data *data)
 	data->num_models = 10;
 }
 
-static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
+static void		select_scene(void *app_ptr)
 {
 	t_scene_data		data;
+	t_wolf3d			*app;
 
-	data.scene_id = scene_id;
-	if (scene_id == scene_id_main_menu)
+	app = app_ptr;
+	data.scene_id = app->next_scene_id;
+	if (data.scene_id == scene_id_main_menu)
 	{
 		data.menu_options[0] = "Start Game";
 		data.menu_options[1] = "Load Game";
@@ -88,7 +90,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.map_filename = NULL;
 		data.num_models = 0;
 	}
-	else if (scene_id == scene_id_main_game)
+	else if (data.scene_id == scene_id_main_game)
 	{
 		data.level = 0;
 		data.menu_option_count = 0;
@@ -97,10 +99,11 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		set_main_scene_data_assets(&data);
 	}
 	app->active_scene = new_scene(&data);
-	if (data.map_filename)
-		read_map_to_scene(app, app->active_scene, data.map_filename);
+	if (app->active_scene->map)
+		generate_scene_objects(app, app->active_scene);
 	if (app->active_scene->main_camera)
 		update_camera(app);
+	app->is_loading = false;
 }
 
 /*
@@ -124,24 +127,35 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->models = NULL;
 	scene->textures = NULL;
 	if (data->num_models > 0)
-		set_main_scene_assets(scene, data);
+		load_scene_assets(scene, data);
+	if (data->map_filename)
+		read_and_init_scene_map(scene);
 	return (scene);
 }
 
-void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
+/*
+** Concurrently select's and loads next scene. Once done, select scene
+** will turn app->is_loading to false;
+*/
+
+void			select_next_scene(t_wolf3d *app)
 {
+	app->is_loading = true;
 	if (app->active_scene != NULL)
-		destroy_scene(app->active_scene);
-	select_scene(app, to_scene);
-	// debug_scene(app->active_scene);
+		thread_pool_add_work(app->thread_pool,
+			destroy_scene, app->active_scene);
+	thread_pool_add_work(app->thread_pool,
+		select_scene, app);
 }
 
-void			destroy_scene(t_scene *scene)
+void			destroy_scene(void *scn)
 {
 	int			i;
 	t_surface	*texture;
 	uint32_t	key;
+	t_scene		*scene;
 
+	scene = scn;
 	if (scene->map_filename != NULL)
 		ft_strdel(&scene->map_filename);
 	if (scene->map != NULL)

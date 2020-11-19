@@ -31,10 +31,10 @@ SOURCES = main.c \
 			scene.c \
 			scene_map.c \
 			time.c \
+			ui.c \
 			debug.c \
 			render/render.c \
 			render/render_utils.c \
-			window/ui.c \
 			window/text.c \
 			window/window.c \
 			window/utils.c \
@@ -47,7 +47,6 @@ MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			map_editor/menu.c \
 			map_editor/cells.c \
 			map_editor/patterns.c \
-			window/ui.c \
 			window/text.c \
 			window/window.c \
 			window/utils.c	\

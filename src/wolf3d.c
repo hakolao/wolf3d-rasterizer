@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/18 18:17:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 00:08:50 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,32 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 		if (SDL_GetMouseFocus() == app->window->window)
 			SDL_WarpMouseInWindow(app->window->window,
 				app->window->width / 2, app->window->height / 2);
-		mouse_state_set(app);
-		mouse_state_handle(app);
-		keyboard_state_set(app);
-		keyboard_state_handle(app);
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
-				event.key.keysym.sym == SDLK_ESCAPE))
-				app->is_running = false;
-			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
-				app->is_debug = !app->is_debug;
-			if (app->active_scene->scene_id == scene_id_main_menu)
-				main_menu_event_handle(app, event);
-			if (event.type == SDL_MOUSEMOTION)
-				mouse_motion_handle(app, event);
-		}
 		if (app->window->resized)
 			wolf3d_resize_dependent_recreate(app);
 		window_frame_clear(app->window);
-		wolf3d_render(app);
-		wolf3d_debug_info_render(app);
+		if (!app->is_loading)
+		{
+			mouse_state_set(app);
+			mouse_state_handle(app);
+			keyboard_state_set(app);
+			keyboard_state_handle(app);
+			while (SDL_PollEvent(&event))
+			{
+				if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
+					event.key.keysym.sym == SDLK_ESCAPE))
+					app->is_running = false;
+				if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
+					app->is_debug = !app->is_debug;
+				if (app->active_scene->scene_id == scene_id_main_menu)
+					main_menu_event_handle(app, event);
+				if (event.type == SDL_MOUSEMOTION)
+					mouse_motion_handle(app, event);
+			}
+			wolf3d_render(app);
+			wolf3d_debug_info_render(app);
+		}
+		else
+			loading_render(app);
 		window_frame_draw(app->window);
 		wolf3d_debug_info_capture(app);
 	}
@@ -62,8 +67,10 @@ void		wolf3d_init(t_wolf3d *app)
 	app->active_scene = NULL;
 	app->is_running = true;
 	app->is_debug = true;
+	app->is_loading = false;
 	init_player(app, (t_vec3){0, 0, 0});
-	set_active_scene(app, scene_id_main_menu);
+	app->next_scene_id = scene_id_main_menu;
+	select_next_scene(app);
 }
 
 static void		wolf3d_cleanup(t_wolf3d *app)

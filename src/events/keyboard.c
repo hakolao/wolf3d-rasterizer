@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:36:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/17 17:58:58 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 23:10:44 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ void 		main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 		if (event.key.keysym.sym == SDLK_RETURN)
 		{
 			if (app->active_scene->selected_option == menu_action_start_game)
-				set_active_scene(app, scene_id_main_game);
+			{
+				app->next_scene_id = scene_id_main_game;
+				select_next_scene(app);
+			}
 			else if (app->active_scene->selected_option == menu_action_quit_game)
 				app->is_running = false;
 		}

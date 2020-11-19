@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:23 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 00:29:00 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,14 @@ void			ui_render(t_wolf3d *app)
 		ui_main_menu_render(app);
 	else if (app->active_scene->scene_id == scene_id_main_game)
 		ui_main_game_render(app);
+}
+
+void			loading_render(t_wolf3d *app)
+{
+	window_text_render_centered(app->window, (t_text_params){
+		.text = "Loading...",
+		.blend_ratio = 1.0,
+		.xy = (int32_t[2]){app->window->width / 2, app->window->height / 2},
+		.text_color = (SDL_Color){255, 255, 255, 255}},
+		app->window->main_font);
 }

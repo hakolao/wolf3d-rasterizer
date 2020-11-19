@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/19 22:44:23 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 23:32:31 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,6 @@ static void				set_scene_collision_tree(t_scene *scene, uint32_t num_objects)
 		l3d_kd_tree_create_or_update(&scene->bullet_tree,
 			scene->triangle_ref, scene->num_triangles);
 	}
-}
-
-static void				read_and_init_scene_map(t_scene *scene,
-							const char *map_filename)
-{
-	t_file_contents	*file;
-
-	error_check(!(scene->map = malloc(sizeof(t_wolf3d_map))),
-		"Failed to malloc map");
-	error_check(!(scene->map->grid =
-		malloc(sizeof(uint32_t) * MAP_SIZE * MAP_SIZE)),
-		"Failed to malloc map grid");
-	if (!(file = read_file(map_filename)))
-		exit(EXIT_FAILURE);
-	ft_memcpy(scene->map->grid, file->buf, file->size);
-	destroy_file_contents(file);
-	scene->map->size = MAP_SIZE;
 }
 
 static void				place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
@@ -113,15 +96,14 @@ static void				instantiate_cell_features(t_wolf3d *app,
 ** Models are copied and instantiated.
 */
 
-void			read_map_to_scene(t_wolf3d *app,
-						t_scene *scene, const char *map_filename)
+void			generate_scene_objects(t_wolf3d *app,
+						t_scene *scene)
 {
 	int32_t			x;
 	int32_t			y;
 	uint32_t		cell;
 	int32_t			obj_i;
 
-	read_and_init_scene_map(scene, map_filename);
 	y = -1;
 	obj_i = 0;
 	while (++y < MAP_SIZE)
@@ -138,4 +120,20 @@ void			read_map_to_scene(t_wolf3d *app,
 		}
 	}
 	set_scene_collision_tree(scene, obj_i);
+}
+
+void				read_and_init_scene_map(t_scene *scene)
+{
+	t_file_contents	*file;
+
+	error_check(!(scene->map = malloc(sizeof(t_wolf3d_map))),
+		"Failed to malloc map");
+	error_check(!(scene->map->grid =
+		malloc(sizeof(uint32_t) * MAP_SIZE * MAP_SIZE)),
+		"Failed to malloc map grid");
+	if (!(file = read_file(scene->map_filename)))
+		exit(EXIT_FAILURE);
+	ft_memcpy(scene->map->grid, file->buf, file->size);
+	destroy_file_contents(file);
+	scene->map->size = MAP_SIZE;
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 13:33:28 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:10:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,16 @@ void			l3d_read_bmp_image_32bit_rgba(const char *filename,
 	*width = image.width;
 	*height = image.height;
 	free(image.pixels);
+}
+
+t_surface		*l3d_read_bmp_image_32bit_rgba_surface(const char *filename)
+{
+	t_surface	*surface;
+
+	surface = malloc(sizeof(t_surface));
+	if (!surface)
+		return (NULL);
+	l3d_read_bmp_image_32bit_rgba(filename, &surface->pixels,
+		&surface->w, &surface->h);
+	return (surface);
 }

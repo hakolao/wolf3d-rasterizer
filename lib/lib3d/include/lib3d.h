@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:27 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:11:11 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,7 @@ void						l3d_3d_object_set_vertex(t_vertex *vertex,
 */
 
 t_3d_object					*l3d_read_obj(const char *filename,
-								const char *texture);
+								t_surface *texture);
 
 /*
 ** Math utils (could be moved somewhere else...)
@@ -387,6 +387,9 @@ void						l3d_triangle_2d_draw(uint32_t *buffer,
 void						l3d_read_bmp_image_32bit_rgba(const char *filename,
 								uint32_t **pixels_out, uint32_t *width,
 								uint32_t *height);
+t_surface					*l3d_read_bmp_image_32bit_rgba_surface(
+								const char *filename);
+
 
 /*
 ** Buffer image copying / placing

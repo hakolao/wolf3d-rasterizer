@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:27:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:52:58 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:51:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,25 +106,15 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
 ** is not returned.
 */
 
-t_3d_object				*l3d_read_obj(const char *filename, const char *txtfile)
+t_3d_object				*l3d_read_obj(const char *filename, t_surface *texture)
 {
 	t_file_contents	*obj_file;
-	t_surface		texture;
-	t_surface		*texture_ptr;
 	t_obj			obj;
 
 	error_check(!(obj_file = read_file(filename)), "Failed read obj file");
-	if (txtfile == NULL)
-		texture_ptr = NULL;
-	else
-	{
-		l3d_read_bmp_image_32bit_rgba(txtfile,
-			&texture.pixels, &texture.w, &texture.h);
-		texture_ptr = &texture;
-	}
 	l3d_obj_str_parse((char*)obj_file->buf, &obj);
 	if (!l3d_is_valid_obj(&obj))
 		return (NULL);
 	destroy_file_contents(obj_file);
-	return (l3d_3d_object_from_obj(&obj, texture_ptr));
+	return (l3d_3d_object_from_obj(&obj, texture));
 }

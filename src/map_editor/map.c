@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/18 17:05:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:56:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,67 +17,47 @@ static void		rescale_image_assets(t_map_editor *app)
 	float		size;
 	int32_t		i;
 	t_surface	*curr_image;
+	uint32_t	key;
 
 	size = (int32_t)app->map->render_size / app->map->size + 1;
 	i = -1;
-	while (++i < app->num_images)
+	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{
-		curr_image = hash_map_get(app->map_images, app->image_keys[i]);
-		hash_map_add(app->map_images, app->image_keys[i],
-			l3d_image_scaled(curr_image, size, size));
-		free(curr_image->pixels);
-		free(curr_image);
+		key = 1 << i;
+		if ((curr_image = hash_map_get(app->map_images, key)))
+		{
+			hash_map_add(app->map_images, key,
+				l3d_image_scaled(curr_image, size, size));
+			free(curr_image->pixels);
+			free(curr_image);
+		}
 	}
 }
 
 void			init_image_assets(t_map_editor *app)
 {
-	t_surface		**surfaces;
-	int32_t			i;
-
-	app->num_images = 10;
-	error_check(!(surfaces = malloc(sizeof(t_surface*) * app->num_images)),
-		"Failed to malloc surfaces pointer array");
-	error_check(!(app->map_images = hash_map_create(app->num_images)),
+	error_check(!(app->map_images = hash_map_create(10)),
 		"Failed to create hash table");
-	app->image_keys[0] = c_floor;
-	app->image_keys[1] = c_floor_start;
-	app->image_keys[2] = c_wall_up;
-	app->image_keys[3] = c_wall_right;
-	app->image_keys[4] = c_wall_down;
-	app->image_keys[5] = c_wall_left;
-	app->image_keys[6] = c_block_nw;
-	app->image_keys[7] = c_block_ne;
-	app->image_keys[8] = c_block_se;
-	app->image_keys[9] = c_block_sw;
-	i = -1;
-	while (++i < app->num_images)
-	{
-		error_check(!(surfaces[i] = malloc(sizeof(t_surface))),
-		"Failed to malloc surface");
-		hash_map_add(app->map_images, app->image_keys[i], surfaces[i]);
-	}
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/floor.bmp",
-		&surfaces[0]->pixels, &surfaces[0]->w, &surfaces[0]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/floor_start.bmp",
-		&surfaces[1]->pixels, &surfaces[1]->w, &surfaces[1]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/wall_up.bmp",
-		&surfaces[2]->pixels, &surfaces[2]->w, &surfaces[2]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/wall_right.bmp",
-		&surfaces[3]->pixels, &surfaces[3]->w, &surfaces[3]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/wall_down.bmp",
-		&surfaces[4]->pixels, &surfaces[4]->w, &surfaces[4]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/wall_left.bmp",
-		&surfaces[5]->pixels, &surfaces[5]->w, &surfaces[5]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_nw.bmp",
-		&surfaces[6]->pixels, &surfaces[6]->w, &surfaces[6]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_ne.bmp",
-		&surfaces[7]->pixels, &surfaces[7]->w, &surfaces[7]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_se.bmp",
-		&surfaces[8]->pixels, &surfaces[8]->w, &surfaces[8]->h);
-	l3d_read_bmp_image_32bit_rgba("assets/map_editor/block_sw.bmp",
-		&surfaces[9]->pixels, &surfaces[9]->w, &surfaces[9]->h);
-	free(surfaces);
+	hash_map_add(app->map_images, c_floor,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/floor.bmp"));
+	hash_map_add(app->map_images, c_floor_start,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/floor_start.bmp"));
+	hash_map_add(app->map_images, c_wall_up,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_up.bmp"));
+	hash_map_add(app->map_images, c_wall_right,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_right.bmp"));
+	hash_map_add(app->map_images, c_wall_down,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_down.bmp"));
+	hash_map_add(app->map_images, c_wall_left,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_left.bmp"));
+	hash_map_add(app->map_images, c_block_nw,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_nw.bmp"));
+	hash_map_add(app->map_images, c_block_ne,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_ne.bmp"));
+	hash_map_add(app->map_images, c_block_se,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_se.bmp"));
+	hash_map_add(app->map_images, c_block_sw,
+		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_sw.bmp"));
 }
 
 void			rescale_map(t_map_editor *app)

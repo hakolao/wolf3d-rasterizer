@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/17 16:41:42 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:55:54 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,20 @@ static void		cleanup(t_map_editor *app)
 {
 	int32_t		i;
 	t_surface	*image;
+	uint32_t	key;
 
 	if (app->filename != NULL)
 		ft_strdel(&app->filename);
 	i = -1;
-	while (++i < app->num_images)
+	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{
-		image = hash_map_get(app->map_images, app->image_keys[i]);
-		free(image->pixels);
-		free(image);
+		key = 1 << i;
+		image = hash_map_get(app->map_images, key);
+		if (image)
+		{
+			free(image->pixels);
+			free(image);
+		}
 	}
 	hash_map_destroy(app->map_images);
 	free(app->map->grid);

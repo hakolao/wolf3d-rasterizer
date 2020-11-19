@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/18 17:37:48 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:29:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,10 @@ typedef struct						s_scene_data
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
 	char					*map_filename;
+	t_hash_table			*textures;
+	t_hash_table			*texture_files;
+	t_hash_table			*models;
+	t_hash_table			*model_files;
 }									t_scene_data;
 
 typedef struct						s_scene
@@ -153,6 +157,8 @@ typedef struct						s_scene
 	int32_t					selected_option;
 	t_scene_id				scene_id;
 	char					*map_filename;
+	t_hash_table			*textures;
+	t_hash_table			*models;
 }									t_scene;
 
 typedef struct						s_wolf3d
@@ -240,8 +246,6 @@ typedef struct						s_map_editor
 	t_button_group			*save_menu;
 	t_wolf3d_map			*map;
 	t_hash_table			*map_images;
-	uint32_t				image_keys[32];
-	int32_t					num_images;
 	t_vec2					grid_pos;
 	t_vec2					mouse_grid_pos;
 	t_map_features			selected_feature;

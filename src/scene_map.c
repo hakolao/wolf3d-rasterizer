@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/17 18:07:14 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:50:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,62 +72,39 @@ static void		place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
 	rotate_player_horizontal(app, xy_rot[2]);
 }
 
-static void		place_dead_end_inaccessible(t_scene *scene, int32_t *obj_i,
-							float unit_size, int32_t xy_rot[3])
+static void		instantiate_3d_model(t_3d_object *new_obj, t_3d_object *model,
+							float unit_size, int32_t xy[2])
 {
-	(void)scene;
-	(void)obj_i;
-	(void)unit_size;
-	(void)xy_rot;
+	new_obj = l3d_3d_object_create(model->num_vertices, model->num_triangles);
+	ft_memcpy(new_obj, model, sizeof(*model));
+	l3d_3d_object_scale(new_obj,
+		unit_size, unit_size,
+		unit_size);
+	l3d_3d_object_translate(new_obj,
+		(float)xy[1] * (2 * unit_size), PLAYER_HEIGHT * 1,
+		-(float)xy[0] * (2 * unit_size));
 }
 
-static void		place_dead_end(t_scene *scene, int32_t *obj_i,
-							float unit_size, int32_t xy_rot[3])
+static void		instantiate_cell_features(t_wolf3d *app,
+					uint32_t cell, int32_t *obj_i, int32_t xy[2])
 {
-	(void)scene;
-	(void)obj_i;
-	(void)unit_size;
-	(void)xy_rot;
-}
+	t_3d_object		*model;
+	uint32_t		model_key;
 
-static void		place_corridor(t_scene *scene, int32_t *obj_i,
-							float unit_size, int32_t xy_rot[3])
-{
-	(void)scene;
-	(void)obj_i;
-	(void)unit_size;
-	(void)xy_rot;
-}
-
-static void		place_wall(t_scene *scene, int32_t *obj_i,
-							float unit_size, int32_t xy_rot[3])
-{
-	(void)scene;
-	(void)obj_i;
-	(void)unit_size;
-	(void)xy_rot;
-}
-
-static void		place_corner(t_scene *scene, int32_t *obj_i,
-							float unit_size, int32_t xy_rot[3])
-{
-	(void)scene;
-	(void)obj_i;
-	(void)unit_size;
-	(void)xy_rot;
-}
-
-static void		place_floor(t_scene *scene, int32_t *obj_i,
-							float unit_size, int32_t xy_rot[3])
-{
-	scene->objects[*obj_i] =
-		l3d_read_obj("assets/models/room_tiles/room_floor.obj",
-					"assets/textures/test_texture_small.bmp");
-	l3d_3d_object_scale(scene->objects[*obj_i], unit_size, unit_size, unit_size);
-	l3d_3d_object_translate(scene->objects[*obj_i],
-		(float)xy_rot[1] * (2 * unit_size), PLAYER_HEIGHT * 1,
-		-(float)xy_rot[0] * (2 * unit_size));
-	(*obj_i)++;
+	model_key = 1;
+	while (model_key != UINT32_MAX)
+	{
+		if ((cell & model_key))
+		{
+			if ((model = hash_map_get(app->active_scene->models, model_key)))
+			{
+				instantiate_3d_model(app->active_scene->objects[*obj_i],
+					model, app->window->width, xy);
+				obj_i++;
+			}
+		}
+		model_key <<= 1;
+	}
 }
 
 void			read_map_to_scene(t_wolf3d *app,
@@ -148,41 +125,10 @@ void			read_map_to_scene(t_wolf3d *app,
 		{
 			cell = scene->map->grid[y * MAP_SIZE + x];
 			if (!(cell & m_room))
-				continue; 
+				continue;
 			if ((cell & m_start))
 				place_player(app, app->window->width, (int32_t[3]){x, y, -140});
-			if ((cell & p_dead_up) == p_dead_up)
-				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
-			else if ((cell & p_dead_right) == p_dead_right)
-				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
-			else if ((cell & p_dead_down) == p_dead_down)
-				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 180});
-			else if ((cell & p_dead_left) == p_dead_left)
-				place_dead_end(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 270});
-			else if ((cell & p_corr_horz) == p_corr_horz)
-				place_corridor(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
-			else if ((cell & p_corr_vert) == p_corr_vert)
-				place_corridor(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
-			else if ((cell & p_wall_up) == p_wall_up)
-				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
-			else if ((cell & p_wall_right) == p_wall_right)
-				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
-			else if ((cell & p_wall_down) == p_wall_down)
-				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 180});
-			else if ((cell & p_wall_left) == p_wall_left)
-				place_wall(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 270});
-			else if ((cell & p_corner_se) == p_corner_se)
-				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
-			else if ((cell & p_corner_sw) == p_corner_sw)
-				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 90});
-			else if ((cell & p_corner_nw) == p_corner_nw)
-				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 180});
-			else if ((cell & p_corner_ne) == p_corner_ne)
-				place_corner(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 270});
-			else if ((cell & p_dead_all) == p_dead_all)
-				place_dead_end_inaccessible(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
-			else if ((cell & p_middle_floor) == p_middle_floor)
-				place_floor(scene, &obj_i, app->window->width, (int32_t[3]){x, y, 0});
+			instantiate_cell_features(app, cell, &obj_i, (int32_t[2]){x, y});
 		}
 	}
 	set_scene_collision_tree(scene, obj_i);

@@ -6,11 +6,85 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/18 18:18:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/19 19:55:52 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static void		set_main_scene_textures(t_scene_data *data)
+{
+	int32_t		i;
+	uint32_t	key;
+	char		*filename;
+
+	data->texture_files = hash_map_create(64);
+	data->textures = hash_map_create(64);
+	hash_map_add(data->texture_files, c_floor,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_wall_up,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_wall_right,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_wall_down,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_wall_left,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_block_ne,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_block_nw,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_block_se,
+		"assets/textures/test_texture_small.bmp");
+	hash_map_add(data->texture_files, c_block_sw,
+		"assets/textures/test_texture_small.bmp");
+	i = -1;
+	while (i < (int32_t)sizeof(uint32_t) * 4)
+	{
+		key = 1 << i;
+		if ((filename = hash_map_get(data->texture_files, key)))
+			hash_map_add(data->textures, key,
+				l3d_read_bmp_image_32bit_rgba_surface(filename));
+	}
+	hash_map_destroy(data->model_files);
+}
+
+static void		set_main_scene_models(t_scene_data *data)
+{
+	int32_t		i;
+	uint32_t	key;
+	char		*filename;
+
+	data->model_files = hash_map_create(64);
+	data->models = hash_map_create(64);
+	hash_map_add(data->model_files, c_floor,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_wall_up,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_wall_right,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_wall_down,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_wall_left,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_block_ne,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_block_nw,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_block_se,
+		"assets/models/room_tiles/room_floor.obj");
+	hash_map_add(data->model_files, c_block_sw,
+		"assets/models/room_tiles/room_floor.obj");
+	i = -1;
+	while (i < (int32_t)sizeof(uint32_t) * 4)
+	{
+		key = 1 << i;
+		if ((filename = hash_map_get(data->model_files, key)))
+			hash_map_add(data->models, key,
+				l3d_read_obj(filename, hash_map_get(data->textures, key)));
+	}
+	hash_map_destroy_free(data->model_files);
+}
 
 static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 {
@@ -32,6 +106,8 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
 		data.map_filename = ft_strdup("maps/okko");
+		set_main_scene_textures(&data);
+		set_main_scene_models(&data);
 	}
 	app->active_scene = new_scene(&data);
 	if (data.map_filename)
@@ -58,6 +134,8 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->main_camera = data->main_camera;
 	scene->map_filename = data->map_filename;
 	scene->map = NULL;
+	scene->textures = data->textures;
+	scene->models = data->models;
 	return (scene);
 }
 
@@ -71,7 +149,9 @@ void			set_active_scene(t_wolf3d *app, t_scene_id to_scene)
 
 void			destroy_scene(t_scene *scene)
 {
-	int		i;
+	int			i;
+	t_surface	*texture;
+	uint32_t	key;
 
 	if (scene->map_filename != NULL)
 		ft_strdel(&scene->map_filename);
@@ -80,6 +160,14 @@ void			destroy_scene(t_scene *scene)
 		free(scene->map->grid);
 		free(scene->map);
 	}
+	i = -1;
+	while (i < (int32_t)sizeof(uint32_t) * 4)
+	{
+		key = 1 << i;
+		if ((texture = hash_map_get(scene->textures, key)))
+			free(texture->pixels);
+	}
+	hash_map_destroy_free(scene->textures);
 	i = -1;
 	while (++i < (int)scene->num_objects)
 		l3d_3d_object_destroy(scene->objects[i]);

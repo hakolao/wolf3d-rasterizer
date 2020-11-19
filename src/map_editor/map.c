@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 19:56:20 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 01:25:39 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,30 @@ void			rescale_map(t_map_editor *app)
 void			init_map(t_map_editor *app, int size)
 {
 	t_file_contents	*file;
+	char			header[4];
 
 	error_check(!(app->map = malloc(sizeof(t_wolf3d_map))),
 		"Failed to malloc map");
-	error_check(!(app->map->grid = malloc(sizeof(uint32_t) * size * size)),
-		"Failed to malloc map grid");
 	if (app->filename == NULL || (!(file = read_file(app->filename))))
+	{
+		error_check(!(app->map->grid = malloc(sizeof(uint32_t) * size * size)),
+			"Failed to malloc map grid");
 		ft_memset(app->map->grid, 0, sizeof(uint32_t) * size * size);
+		app->map->size = size;
+	}
 	else
 	{
-		ft_memcpy(app->map->grid, file->buf, file->size);
+		ft_memcpy(&header, file->buf, 4);
+		if (!ft_strequ(header, "MAP\0"))
+			error_check(true,
+			"Invalid file, not a map file. First 4 bytes must be MAP\0");
+		ft_memcpy(&app->map->size, file->buf + 4, 4);
+		error_check(!(app->map->grid = malloc(sizeof(uint32_t) *
+			app->map->size * app->map->size)),
+			"Failed to malloc map grid");
+		ft_memcpy(app->map->grid, file->buf + 8, file->size - 8);
 		destroy_file_contents(file);
 	}
-	app->map->size = size;
 	init_image_assets(app);
 	rescale_map(app);
 }

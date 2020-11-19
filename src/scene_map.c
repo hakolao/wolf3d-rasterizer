@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/20 00:39:07 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 01:25:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,12 @@ void			generate_scene_objects(t_wolf3d *app,
 
 	y = -1;
 	obj_i = 0;
-	while (++y < MAP_SIZE)
+	while (++y < scene->map->size)
 	{
 		x = -1;
-		while (++x < MAP_SIZE)
+		while (++x < scene->map->size)
 		{
-			cell = scene->map->grid[y * MAP_SIZE + x];
+			cell = scene->map->grid[y * scene->map->size + x];
 			if (!(cell & m_room))
 				continue;
 			if ((cell & m_start))
@@ -125,15 +125,20 @@ void			generate_scene_objects(t_wolf3d *app,
 void				read_and_init_scene_map(t_scene *scene)
 {
 	t_file_contents	*file;
+	char			header[4];
 
-	error_check(!(scene->map = malloc(sizeof(t_wolf3d_map))),
-		"Failed to malloc map");
-	error_check(!(scene->map->grid =
-		malloc(sizeof(uint32_t) * MAP_SIZE * MAP_SIZE)),
-		"Failed to malloc map grid");
 	if (!(file = read_file(scene->map_filename)))
 		exit(EXIT_FAILURE);
-	ft_memcpy(scene->map->grid, file->buf, file->size);
+	error_check(!(scene->map = malloc(sizeof(t_wolf3d_map))),
+		"Failed to malloc map");
+	ft_memcpy(header, file->buf, 4);
+	if (!ft_strequ(header, "MAP\0"))
+		error_check(true,
+			"Invalid file, not a map file. First 4 bytes must be MAP\0");
+	ft_memcpy(&scene->map->size, file->buf + 4, 4);
+	error_check(!(scene->map->grid =
+		malloc(sizeof(uint32_t) * scene->map->size * scene->map->size)),
+		"Failed to malloc map grid");
+	ft_memcpy(scene->map->grid, file->buf + 8, file->size - 8);
 	destroy_file_contents(file);
-	scene->map->size = MAP_SIZE;
 }

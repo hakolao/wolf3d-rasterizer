@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 19:55:54 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 01:07:03 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ static void		cleanup(t_map_editor *app)
 int				main(int argc, char **argv)
 {
 	t_map_editor	app;
+	int32_t			size;
+	int32_t			i;
 
 	app.thread_pool = thread_pool_create(NUM_THREADS);
 	app.is_running = true;
@@ -139,15 +141,21 @@ int				main(int argc, char **argv)
 	window_create(&app.window, MAP_EDITOR_WIDTH, MAP_EDITOR_HEIGHT);
 	map_editor_draw_menu_create(&app);
 	map_editor_save_menu_create(&app);
-	if (argc == 2)
+	app.filename = NULL;
+	if (argc > 1)
 	{
-		app.filename = ft_strdup(argv[1]);
-		init_map(&app, MAP_SIZE);
+		size = INITIAL_MAP_SIZE;
+		i = -1;
+		while (++i < argc)
+		{
+			if (ft_match(argv[i], "--size=*"))
+				size = ft_atoi(argv[i] + 7);
+			else if (ft_match(argv[i], "--filename=*") && app.filename == NULL)
+				app.filename = ft_strdup(argv[i] + 11);
+		}
+		init_map(&app, size > 0 && size <= 50 ? size : INITIAL_MAP_SIZE);
 	} else
-	{
-		app.filename = NULL;
-		init_map(&app, MAP_SIZE);
-	}
+		init_map(&app, INITIAL_MAP_SIZE);
 	main_loop(&app);
 	cleanup(&app);
 	return (EXIT_SUCCESS);

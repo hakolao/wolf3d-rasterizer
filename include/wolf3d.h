@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 00:02:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 00:48:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
-# define MAP_SIZE 15
+# define INITIAL_MAP_SIZE 15
 
 # define NUM_THREADS 4
 

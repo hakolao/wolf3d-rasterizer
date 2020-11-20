@@ -6,11 +6,17 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/20 01:25:47 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 12:41:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static void				generate_skybox(t_scene *scene, float unit_size)
+{
+	(void)scene;
+	(void)unit_size;
+}
 
 static void				scene_set_triangle_refs(t_scene *scene)
 {
@@ -35,10 +41,9 @@ static void				scene_set_triangle_refs(t_scene *scene)
 	scene->num_triangles = num_triangles;
 }
 
-static void				set_scene_collision_tree(t_scene *scene, uint32_t num_objects)
+static void				set_scene_collision_tree(t_scene *scene)
 {
 	scene->bullet_tree = NULL;
-	scene->num_objects = num_objects;
 	if (scene->num_objects > 0)
 	{
 		scene_set_triangle_refs(scene);
@@ -119,7 +124,9 @@ void			generate_scene_objects(t_wolf3d *app,
 			instantiate_cell_features(app, cell, &obj_i, (int32_t[2]){x, y});
 		}
 	}
-	set_scene_collision_tree(scene, obj_i);
+	scene->num_objects = obj_i;
+	set_scene_collision_tree(scene);
+	generate_skybox(scene, app->window->width);
 }
 
 void				read_and_init_scene_map(t_scene *scene)

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 00:48:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 11:53:31 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ typedef struct						s_scene
 	char					*map_filename;
 	t_hash_table			*textures;
 	t_hash_table			*models;
+	t_surface				*skybox[6];
 }									t_scene;
 
 typedef struct						s_wolf3d

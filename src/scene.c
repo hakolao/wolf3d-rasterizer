@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 00:31:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/20 11:55:39 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,18 @@ static void		load_scene_assets(t_scene *scene, t_scene_data *data)
 			l3d_read_obj(data->model_files[i],
 				hash_map_get(scene->textures, key)));
 	}
+	scene->skybox[0] = l3d_read_bmp_image_32bit_rgba_surface(
+		"assets/skybox/skyrender0001.bmp");
+	scene->skybox[1] = l3d_read_bmp_image_32bit_rgba_surface(
+		"assets/skybox/skyrender0002.bmp");
+	scene->skybox[2] = l3d_read_bmp_image_32bit_rgba_surface(
+		"assets/skybox/skyrender0003.bmp");
+	scene->skybox[3] = l3d_read_bmp_image_32bit_rgba_surface(
+		"assets/skybox/skyrender0004.bmp");
+	scene->skybox[4] = l3d_read_bmp_image_32bit_rgba_surface(
+		"assets/skybox/skyrender0005.bmp");
+	scene->skybox[5] = l3d_read_bmp_image_32bit_rgba_surface(
+		"assets/skybox/skyrender0006.bmp");
 }
 
 /*
@@ -174,6 +186,12 @@ void			destroy_scene(void *scn)
 		}
 		hash_map_destroy_free(scene->models);
 		hash_map_destroy_free(scene->textures);
+		i = -1;
+		while (++i < 6)
+		{
+			free(scene->skybox[i]->pixels);
+			free(scene->skybox[i]);
+		}
 	}
 	i = -1;
 	while (++i < (int)scene->num_objects)

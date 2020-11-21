@@ -71,6 +71,7 @@ typedef struct				s_ray
 typedef struct				s_material
 {
 	uint32_t	*texture;
+	uint32_t	*normal_map;
 	uint32_t	width;
 	uint32_t	height;
 }							t_material;
@@ -94,6 +95,8 @@ typedef struct				s_triangle
 	t_material		*material;
 	t_vec2			points_2d[3];
 	float			vtc_zvalue[3];
+	t_vec3			tangent;
+	t_vec3			bitangent;
 }							t_triangle;
 
 typedef struct			s_l3d_buffers
@@ -276,6 +279,7 @@ void						l3d_triangle_vec_midpoint(t_tri_vec *triangles,
 								t_vec3 res);
 void						l3d_triangle_centroid_update(t_triangle *triangle);
 void						l3d_triangle_normal_update(t_triangle *triangle);
+void						l3d_triangle_tangent_update(t_triangle *triangle);
 
 /*
 **	Triangle clipping

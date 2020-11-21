@@ -73,6 +73,39 @@ static float	calculate_z_val(float baryc[3], t_triangle *triangle)
 			baryc[2] * triangle->vtc_zvalue[2])));
 }
 
+static void		normal_from_color(uint32_t color, t_vec3 normal)
+{
+	uint32_t	rgba[4];
+
+	l3d_u32_to_rgba(color, rgba);
+	normal[0] = rgba[0];
+	normal[1] = rgba[1];
+	normal[2] = rgba[2];
+}
+
+static void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
+{
+	uint32_t	normal_value;
+	t_vec3		bumpnormal;
+	t_vec3		resultnormal;
+	t_mat3		tbn;
+
+	normal_value = l3d_sample_texture(triangle->material->normal_map,
+					(int[2]){triangle->material->width,
+					triangle->material->height}, uv);
+	normal_from_color(normal_value, bumpnormal);
+	ml_vector3_mul(bumpnormal, 2, bumpnormal);
+	ml_vector3_sub(bumpnormal, (t_vec3){1.0, 1.0, 1.0}, bumpnormal);
+	// tbn = mat3(tangent, bitangent, normal); by-row matrix
+	// resultnormal = tbn * bumpnormal;
+	//! check matrix multiplication that it is column * vector
+	//! research shading by normal
+	//! implement flashlight style post processing "overlay"
+	ml_matrix3_row(triangle->tangent, triangle->bitangent, triangle->normal, tbn);
+	ml_matrix3_mul_vec3(tbn, bumpnormal, resultnormal);
+	ml_vector3_normalize(resultnormal, res);
+}
+
 static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 							int xy[2], t_triangle *triangle)
 {

@@ -26,6 +26,7 @@ typedef float		t_vec2[2];
 typedef float		t_vec3[3];
 typedef float		t_vec4[4];
 typedef t_vec4		t_mat4[4];
+typedef t_vec3		t_mat3[3];
 
 typedef struct		s_canvas
 {
@@ -74,7 +75,15 @@ void				ml_vector4_copy(t_vec4 src, t_vec4 dest);
 void				ml_vector4_set_all(t_vec4 vec, float val);
 
 /*
-** Matrix
+**	Matrix3
+*/
+
+void				ml_matrix3_row(t_vec3 row1, t_vec3 row2,
+									t_vec3 row3, t_mat3 res);
+void				ml_matrix3_mul_vec3(t_mat3 m, t_vec3 v, t_vec3 res);
+
+/*
+**	Matrix4
 */
 
 void				ml_matrix4_id(t_mat4 res);

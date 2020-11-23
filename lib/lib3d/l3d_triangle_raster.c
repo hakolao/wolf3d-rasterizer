@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/11/23 16:41:23 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 16:54:03 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,17 +135,11 @@ static void		draw_zpixel(t_sub_framebuffer *buffers,
 		buffers->width, buffers->height
 	}, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
-	ft_printf("pre plot: zval: %f, pixel val: %f offsets: %d %d\n",
-		z_val, pixel, offset_xy[0], offset_xy[1]);
 	if (z_val <= pixel)
 	{
-		ft_printf("actually plot: zval: %f, pixel val: %f offsets: %d %d\n",
-			z_val, pixel, offset_xy[0], offset_xy[1]);
 		l3d_pixel_plot_float(buffers->zbuffer,
 			(uint32_t[2]){buffers->width, buffers->height},
 			offset_xy, z_val);
-		ft_printf("WTFFF: actually plot: zval: %f, pixel val: %f offsets: %d %d\n",
-			z_val, pixel, offset_xy[0], offset_xy[1]);
 	}
 }
 

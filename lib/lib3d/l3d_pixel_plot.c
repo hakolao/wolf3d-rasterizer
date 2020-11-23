@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 14:27:20 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 16:35:01 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 16:56:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ void		l3d_pixel_plot_float(float *buffer, uint32_t dimensions_wh[2],
 	if (xy[0] < 0 || xy[0] >= (float)dimensions_wh[0] ||
 		xy[1] < 0 || xy[1] >= (float)dimensions_wh[1])
 		return;
+	ft_printf("Index: %d, value: %f, dims: %d %d\n", xy[1] * dimensions_wh[0] + xy[0],
+		dimensions_wh[0], dimensions_wh[1]);
 	buffer[xy[1] * dimensions_wh[0] + xy[0]] = value;
 }

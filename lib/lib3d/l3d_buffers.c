@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:47:57 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/23 20:37:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:54:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static t_sub_framebuffer	*l3d_framebuffer_sub_create(t_framebuffer *parent,
 	sub_buffer->parent_width = parent->width;
 	sub_buffer->x_start = x * sub_buffer->width;
 	sub_buffer->y_start = y * sub_buffer->height;
+	sub_buffer->x_offset = sub_buffer->parent_width * 0.5 - sub_buffer->x_start;
+	sub_buffer->y_offset = sub_buffer->parent_height * 0.5 - sub_buffer->y_start;
 	error_check(!(
 		sub_buffer->buffer = malloc(sizeof(uint32_t) *
 			sub_buffer->height * sub_buffer->width)),

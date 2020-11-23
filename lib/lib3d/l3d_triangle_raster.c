@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/11/23 20:50:54 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 21:00:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 	float		z_val;
 	int32_t		offset_xy[2];
 
-	offset_xy[0] = xy[0] + buffers->parent_width * 0.5 - buffers->x_start;
-	offset_xy[1] = xy[1] + buffers->parent_height * 0.5 - buffers->y_start;
+	offset_xy[0] = xy[0] + buffers->x_offset;
+	offset_xy[1] = xy[1] + buffers->y_offset;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
 	zpixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height}, offset_xy);
@@ -104,12 +104,12 @@ static void		scan_line(t_sub_framebuffer *buffers,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x + buffers->parent_width * 0.5 - buffers->x_start < 0)
+		if (x + buffers->x_offset < 0)
 		{
-			x = -buffers->parent_width * 0.5 + buffers->x_start;
-			continue;
+			x = -buffers->x_offset;
+			continue ;
 		}
-		else if (x + buffers->parent_width * 0.5 - buffers->x_start >= buffers->width)
+		else if (x + buffers->x_offset >= buffers->width)
 			break;
 		draw_pixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -124,8 +124,8 @@ static void		draw_zpixel(t_sub_framebuffer *buffers,
 	float		z_val;
 	int32_t		offset_xy[2];
 
-	offset_xy[0] = xy[0] + buffers->parent_width * 0.5 - buffers->x_start;
-	offset_xy[1] = xy[1] + buffers->parent_height * 0.5 - buffers->y_start;
+	offset_xy[0] = xy[0] + buffers->x_offset;
+	offset_xy[1] = xy[1] + buffers->y_offset;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
 	pixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height
@@ -151,12 +151,12 @@ static void		scan_z_line(t_sub_framebuffer *buffers,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x + buffers->parent_width * 0.5 - buffers->x_start < 0)
+		if (x + buffers->x_offset < 0)
 		{
-			x = -buffers->parent_width * 0.5 + buffers->x_start;
-			continue;
+			x = -buffers->x_offset;
+			continue ;
 		}
-		else if (x + buffers->parent_width * 0.5 - buffers->x_start >= buffers->width)
+		else if (x + buffers->x_offset >= buffers->width)
 			break;
 		draw_zpixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -173,12 +173,12 @@ static void		raster_upper(t_sub_framebuffer *bufs,
 	y = data->y1;
 	while (y < data->y2)
 	{
-		if (y + bufs->parent_height * 0.5 - bufs->y_start < 0)
+		if (y + bufs->y_offset < 0)
 		{
-			y = -bufs->parent_height * 0.5 + bufs->y_start;
-			continue;
+			y = -bufs->y_offset;
+			continue ;
 		}
-		else if (y + bufs->parent_height * 0.5 - bufs->y_start >= bufs->height)
+		else if (y + bufs->y_offset >= bufs->height)
 			break;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
@@ -210,12 +210,12 @@ static void		raster_lower(t_sub_framebuffer *bufs,
 	y = data->y2;
 	while (y < data->y3)
 	{
-		if (y + bufs->parent_height * 0.5 - bufs->y_start < 0)
+		if (y + bufs->y_offset < 0)
 		{
-			y = -bufs->parent_height * 0.5 + bufs->y_start;
-			continue;
+			y = -bufs->y_offset;
+			continue ;
 		}
-		else if (y + bufs->parent_height * 0.5 - bufs->y_start >= bufs->height)
+		else if (y + bufs->y_offset >= bufs->height)
 			break;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);

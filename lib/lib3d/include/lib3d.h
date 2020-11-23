@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 16:58:22 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:57:37 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ typedef struct			s_sub_framebuffer
 	int32_t			y_start;
 	int32_t			parent_width;
 	int32_t			parent_height;
+	float			x_offset;
+	float			y_offset;
 }						t_sub_framebuffer;
 
 typedef struct			s_framebuffer

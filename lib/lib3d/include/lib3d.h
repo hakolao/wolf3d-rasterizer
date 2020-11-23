@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 14:28:51 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 15:12:24 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,8 @@ typedef struct				s_triangle
 	t_bool			is_single_sided;
 	t_vec3			ab;
 	t_vec3			ac;
-	t_vertex		*ordered_vtc[3];
 	t_material		*material;
 	t_vec2			points_2d[3];
-	float			vtc_zvalue[3];
 }							t_triangle;
 
 typedef struct			s_sub_framebuffer
@@ -356,9 +354,9 @@ double						l3d_rand_d(void);
 **	Triangle rasterization
 */
 
-void						l3d_triangle_raster(t_l3d_buffers *buffers,
+void						l3d_triangle_raster(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
-void						l3d_triangle_set_zbuffer(t_l3d_buffers *buffers,
+void						l3d_triangle_set_zbuffer(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
 void						l3d_calculate_barycoords(
 													t_vec2 *triangle_points_2d,

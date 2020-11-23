@@ -6,35 +6,27 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/11/23 14:36:27 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 15:24:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d_internals.h"
 
-static void		order_corners_y(t_triangle *triangle, t_vertex **vtc,
-								t_vec2 *ordered_corners, t_vec2 *points_2d)
+static void		order_corners_y(t_vec2 *ordered_corners, t_vec2 *points_2d)
 {
 	size_t	indices[3];
-	t_vec2	uvs[3];
 
-	ml_vector2_copy(triangle->uvs[0], uvs[0]);
-	ml_vector2_copy(triangle->uvs[1], uvs[1]);
-	ml_vector2_copy(triangle->uvs[2], uvs[2]);
 	ft_min_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
 						3, &(indices[0]));
-	vtc[0] = triangle->vtc[indices[0]];
 	ml_vector2_copy(points_2d[indices[0]], ordered_corners[0]);
 	ft_max_double_idx((double[3]){points_2d[0][1],
 									points_2d[1][1],
 									points_2d[2][1]},
 						3, &(indices[2]));
-	vtc[2] = triangle->vtc[indices[2]];
 	ml_vector2_copy(points_2d[indices[2]], ordered_corners[2]);
 	indices[1] = 3 - (indices[0] + indices[2]);
-	vtc[1] = triangle->vtc[indices[1]];
 	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
 }
 
@@ -68,9 +60,9 @@ void			clamp_uv(t_vec2 uv)
 
 static float	calculate_z_val(float baryc[3], t_triangle *triangle)
 {
-	return (((baryc[0] * triangle->vtc_zvalue[0] +
-			baryc[1] * triangle->vtc_zvalue[1] +
-			baryc[2] * triangle->vtc_zvalue[2])));
+	return (((baryc[0] * (1.0 / triangle->vtc[0]->pos[2]) +
+			baryc[1] * (1.0 / triangle->vtc[1]->pos[2]) +
+			baryc[2] *(1.0 / triangle->vtc[2]->pos[2]))));
 }
 
 static void		draw_pixel(t_sub_framebuffer *buffers,
@@ -113,12 +105,13 @@ static void		scan_line(t_sub_framebuffer *buffers,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < -(int)buffers->width * 0.5)
+		if (x < buffers->x_start - buffers->parent_width * 0.5)
 		{
-			x = -(int)buffers->width * 0.5;
+			x = buffers->x_start - buffers->parent_width * 0.5;
 			continue;
 		}
-		else if (x > (int)buffers->width * 0.5)
+		else if (x >
+			buffers->x_start + buffers->width - buffers->parent_width * 0.5)
 			break;
 		draw_pixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -158,12 +151,13 @@ static void		scan_z_line(t_sub_framebuffer *buffers,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < -(int)buffers->width * 0.5)
+		if (x < buffers->x_start - buffers->parent_width * 0.5)
 		{
-			x = -(int)buffers->width * 0.5;
+			x = buffers->x_start - buffers->parent_width * 0.5;
 			continue;
 		}
-		else if (x > (int)buffers->width * 0.5)
+		else if (x >
+			buffers->x_start + buffers->width - buffers->parent_width * 0.5)
 			break;
 		draw_zpixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -180,12 +174,13 @@ static void		raster_upper(t_sub_framebuffer *bufs,
 	y = data->y1;
 	while (y < data->y2)
 	{
-		if (y < -(int)(bufs->height * 0.5))
+		if (y < bufs->y_start - bufs->parent_height * 0.5)
 		{
-			y = -(int)bufs->height * 0.5;
+			y = bufs->y_start - bufs->parent_height * 0.5;
 			continue;
 		}
-		else if (y > (int)(bufs->height * 0.5))
+		else if (y >
+			bufs->y_start + bufs->height - bufs->parent_height * 0.5)
 			break;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
@@ -217,12 +212,12 @@ static void		raster_lower(t_sub_framebuffer *bufs,
 	y = data->y2;
 	while (y < data->y3)
 	{
-		if (y < -(int)(bufs->framebuffer->height * 0.5))
+		if (y < bufs->y_start)
 		{
-			y = -(int)bufs->framebuffer->height * 0.5;
+			y = bufs->y_start;
 			continue;
 		}
-		else if (y > (int)(bufs->framebuffer->height * 0.5))
+		else if (y > bufs->y_start + bufs->height)
 			break;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
@@ -249,8 +244,7 @@ void			l3d_triangle_set_zbuffer(t_sub_framebuffer *buffers, t_triangle *triangle
 	t_raster_data	data;
 	t_vec2			ordered_points_2d[3];
 
-	order_corners_y(triangle, triangle->ordered_vtc, ordered_points_2d,
-					triangle->points_2d);
+	order_corners_y(ordered_points_2d, triangle->points_2d);
 	data.x1 = floor(ordered_points_2d[0][0]);
 	data.x2 = floor(ordered_points_2d[1][0]);
 	data.x3 = floor(ordered_points_2d[2][0]);
@@ -270,8 +264,7 @@ void			l3d_triangle_raster(t_sub_framebuffer *buffers, t_triangle *triangle)
 	t_raster_data	data;
 	t_vec2			ordered_points_2d[3];
 
-	order_corners_y(triangle, triangle->ordered_vtc, ordered_points_2d,
-					triangle->points_2d);
+	order_corners_y(ordered_points_2d, triangle->points_2d);
 	data.x1 = floor(ordered_points_2d[0][0]);
 	data.x2 = floor(ordered_points_2d[1][0]);
 	data.x3 = floor(ordered_points_2d[2][0]);

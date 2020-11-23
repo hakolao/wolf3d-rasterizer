@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 20:27:03 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:38:27 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void			window_frame_recreate(t_window *window)
 	window->frame = SDL_CreateTexture(window->renderer,
 		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, window->width,
 		window->height);
-	SDL_SetTextureBlendMode(window->frame, SDL_BLENDMODE_BLEND);
 	error_check(window->frame == NULL, SDL_GetError());
 	l3d_framebuffer_recreate(&window->framebuffer, window->width, window->height);
 	if (window->main_font != NULL)

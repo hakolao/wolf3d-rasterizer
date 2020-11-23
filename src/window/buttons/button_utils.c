@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 11:57:08 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 14:32:43 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,20 @@ void			button_render(t_button *button)
 	if (!button->texture)
 		return ;
 	if (button->is_down)
-		l3d_framebuffer_image_place(
+		l3d_image_place(
 			&(t_surface){
-				.h = button->window->height,
-				.w = button->window->width,
-				.pixels = button->window->buffers->framebuffer},
+				.h = button->window->framebuffer->height,
+				.w = button->window->framebuffer->width,
+				.pixels = button->window->framebuffer->buffer},
 			button->texture_down ? button->texture_down : button->texture,
 			(int32_t[2]){button->pos[0], button->pos[1]},
 				button->is_hovered ? 0.5 : 1.0);
 	else
-		l3d_framebuffer_image_place(
+		l3d_image_place(
 			&(t_surface){
-				.h = button->window->height,
-				.w = button->window->width,
-				.pixels = button->window->buffers->framebuffer},
+				.h = button->window->framebuffer->height,
+				.w = button->window->framebuffer->width,
+				.pixels = button->window->framebuffer->buffer},
 			button->texture,
 			(int32_t[2]){button->pos[0], button->pos[1]},
 			button->is_hovered ? 0.5 : 1.0);

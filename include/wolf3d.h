@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 12:42:50 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:36:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,11 +259,11 @@ typedef struct						s_map_editor
 /*
 ** For threading
 */
-typedef struct						s_triangle_work
+typedef struct						s_rasterize_work
 {
 	t_wolf3d				*app;
-	t_triangle				*triangle;
-}									t_triangle_work;
+	t_sub_framebuffer		*sub_buffer;
+}									t_rasterize_work;
 
 void						wolf3d_run(t_wolf3d *app);
 

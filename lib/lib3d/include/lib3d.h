@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 16:49:47 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
+/*   Updated: 2020/11/23 21:10:32 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,32 @@ typedef struct				s_triangle
 	t_vec3			ac;
 	t_material		*material;
 	t_vec2			points_2d[3];
-	float			vtc_zvalue[3];
+	t_vec3			vtc_zvalue;
 }							t_triangle;
 
-typedef struct			s_l3d_buffers
+typedef struct			s_sub_framebuffer
 {
-	uint32_t		*framebuffer;
+	uint32_t		*buffer;
 	float			*zbuffer;
-}						t_l3d_buffers;
+	int32_t			width;
+	int32_t			height;
+	int32_t			x_start;
+	int32_t			y_start;
+	int32_t			parent_width;
+	int32_t			parent_height;
+	float			x_offset;
+	float			y_offset;
+}						t_sub_framebuffer;
+
+typedef struct			s_framebuffer
+{
+	uint32_t			*buffer;
+	int32_t				width;
+	int32_t				height;
+	t_sub_framebuffer	**sub_buffers;
+	int32_t				num_x;
+	int32_t				num_y;
+}						t_framebuffer;
 
 /*
 ** Ray hit is saved to this hit record struct. Add params if needed.
@@ -339,11 +357,9 @@ double						l3d_rand_d(void);
 **	Triangle rasterization
 */
 
-void						l3d_triangle_raster(t_l3d_buffers *buffers,
-												uint32_t *dimensions,
+void						l3d_triangle_raster(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
-void						l3d_triangle_set_zbuffer(t_l3d_buffers *buffers,
-												uint32_t *dimensions,
+void						l3d_triangle_set_zbuffer(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
 void						l3d_calculate_barycoords(
 													t_vec2 *triangle_points_2d,
@@ -398,7 +414,7 @@ t_surface					*l3d_read_bmp_image_32bit_rgba_surface(
 ** Buffer image copying / placing
 */
 
-void						l3d_framebuffer_image_place(t_surface *frame,
+void						l3d_image_place(t_surface *frame,
 								t_surface *image, int32_t pos_xy[2],
 								float blend_ratio);
 t_surface					*l3d_image_scaled(t_surface *image,
@@ -413,5 +429,15 @@ uint32_t					l3d_color_blend_u32(uint32_t color1,
 								uint32_t color2, float ratio);
 void						l3d_u32_to_rgba(uint32_t color, uint32_t rgba[4]);
 uint32_t					l3d_triangle_normal_color(t_triangle *triangle);
+
+/*
+** Framebuffer utils
+*/
+
+t_framebuffer				*l3d_framebuffer_create(int32_t width,
+													int32_t height);
+void						l3d_framebuffer_destroy(t_framebuffer *framebuffer);
+void						l3d_framebuffer_recreate(t_framebuffer **framebuffer,
+												int32_t width, int32_t height);
 
 #endif

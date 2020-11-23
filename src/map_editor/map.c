@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 01:25:39 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 14:33:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,20 @@ static void		map_grid_render(t_map_editor *app, t_vec2 pos, uint32_t color)
 	int32_t		i;
 	float		interval;
 
-	buffer = app->window->buffers->framebuffer;
+	buffer = app->window->framebuffer->buffer;
 	interval = app->map->cell_render_size;
 	i = -1;
 	while (++i <= app->map->size)
 	{
 		l3d_line_draw(buffer,
-			(uint32_t[2]){app->window->width, app->window->height
+			(uint32_t[2]){app->window->framebuffer->width,
+						app->window->framebuffer->height
 		}, (int32_t[2][2]){{pos[0] + (float)(i * interval), pos[1]},
 			{pos[0] + (float)(i * interval), pos[1] +
 				app->map->render_size}}, color);
 		l3d_line_draw(buffer,
-			(uint32_t[2]){app->window->width, app->window->height
+			(uint32_t[2]){app->window->framebuffer->width,
+						app->window->framebuffer->height
 		}, (int32_t[2][2]){{pos[0], pos[1] + (float)(i * interval)},
 			{pos[0] + app->map->render_size, pos[1] + (float)(i * interval)}},
 			color);
@@ -148,10 +150,11 @@ static void		map_features_render(t_map_editor *app)
 				{
 					image = hash_map_get(app->map_images, feature_flag);
 					if (image != NULL)
-						l3d_framebuffer_image_place(
-							&(t_surface){.h = app->window->height,
-								.w = app->window->width,
-							.pixels = app->window->buffers->framebuffer},
+						l3d_image_place(
+							&(t_surface){.h =
+									app->window->framebuffer->height,
+								.w = app->window->framebuffer->width,
+							.pixels = app->window->framebuffer->buffer},
 							image,
 							(int32_t[2]){
 								(int32_t)app->grid_pos[0] + x * app->map->cell_render_size,

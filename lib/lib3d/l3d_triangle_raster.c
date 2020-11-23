@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/11/23 17:55:15 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 18:13:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,17 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 	float		baryc[3];
 	t_vec2		uv;
 	float		z_val;
+	int32_t		offset_xy[2];
 
+	offset_xy[0] = xy[0] + buffers->parent_width * 0.5 - buffers->x_start;
+	offset_xy[1] = xy[1] + buffers->parent_height * 0.5 - buffers->y_start;
+	if (offset_xy[0] < 0 || offset_xy[0] >= buffers->width ||
+		offset_xy[1] < 0 || offset_xy[1] >= buffers->height )
+		return ;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
 	ft_printf("%f %f %f %d %d\n", baryc[0], baryc[1], baryc[2], xy[0], xy[1]);
 	zpixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
-		buffers->width, buffers->height}, xy);
+		buffers->width, buffers->height}, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
 	if (z_val <= zpixel)
 	{
@@ -84,7 +90,7 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 		clamp_uv(uv);
 		l3d_pixel_plot(buffers->buffer,
 			(uint32_t[2]){buffers->width, buffers->height},
-			xy, l3d_sample_texture(triangle->material->texture,
+			offset_xy, l3d_sample_texture(triangle->material->texture,
 					(int[2]){triangle->material->width,
 					triangle->material->height}, uv));
 	}
@@ -102,12 +108,12 @@ static void		scan_line(t_sub_framebuffer *buffers,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < 0)
+		if (x < -buffers->parent_width * 0.5)
 		{
-			x = 0;
+			x = -buffers->parent_width * 0.5;
 			continue;
 		}
-		else if (x > buffers->width)
+		else if (x > buffers->parent_width * 0.5)
 			break;
 		draw_pixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -120,18 +126,24 @@ static void		draw_zpixel(t_sub_framebuffer *buffers,
 	float		pixel;
 	float		baryc[3];
 	float		z_val;
+	int32_t		offset_xy[2];
 
+	offset_xy[0] = xy[0] + buffers->parent_width * 0.5 - buffers->x_start;
+	offset_xy[1] = xy[1] + buffers->parent_height * 0.5 - buffers->y_start;
+	if (offset_xy[0] < 0 || offset_xy[0] >= buffers->width ||
+		offset_xy[1] < 0 || offset_xy[1] >= buffers->height )
+		return ;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
 	ft_printf("%f %f %f %d %d\n", baryc[0], baryc[1], baryc[2], xy[0], xy[1]);
 	pixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height
-	}, xy);
+	}, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
 	if (z_val <= pixel)
 	{
 		l3d_pixel_plot_float(buffers->zbuffer,
 			(uint32_t[2]){buffers->width, buffers->height},
-			xy, z_val);
+			offset_xy, z_val);
 	}
 }
 
@@ -147,12 +159,12 @@ static void		scan_z_line(t_sub_framebuffer *buffers,
 	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
-		if (x < 0)
+		if (x < -buffers->parent_width * 0.5)
 		{
-			x = 0;
+			x = -buffers->parent_width * 0.5;
 			continue;
 		}
-		else if (x > buffers->width)
+		else if (x > buffers->parent_width * 0.5)
 			break;
 		draw_zpixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
@@ -169,12 +181,12 @@ static void		raster_upper(t_sub_framebuffer *bufs,
 	y = data->y1;
 	while (y < data->y2)
 	{
-		if (y < 0)
+		if (y < -bufs->parent_height * 0.5)
 		{
-			y = 0;
+			y = -bufs->parent_height * 0.5;
 			continue;
 		}
-		else if (y > bufs->height)
+		else if (y > bufs->parent_height * 0.5)
 			break;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
@@ -206,12 +218,12 @@ static void		raster_lower(t_sub_framebuffer *bufs,
 	y = data->y2;
 	while (y < data->y3)
 	{
-		if (y < 0)
+		if (y < -bufs->parent_height * 0.5)
 		{
-			y = 0;
+			y = -bufs->parent_height * 0.5;
 			continue;
 		}
-		else if (y > bufs->height)
+		else if (y > bufs->parent_height * 0.5)
 			break;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
@@ -239,12 +251,12 @@ void			l3d_triangle_set_zbuffer(t_sub_framebuffer *buffers, t_triangle *triangle
 	t_vec2			ordered_points_2d[3];
 
 	order_corners_y(ordered_points_2d, triangle->points_2d);
-	data.x1 = floor(ordered_points_2d[0][0]) + buffers->parent_width * 0.5 - buffers->x_start;
-	data.x2 = floor(ordered_points_2d[1][0]) + buffers->parent_width * 0.5 - buffers->x_start;
-	data.x3 = floor(ordered_points_2d[2][0]) + buffers->parent_width * 0.5 - buffers->x_start;
-	data.y1 = floor(ordered_points_2d[0][1]) + buffers->parent_height * 0.5 - buffers->y_start;
-	data.y2 = floor(ordered_points_2d[1][1]) + buffers->parent_height * 0.5 - buffers->y_start;
-	data.y3 = floor(ordered_points_2d[2][1]) + buffers->parent_height * 0.5 - buffers->y_start;
+	data.x1 = floor(ordered_points_2d[0][0]);
+	data.x2 = floor(ordered_points_2d[1][0]);
+	data.x3 = floor(ordered_points_2d[2][0]);
+	data.y1 = floor(ordered_points_2d[0][1]);
+	data.y2 = floor(ordered_points_2d[1][1]);
+	data.y3 = floor(ordered_points_2d[2][1]);
 	data.slope_bc = (data.x3 - data.x2) / (data.y3 - data.y2);
 	data.slope_ac = (data.x3 - data.x1) / (data.y3 - data.y1);
 	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);
@@ -259,12 +271,12 @@ void			l3d_triangle_raster(t_sub_framebuffer *buffers, t_triangle *triangle)
 	t_vec2			ordered_points_2d[3];
 
 	order_corners_y(ordered_points_2d, triangle->points_2d);
-	data.x1 = floor(ordered_points_2d[0][0]) + buffers->parent_width * 0.5 - buffers->x_start;
-	data.x2 = floor(ordered_points_2d[1][0]) + buffers->parent_width * 0.5 - buffers->x_start;
-	data.x3 = floor(ordered_points_2d[2][0]) + buffers->parent_width * 0.5 - buffers->x_start;
-	data.y1 = floor(ordered_points_2d[0][1]) + buffers->parent_height * 0.5 - buffers->y_start;
-	data.y2 = floor(ordered_points_2d[1][1]) + buffers->parent_height * 0.5 - buffers->y_start;
-	data.y3 = floor(ordered_points_2d[2][1]) + buffers->parent_height * 0.5 - buffers->y_start;
+	data.x1 = floor(ordered_points_2d[0][0]);
+	data.x2 = floor(ordered_points_2d[1][0]);
+	data.x3 = floor(ordered_points_2d[2][0]);
+	data.y1 = floor(ordered_points_2d[0][1]);
+	data.y2 = floor(ordered_points_2d[1][1]);
+	data.y3 = floor(ordered_points_2d[2][1]);
 	data.slope_bc = (data.x3 - data.x2) / (data.y3 - data.y2);
 	data.slope_ac = (data.x3 - data.x1) / (data.y3 - data.y1);
 	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);

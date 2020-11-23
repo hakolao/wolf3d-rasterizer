@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 22:21:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 16:49:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ typedef struct				s_triangle
 	t_bool			is_single_sided;
 	t_vec3			ab;
 	t_vec3			ac;
-	t_vertex		*ordered_vtc[3];
 	t_material		*material;
 	t_vec2			points_2d[3];
 	float			vtc_zvalue[3];

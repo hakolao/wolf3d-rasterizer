@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 14:11:58 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 14:32:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,21 @@ void			window_frame_clear(t_window *window)
 
 	i = 0;
 	color = 0x000000FF;
-	while (i < window->buffers->framebuffer->width *
-				window->buffers->framebuffer->height)
+	while (i < window->framebuffer->width *
+				window->framebuffer->height)
 	{
-		window->buffers->framebuffer->buffer[i] = color;
-		window->buffers->framebuffer->buffer[i + 1] = color;
-		window->buffers->framebuffer->buffer[i + 2] = color;
-		window->buffers->framebuffer->buffer[i + 3] = color;
-		window->buffers->zbuffer->buffer[i] = INT32_MAX;
-		window->buffers->zbuffer->buffer[i + 1] = INT32_MAX;
-		window->buffers->zbuffer->buffer[i + 2] = INT32_MAX;
-		window->buffers->zbuffer->buffer[i + 3] = INT32_MAX;
+		window->framebuffer->buffer[i] = color;
+		window->framebuffer->buffer[i + 1] = color;
+		window->framebuffer->buffer[i + 2] = color;
+		window->framebuffer->buffer[i + 3] = color;
 		i += 4;
 	}
 }
 
 void			window_frame_draw(t_window *window)
 {
-	SDL_UpdateTexture(window->frame, NULL, window->buffers->framebuffer->buffer,
-		window->buffers->framebuffer->width * 4);
+	SDL_UpdateTexture(window->frame, NULL, window->framebuffer->buffer,
+		window->framebuffer->width * 4);
 	SDL_RenderCopy(window->renderer, window->frame, NULL, NULL);
 	SDL_RenderPresent(window->renderer);
 }
@@ -76,7 +72,7 @@ void			window_frame_recreate(t_window *window)
 		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, window->width,
 		window->height);
 	error_check(window->frame == NULL, SDL_GetError());
-	l3d_render_buffers_recreate(&window->buffers, window->width, window->height);
+	l3d_framebuffer_recreate(&window->framebuffer, window->width, window->height);
 	if (window->main_font != NULL)
 		TTF_CloseFont(window->main_font);
 	window->main_font = TTF_OpenFont(GAME_FONT, FONT_SIZE);
@@ -105,7 +101,7 @@ void			window_create(t_window **window_ref,
 	window->window_id = SDL_GetWindowID(window->window);
 	window->is_hidden = false;
 	window->frame = NULL;
-	window->buffers = NULL;
+	window->framebuffer = NULL;
 	window->main_font = NULL;
 	window->debug_font = NULL;
 	window_frame_recreate(window);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 14:10:49 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 14:28:51 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct				s_triangle
 typedef struct			s_sub_framebuffer
 {
 	uint32_t		*buffer;
+	float			*zbuffer;
 	int32_t			width;
 	int32_t			height;
 	int32_t			x_start;
@@ -107,17 +108,6 @@ typedef struct			s_sub_framebuffer
 	int32_t			parent_width;
 	int32_t			parent_height;
 }						t_sub_framebuffer;
-
-typedef struct			s_sub_zbuffer
-{
-	float			*buffer;
-	int32_t			width;
-	int32_t			height;
-	int32_t			x_start;
-	int32_t			y_start;
-	int32_t			parent_width;
-	int32_t			parent_height;
-}						t_sub_zbuffer;
 
 typedef struct			s_framebuffer
 {
@@ -128,22 +118,6 @@ typedef struct			s_framebuffer
 	int32_t				num_x;
 	int32_t				num_y;
 }						t_framebuffer;
-
-typedef struct			s_zbuffer
-{
-	float			*buffer;
-	int32_t			width;
-	int32_t			height;
-	t_sub_zbuffer	**sub_buffers;
-	int32_t			num_x;
-	int32_t			num_y;
-}						t_zbuffer;
-
-typedef struct			s_l3d_buffers
-{
-	t_framebuffer	*framebuffer;
-	t_zbuffer		*zbuffer;
-}						t_l3d_buffers;
 
 /*
 ** Ray hit is saved to this hit record struct. Add params if needed.
@@ -462,12 +436,7 @@ uint32_t					l3d_triangle_normal_color(t_triangle *triangle);
 t_framebuffer				*l3d_framebuffer_create(int32_t width,
 													int32_t height);
 void						l3d_framebuffer_destroy(t_framebuffer *framebuffer);
-t_zbuffer					*l3d_zbuffer_create(int32_t width, int32_t height);
-void						l3d_zbuffer_destroy(t_zbuffer *zbuffer);
-void						l3d_render_buffers_recreate(t_l3d_buffers **buffers,
+void						l3d_framebuffer_recreate(t_framebuffer **framebuffer,
 												int32_t width, int32_t height);
-void						l3d_render_buffers_destroy(t_l3d_buffers *buffers);
-t_l3d_buffers				*l3d_render_buffers_create(int32_t width,
-												int32_t height);
 
 #endif

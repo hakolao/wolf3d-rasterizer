@@ -31,7 +31,7 @@ static void		update_triangle_vertex_zvalues(t_triangle *triangle)
 */
 
 static void		render_triangle(t_wolf3d *app,
-								void (*render_f)(t_l3d_buffers *buffers,
+								void (*render_f)(t_framebuffer *buffer,
 												t_triangle *tri),
 								t_triangle *triangle)
 {
@@ -48,20 +48,20 @@ static void		render_triangle(t_wolf3d *app,
 		screen_intersection(app, &clipped_triangles[1]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[1]);
-		render_f(app->window->buffers, &clipped_triangles[0]);
-		render_f(app->window->buffers, &clipped_triangles[1]);
+		render_f(app->window->framebuffer, &clipped_triangles[0]);
+		render_f(app->window->framebuffer, &clipped_triangles[1]);
 	}
 	else if (test_clip ==1)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);
-		render_f(app->window->buffers, &clipped_triangles[0]);
+		render_f(app->window->framebuffer, &clipped_triangles[0]);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle);
-		render_f(app->window->buffers, triangle);
+		render_f(app->window->framebuffer, triangle);
 	}
 }
 

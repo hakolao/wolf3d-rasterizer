@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:36:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 23:10:44 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 12:43:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ void		keyboard_state_handle(t_wolf3d *app)
 			move_player(app, move_backward);
 		if (app->keyboard.state[SDL_SCANCODE_D])
 			move_player(app, move_strafe_right);
+		if (app->keyboard.state[SDL_SCANCODE_LSHIFT])
+			app->player.is_running = true;
+		else
+			app->player.is_running = false;
 	}
 }
 

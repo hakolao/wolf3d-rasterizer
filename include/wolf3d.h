@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 11:53:31 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 12:42:50 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct						s_player
 	t_vec3					forward;
 	t_vec3					sideways;
 	t_vec3					up;
+	t_bool					is_running;
 	float					speed;
 	float					rot_speed;
 	float					rot_x;

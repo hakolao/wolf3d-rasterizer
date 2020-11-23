@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/06 17:02:18 by veilo             #+#    #+#             */
-/*   Updated: 2020/11/23 18:13:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 18:54:57 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,9 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 	if (offset_xy[0] < 0 || offset_xy[0] >= buffers->width ||
 		offset_xy[1] < 0 || offset_xy[1] >= buffers->height )
 		return ;
+	ft_printf("%d %d\n", xy[0], xy[1]);
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	ft_printf("%f %f %f %d %d\n", baryc[0], baryc[1], baryc[2], xy[0], xy[1]);
+	ft_printf("%f %f %f %d %d\n", baryc[0], baryc[1], baryc[2], offset_xy[0], offset_xy[1]);
 	zpixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height}, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
@@ -133,8 +134,9 @@ static void		draw_zpixel(t_sub_framebuffer *buffers,
 	if (offset_xy[0] < 0 || offset_xy[0] >= buffers->width ||
 		offset_xy[1] < 0 || offset_xy[1] >= buffers->height )
 		return ;
+	ft_printf("%d %d\n", xy[0], xy[1]);
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	ft_printf("%f %f %f %d %d\n", baryc[0], baryc[1], baryc[2], xy[0], xy[1]);
+	ft_printf("%f %f %f %d %d\n", baryc[0], baryc[1], baryc[2], offset_xy[0], offset_xy[1]);
 	pixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height
 	}, offset_xy);
@@ -296,6 +298,10 @@ void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
 	float denom;
 	float inv_denom;
 
+	ml_vector2_print(triangle_points_2d[0]);
+	ml_vector2_print(triangle_points_2d[1]);
+	ml_vector2_print(triangle_points_2d[2]);
+	ml_vector2_print(point);
 	denom = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
 			(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
 			(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *

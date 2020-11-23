@@ -74,7 +74,7 @@ static void		render_triangle(t_wolf3d *app, t_triangle *triangle)
 		parallel_rasterize(app, &clipped_triangles[0]);
 		parallel_rasterize(app, &clipped_triangles[1]);
 	}
-	else if (test_clip ==1)
+	else if (test_clip == 1)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);

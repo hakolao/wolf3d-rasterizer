@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 14:47:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 16:32:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 # define INITIAL_MAP_SIZE 15
 
-# define NUM_THREADS 4
+# define NUM_THREADS 2
 
 # define WIDTH 1280
 # define HEIGHT 720

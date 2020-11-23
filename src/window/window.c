@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 15:38:58 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 16:17:14 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void			window_frame_clear(t_window *window)
 	int32_t		k;
 	uint32_t	color;
 
-	i = 0;
 	color = 0x000000FF;
 	k = -1;
+	i = -1;
 	while (++i < window->framebuffer->num_x * window->framebuffer->num_y)
 	{
-		j = -1;
+		j = 0;
 		while (j < window->framebuffer->sub_buffers[i]->width *
 				window->framebuffer->sub_buffers[i]->height)
 		{

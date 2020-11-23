@@ -45,6 +45,7 @@ static void		parallel_rasterize(t_wolf3d *app, t_triangle *triangle)
 	{
 		add_rasterize_work(app,
 			app->window->framebuffer->sub_buffers[i], triangle);
+		break ;
 	}
 }
 

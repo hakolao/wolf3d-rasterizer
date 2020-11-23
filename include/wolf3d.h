@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 16:32:07 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:35:50 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 # define INITIAL_MAP_SIZE 15
 
-# define NUM_THREADS 2
+# define NUM_THREADS 6
 
 # define WIDTH 1280
 # define HEIGHT 720
@@ -261,8 +261,8 @@ typedef struct						s_map_editor
 */
 typedef struct						s_rasterize_work
 {
+	t_wolf3d				*app;
 	t_sub_framebuffer		*sub_buffer;
-	t_triangle				*triangle;
 }									t_rasterize_work;
 
 void						wolf3d_run(t_wolf3d *app);

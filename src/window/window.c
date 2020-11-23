@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 16:17:14 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 20:27:03 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,60 +41,22 @@ static int		window_resize_callback(void *data, SDL_Event *event)
 void			window_frame_clear(t_window *window)
 {
 	int32_t		i;
-	int32_t		j;
-	int32_t		k;
 	uint32_t	color;
 
 	color = 0x000000FF;
-	k = -1;
-	i = -1;
-	while (++i < window->framebuffer->num_x * window->framebuffer->num_y)
+	i = 0;
+	while (i < window->framebuffer->width * window->framebuffer->height)
 	{
-		j = 0;
-		while (j < window->framebuffer->sub_buffers[i]->width *
-				window->framebuffer->sub_buffers[i]->height)
-		{
-			window->framebuffer->sub_buffers[i]->buffer[j] = color;
-			window->framebuffer->sub_buffers[i]->buffer[j + 1] = color;
-			window->framebuffer->sub_buffers[i]->buffer[j + 2] = color;
-			window->framebuffer->sub_buffers[i]->buffer[j + 3] = color;
-			window->framebuffer->sub_buffers[i]->zbuffer[j] = FLT_MAX;
-			window->framebuffer->sub_buffers[i]->zbuffer[j + 1] = FLT_MAX;
-			window->framebuffer->sub_buffers[i]->zbuffer[j + 2] = FLT_MAX;
-			window->framebuffer->sub_buffers[i]->zbuffer[j + 3] = FLT_MAX;
-			window->framebuffer->buffer[k] = color;
-			window->framebuffer->buffer[k + 1] = color;
-			window->framebuffer->buffer[k + 2] = color;
-			window->framebuffer->buffer[k + 3] = color;
-			j += 4;
-			k += 4;
-		}
+		window->framebuffer->buffer[i] = color;
+		window->framebuffer->buffer[i + 1] = color;
+		window->framebuffer->buffer[i + 2] = color;
+		window->framebuffer->buffer[i + 3] = color;
+		i += 4;
 	}
-
 }
 
 void			window_frame_draw(t_window *window)
 {
-	int32_t		x;
-	int32_t		y;
-	SDL_Rect	rect;
-	int32_t		index;
-
-	y = -1;
-	while (++y < window->framebuffer->num_y)
-	{
-		x = -1;
-		while (++x < window->framebuffer->num_x)
-		{
-			index = y * window->framebuffer->num_x + x;
-			rect.w = window->framebuffer->sub_buffers[index]->width;
-			rect.h = window->framebuffer->sub_buffers[index]->height;
-			rect.x = window->framebuffer->sub_buffers[index]->x_start;
-			rect.y = window->framebuffer->sub_buffers[index]->y_start;
-			SDL_UpdateTexture(window->frame, &rect, window->framebuffer->sub_buffers[index],
-				window->framebuffer->sub_buffers[index]->width * 4);
-		}
-	}
 	SDL_UpdateTexture(window->frame, NULL, window->framebuffer->buffer,
 		window->framebuffer->width * 4);
 	SDL_RenderCopy(window->renderer, window->frame, NULL, NULL);
@@ -108,6 +70,7 @@ void			window_frame_recreate(t_window *window)
 	window->frame = SDL_CreateTexture(window->renderer,
 		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, window->width,
 		window->height);
+	SDL_SetTextureBlendMode(window->frame, SDL_BLENDMODE_BLEND);
 	error_check(window->frame == NULL, SDL_GetError());
 	l3d_framebuffer_recreate(&window->framebuffer, window->width, window->height);
 	if (window->main_font != NULL)

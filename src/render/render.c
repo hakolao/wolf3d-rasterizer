@@ -19,44 +19,15 @@ static void		update_triangle_vertex_zvalues(t_triangle *triangle)
 	triangle->vtc_zvalue[2] = 1 / (triangle->vtc[2]->pos[2] + L3D_EPSILON);
 }
 
-static void		rasterize_work(void *params)
+static void		rasterize(t_sub_framebuffer *sub_buffer,
+							t_triangle *triangle)
 {
-	t_rasterize_work 	*work;
-
-	work = params;
-	l3d_triangle_set_zbuffer(work->sub_buffer, work->triangle);
-	l3d_triangle_raster(work->sub_buffer, work->triangle);
-	free(work);
+	l3d_triangle_set_zbuffer(sub_buffer, triangle);
+	l3d_triangle_raster(sub_buffer, triangle);
 }
 
-static void		add_rasterize_work(t_wolf3d *app,
-									t_sub_framebuffer *sub_buffer,
+static void		render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
 									t_triangle *triangle)
-{
-	t_rasterize_work 	*work;
-
-	error_check(!(work = malloc(sizeof(*work))),
-		"Failed to malloc rasterize work");
-	work->sub_buffer = sub_buffer;
-	work->triangle = triangle;
-	thread_pool_add_work(app->thread_pool, rasterize_work, work);
-}
-
-static void		parallel_rasterize(t_wolf3d *app, t_triangle *triangle)
-{
-	int32_t				i;
-
-	i = -1;
-	while (++i < app->window->framebuffer->num_x *
-		app->window->framebuffer->num_y)
-	{
-		add_rasterize_work(app,
-			app->window->framebuffer->sub_buffers[i], triangle);
-		break ;
-	}
-}
-
-static void		render_triangle(t_wolf3d *app, t_triangle *triangle)
 {
 	t_triangle	clipped_triangles[2];
 	t_vertex	vtc[9];
@@ -71,20 +42,20 @@ static void		render_triangle(t_wolf3d *app, t_triangle *triangle)
 		screen_intersection(app, &clipped_triangles[1]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[1]);
-		parallel_rasterize(app, &clipped_triangles[0]);
-		parallel_rasterize(app, &clipped_triangles[1]);
+		rasterize(sub_buffer, &clipped_triangles[0]);
+		rasterize(sub_buffer, &clipped_triangles[1]);
 	}
 	else if (test_clip == 1)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);
-		parallel_rasterize(app, &clipped_triangles[0]);
+		rasterize(sub_buffer, &clipped_triangles[0]);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle);
-		parallel_rasterize(app, triangle);
+		rasterize(sub_buffer, triangle);
 	}
 }
 
@@ -108,26 +79,129 @@ static void		set_render_triangle(t_wolf3d *app,
 	l3d_triangle_update(r_triangle);
 }
 
-static void		render_scene(t_wolf3d *app)
+static void		rasterize_work(void *params)
 {
-	int				i;
-	int				j;
-	t_triangle		*triangle;
-	t_triangle		r_triangle;
-	t_vertex		vtc[3];
+	t_rasterize_work	*work;
+	int					i;
+	int					j;
+	t_triangle			*triangle;
+	t_triangle			r_triangle;
+	t_vertex			vtc[3];
 
+	work = params;
 	i = -1;
-	while (++i < (int)app->active_scene->num_objects)
+	while (++i < (int)work->app->active_scene->num_objects)
 	{
 		j = -1;
-		while (++j < app->active_scene->objects[i]->num_triangles)
+		while (++j < work->app->active_scene->objects[i]->num_triangles)
 		{
-			triangle = app->active_scene->objects[i]->triangles + j;
-			set_render_triangle(app, &r_triangle, triangle, vtc);
-			if (is_rendered(app, &r_triangle))
-				render_triangle(app, &r_triangle);
+			triangle = work->app->active_scene->objects[i]->triangles + j;
+			set_render_triangle(work->app, &r_triangle, triangle, vtc);
+			if (is_rendered(work->app, &r_triangle))
+				render_triangle(work->app, work->sub_buffer, &r_triangle);
 		}
 	}
+	free(work);
+}
+
+static void		add_rasterize_work(t_wolf3d *app,
+									t_sub_framebuffer *sub_buffer)
+{
+	t_rasterize_work 	*work;
+
+	error_check(!(work = malloc(sizeof(*work))),
+		"Failed to malloc rasterize work");
+	work->sub_buffer = sub_buffer;
+	work->app = app;
+	thread_pool_add_work(app->thread_pool, rasterize_work, work);
+}
+
+static void		clear_work(void *params)
+{
+	t_rasterize_work 	*work;
+	t_sub_framebuffer	*sub_buffer;
+	int32_t				i;
+	uint32_t			color;
+
+	work = params;
+	sub_buffer = work->sub_buffer;
+	color = 0x000000FF;
+	i = 0;
+	while (i < sub_buffer->width * sub_buffer->height)
+	{
+		sub_buffer->buffer[i] = color;
+		sub_buffer->buffer[i + 1] = color;
+		sub_buffer->buffer[i + 2] = color;
+		sub_buffer->buffer[i + 3] = color;
+		sub_buffer->zbuffer[i] = FLT_MAX;
+		sub_buffer->zbuffer[i + 1] = FLT_MAX;
+		sub_buffer->zbuffer[i + 2] = FLT_MAX;
+		sub_buffer->zbuffer[i + 3] = FLT_MAX;
+		i += 4;
+	}
+	free(work);
+}
+
+static void		add_clear_work(t_wolf3d *app,
+								t_sub_framebuffer *sub_buffer)
+{
+	t_rasterize_work 	*work;
+
+	error_check(!(work = malloc(sizeof(*work))),
+		"Failed to malloc rasterize work");
+	work->sub_buffer = sub_buffer;
+	work->app = app;
+	thread_pool_add_work(app->thread_pool, clear_work, work);
+}
+
+static void		draw_work(void *params)
+{
+	t_rasterize_work 	*work;
+	t_sub_framebuffer	*sub_buffer;
+	t_framebuffer		*framebuffer;
+
+	work = params;
+	framebuffer = work->app->window->framebuffer;
+	sub_buffer = work->sub_buffer;
+	l3d_image_place(
+		&(t_surface){.h = framebuffer->height, .w = framebuffer->width,
+			.pixels = framebuffer->buffer},
+		&(t_surface){.h = sub_buffer->height, .w = sub_buffer->width,
+			.pixels = sub_buffer->buffer},
+		(int32_t[2]){sub_buffer->x_start, sub_buffer->y_start}, 1.0);
+	free(work);
+}
+
+static void		add_draw_work(t_wolf3d *app,
+								t_sub_framebuffer *sub_buffer)
+{
+	t_rasterize_work 	*work;
+
+	error_check(!(work = malloc(sizeof(*work))),
+		"Failed to malloc rasterize work");
+	work->sub_buffer = sub_buffer;
+	work->app = app;
+	thread_pool_add_work(app->thread_pool, draw_work, work);
+}
+
+static void		render_scene_parallel(t_wolf3d *app)
+{
+	int32_t				i;
+
+	i = -1;
+	while (++i < app->window->framebuffer->num_x *
+		app->window->framebuffer->num_y)
+		add_clear_work(app, app->window->framebuffer->sub_buffers[i]);
+	thread_pool_wait(app->thread_pool);
+	i = -1;
+	while (++i < app->window->framebuffer->num_x *
+		app->window->framebuffer->num_y)
+		add_rasterize_work(app, app->window->framebuffer->sub_buffers[i]);
+	thread_pool_wait(app->thread_pool);
+	i = -1;
+	while (++i < app->window->framebuffer->num_x *
+		app->window->framebuffer->num_y)
+		add_draw_work(app, app->window->framebuffer->sub_buffers[i]);
 	thread_pool_wait(app->thread_pool);
 }
 
@@ -135,7 +209,7 @@ void			wolf3d_render(t_wolf3d *app)
 {
 	if (app->active_scene->main_camera != NULL)
 	{
-		render_scene(app);
+		render_scene_parallel(app);
 	}
 	ui_render(app);
 }

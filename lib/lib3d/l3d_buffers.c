@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:47:57 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/23 20:54:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 21:14:22 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ t_framebuffer				*l3d_framebuffer_create(int32_t width, int32_t height)
 	error_check(!(framebuffer->buffer =
 		malloc(sizeof(uint32_t) * width * height)),
 		"Failed to malloc frame buffer");
-	framebuffer->num_x = 2;
-	framebuffer->num_y = 2;
+	framebuffer->num_x = L3D_BUFFER_SPLIT_SIZE;
+	framebuffer->num_y = L3D_BUFFER_SPLIT_SIZE;
 	framebuffer->width = width;
 	framebuffer->height = height;
 	error_check(!(framebuffer->sub_buffers = malloc(sizeof(t_sub_framebuffer*) *

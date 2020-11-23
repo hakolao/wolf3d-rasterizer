@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/23 21:10:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 21:14:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@
 # define L3D_MAX_KD_TREE_DEPTH 10
 # define L3D_MIN_KD_NODE_NUM_TRIANGLES 2
 # define L3D_TRI_VEC_INITIAL_CAPACITY 10
+
+/*
+** Must be divisible by 2
+*/
+# define L3D_BUFFER_SPLIT_SIZE 4
 
 # define L3D_MAX_OBJECTS 32
 # define L3D_MAX_TRIANGLES 16384

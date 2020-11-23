@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 15:12:24 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 16:58:22 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct				s_triangle
 	t_vec3			ac;
 	t_material		*material;
 	t_vec2			points_2d[3];
+	t_vec3			vtc_zvalue;
 }							t_triangle;
 
 typedef struct			s_sub_framebuffer

@@ -12,6 +12,13 @@
 
 #include "wolf3d.h"
 
+static void		update_triangle_vertex_zvalues(t_triangle *triangle)
+{
+	triangle->vtc_zvalue[0] = 1 / (triangle->vtc[0]->pos[2] + L3D_EPSILON);
+	triangle->vtc_zvalue[1] = 1 / (triangle->vtc[1]->pos[2] + L3D_EPSILON);
+	triangle->vtc_zvalue[2] = 1 / (triangle->vtc[2]->pos[2] + L3D_EPSILON);
+}
+
 static void		rasterize_work(void *params)
 {
 	t_rasterize_work 	*work;
@@ -62,17 +69,21 @@ static void		render_triangle(t_wolf3d *app, t_triangle *triangle)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[1]);
+		update_triangle_vertex_zvalues(&clipped_triangles[0]);
+		update_triangle_vertex_zvalues(&clipped_triangles[1]);
 		parallel_rasterize(app, &clipped_triangles[0]);
 		parallel_rasterize(app, &clipped_triangles[1]);
 	}
 	else if (test_clip ==1)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
+		update_triangle_vertex_zvalues(&clipped_triangles[0]);
 		parallel_rasterize(app, &clipped_triangles[0]);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
+		update_triangle_vertex_zvalues(triangle);
 		parallel_rasterize(app, triangle);
 	}
 }

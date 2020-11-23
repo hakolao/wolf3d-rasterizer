@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 14:11:58 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,24 +45,25 @@ void			window_frame_clear(t_window *window)
 
 	i = 0;
 	color = 0x000000FF;
-	while (i < window->width * window->height)
+	while (i < window->buffers->framebuffer->width *
+				window->buffers->framebuffer->height)
 	{
-		window->buffers->framebuffer[i] = color;
-		window->buffers->framebuffer[i + 1] = color;
-		window->buffers->framebuffer[i + 2] = color;
-		window->buffers->framebuffer[i + 3] = color;
-		window->buffers->zbuffer[i] = INT32_MAX;
-		window->buffers->zbuffer[i + 1] = INT32_MAX;
-		window->buffers->zbuffer[i + 2] = INT32_MAX;
-		window->buffers->zbuffer[i + 3] = INT32_MAX;
+		window->buffers->framebuffer->buffer[i] = color;
+		window->buffers->framebuffer->buffer[i + 1] = color;
+		window->buffers->framebuffer->buffer[i + 2] = color;
+		window->buffers->framebuffer->buffer[i + 3] = color;
+		window->buffers->zbuffer->buffer[i] = INT32_MAX;
+		window->buffers->zbuffer->buffer[i + 1] = INT32_MAX;
+		window->buffers->zbuffer->buffer[i + 2] = INT32_MAX;
+		window->buffers->zbuffer->buffer[i + 3] = INT32_MAX;
 		i += 4;
 	}
 }
 
 void			window_frame_draw(t_window *window)
 {
-	SDL_UpdateTexture(window->frame, NULL, window->buffers->framebuffer,
-		window->width * 4);
+	SDL_UpdateTexture(window->frame, NULL, window->buffers->framebuffer->buffer,
+		window->buffers->framebuffer->width * 4);
 	SDL_RenderCopy(window->renderer, window->frame, NULL, NULL);
 	SDL_RenderPresent(window->renderer);
 }
@@ -75,20 +76,7 @@ void			window_frame_recreate(t_window *window)
 		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, window->width,
 		window->height);
 	error_check(window->frame == NULL, SDL_GetError());
-	if (window->buffers != NULL)
-	{
-		free(window->buffers->framebuffer);
-		free(window->buffers->zbuffer);
-		free(window->buffers);
-	}
-	error_check(!(window->buffers = malloc(sizeof(t_l3d_buffers))),
-		"Failed to malloc wolf3d buffers struct");
-	error_check(!(window->buffers->framebuffer = (uint32_t*)malloc(sizeof(uint32_t) *
-		window->width * window->height)),
-		"Failed to malloc framebuffer in resize");
-	error_check(!(window->buffers->zbuffer = (float*)malloc(sizeof(float) *
-		window->width * window->height)),
-		"Failed to malloc zbuffer in resize");
+	l3d_render_buffers_recreate(&window->buffers, window->width, window->height);
 	if (window->main_font != NULL)
 		TTF_CloseFont(window->main_font);
 	window->main_font = TTF_OpenFont(GAME_FONT, FONT_SIZE);

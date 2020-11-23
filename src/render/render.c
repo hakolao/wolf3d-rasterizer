@@ -32,17 +32,13 @@ static void		update_triangle_vertex_zvalues(t_triangle *triangle)
 
 static void		render_triangle(t_wolf3d *app,
 								void (*render_f)(t_l3d_buffers *buffers,
-												uint32_t *dim,
 												t_triangle *tri),
 								t_triangle *triangle)
 {
-	uint32_t	dimensions[2];
 	t_triangle	clipped_triangles[2];
 	t_vertex	vtc[9];
 	int32_t		test_clip;
 
-	dimensions[0] = app->window->width;
-	dimensions[1] = app->window->height;
 	l3d_set_clipped_triangles(vtc, triangle, clipped_triangles);
 	test_clip = l3d_clip_triangle(triangle,
 		&app->active_scene->main_camera->viewplanes[0], clipped_triangles);
@@ -52,20 +48,20 @@ static void		render_triangle(t_wolf3d *app,
 		screen_intersection(app, &clipped_triangles[1]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[1]);
-		render_f(app->window->buffers, dimensions, &clipped_triangles[0]);
-		render_f(app->window->buffers, dimensions, &clipped_triangles[1]);
+		render_f(app->window->buffers, &clipped_triangles[0]);
+		render_f(app->window->buffers, &clipped_triangles[1]);
 	}
 	else if (test_clip ==1)
 	{
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);
-		render_f(app->window->buffers, dimensions, &clipped_triangles[0]);
+		render_f(app->window->buffers, &clipped_triangles[0]);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle);
-		render_f(app->window->buffers, dimensions, triangle);
+		render_f(app->window->buffers, triangle);
 	}
 }
 

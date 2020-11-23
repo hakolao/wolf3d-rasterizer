@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 01:07:03 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 13:16:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,7 @@ static void		cleanup(t_map_editor *app)
 	free(app->map);
 	button_group_destroy(app->select_menu);
 	thread_pool_destroy(app->thread_pool);
-	free(app->window->buffers->framebuffer);
-	free(app->window->buffers->zbuffer);
+	l3d_render_buffers_destroy(app->window->buffers);
 	SDL_DestroyRenderer(app->window->renderer);
 	SDL_DestroyWindow(app->window->window);
 	TTF_CloseFont(app->window->main_font);

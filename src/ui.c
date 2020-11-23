@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 11:59:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 13:22:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ static void		ui_main_menu_render(t_wolf3d *app)
 
 static void		ui_main_game_render(t_wolf3d *app)
 {
-	l3d_line_draw(app->window->buffers->framebuffer,
-		(uint32_t[2]){app->window->width, app->window->height},
+	l3d_line_draw(app->window->buffers->framebuffer->buffer,
+		(uint32_t[2]){app->window->buffers->framebuffer->width,
+			app->window->buffers->framebuffer->height},
 		(int32_t[2][2]){{app->window->width / 2 - 10, app->window->height / 2},
 		{app->window->width / 2 + 10, app->window->height / 2}}, 0xFFFFFFFF);
-	l3d_line_draw(app->window->buffers->framebuffer,
-		(uint32_t[2]){app->window->width, app->window->height},
+	l3d_line_draw(app->window->buffers->framebuffer->buffer,
+		(uint32_t[2]){app->window->buffers->framebuffer->width,
+			app->window->buffers->framebuffer->height},
 		(int32_t[2][2]){{app->window->width / 2, app->window->height / 2 - 10},
 		{app->window->width / 2, app->window->height / 2 + 10}}, 0xFFFFFFFF);
 }

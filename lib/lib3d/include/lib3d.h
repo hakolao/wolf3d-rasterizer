@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 22:21:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 14:10:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,52 @@ typedef struct				s_triangle
 	float			vtc_zvalue[3];
 }							t_triangle;
 
+typedef struct			s_sub_framebuffer
+{
+	uint32_t		*buffer;
+	int32_t			width;
+	int32_t			height;
+	int32_t			x_start;
+	int32_t			y_start;
+	int32_t			parent_width;
+	int32_t			parent_height;
+}						t_sub_framebuffer;
+
+typedef struct			s_sub_zbuffer
+{
+	float			*buffer;
+	int32_t			width;
+	int32_t			height;
+	int32_t			x_start;
+	int32_t			y_start;
+	int32_t			parent_width;
+	int32_t			parent_height;
+}						t_sub_zbuffer;
+
+typedef struct			s_framebuffer
+{
+	uint32_t			*buffer;
+	int32_t				width;
+	int32_t				height;
+	t_sub_framebuffer	**sub_buffers;
+	int32_t				num_x;
+	int32_t				num_y;
+}						t_framebuffer;
+
+typedef struct			s_zbuffer
+{
+	float			*buffer;
+	int32_t			width;
+	int32_t			height;
+	t_sub_zbuffer	**sub_buffers;
+	int32_t			num_x;
+	int32_t			num_y;
+}						t_zbuffer;
+
 typedef struct			s_l3d_buffers
 {
-	uint32_t		*framebuffer;
-	float			*zbuffer;
+	t_framebuffer	*framebuffer;
+	t_zbuffer		*zbuffer;
 }						t_l3d_buffers;
 
 /*
@@ -341,10 +383,8 @@ double						l3d_rand_d(void);
 */
 
 void						l3d_triangle_raster(t_l3d_buffers *buffers,
-												uint32_t *dimensions,
 												t_triangle *triangle);
 void						l3d_triangle_set_zbuffer(t_l3d_buffers *buffers,
-												uint32_t *dimensions,
 												t_triangle *triangle);
 void						l3d_calculate_barycoords(
 													t_vec2 *triangle_points_2d,
@@ -399,7 +439,7 @@ t_surface					*l3d_read_bmp_image_32bit_rgba_surface(
 ** Buffer image copying / placing
 */
 
-void						l3d_framebuffer_image_place(t_surface *frame,
+void						l3d_image_place(t_surface *frame,
 								t_surface *image, int32_t pos_xy[2],
 								float blend_ratio);
 t_surface					*l3d_image_scaled(t_surface *image,
@@ -414,5 +454,20 @@ uint32_t					l3d_color_blend_u32(uint32_t color1,
 								uint32_t color2, float ratio);
 void						l3d_u32_to_rgba(uint32_t color, uint32_t rgba[4]);
 uint32_t					l3d_triangle_normal_color(t_triangle *triangle);
+
+/*
+** Framebuffer utils
+*/
+
+t_framebuffer				*l3d_framebuffer_create(int32_t width,
+													int32_t height);
+void						l3d_framebuffer_destroy(t_framebuffer *framebuffer);
+t_zbuffer					*l3d_zbuffer_create(int32_t width, int32_t height);
+void						l3d_zbuffer_destroy(t_zbuffer *zbuffer);
+void						l3d_render_buffers_recreate(t_l3d_buffers **buffers,
+												int32_t width, int32_t height);
+void						l3d_render_buffers_destroy(t_l3d_buffers *buffers);
+t_l3d_buffers				*l3d_render_buffers_create(int32_t width,
+												int32_t height);
 
 #endif

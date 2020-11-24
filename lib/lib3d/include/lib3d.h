@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 17:32:07 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:15:24 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@
 */
 # define L3D_BUFFER_SPLIT_SIZE 4
 
-# define L3D_MAX_OBJECTS 32
-# define L3D_MAX_TRIANGLES 16384
-# define L3D_MAX_VERTICES 16384
+# define L3D_MAX_OBJ_TRIANGLES 16384
+# define L3D_MAX_OBJ_VERTICES 16384
 
 /*
 ** OBJ file temporary structs. They are used in transfering obj data to final

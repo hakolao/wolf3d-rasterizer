@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 23:41:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:19:14 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000
 
-# define MAX_NUM_OBJECTS 1024
+# define MAX_NUM_OBJECTS 16384
 # define MAX_NUM_TRIANGLES 65536
 
 typedef enum						e_render_pass

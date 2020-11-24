@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 13:20:53 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:32:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ t_3d_object		*l3d_3d_object_copy(t_3d_object *src)
 	dst = l3d_3d_object_create(src->num_vertices, src->num_triangles);
 	if (!dst || !src)
 		return (NULL);
-	dst->num_vertices = src->num_vertices;
-	dst->num_triangles = src->num_triangles;
 	ml_matrix4_copy(src->scale, dst->scale);
 	ml_vector3_copy(src->position, dst->position);
 	ml_matrix4_copy(src->rotation, dst->rotation);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 17:24:07 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:36:39 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void			destroy_scene(void *scn)
 	t_surface	*texture;
 	uint32_t	key;
 	t_scene		*scene;
+	t_3d_object	*model;
 
 	scene = scn;
 	if (scene->map_filename != NULL)
@@ -187,8 +188,21 @@ void			destroy_scene(void *scn)
 			if ((texture = hash_map_get(scene->textures, key)))
 				free(texture->pixels);
 		}
-		hash_map_destroy_free(scene->models);
 		hash_map_destroy_free(scene->textures);
+	}
+	if (scene->models)
+	{
+		i = -1;
+		while (++i < (int32_t)sizeof(uint32_t) * 4)
+		{
+			key = 1 << i;
+			if ((model = hash_map_get(scene->models, key)))
+				l3d_3d_object_destroy(model);
+		}
+		hash_map_destroy_free(scene->models);
+	}
+	if (scene->skybox[0])
+	{
 		i = -1;
 		while (++i < 6)
 		{

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:11 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 13:16:12 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:15:43 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@
 
 void					l3d_obj_content_allocate(t_obj *o)
 {
-	error_check(!(o->v = malloc(sizeof(t_vec3) * L3D_MAX_VERTICES)),
+	error_check(!(o->v = malloc(sizeof(t_vec3) * L3D_MAX_OBJ_VERTICES)),
 		"Failed to malloc obj vs");
-	error_check(!(o->vt = malloc(sizeof(t_vec2) * L3D_MAX_VERTICES)),
+	error_check(!(o->vt = malloc(sizeof(t_vec2) * L3D_MAX_OBJ_VERTICES)),
 		"Failed to malloc obj v textures");
-	error_check(!(o->vn = malloc(sizeof(t_vec3) * L3D_MAX_VERTICES)),
+	error_check(!(o->vn = malloc(sizeof(t_vec3) * L3D_MAX_OBJ_VERTICES)),
 		"Failed to malloc obj v normals");
 	error_check(!(o->triangles =
-		malloc(sizeof(uint32_t) * 9 * L3D_MAX_TRIANGLES)),
+		malloc(sizeof(uint32_t) * 9 * L3D_MAX_OBJ_TRIANGLES)),
 		"Failed to malloc obj triangles");
 }
 

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 00:40:16 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:53:42 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static void		select_scene(void *app_ptr)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.map_filename = ft_strdup("maps/okko");
+		data.map_filename = ft_strdup("maps/bigone");
 		set_main_scene_data_assets(&data);
 	}
 	app->active_scene = new_scene(&data);
@@ -175,6 +175,8 @@ void			destroy_scene(void *scn)
 	scene = scn;
 	if (scene->map_filename != NULL)
 		ft_strdel(&scene->map_filename);
+	if (scene->bullet_tree)
+		l3d_kd_tree_destroy(scene->bullet_tree);
 	if (scene->map != NULL)
 	{
 		free(scene->map->grid);

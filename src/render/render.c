@@ -15,27 +15,10 @@
 static void		rasterize_work(void *params)
 {
 	t_render_work	*work;
-	int					i;
-	int					j;
-	t_triangle			*triangle;
-	t_triangle			r_triangle;
-	t_vertex			vtc[3];
 
 	work = params;
 	rasterize_skybox(work);
-	i = -1;
-	while (++i < (int)work->app->active_scene->num_objects)
-	{
-		j = -1;
-		while (++j < work->app->active_scene->objects[i]->num_triangles)
-		{
-			triangle = work->app->active_scene->objects[i]->triangles + j;
-			set_render_triangle(work->app, &r_triangle, triangle, vtc);
-			if (is_rendered(work->app, &r_triangle))
-				render_triangle(work->app, work->sub_buffer, &r_triangle,
-					rpass_rasterize | rpass_zbuffer);
-		}
-	}
+	rasterize_objects(work);
 	free(work);
 }
 
@@ -90,21 +73,16 @@ static void		render_work_parallel(t_wolf3d *app,
 	thread_pool_wait(app->thread_pool);
 }
 
-static void		render_scene_parallel(t_wolf3d *app)
-{
-	// First clear sub buffers
-	render_work_parallel(app, clear_work);
-	// Render everything on sub buffers
-	render_work_parallel(app, rasterize_work);
-	// Place sub buffers onto main buffer
-	render_work_parallel(app, draw_work);
-}
-
 void			wolf3d_render(t_wolf3d *app)
 {
 	if (app->active_scene->main_camera != NULL)
 	{
-		render_scene_parallel(app);
+		// First clear sub buffers
+		render_work_parallel(app, clear_work);
+		// Render everything on sub buffers
+		render_work_parallel(app, rasterize_work);
+		// Place sub buffers onto main buffer
+		render_work_parallel(app, draw_work);
 	}
 	ui_render(app);
 }

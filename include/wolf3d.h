@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 17:47:02 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 17:54:44 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,6 +308,7 @@ void						ui_render(t_wolf3d *app);
 void						wolf3d_render(t_wolf3d *app);
 void						loading_render(t_wolf3d *app);
 void						rasterize_skybox(t_render_work *work);
+void						rasterize_objects(t_render_work *work);
 void						render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
 									t_triangle *triangle, t_render_pass passes);
 void						set_render_triangle(t_wolf3d *app,

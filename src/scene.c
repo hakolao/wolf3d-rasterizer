@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 00:38:47 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:40:16 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->map = NULL;
 	scene->models = NULL;
 	scene->textures = NULL;
+	ft_memset(scene->skybox, 0, sizeof(t_3d_object*) * 6);
 	if (data->num_models > 0)
 		load_scene_assets(scene, data);
 	if (data->map_filename)

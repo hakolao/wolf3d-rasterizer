@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 13:40:57 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 13:43:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void				generate_skybox(t_scene *scene, float unit_size)
 	l3d_3d_object_rotate(scene->skybox[2], 0, 180, 0);
 	l3d_3d_object_translate(scene->skybox[2], 0, -unit_size * 10, 0);
 	//back
-	// l3d_3d_object_rotate(scene->skybox[3], 180, 0, 0);
+	l3d_3d_object_rotate(scene->skybox[3], 90, -180, 90);
 	l3d_3d_object_translate(scene->skybox[3], 0, 0, unit_size * 10);
 	//left
 	l3d_3d_object_rotate(scene->skybox[4], 0, 180, 90);

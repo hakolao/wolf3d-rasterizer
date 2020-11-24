@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 17:32:44 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 23:55:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void			window_create(t_window **window_ref,
 	error_check((window = (t_window*)malloc(sizeof(t_window))) == NULL,
 		"Window malloc failed");
 	window->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_RESIZABLE);
+		SDL_WINDOWPOS_CENTERED, width, height, 0);
 	window->width = width;
 	window->height = height;
 	error_check(window->window == NULL, SDL_GetError());
@@ -95,5 +95,6 @@ void			window_create(t_window **window_ref,
 	window_frame_recreate(window);
 	SDL_AddEventWatch(window_resize_callback, window);
 	window->resized = false;
+	window->is_fullscreen = false;
 	*window_ref = window;
 }

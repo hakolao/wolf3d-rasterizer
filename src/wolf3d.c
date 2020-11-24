@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 15:02:37 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:00:13 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 	while (app->is_running)
 	{
 		app->info.performance_start = SDL_GetPerformanceCounter();
-		// Needed to ensure mouse events work right...:S
+		// Force window centered
 		if (SDL_GetMouseFocus() == app->window->window)
-			SDL_WarpMouseInWindow(app->window->window,
-				app->window->width / 2, app->window->height / 2);
+			SDL_SetWindowPosition(app->window->window,
+					SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		if (app->window->resized)
 			wolf3d_resize_dependent_recreate(app);
 		window_frame_clear(app->window);
@@ -53,6 +53,14 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 				app->is_running = false;
 			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
 				app->is_debug = !app->is_debug;
+			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_f)
+			{
+				app->window->is_fullscreen = !app->window->is_fullscreen;
+				if (app->window->is_fullscreen)
+					SDL_SetWindowFullscreen(app->window->window, SDL_WINDOW_FULLSCREEN);
+				else
+					SDL_SetWindowFullscreen(app->window->window, 0);
+			}
 			if (app->active_scene->scene_id == scene_id_main_menu)
 				main_menu_event_handle(app, event);
 			if (event.type == SDL_MOUSEMOTION)

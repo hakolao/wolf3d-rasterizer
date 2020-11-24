@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 14:24:33 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 23:41:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct						s_window
 	SDL_Window				*window;
 	uint32_t				window_id;
 	t_bool					is_hidden;
+	t_bool					is_fullscreen;
 }									t_window;
 
 

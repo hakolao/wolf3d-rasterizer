@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 14:42:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 00:02:16 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 16:30:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define BUFF_SIZE 50
 # define MAX_FD 65536
-# define FILE_READ_BUF 32768
+# define FILE_READ_BUF 65536
 
 # include <string.h>
 # include <fcntl.h>
@@ -88,6 +88,7 @@ typedef struct	s_file_contents
 {
 	void				*buf;
 	uint32_t			size;
+	uint32_t			capacity;
 }				t_file_contents;
 
 int				ft_isalnum(int c);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 13:16:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 13:20:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 	ml_matrix4_id(object->scale);
 	ml_vector3_set(object->position, 0, 0, 0);
 	ft_memset(object->material, 0, sizeof(t_material));
+	object->num_triangles = num_triangles;
+	object->num_vertices = num_vertices;
 	return (object);
 }
 

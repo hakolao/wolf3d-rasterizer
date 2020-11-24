@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 12:48:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 13:19:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,7 @@ void			destroy_scene(void *scn)
 		i = -1;
 		while (++i < 6)
 		{
+			l3d_3d_object_destroy(scene->skybox[i]);
 			free(scene->skybox_textures[i]->pixels);
 			free(scene->skybox_textures[i]);
 		}

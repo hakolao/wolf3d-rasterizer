@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 14:43:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 17:24:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ static void		load_scene_assets(t_scene *scene, t_scene_data *data)
 	while (++i < (int32_t)data->num_models)
 	{
 		key = data->asset_keys[i];
-		hash_map_add(scene->textures, key,
-			l3d_read_bmp_image_32bit_rgba_surface(data->texture_files[i]));
-		hash_map_add(scene->models, key,
-			l3d_read_obj(data->model_files[i],
-				hash_map_get(scene->textures, key)));
+		if (data->texture_files[i] != NULL && data->model_files[i] != NULL)
+		{
+			hash_map_add(scene->textures, key,
+				l3d_read_bmp_image_32bit_rgba_surface(data->texture_files[i]));
+			hash_map_add(scene->models, key,
+				l3d_read_obj(data->model_files[i],
+					hash_map_get(scene->textures, key)));
+		}
 	}
 	scene->skybox_textures[0] = l3d_read_bmp_image_32bit_rgba_surface(
 		"assets/skybox/front.bmp");
@@ -58,20 +61,20 @@ static void		set_main_scene_data_assets(t_scene_data *data)
 	data->texture_files[3] = "assets/textures/test_texture.bmp";
 	data->texture_files[4] = "assets/textures/test_texture.bmp";
 	data->texture_files[5] = "assets/textures/test_texture.bmp";
-	data->texture_files[6] = "assets/textures/test_texture.bmp";
-	data->texture_files[7] = "assets/textures/test_texture.bmp";
-	data->texture_files[8] = "assets/textures/test_texture.bmp";
-	data->texture_files[9] = "assets/textures/test_texture.bmp";
+	data->texture_files[6] = NULL;
+	data->texture_files[7] = NULL;
+	data->texture_files[8] = NULL;
+	data->texture_files[9] = NULL;
 	data->model_files[0] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[1] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[2] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[3] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[4] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[5] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[6] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[7] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[8] = "assets/models/room_tiles/room_floor.obj";
-	data->model_files[9] = "assets/models/room_tiles/room_floor.obj";
+	data->model_files[1] = NULL;
+	data->model_files[2] = "assets/models/room_tiles/wall_up.obj";
+	data->model_files[3] = "assets/models/room_tiles/wall_right.obj";
+	data->model_files[4] = "assets/models/room_tiles/wall_down.obj";
+	data->model_files[5] = "assets/models/room_tiles/wall_left.obj";
+	data->model_files[6] = NULL;
+	data->model_files[7] = NULL;
+	data->model_files[8] = NULL;
+	data->model_files[9] = NULL;
 	data->asset_keys[0] = c_floor;
 	data->asset_keys[1] = c_floor_start;
 	data->asset_keys[2] = c_wall_up;

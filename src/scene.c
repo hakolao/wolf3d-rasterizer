@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 00:36:39 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 00:38:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ void			destroy_scene(void *scn)
 			if ((model = hash_map_get(scene->models, key)))
 				l3d_3d_object_destroy(model);
 		}
-		hash_map_destroy_free(scene->models);
+		hash_map_destroy(scene->models);
 	}
 	if (scene->skybox[0])
 	{

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 13:43:07 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 15:42:37 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,12 @@ static t_3d_object		*plane_create(t_surface	*texture)
 		plane->vertices[0], plane->vertices[1], plane->vertices[2]}, plane);
 	l3d_triangle_set(&plane->triangles[1], (t_vertex*[3]){
 		plane->vertices[0], plane->vertices[2], plane->vertices[3]}, plane);
-	// plane->triangles[0].is_single_sided = false;
-	// plane->triangles[1].is_single_sided = false;
-	ml_vector2_copy((t_vec2){0, 0}, plane->triangles[0].uvs[0]);
-	ml_vector2_copy((t_vec2){1, 0}, plane->triangles[0].uvs[1]);
-	ml_vector2_copy((t_vec2){1, 1}, plane->triangles[0].uvs[2]);
-	ml_vector2_copy((t_vec2){0, 0}, plane->triangles[1].uvs[0]);
-	ml_vector2_copy((t_vec2){1, 1}, plane->triangles[1].uvs[1]);
-	ml_vector2_copy((t_vec2){0, 1}, plane->triangles[1].uvs[2]);
+	ml_vector2_copy((t_vec2){0, 1}, plane->triangles[0].uvs[0]);
+	ml_vector2_copy((t_vec2){1, 1}, plane->triangles[0].uvs[1]);
+	ml_vector2_copy((t_vec2){1, 0}, plane->triangles[0].uvs[2]);
+	ml_vector2_copy((t_vec2){0, 1}, plane->triangles[1].uvs[0]);
+	ml_vector2_copy((t_vec2){1, 0}, plane->triangles[1].uvs[1]);
+	ml_vector2_copy((t_vec2){0, 0}, plane->triangles[1].uvs[2]);
 	return (plane);
 }
 
@@ -60,10 +58,11 @@ static void				generate_skybox(t_scene *scene, float unit_size)
 			unit_size * 10, unit_size * 10, unit_size * 10);
 	}
 	//front
-	l3d_3d_object_rotate(scene->skybox[0], 90, 0, -90);
+	l3d_3d_object_rotate(scene->skybox[0], 90, 0, 90);
 	l3d_3d_object_translate(scene->skybox[0], 0, 0, -unit_size * 10);
 	//left
 	l3d_3d_object_rotate(scene->skybox[1], 0, 0, -90);
+	l3d_3d_object_rotate(scene->skybox[1], -90, 0, 0);
 	l3d_3d_object_translate(scene->skybox[1], -unit_size * 10, 0, 0);
 	//top
 	l3d_3d_object_rotate(scene->skybox[2], 0, 180, 0);
@@ -71,12 +70,12 @@ static void				generate_skybox(t_scene *scene, float unit_size)
 	//back
 	l3d_3d_object_rotate(scene->skybox[3], 90, -180, 90);
 	l3d_3d_object_translate(scene->skybox[3], 0, 0, unit_size * 10);
-	//left
+	//right
 	l3d_3d_object_rotate(scene->skybox[4], 0, 180, 90);
 	l3d_3d_object_translate(scene->skybox[4], unit_size * 10, 0, 0);
 	//bottom
 	l3d_3d_object_translate(scene->skybox[5], 0, unit_size * 10, 0);
-	l3d_3d_object_rotate(scene->skybox[5], 0, -180, 180);
+	l3d_3d_object_rotate(scene->skybox[5], 0, -90, 180);
 }
 
 static void				scene_set_triangle_refs(t_scene *scene)

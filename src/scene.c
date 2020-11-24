@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 13:19:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 14:43:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ static void		load_scene_assets(t_scene *scene, t_scene_data *data)
 				hash_map_get(scene->textures, key)));
 	}
 	scene->skybox_textures[0] = l3d_read_bmp_image_32bit_rgba_surface(
-		"assets/skybox/skyrender0001.bmp");
+		"assets/skybox/front.bmp");
 	scene->skybox_textures[1] = l3d_read_bmp_image_32bit_rgba_surface(
-		"assets/skybox/skyrender0002.bmp");
+		"assets/skybox/left.bmp");
 	scene->skybox_textures[2] = l3d_read_bmp_image_32bit_rgba_surface(
-		"assets/skybox/skyrender0003.bmp");
+		"assets/skybox/top.bmp");
 	scene->skybox_textures[3] = l3d_read_bmp_image_32bit_rgba_surface(
-		"assets/skybox/skyrender0004.bmp");
+		"assets/skybox/back.bmp");
 	scene->skybox_textures[4] = l3d_read_bmp_image_32bit_rgba_surface(
-		"assets/skybox/skyrender0005.bmp");
+		"assets/skybox/right.bmp");
 	scene->skybox_textures[5] = l3d_read_bmp_image_32bit_rgba_surface(
-		"assets/skybox/skyrender0006.bmp");
+		"assets/skybox/bottom.bmp");
 }
 
 /*

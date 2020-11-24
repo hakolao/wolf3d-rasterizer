@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:27:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 21:49:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 13:10:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 			v_i = read_obj->triangles[i * 9 + j * 3 + 0] - 1;
 			vt_i = read_obj->triangles[i * 9 + j * 3 + 1] - 1;
 			vn_i = read_obj->triangles[i * 9 + j * 3 + 2] - 1;
-			error_check(obj->vertices[v_i] == NULL && !(obj->vertices[v_i] =
-				malloc(sizeof(t_vertex))), "Failed to malloc vertex");
 			l3d_3d_object_set_vertex(obj->vertices[v_i], read_obj->v[v_i]);
 			ml_vector2_copy(read_obj->vt[vt_i], obj->triangles[i].uvs[j]);
 			ml_vector3_copy(read_obj->vn[vn_i], obj->triangles[i].normals[j]);

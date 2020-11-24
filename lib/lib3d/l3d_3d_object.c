@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/19 22:39:12 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 13:11:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,7 @@ t_3d_object		*l3d_3d_object_copy(t_3d_object *src)
 	ft_memcpy(dst->material, src->material, sizeof(t_material));
 	i = -1;
 	while (++i < src->num_vertices)
-	{
-		error_check(!(dst->vertices[i] = malloc(sizeof(t_vertex))),
-			"Failed to malloc vertices in obj copy");
 		ft_memcpy(dst->vertices[i], src->vertices[i], sizeof(t_vertex));
-	}
 	i = -1;
 	while (++i < src->num_triangles)
 	{
@@ -99,11 +95,16 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 					uint32_t num_triangles)
 {
 	t_3d_object	*object;
+	int32_t		i;
 
 	error_check(!(object = malloc(sizeof(*object))),
 		"Failed to malloc 3d obj");
 	error_check(!(object->vertices = malloc(sizeof(t_vertex*) * num_vertices)),
 		"Failed to malloc 3d obj vertices");
+	i = -1;
+	while (++i < (int32_t)num_vertices)
+		error_check(!(object->vertices[i] = malloc(sizeof(t_vertex))),
+			"Failed to malloc vertex");
 	ft_memset(object->vertices, 0, sizeof(t_vertex*) * num_vertices);
 	error_check(!(object->triangles =
 		malloc(sizeof(t_triangle) * num_triangles)),

@@ -34,6 +34,8 @@ SOURCES = main.c \
 			ui.c \
 			debug.c \
 			render/render.c \
+			render/triangle.c \
+			render/skybox.c \
 			render/render_utils.c \
 			window/text.c \
 			window/window.c \

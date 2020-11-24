@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 14:07:25 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 17:47:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,11 +260,11 @@ typedef struct						s_map_editor
 /*
 ** For threading
 */
-typedef struct						s_rasterize_work
+typedef struct						s_render_work
 {
 	t_wolf3d				*app;
 	t_sub_framebuffer		*sub_buffer;
-}									t_rasterize_work;
+}									t_render_work;
 
 void						wolf3d_run(t_wolf3d *app);
 
@@ -299,7 +299,7 @@ t_camera					*new_camera();
 void						update_camera(t_wolf3d *app);
 
 /*
-** Render to framebuffer
+** Rendering
 */
 t_bool						screen_intersection(t_wolf3d *app,
 								t_triangle *triangle);
@@ -307,6 +307,12 @@ t_bool						is_rendered(t_wolf3d *app, t_triangle *triangle);
 void						ui_render(t_wolf3d *app);
 void						wolf3d_render(t_wolf3d *app);
 void						loading_render(t_wolf3d *app);
+void						rasterize_skybox(t_render_work *work);
+void						render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
+									t_triangle *triangle, t_render_pass passes);
+void						set_render_triangle(t_wolf3d *app,
+									t_triangle *r_triangle,
+									t_triangle *triangle, t_vertex *vtc);
 /*
 ** Scene
 */

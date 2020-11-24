@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/23 21:14:59 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 17:32:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -444,5 +444,9 @@ t_framebuffer				*l3d_framebuffer_create(int32_t width,
 void						l3d_framebuffer_destroy(t_framebuffer *framebuffer);
 void						l3d_framebuffer_recreate(t_framebuffer **framebuffer,
 												int32_t width, int32_t height);
+void						l3d_buffer_float_clear(float *buffer,
+									uint32_t size, float clear_value);
+void						l3d_buffer_uint32_clear(uint32_t *buffer,
+									uint32_t size, uint32_t clear_value);
 
 #endif

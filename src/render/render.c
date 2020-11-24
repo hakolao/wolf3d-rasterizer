@@ -165,25 +165,13 @@ static void		clear_work(void *params)
 {
 	t_rasterize_work 	*work;
 	t_sub_framebuffer	*sub_buffer;
-	int32_t				i;
-	uint32_t			color;
 
 	work = params;
 	sub_buffer = work->sub_buffer;
-	color = 0x000000FF;
-	i = 0;
-	while (i < sub_buffer->width * sub_buffer->height)
-	{
-		sub_buffer->buffer[i] = color;
-		sub_buffer->buffer[i + 1] = color;
-		sub_buffer->buffer[i + 2] = color;
-		sub_buffer->buffer[i + 3] = color;
-		sub_buffer->zbuffer[i] = FLT_MAX;
-		sub_buffer->zbuffer[i + 1] = FLT_MAX;
-		sub_buffer->zbuffer[i + 2] = FLT_MAX;
-		sub_buffer->zbuffer[i + 3] = FLT_MAX;
-		i += 4;
-	}
+	l3d_buffer_uint32_clear(sub_buffer->buffer,
+		sub_buffer->width * sub_buffer->height, 0x000000FF);
+	l3d_buffer_float_clear(sub_buffer->zbuffer,
+		sub_buffer->width * sub_buffer->height, FLT_MAX);
 	free(work);
 }
 

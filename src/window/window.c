@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 20:38:27 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 17:32:44 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,8 @@ static int		window_resize_callback(void *data, SDL_Event *event)
 
 void			window_frame_clear(t_window *window)
 {
-	int32_t		i;
-	uint32_t	color;
-
-	color = 0x000000FF;
-	i = 0;
-	while (i < window->framebuffer->width * window->framebuffer->height)
-	{
-		window->framebuffer->buffer[i] = color;
-		window->framebuffer->buffer[i + 1] = color;
-		window->framebuffer->buffer[i + 2] = color;
-		window->framebuffer->buffer[i + 3] = color;
-		i += 4;
-	}
+	l3d_buffer_uint32_clear(window->framebuffer->buffer,
+		window->framebuffer->width * window->framebuffer->height, 0x000000FF);
 }
 
 void			window_frame_draw(t_window *window)

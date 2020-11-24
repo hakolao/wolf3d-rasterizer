@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:20:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 13:11:38 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 13:15:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 	while (++i < (int32_t)num_vertices)
 		error_check(!(object->vertices[i] = malloc(sizeof(t_vertex))),
 			"Failed to malloc vertex");
-	ft_memset(object->vertices, 0, sizeof(t_vertex*) * num_vertices);
 	error_check(!(object->triangles =
 		malloc(sizeof(t_triangle) * num_triangles)),
 		"Failed to malloc 3d obj triangles");

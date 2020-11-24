@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 12:48:47 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 14:07:25 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@
 
 typedef enum						e_render_pass
 {
-	rpass_rasterize,
-	rpass_zbuffer
+	rpass_rasterize = 1,
+	rpass_zbuffer = 1 << 1
 }									t_render_pass;
 
 /*

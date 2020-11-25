@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 14:13:44 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:32:30 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,14 @@ typedef struct				s_surface
 	uint32_t		h;
 }							t_surface;
 
+typedef struct				s_temp_object
+{
+	uint32_t				creation_time;
+	t_3d_object				*obj;
+}							t_temp_object;
+
+typedef	t_list				t_temp_objects;
+
 /*
 ** Kd tree
 */
@@ -462,5 +470,11 @@ void						l3d_skybox_create(t_3d_object *skybox[6],
 t_3d_object					*l3d_plane_create(t_surface	*texture);
 t_3d_object					*l3d_object_instantiate(t_3d_object *model,
 								float unit_size, t_vec3 pos);
+void						l3d_temp_objects_add(t_temp_objects **temp_objects,
+								t_3d_object *object, uint32_t creation_time);
+void						l3d_temp_objects_destroy(t_temp_objects **temp_objects);
+void						l3d_temp_objects_destroy_if_expired(t_temp_objects **temp_objects,
+													uint32_t current_time,
+													uint32_t diff_limit);
 
 #endif

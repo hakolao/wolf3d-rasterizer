@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 14:15:07 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 14:15:55 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void				place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
 {
 	init_player(app,
 		(t_vec3){(float)xy_rot[1] * (2 * unit_size), 0,
-		(float)xy_rot[0] *  (2 * unit_size)});
+		(float)xy_rot[0] * (2 * unit_size)});
 	rotate_player_horizontal(app, xy_rot[2]);
 }
 

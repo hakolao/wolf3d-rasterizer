@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:34:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:35:52 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,29 +40,42 @@ void					determine_closest_triangle_hit(t_hits *hits,
 		*closest = NULL;
 }
 
+static void				add_bullet_hole(t_wolf3d *app,
+										t_hit *closest_triangle_hit)
+{
+	t_3d_object	*model;
+	t_3d_object	*instance;
+
+	model = hash_map_get(app->active_scene->models,
+		(int)"bullet_hole");
+	l3d_3d_object_debug_print(model);
+	instance = l3d_object_instantiate(model, app->window->width * 0.1,
+			closest_triangle_hit->hit_point);
+	l3d_3d_object_debug_print(instance);
+	l3d_temp_objects_add(&app->active_scene->temp_objects,
+		instance, SDL_GetTicks());
+}
+
 void					shooting_handle(t_wolf3d *app)
 {
-	t_ray	ray;
-	t_vec3	origin;
-	t_vec3	add;
-	t_hits	*hits;
-	t_hit	*closest_triangle_hit;
+	t_ray			ray;
+	t_vec3			origin;
+	t_vec3			add;
+	t_hits			*hits;
+	t_hit			*closest_triangle_hit;
 
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
-		if ((SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_LMASK))
+		hits = NULL;
+		ml_vector3_mul(app->player.forward, NEAR_CLIP_DIST, add);
+		ml_vector3_add(app->player.pos, add, origin);
+		l3d_ray_set(app->player.forward, origin, &ray);
+		if (l3d_kd_tree_ray_hit(app->active_scene->bullet_tree->root, &ray, &hits))
 		{
-			hits = NULL;
-			ml_vector3_mul(app->player.forward, NEAR_CLIP_DIST, add);
-			ml_vector3_add(app->player.pos, add, origin);
-			l3d_ray_set(app->player.forward, origin, &ray);
-			if (l3d_kd_tree_ray_hit(app->active_scene->bullet_tree->root, &ray, &hits))
-			{
-				determine_closest_triangle_hit(hits, &closest_triangle_hit);
-				if (closest_triangle_hit != NULL)
-					ft_printf("Hit triangle T: %f\n", closest_triangle_hit->t);
-				l3d_delete_hits(&hits);
-			}
+			determine_closest_triangle_hit(hits, &closest_triangle_hit);
+			if (closest_triangle_hit != NULL)
+				add_bullet_hole(app, closest_triangle_hit);
+			l3d_delete_hits(&hits);
 		}
 	}
 }

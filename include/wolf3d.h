@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:54:28 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:28:51 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@
 
 # define MAX_NUM_OBJECTS 16384
 # define MAX_NUM_TRIANGLES 65536
+
+# define NUM_ASSETS 64
+# define TEMP_OBJECT_EXPIRE_SEC 100
 
 typedef enum						e_render_pass
 {
@@ -130,10 +133,10 @@ typedef struct						s_scene_data
 	uint32_t				menu_option_count;
 	t_camera				*main_camera;
 	char					*map_filename;
-	char					*texture_files[32];
-	char					*model_files[32];
-	uint32_t				asset_keys[32];
-	uint32_t				num_models;
+	char					*texture_files[NUM_ASSETS];
+	char					*model_files[NUM_ASSETS];
+	uint32_t				asset_keys[NUM_ASSETS];
+	uint32_t				num_assets_to_load;
 }									t_scene_data;
 
 typedef struct						s_scene
@@ -156,6 +159,7 @@ typedef struct						s_scene
 	t_hash_table			*models;
 	t_surface				*skybox_textures[6];
 	t_3d_object				*skybox[6];
+	t_temp_objects			*temp_objects;
 }									t_scene;
 
 typedef struct						s_wolf3d

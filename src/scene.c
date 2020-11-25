@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:49:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:30:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void		load_scene_assets(t_scene *scene, t_scene_data *data)
 	int32_t		i;
 	uint32_t	key;
 
-	scene->models = hash_map_create(data->num_models);
-	scene->textures = hash_map_create(data->num_models);
+	scene->models = hash_map_create(data->num_assets_to_load);
+	scene->textures = hash_map_create(data->num_assets_to_load);
 	i = -1;
-	while (++i < (int32_t)data->num_models)
+	while (++i < (int32_t)data->num_assets_to_load)
 	{
 		key = data->asset_keys[i];
 		if (data->texture_files[i] != NULL && data->model_files[i] != NULL)
@@ -44,6 +44,9 @@ static void		load_scene_assets(t_scene *scene, t_scene_data *data)
 		"assets/skybox/right.bmp");
 	scene->skybox_textures[5] = l3d_read_bmp_image_32bit_rgba_surface(
 		"assets/skybox/bottom.bmp");
+	hash_map_add(scene->models, (int)"bullet_hole",
+		l3d_plane_create(l3d_read_bmp_image_32bit_rgba_surface(
+			"assets/textures/bullet_hole.bmp")));
 }
 
 /*
@@ -85,7 +88,7 @@ static void		set_main_scene_data_assets(t_scene_data *data)
 	data->asset_keys[7] = c_block_ne;
 	data->asset_keys[8] = c_block_se;
 	data->asset_keys[9] = c_block_sw;
-	data->num_models = 10;
+	data->num_assets_to_load = 10;
 }
 
 static void		select_scene(void *app_ptr)
@@ -150,10 +153,11 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->main_camera = data->main_camera;
 	scene->map_filename = data->map_filename;
 	ft_memset(scene->skybox, 0, sizeof(t_3d_object*) * 6);
-	if (data->num_models > 0)
+	if (data->num_assets_to_load > 0)
 		load_scene_assets(scene, data);
 	if (data->map_filename)
 		read_and_init_scene_map(scene);
+	scene->temp_objects = NULL;
 	return (scene);
 }
 
@@ -205,6 +209,8 @@ void			destroy_scene(t_scene *scene)
 			if ((model = hash_map_get(scene->models, key)))
 				l3d_3d_object_destroy(model);
 		}
+		if ((model = hash_map_get(scene->models, (int)"bullet_hole")))
+			l3d_3d_object_destroy(model);
 		hash_map_destroy(scene->models);
 	}
 	if (scene->skybox[0])
@@ -220,6 +226,8 @@ void			destroy_scene(t_scene *scene)
 	i = -1;
 	while (++i < (int)scene->num_objects)
 		l3d_3d_object_destroy(scene->objects[i]);
+	if (scene->temp_objects)
+		l3d_temp_objects_destroy(&scene->temp_objects);
 	if (scene->main_camera)
 	{
 		free(scene->main_camera);

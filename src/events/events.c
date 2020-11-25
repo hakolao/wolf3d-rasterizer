@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 13:56:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:29:58 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,29 @@ static void		handle_game_events(t_wolf3d *app, SDL_Event event)
 		main_menu_event_handle(app, event);
 	else if (app->active_scene->scene_id == scene_id_main_menu_settings)
 		main_menu_settings_event_handle(app, event);
-	else if (app->active_scene->scene_id == scene_id_main_game &&
-		app->active_scene->is_paused)
-		main_game_menu_event_handle(app, event);
-	else if (app->active_scene->scene_id == scene_id_main_game &&
-		event.type == SDL_MOUSEMOTION && !app->active_scene->is_paused)
-		mouse_motion_handle(app, event);
+	else if (app->active_scene->scene_id == scene_id_main_game)
+	{
+		if (app->active_scene->temp_objects)
+			l3d_temp_objects_destroy_if_expired(
+				&app->active_scene->temp_objects,
+				SDL_GetTicks(), TEMP_OBJECT_EXPIRE_SEC * 1000);
+		if (app->active_scene->is_paused)
+			main_game_menu_event_handle(app, event);
+		else
+		{
+			if (event.type == SDL_MOUSEMOTION)
+				mouse_motion_handle(app, event);
+			if (event.type == SDL_MOUSEBUTTONDOWN &&
+				event.button.button == SDL_BUTTON_LMASK)
+				shooting_handle(app);
+		}
+	}
 }
+
 
 static void		handle_game_input_state(t_wolf3d *app)
 {
 	mouse_state_set(app);
-	shooting_handle(app);
 	keyboard_state_set(app);
 	movement_handle(app);
 }

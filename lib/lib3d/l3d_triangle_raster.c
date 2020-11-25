@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/23 21:11:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 14:42:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,5 +363,5 @@ uint32_t		l3d_sample_texture(uint32_t *texture_data, int *dimensions,
 		index = dimensions[0] * dimensions[1] - 1;
 	else if (index < 0)
 		index = 0;
-	return (texture_data[index]);
+	return (l3d_color_blend_u32(0x808080ff, texture_data[index], 1.0));
 }

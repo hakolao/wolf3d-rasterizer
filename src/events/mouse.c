@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 15:35:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 15:45:48 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,8 @@ static void				add_bullet_hole(t_wolf3d *app,
 
 	model = hash_map_get(app->active_scene->models,
 		(int)"bullet_hole");
-	l3d_3d_object_debug_print(model);
 	instance = l3d_object_instantiate(model, app->window->width * 0.1,
 			closest_triangle_hit->hit_point);
-	l3d_3d_object_debug_print(instance);
 	l3d_temp_objects_add(&app->active_scene->temp_objects,
 		instance, SDL_GetTicks());
 }

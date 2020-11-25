@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 14:05:45 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 15:32:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:04:32 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,17 +102,10 @@ t_3d_object			*l3d_object_instantiate(t_3d_object *model,
 
 static void			l3d_destroy_temp_object(void *params, size_t size)
 {
-	t_list			*node;
 	t_temp_object	*temp_obj;
 
 	(void)size;
-	node = params;
-	temp_obj = node->content;
-	if (temp_obj->obj->material->texture != NULL)
-	{
-		free(temp_obj->obj->material->texture);
-		temp_obj->obj->material->texture = NULL;
-	}
+	temp_obj = params;
 	l3d_3d_object_destroy(temp_obj->obj);
 	free(temp_obj);
 	temp_obj = NULL;
@@ -127,7 +120,9 @@ static t_bool		l3d_temp_objects_expired(t_temp_objects **temp_objects,
 
 	tmp = *temp_objects;
 	all_expired = true;
-	while (tmp->next)
+	if (!tmp)
+		return (all_expired);
+	while (tmp)
 	{
 		if (current_time - ((t_temp_object*)tmp->content)->creation_time <
 			diff_limit)
@@ -155,12 +150,14 @@ void				l3d_temp_objects_destroy(t_temp_objects **temp_objects)
 void				l3d_temp_objects_add(t_temp_objects **temp_objects,
 						t_3d_object *object, uint32_t creation_time)
 {
-	t_temp_object	tmp_obj;
+	t_temp_object	*tmp_obj;
 
-	tmp_obj.obj = object;
-	tmp_obj.creation_time = creation_time;
-	if (temp_objects == NULL || *temp_objects == NULL)
-		*temp_objects = ft_lstnew(&tmp_obj, sizeof(tmp_obj));
+	error_check(!(tmp_obj = malloc(sizeof(*tmp_obj))),
+		"Failed to malloc temp object");
+	tmp_obj->obj = object;
+	tmp_obj->creation_time = creation_time;
+	if (*temp_objects == NULL)
+		*temp_objects = ft_lstnew(tmp_obj, sizeof(*tmp_obj));
 	else
-		ft_lstadd(temp_objects, ft_lstnew(&tmp_obj, sizeof(tmp_obj)));
+		ft_lstadd(temp_objects, ft_lstnew(tmp_obj, sizeof(*tmp_obj)));
 }

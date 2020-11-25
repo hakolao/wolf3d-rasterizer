@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 15:30:49 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:05:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static void		load_scene_assets(t_scene *scene, t_scene_data *data)
 		"assets/skybox/right.bmp");
 	scene->skybox_textures[5] = l3d_read_bmp_image_32bit_rgba_surface(
 		"assets/skybox/bottom.bmp");
+	// Temp objects should not share materials with other objects,
+	// Their texture gets deleted when they are cleared.
 	hash_map_add(scene->models, (int)"bullet_hole",
 		l3d_plane_create(l3d_read_bmp_image_32bit_rgba_surface(
 			"assets/textures/bullet_hole.bmp")));
@@ -210,7 +212,10 @@ void			destroy_scene(t_scene *scene)
 				l3d_3d_object_destroy(model);
 		}
 		if ((model = hash_map_get(scene->models, (int)"bullet_hole")))
+		{
+			free(model->material->texture);
 			l3d_3d_object_destroy(model);
+		}
 		hash_map_destroy(scene->models);
 	}
 	if (scene->skybox[0])

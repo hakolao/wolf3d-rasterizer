@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 15:45:48 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:31:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,6 @@ void					determine_closest_triangle_hit(t_hits *hits,
 		*closest = NULL;
 }
 
-static void				add_bullet_hole(t_wolf3d *app,
-										t_hit *closest_triangle_hit)
-{
-	t_3d_object	*model;
-	t_3d_object	*instance;
-
-	model = hash_map_get(app->active_scene->models,
-		(int)"bullet_hole");
-	instance = l3d_object_instantiate(model, app->window->width * 0.1,
-			closest_triangle_hit->hit_point);
-	l3d_temp_objects_add(&app->active_scene->temp_objects,
-		instance, SDL_GetTicks());
-}
-
 void					shooting_handle(t_wolf3d *app)
 {
 	t_ray			ray;
@@ -72,7 +58,7 @@ void					shooting_handle(t_wolf3d *app)
 		{
 			determine_closest_triangle_hit(hits, &closest_triangle_hit);
 			if (closest_triangle_hit != NULL)
-				add_bullet_hole(app, closest_triangle_hit);
+				//ToDo Add bullet hole here
 			l3d_delete_hits(&hits);
 		}
 	}

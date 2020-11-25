@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 15:32:30 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:27:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,6 +338,8 @@ void						l3d_bounding_box_set(t_tri_vec *triangles,
 ** 3d objects
 */
 
+void						l3d_3d_object_rotate_matrix(t_3d_object *object,
+								t_mat4 rotation);
 void						l3d_3d_object_transform(t_3d_object *obj,
 								t_mat4 transform);
 void						l3d_3d_object_translate(t_3d_object *object,

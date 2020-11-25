@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 16:38:55 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:53:39 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,7 +351,7 @@ uint32_t		l3d_sample_texture(t_material *material,
 	float		y;
 	uint32_t	default_color;
 
-	default_color = 0x808080ff;
+	default_color = 0xFF00FFFF;
 	if (!material)
 		return (default_color);
 	x = floor(uv_point[0] * material->width);

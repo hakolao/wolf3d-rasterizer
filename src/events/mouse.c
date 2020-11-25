@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 16:31:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:54:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void					determine_closest_triangle_hit(t_hits *hits,
 
 	head = hits;
 	*closest = NULL;
-	while (head->next)
+	while (head)
 	{
 		hit = (t_hit*)head->content;
 		if (*closest == NULL && hit != NULL && hit->t > 0.0 && hit->triangle)
@@ -58,7 +58,7 @@ void					shooting_handle(t_wolf3d *app)
 		{
 			determine_closest_triangle_hit(hits, &closest_triangle_hit);
 			if (closest_triangle_hit != NULL)
-				//ToDo Add bullet hole here
+				; //ToDo shoot (Add bullet to temp objects)
 			l3d_delete_hits(&hits);
 		}
 	}

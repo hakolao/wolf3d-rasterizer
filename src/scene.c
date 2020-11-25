@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:26:02 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:49:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ static void		select_scene(void *app_ptr)
 		data.menu_options[2] = "Settings";
 		data.menu_options[3] = "Quit";
 		data.menu_option_count = 4;
-		ft_printf("Select scene main menu\n");
 	}
 	if (data.scene_id == scene_id_main_menu_settings)
 	{
@@ -142,6 +141,7 @@ t_scene			*new_scene(t_scene_data *data)
 
 	error_check(!(scene = (t_scene*)malloc(sizeof(t_scene))),
 		"Failed to malloc scene");
+	ft_memset(scene, 0, sizeof(*scene));
 	scene->scene_id = data->scene_id;
 	ft_memcpy(scene->menu_options, data->menu_options,
 		sizeof(char*)*data->menu_option_count);
@@ -149,9 +149,6 @@ t_scene			*new_scene(t_scene_data *data)
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
 	scene->map_filename = data->map_filename;
-	scene->map = NULL;
-	scene->models = NULL;
-	scene->textures = NULL;
 	ft_memset(scene->skybox, 0, sizeof(t_3d_object*) * 6);
 	if (data->num_models > 0)
 		load_scene_assets(scene, data);
@@ -179,7 +176,6 @@ void			destroy_scene(t_scene *scene)
 	uint32_t	key;
 	t_3d_object	*model;
 
-	ft_printf("Destroy scene\n");
 	if (scene->map_filename != NULL)
 		ft_strdel(&scene->map_filename);
 	if (scene->bullet_tree)

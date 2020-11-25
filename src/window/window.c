@@ -6,11 +6,21 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 23:55:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:30:56 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void			window_resize(t_window *window, int32_t width, int32_t height)
+{
+	SDL_SetWindowSize(window->window, width, height);
+	window->width = width;
+	window->height = height;
+	SDL_SetWindowPosition(window->window,
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	window_frame_recreate(window);
+}
 
 static int		window_resize_callback(void *data, SDL_Event *event)
 {
@@ -69,6 +79,7 @@ void			window_frame_recreate(t_window *window)
 		TTF_CloseFont(window->debug_font);
 	window->debug_font = TTF_OpenFont(DEBUG_FONT, FONT_SIZE);
 	error_check(window->debug_font == NULL, TTF_GetError());
+	ft_printf("Res: %d %d\n", window->width, window->height);
 }
 
 void			window_create(t_window **window_ref,

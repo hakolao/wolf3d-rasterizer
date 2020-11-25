@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 00:53:42 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:31:30 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,21 +94,25 @@ static void		select_scene(void *app_ptr)
 	t_wolf3d			*app;
 
 	app = app_ptr;
+	ft_memset(&data, 0, sizeof(data));
 	data.scene_id = app->next_scene_id;
 	if (data.scene_id == scene_id_main_menu)
 	{
 		data.menu_options[0] = "Start Game";
 		data.menu_options[1] = "Load Game";
-		data.menu_options[2] = "Quit";
+		data.menu_options[2] = "Settings";
+		data.menu_options[3] = "Quit";
+		data.menu_option_count = 4;
+	}
+	if (data.scene_id == scene_id_main_menu_settings)
+	{
+		data.menu_options[0] = "1280x720";
+		data.menu_options[1] = "1920x1080";
+		data.menu_options[2] = "Back";
 		data.menu_option_count = 3;
-		data.main_camera = NULL;
-		data.map_filename = NULL;
-		data.num_models = 0;
 	}
 	else if (data.scene_id == scene_id_main_game)
 	{
-		data.level = 0;
-		data.menu_option_count = 0;
 		data.main_camera = new_camera();
 		data.map_filename = ft_strdup("maps/bigone");
 		set_main_scene_data_assets(&data);

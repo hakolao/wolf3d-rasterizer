@@ -6,13 +6,13 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 14:33:15 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:14:25 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		ui_main_menu_render(t_wolf3d *app)
+static void		ui_menu_render(t_wolf3d *app)
 {
 	int32_t			row_height;
 	int32_t			y;
@@ -49,8 +49,9 @@ static void		ui_main_game_render(t_wolf3d *app)
 
 void			ui_render(t_wolf3d *app)
 {
-	if (app->active_scene->scene_id == scene_id_main_menu)
-		ui_main_menu_render(app);
+	if (app->active_scene->scene_id == scene_id_main_menu ||
+		app->active_scene->scene_id == scene_id_main_menu_settings)
+		ui_menu_render(app);
 	else if (app->active_scene->scene_id == scene_id_main_game)
 		ui_main_game_render(app);
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 00:19:14 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:13:08 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,9 @@ typedef enum						e_move
 typedef enum						e_scene_id
 {
 	scene_id_main_menu,
+	scene_id_main_menu_settings,
 	scene_id_main_game,
 }									t_scene_id;
-
-typedef enum						e_menu_actions
-{
-	menu_action_start_game,
-	menu_action_load_game,
-	menu_action_quit_game
-}									t_menu_actions;
 
 /*
 **	Camera screen distance is the distance of the
@@ -290,6 +284,7 @@ void						mouse_state_handle(t_wolf3d *app);
 void						keyboard_state_handle(t_wolf3d *app);
 void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
 void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);
+void 						main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event);
 
 
 /*

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 23:41:38 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:25:42 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ void						window_create(t_window **window_ref,
 void						window_frame_recreate(t_window *window);
 void						window_frame_draw(t_window *window);
 void						window_frame_clear(t_window *window);
+void						window_resize(t_window *window,
+								int32_t width, int32_t height);
 
 /*
 ** Text

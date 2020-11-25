@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 11:54:44 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:20:48 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			}
 			if (app->active_scene->scene_id == scene_id_main_menu)
 				main_menu_event_handle(app, event);
+			else if (app->active_scene->scene_id == scene_id_main_menu_settings)
+				main_menu_settings_event_handle(app, event);
 			if (event.type == SDL_MOUSEMOTION)
 				mouse_motion_handle(app, event);
 		}

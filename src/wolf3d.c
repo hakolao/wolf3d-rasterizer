@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 00:00:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 11:54:44 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 	while (app->is_running)
 	{
 		app->info.performance_start = SDL_GetPerformanceCounter();
-		// Force window centered
-		if (SDL_GetMouseFocus() == app->window->window)
-			SDL_SetWindowPosition(app->window->window,
-					SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 		if (app->window->resized)
 			wolf3d_resize_dependent_recreate(app);
 		window_frame_clear(app->window);

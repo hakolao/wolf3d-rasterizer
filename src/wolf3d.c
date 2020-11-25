@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:03:02 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:47:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 		if (app->window->resized)
 			wolf3d_resize_dependent_recreate(app);
 		window_frame_clear(app->window);
+		handle_events(app);
 		if (app->is_loading)
 		{
 			loading_render(app);
@@ -36,12 +37,14 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			wolf3d_debug_info_capture(app);
 			continue ;
 		}
-		handle_events(app);
-		wolf3d_render(app);
-		if (app->is_debug)
-			wolf3d_debug_info_render(app);
-		window_frame_draw(app->window);
-		wolf3d_debug_info_capture(app);
+		else
+		{
+			wolf3d_render(app);
+			if (app->is_debug)
+				wolf3d_debug_info_render(app);
+			window_frame_draw(app->window);
+			wolf3d_debug_info_capture(app);
+		}
 	}
 }
 

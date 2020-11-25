@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 12:14:25 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:09:28 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,35 @@ static void		ui_main_game_render(t_wolf3d *app)
 		{app->window->width / 2, app->window->height / 2 + 10}}, 0xFFFFFFFF);
 }
 
+static void		framebuffer_dark_overlay(t_wolf3d *app)
+{
+	int32_t		i;
+
+	i = -1;
+	while (++i < app->window->framebuffer->width *
+		app->window->framebuffer->height)
+	{
+		app->window->framebuffer->buffer[i] = l3d_color_blend_u32(
+			app->window->framebuffer->buffer[i],
+			0x000000FF, 0.5);
+	}
+}
+
 void			ui_render(t_wolf3d *app)
 {
+
 	if (app->active_scene->scene_id == scene_id_main_menu ||
 		app->active_scene->scene_id == scene_id_main_menu_settings)
 		ui_menu_render(app);
 	else if (app->active_scene->scene_id == scene_id_main_game)
+	{
 		ui_main_game_render(app);
+		if (app->active_scene->is_menu_on)
+		{
+			framebuffer_dark_overlay(app);
+			ui_menu_render(app);
+		}			
+	}
 }
 
 void			loading_render(t_wolf3d *app)

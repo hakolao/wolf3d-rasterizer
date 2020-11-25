@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 12:47:22 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:02:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ typedef struct						s_scene
 	const char				*menu_options[128];
 	int32_t					menu_option_count;
 	int32_t					selected_option;
+	t_bool					is_menu_on;
 	t_scene_id				scene_id;
 	char					*map_filename;
 	t_hash_table			*textures;
@@ -277,6 +278,7 @@ void						rotate_player_horizontal(t_wolf3d *app, float angle);
 /*
 ** Events
 */
+void						handle_events(t_wolf3d *app);
 void						keyboard_state_set(t_wolf3d *app);
 void						mouse_state_set(t_wolf3d *app);
 void						mouse_state_handle(t_wolf3d *app);
@@ -284,6 +286,7 @@ void						keyboard_state_handle(t_wolf3d *app);
 void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
 void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);
 void 						main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event);
+void 						main_game_menu_event_handle(t_wolf3d *app, SDL_Event event);
 
 
 /*

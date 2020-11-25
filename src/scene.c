@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 12:31:30 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:12:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,10 @@ static void		select_scene(void *app_ptr)
 	}
 	else if (data.scene_id == scene_id_main_game)
 	{
+		data.menu_options[0] = "Save";
+		data.menu_options[1] = "Main Menu";
+		data.menu_options[2] = "Exit Game";
+		data.menu_option_count = 3;
 		data.main_camera = new_camera();
 		data.map_filename = ft_strdup("maps/bigone");
 		set_main_scene_data_assets(&data);

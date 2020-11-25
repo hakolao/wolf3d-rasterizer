@@ -6,76 +6,11 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 12:47:37 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 14:15:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-static t_3d_object		*plane_create(t_surface	*texture)
-{
-	t_3d_object		*plane;
-
-	plane = l3d_3d_object_create(4, 2);
-	if (texture != NULL)
-	{
-		plane->material->height = texture->h;
-		plane->material->width = texture->w;
-		plane->material->texture = texture->pixels;
-	}
-	ml_vector4_copy((t_vec4){-1, 0, -1, 1}, plane->vertices[0]->pos);
-	ml_vector4_copy((t_vec4){-1, 0, 1, 1}, plane->vertices[1]->pos);
-	ml_vector4_copy((t_vec4){1, 0, 1, 1}, plane->vertices[2]->pos);
-	ml_vector4_copy((t_vec4){1, 0, -1, 1}, plane->vertices[3]->pos);
-	plane->triangles[0].vtc_indices[0] = 0;
-	plane->triangles[0].vtc_indices[1] = 1;
-	plane->triangles[0].vtc_indices[2] = 2;
-	plane->triangles[1].vtc_indices[0] = 0;
-	plane->triangles[1].vtc_indices[1] = 2;
-	plane->triangles[1].vtc_indices[1] = 3;
-	l3d_triangle_set(&plane->triangles[0], (t_vertex*[3]){
-		plane->vertices[0], plane->vertices[1], plane->vertices[2]}, plane);
-	l3d_triangle_set(&plane->triangles[1], (t_vertex*[3]){
-		plane->vertices[0], plane->vertices[2], plane->vertices[3]}, plane);
-	ml_vector2_copy((t_vec2){0, 1}, plane->triangles[0].uvs[0]);
-	ml_vector2_copy((t_vec2){1, 1}, plane->triangles[0].uvs[1]);
-	ml_vector2_copy((t_vec2){1, 0}, plane->triangles[0].uvs[2]);
-	ml_vector2_copy((t_vec2){0, 1}, plane->triangles[1].uvs[0]);
-	ml_vector2_copy((t_vec2){1, 0}, plane->triangles[1].uvs[1]);
-	ml_vector2_copy((t_vec2){0, 0}, plane->triangles[1].uvs[2]);
-	return (plane);
-}
-
-/*
-** front, left, top, back, right, bottom
-*/
-
-static void				generate_skybox(t_scene *scene, float unit_size)
-{
-	int32_t		i;
-	float		scale;
-
-	scale = unit_size * 10;
-	i = -1;
-	while (++i < 6)
-	{
-		scene->skybox[i] = plane_create(scene->skybox_textures[i]);
-		l3d_3d_object_scale(scene->skybox[i],
-			scale, scale, scale);
-	}
-	l3d_3d_object_rotate(scene->skybox[0], 90, 0, 90);
-	l3d_3d_object_translate(scene->skybox[0], 0, 0, -scale);
-	l3d_3d_object_rotate(scene->skybox[1], -90, -90, 0);
-	l3d_3d_object_translate(scene->skybox[1], -scale, 0, 0);
-	l3d_3d_object_rotate(scene->skybox[2], 0, -90, 0);
-	l3d_3d_object_translate(scene->skybox[2], 0, -scale, 0);
-	l3d_3d_object_rotate(scene->skybox[3], 90, -180, 90);
-	l3d_3d_object_translate(scene->skybox[3], 0, 0, scale);
-	l3d_3d_object_rotate(scene->skybox[4], 0, 270, 90);
-	l3d_3d_object_translate(scene->skybox[4], scale, 0, 0);
-	l3d_3d_object_translate(scene->skybox[5], 0, scale, 0);
-	l3d_3d_object_rotate(scene->skybox[5], 0, -90, 180);
-}
 
 static void				scene_set_triangle_refs(t_scene *scene)
 {
@@ -119,26 +54,15 @@ static void				place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
 	rotate_player_horizontal(app, xy_rot[2]);
 }
 
-static t_3d_object		*instantiate_3d_model(t_3d_object *model,
-							float unit_size, int32_t xy[2])
-{
-	t_3d_object	*new_obj;
-
-	new_obj = l3d_3d_object_copy(model);
-	l3d_3d_object_scale(new_obj, unit_size, unit_size, unit_size);
-	l3d_3d_object_translate(new_obj,
-		(float)xy[1] * (2 * unit_size), unit_size,
-		-(float)xy[0] * (2 * unit_size));
-	return (new_obj);
-}
-
 static void				instantiate_cell_features(t_wolf3d *app,
 							uint32_t cell, int32_t *obj_i, int32_t xy[2])
 {
 	t_3d_object		*model;
 	int32_t			i;
 	uint32_t		key;
+	float			unit_size;
 
+	unit_size = app->window->width;
 	i = -1;
 	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{
@@ -148,7 +72,9 @@ static void				instantiate_cell_features(t_wolf3d *app,
 			if ((model = hash_map_get(app->active_scene->models, key)))
 			{
 				app->active_scene->objects[*obj_i] =
-					instantiate_3d_model(model, app->window->width, xy);
+					l3d_object_instantiate(model, unit_size,
+					(t_vec3){(float)xy[1] * (2 * unit_size), unit_size,
+						-(float)xy[0] * (2 * unit_size)});
 				(*obj_i)++;
 			}
 		}
@@ -185,7 +111,8 @@ void			generate_scene_objects(t_wolf3d *app,
 	}
 	scene->num_objects = obj_i;
 	set_scene_collision_tree(scene);
-	generate_skybox(scene, app->window->width);
+	l3d_skybox_create(scene->skybox, scene->skybox_textures,
+		app->window->width);
 }
 
 void				read_and_init_scene_map(t_scene *scene)

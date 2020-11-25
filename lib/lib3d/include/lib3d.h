@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 14:03:53 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 14:13:44 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -452,5 +452,15 @@ void						l3d_buffer_float_clear(float *buffer,
 									uint32_t size, float clear_value);
 void						l3d_buffer_uint32_clear(uint32_t *buffer,
 									uint32_t size, uint32_t clear_value);
+
+/*
+** Procedural gen
+*/
+void						l3d_skybox_create(t_3d_object *skybox[6],
+												t_surface *skybox_textures[6],
+												float unit_size);
+t_3d_object					*l3d_plane_create(t_surface	*texture);
+t_3d_object					*l3d_object_instantiate(t_3d_object *model,
+								float unit_size, t_vec3 pos);
 
 #endif

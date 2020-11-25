@@ -31,7 +31,7 @@ static void		select_scene(t_wolf3d *app, t_scene_id scene_id)
 		data.level = 0;
 		data.menu_option_count = 0;
 		data.main_camera = new_camera();
-		data.map_filename = ft_strdup("maps/okko");
+		data.map_filename = ft_strdup("maps/wolf3d_map_t3146");
 	}
 	app->active_scene = new_scene(&data);
 	if (data.map_filename)

@@ -82,7 +82,8 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 ** array. Saves the number of objects to inputed num_objects ref.
 */
 
-static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
+static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture,
+												t_surface *normal_map)
 {
 	t_3d_object	*l3d_object;
 
@@ -90,6 +91,7 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
 	if (texture)
 	{
 		l3d_object->material->texture = texture->pixels;
+		l3d_object->material->normal_map = normal_map->pixels;
 		l3d_object->material->width = texture->w;
 		l3d_object->material->height = texture->h;
 	}
@@ -106,14 +108,25 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
 ** is not returned.
 */
 
-t_3d_object				*l3d_read_obj(const char *filename, const char *txtfile)
+t_3d_object				*l3d_read_obj(const char *filename, const char *txtfile,
+										const char *normal_map_file)
 {
 	t_file_contents	*obj_file;
 	t_surface		texture;
+	t_surface		normal_map;
 	t_surface		*texture_ptr;
+	t_surface		*normal_map_ptr;
 	t_obj			obj;
 
 	error_check(!(obj_file = read_file(filename)), "Failed read obj file");
+	if (normal_map_file == NULL)
+		normal_map_ptr = NULL;
+		else
+	{
+		l3d_read_bmp_image_32bit_rgba(normal_map_file,
+			&normal_map.pixels, &normal_map.w, &normal_map.h);
+		normal_map_ptr = &normal_map;
+	}
 	if (txtfile == NULL)
 		texture_ptr = NULL;
 	else
@@ -126,5 +139,5 @@ t_3d_object				*l3d_read_obj(const char *filename, const char *txtfile)
 	if (!l3d_is_valid_obj(&obj))
 		return (NULL);
 	destroy_file_contents(obj_file);
-	return (l3d_3d_object_from_obj(&obj, texture_ptr));
+	return (l3d_3d_object_from_obj(&obj, texture_ptr, normal_map_ptr));
 }

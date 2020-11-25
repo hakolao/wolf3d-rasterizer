@@ -47,7 +47,7 @@ void				l3d_triangle_tangent_update(t_triangle *triangle)
 									deltas[2] * triangle->ac[2]);
 	ml_vector3_normalize(triangle->tangent, triangle->tangent);
 	//	triangle->tangent = normalize(tangent - dot(tangent, normal) * normal);
-	ml_vector3_normalize(triangle->normal, tempnormal);
+	ml_vector3_normalize(triangle->normal, triangle->normalized_normal);
 	ml_vector3_mul(tempnormal, ml_vector3_dot(triangle->tangent, tempnormal) , temptangent);
 	ml_vector3_sub(triangle->tangent, temptangent, triangle->tangent);
 	ml_vector3_normalize(triangle->tangent, triangle->tangent);

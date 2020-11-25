@@ -73,17 +73,20 @@ static float	calculate_z_val(float baryc[3], t_triangle *triangle)
 			baryc[2] * triangle->vtc_zvalue[2])));
 }
 
-static void		normal_from_color(uint32_t color, t_vec3 normal)
+void		normal_from_color(uint32_t color, t_vec3 normal)
 {
 	uint32_t	rgba[4];
 
 	l3d_u32_to_rgba(color, rgba);
-	normal[0] = rgba[0];
-	normal[1] = rgba[1];
-	normal[2] = rgba[2];
+	normal[0] = (float)rgba[0] / 255;
+	normal[1] = (float)rgba[1] / 255;
+	normal[2] = (float)rgba[2] / 255;
+	(void)normal;
+	(void)color;
+	(void)rgba;
 }
 
-static void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
+void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
 {
 	uint32_t	normal_value;
 	t_vec3		bumpnormal;
@@ -96,14 +99,34 @@ static void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
 	normal_from_color(normal_value, bumpnormal);
 	ml_vector3_mul(bumpnormal, 2, bumpnormal);
 	ml_vector3_sub(bumpnormal, (t_vec3){1.0, 1.0, 1.0}, bumpnormal);
-	// tbn = mat3(tangent, bitangent, normal); by-row matrix
-	// resultnormal = tbn * bumpnormal;
-	//! check matrix multiplication that it is column * vector
-	//! research shading by normal
-	//! implement flashlight style post processing "overlay"
-	ml_matrix3_row(triangle->tangent, triangle->bitangent, triangle->normal, tbn);
+	ml_matrix3_column(triangle->tangent, triangle->bitangent,
+						triangle->normalized_normal, tbn);
 	ml_matrix3_mul_vec3(tbn, bumpnormal, resultnormal);
 	ml_vector3_normalize(resultnormal, res);
+	(void)normal_value;
+	(void)bumpnormal;
+	(void)resultnormal;
+	(void)tbn;
+	(void)res;
+}
+
+void		fragment_shade_normal(t_vec3 light_vector, t_vec3 frag_normal,
+										uint32_t frag, uint32_t *res)
+{
+	float		dot;
+	uint32_t	rgba[4];
+	int			i;
+
+	i = -1;
+	ml_vector3_mul(frag_normal, 1.0, frag_normal);
+	ml_vector3_normalize(frag_normal, frag_normal);
+	dot = ml_vector3_dot(light_vector, frag_normal);
+	l3d_u32_to_rgba(frag, rgba);
+	while (++i < 4)
+	{
+		rgba[i] *= fabs(dot);
+	}
+	*res = l3d_rgba_to_u32(rgba);
 }
 
 static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
@@ -114,6 +137,11 @@ static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 	t_vec2		uv;
 	int32_t		offset_xy[2];
 	float		z_val;
+	t_vec3		frag_normal;
+	t_vec3		light_vector;
+	uint32_t	color;
+
+	ml_vector3_set(light_vector, 0.0, 0.0, -1.0);
 
 	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
 	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
@@ -122,14 +150,16 @@ static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 	z_val = calculate_z_val(baryc, triangle);
 	if (z_val <= zpixel)
 	{
-
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
-		l3d_pixel_plot(buffers->framebuffer,
-			(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
-			offset_xy, l3d_sample_texture(triangle->material->texture,
+		calc_bumped_normal(triangle, uv, frag_normal);
+		color = l3d_sample_texture(triangle->material->texture,
 					(int[2]){triangle->material->width,
-					triangle->material->height}, uv));
+					triangle->material->height}, uv);
+		fragment_shade_normal(light_vector, frag_normal, color, &color);
+		l3d_pixel_plot(buffers->framebuffer,
+						(uint32_t[2]){dimensionswh[0], dimensionswh[1]},
+						offset_xy, color);
 	}
 }
 

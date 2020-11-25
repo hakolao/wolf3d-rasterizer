@@ -54,7 +54,7 @@ SOURCES = ml_matrix4_id.c \
 			ml_vector2_add.c \
 			ml_matrix4_translation.c \
 			ml_matrix4_copy.c \
-			ml_matrix3_row.c \
+			ml_matrix3_create.c \
 			ml_matrix3_mul_vec3.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))

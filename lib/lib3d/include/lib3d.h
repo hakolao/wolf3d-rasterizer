@@ -97,6 +97,7 @@ typedef struct				s_triangle
 	float			vtc_zvalue[3];
 	t_vec3			tangent;
 	t_vec3			bitangent;
+	t_vec3			normalized_normal;
 }							t_triangle;
 
 typedef struct			s_l3d_buffers
@@ -326,7 +327,7 @@ void						l3d_3d_object_set_vertex(t_vertex *vertex,
 */
 
 t_3d_object					*l3d_read_obj(const char *filename,
-								const char *texture);
+										const char *texture, const char *normal_map);
 
 /*
 ** Math utils (could be moved somewhere else...)

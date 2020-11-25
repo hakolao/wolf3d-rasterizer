@@ -78,8 +78,10 @@ void				ml_vector4_set_all(t_vec4 vec, float val);
 **	Matrix3
 */
 
+void				ml_matrix3_column(t_vec3 column1, t_vec3 column2,
+										t_vec3 column3, t_mat3 res);
 void				ml_matrix3_row(t_vec3 row1, t_vec3 row2,
-									t_vec3 row3, t_mat3 res);
+										t_vec3 row3, t_mat3 res);
 void				ml_matrix3_mul_vec3(t_mat3 m, t_vec3 v, t_vec3 res);
 
 /*

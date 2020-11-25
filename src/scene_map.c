@@ -51,12 +51,13 @@ static void		place_floor(t_scene *scene, int32_t obj_i,
 							float unit_size, int32_t xy[2])
 {
 	scene->objects[obj_i] =
-		l3d_read_obj("assets/models/room_tiles/room_floor.obj",
-					"assets/textures/test_texture_small.bmp");
-	l3d_3d_object_scale(scene->objects[obj_i], unit_size, unit_size, unit_size);
+		l3d_read_obj("assets/icosphere_massive2.obj",
+					"assets/textures/test_texture.bmp",
+					"assets/textures/test_texture_normal.bmp");
+	l3d_3d_object_scale(scene->objects[obj_i], unit_size * 10, unit_size * 10, unit_size * 10);
 	l3d_3d_object_translate(scene->objects[obj_i],
-		xy[1] * unit_size - unit_size / 2.0, PLAYER_HEIGHT * 1,
-		-xy[0] * unit_size - unit_size / 2.0);
+		xy[1] * unit_size * 2, PLAYER_HEIGHT * 1,
+		-xy[0] * unit_size * 2);
 }
 
 static void		place_player(t_wolf3d *app, float unit_size, int32_t xy[2])

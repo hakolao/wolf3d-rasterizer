@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:55:59 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:34:11 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void					determine_closest_triangle_hit(t_hits *hits,
 		*closest = NULL;
 }
 
-void					mouse_state_handle(t_wolf3d *app)
+void					shooting_handle(t_wolf3d *app)
 {
 	t_ray	ray;
 	t_vec3	origin;

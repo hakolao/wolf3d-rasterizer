@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:12:59 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:26:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ static void		select_scene(void *app_ptr)
 	t_wolf3d			*app;
 
 	app = app_ptr;
+	if (app->active_scene != NULL)
+		destroy_scene(app->active_scene);
 	ft_memset(&data, 0, sizeof(data));
 	data.scene_id = app->next_scene_id;
 	if (data.scene_id == scene_id_main_menu)
@@ -103,6 +105,7 @@ static void		select_scene(void *app_ptr)
 		data.menu_options[2] = "Settings";
 		data.menu_options[3] = "Quit";
 		data.menu_option_count = 4;
+		ft_printf("Select scene main menu\n");
 	}
 	if (data.scene_id == scene_id_main_menu_settings)
 	{
@@ -165,22 +168,18 @@ t_scene			*new_scene(t_scene_data *data)
 void			select_next_scene(t_wolf3d *app)
 {
 	app->is_loading = true;
-	if (app->active_scene != NULL)
-		thread_pool_add_work(app->thread_pool,
-			destroy_scene, app->active_scene);
 	thread_pool_add_work(app->thread_pool,
 		select_scene, app);
 }
 
-void			destroy_scene(void *scn)
+void			destroy_scene(t_scene *scene)
 {
 	int			i;
 	t_surface	*texture;
 	uint32_t	key;
-	t_scene		*scene;
 	t_3d_object	*model;
 
-	scene = scn;
+	ft_printf("Destroy scene\n");
 	if (scene->map_filename != NULL)
 		ft_strdel(&scene->map_filename);
 	if (scene->bullet_tree)

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:02:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:34:11 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,8 +281,8 @@ void						rotate_player_horizontal(t_wolf3d *app, float angle);
 void						handle_events(t_wolf3d *app);
 void						keyboard_state_set(t_wolf3d *app);
 void						mouse_state_set(t_wolf3d *app);
-void						mouse_state_handle(t_wolf3d *app);
-void						keyboard_state_handle(t_wolf3d *app);
+void						shooting_handle(t_wolf3d *app);
+void						movement_handle(t_wolf3d *app);
 void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
 void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);
 void 						main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event);
@@ -317,7 +317,7 @@ void						set_render_triangle(t_wolf3d *app,
 void						scene_vertices_init(t_wolf3d *app,
 								t_scene *scene);
 t_scene						*new_scene(t_scene_data *data);
-void						destroy_scene(void *scene);
+void						destroy_scene(t_scene *scene);
 void						select_next_scene(t_wolf3d *app);
 void						debug_scene(t_scene *scene);
 void						generate_scene_objects(t_wolf3d *app,

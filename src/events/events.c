@@ -6,13 +6,13 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 13:00:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:35:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		handle_menu_events(t_wolf3d *app, SDL_Event event)
+static void		handle_game_events(t_wolf3d *app, SDL_Event event)
 {
 	if (app->active_scene->scene_id == scene_id_main_menu)
 		main_menu_event_handle(app, event);
@@ -21,16 +21,24 @@ static void		handle_menu_events(t_wolf3d *app, SDL_Event event)
 	else if (app->active_scene->scene_id == scene_id_main_game &&
 		app->active_scene->is_menu_on)
 		main_game_menu_event_handle(app, event);
+	else if (app->active_scene->scene_id == scene_id_main_game &&
+		event.type == SDL_MOUSEMOTION)
+		mouse_motion_handle(app, event);
+}
+
+static void		handle_game_input_state(t_wolf3d *app)
+{
+	mouse_state_set(app);
+	shooting_handle(app);
+	keyboard_state_set(app);
+	movement_handle(app);
 }
 
 void			handle_events(t_wolf3d *app)
 {
 	SDL_Event	event;
 
-	mouse_state_set(app);
-	mouse_state_handle(app);
-	keyboard_state_set(app);
-	keyboard_state_handle(app);
+	handle_game_input_state(app);
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN &&
@@ -51,8 +59,6 @@ void			handle_events(t_wolf3d *app)
 			else
 				SDL_SetWindowFullscreen(app->window->window, 0);
 		}
-		handle_menu_events(app, event);
-		if (event.type == SDL_MOUSEMOTION)
-			mouse_motion_handle(app, event);
+		handle_game_events(app, event);
 	}
 }

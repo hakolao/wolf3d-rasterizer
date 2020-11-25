@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:01:25 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 13:12:35 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:29:22 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void 		main_game_menu_event_handle(t_wolf3d *app, SDL_Event event)
 			else if (app->active_scene->selected_option == 1)
 			{
 				app->next_scene_id = scene_id_main_menu;
+				app->active_scene->is_menu_on = false;
 				select_next_scene(app);
 			}
 			else if (app->active_scene->selected_option == 2)

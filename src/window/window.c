@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 12:30:56 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:46:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void			window_frame_recreate(t_window *window)
 		TTF_CloseFont(window->debug_font);
 	window->debug_font = TTF_OpenFont(DEBUG_FONT, FONT_SIZE);
 	error_check(window->debug_font == NULL, TTF_GetError());
-	ft_printf("Res: %d %d\n", window->width, window->height);
 }
 
 void			window_create(t_window **window_ref,

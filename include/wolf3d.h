@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 12:13:08 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:47:22 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@
 
 # define PLAYER_SPEED 6.0
 # define PLAYER_ROTATION_SPEED 0.2
-# define PLAYER_HEIGHT WIDTH
 
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000

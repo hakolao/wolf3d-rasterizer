@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 00:56:12 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 12:47:37 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ static t_3d_object		*instantiate_3d_model(t_3d_object *model,
 	new_obj = l3d_3d_object_copy(model);
 	l3d_3d_object_scale(new_obj, unit_size, unit_size, unit_size);
 	l3d_3d_object_translate(new_obj,
-		(float)xy[1] * (2 * unit_size), PLAYER_HEIGHT * 1,
+		(float)xy[1] * (2 * unit_size), unit_size,
 		-(float)xy[0] * (2 * unit_size));
 	return (new_obj);
 }

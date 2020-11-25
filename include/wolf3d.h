@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:34:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:54:28 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ typedef struct						s_scene
 	const char				*menu_options[128];
 	int32_t					menu_option_count;
 	int32_t					selected_option;
-	t_bool					is_menu_on;
+	t_bool					is_paused;
 	t_scene_id				scene_id;
 	char					*map_filename;
 	t_hash_table			*textures;

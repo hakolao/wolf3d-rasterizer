@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:09:28 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:54:28 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void			ui_render(t_wolf3d *app)
 	else if (app->active_scene->scene_id == scene_id_main_game)
 	{
 		ui_main_game_render(app);
-		if (app->active_scene->is_menu_on)
+		if (app->active_scene->is_paused)
 		{
 			framebuffer_dark_overlay(app);
 			ui_menu_render(app);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 16:27:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:37:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,8 +387,7 @@ void						l3d_calculate_barycoords(
 void						l3d_interpolate_uv(t_triangle *triangle,
 												float *barycoords,
 												t_vec2 point_uv);
-uint32_t					l3d_sample_texture(uint32_t *texture_data,
-											int *dimensions, t_vec2 uv_point);
+uint32_t					l3d_sample_texture(t_material *material, t_vec2 uv_point);
 
 
 /*

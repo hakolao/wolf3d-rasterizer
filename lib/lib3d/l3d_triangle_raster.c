@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 14:42:23 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:38:55 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,7 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 		clamp_uv(uv);
 		l3d_pixel_plot(buffers->buffer,
 			(uint32_t[2]){buffers->width, buffers->height},
-			offset_xy, l3d_sample_texture(triangle->material->texture,
-					(int[2]){triangle->material->width,
-					triangle->material->height}, uv));
+			offset_xy, l3d_sample_texture(triangle->material, uv));
 	}
 }
 
@@ -345,23 +343,27 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 **	index = x + width * y;
 */
 
-uint32_t		l3d_sample_texture(uint32_t *texture_data, int *dimensions,
+uint32_t		l3d_sample_texture(t_material *material,
 									t_vec2 uv_point)
 {
-	int		index;
-	float	x;
-	float	y;
+	int			index;
+	float		x;
+	float		y;
+	uint32_t	default_color;
 
-	x = floor(uv_point[0] * dimensions[0]);
-	y = floor(uv_point[1] * dimensions[1]);
-	if (x >= dimensions[0])
-		x = (float)(dimensions[0] - 1);
-	if (y >= dimensions[1])
-		y = (float)(dimensions[1] - 1);
-	index = (int)floor(x) + (int)(floor(y * dimensions[0]));
-	if (index >= dimensions[0] * dimensions[1])
-		index = dimensions[0] * dimensions[1] - 1;
+	default_color = 0x808080ff;
+	if (!material)
+		return (default_color);
+	x = floor(uv_point[0] * material->width);
+	y = floor(uv_point[1] * material->height);
+	if (x >= (int32_t)material->width)
+		x = (float)(material->width - 1);
+	if (y >= (int32_t)material->height)
+		y = (float)(material->height - 1);
+	index = (int)floor(x) + (int)(floor(y * material->width));
+	if (index >= (int32_t)material->width * (int32_t)material->height)
+		index = material->width * material->height - 1;
 	else if (index < 0)
 		index = 0;
-	return (l3d_color_blend_u32(0x808080ff, texture_data[index], 1.0));
+	return (l3d_color_blend_u32(default_color, material->texture[index], 1.0));
 }

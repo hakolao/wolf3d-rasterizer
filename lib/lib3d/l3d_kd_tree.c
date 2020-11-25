@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:54:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:05 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 13:58:30 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void				l3d_kd_tree_destroy(t_kd_tree *tree)
 void				l3d_kd_tree_create_or_update(t_kd_tree **tree,
 					t_triangle **triangles, uint32_t num_triangles)
 {
-	if (*tree)
+	if (tree && *tree)
 		l3d_kd_tree_destroy(*tree);
 	*tree = l3d_kd_tree_create(triangles, num_triangles);
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 00:15:24 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 14:03:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@
 # define L3D_EPSILON 0.0000001
 # define L3D_SINGLE_SIDED 1
 # define L3D_MAX_KD_TREE_DEPTH 10
-# define L3D_MIN_KD_NODE_NUM_TRIANGLES 2
+/*
+** L3D_MIN_KD_NODE_NUM_TRIANGLES should be > 2
+** Else tree_create_recursive will leave a triangle vector leak
+** ToDo: Fix in the algorithm...
+*/
+# define L3D_MIN_KD_NODE_NUM_TRIANGLES 4
 # define L3D_TRI_VEC_INITIAL_CAPACITY 10
 
 /*

@@ -118,8 +118,6 @@ void		fragment_shade_normal(t_vec3 light_vector, t_vec3 frag_normal,
 	int			i;
 
 	i = -1;
-	ml_vector3_mul(frag_normal, 1.0, frag_normal);
-	ml_vector3_normalize(frag_normal, frag_normal);
 	dot = ml_vector3_dot(light_vector, frag_normal);
 	l3d_u32_to_rgba(frag, rgba);
 	while (++i < 4)

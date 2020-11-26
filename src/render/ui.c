@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 15:25:18 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:43:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,19 @@ static void		player_pos_to_grid_pos(t_wolf3d *app, t_vec2 grid_pos)
 	grid_pos[1] = (app->player.pos[0] / app->unit_size / 2.0) + 0.5;
 }
 
-static void		framebuffer_dark_overlay(t_wolf3d *app)
+static void		framebuffer_dark_overlay(t_framebuffer *framebuffer,
+					int32_t width, int32_t height, t_vec2 pos)
 {
+	uint32_t	dark[width * height];
 	int32_t		i;
 
 	i = -1;
-	while (++i < app->window->framebuffer->width *
-		app->window->framebuffer->height)
-	{
-		app->window->framebuffer->buffer[i] = l3d_color_blend_u32(
-			app->window->framebuffer->buffer[i],
-			0x000000FF, 0.5);
-	}
+	while (++i < width * height)
+		dark[i] = 0x000000FF;
+	l3d_image_place(&(t_surface){.pixels = framebuffer->buffer,
+			.h = framebuffer->height, .w = framebuffer->width},
+		&(t_surface){.pixels = dark, .w = width, .h = height},
+		(int32_t[2]){pos[0], pos[1]}, 0.5);
 }
 
 static void		minimap_render(t_wolf3d *app)
@@ -64,13 +65,21 @@ static void		minimap_render(t_wolf3d *app)
 	player_pos_to_grid_pos(app, player_grid_pos);
 	if (app->is_minimap_largened)
 	{
-		framebuffer_dark_overlay(app);
+		framebuffer_dark_overlay(app->window->framebuffer,
+			app->window->width, app->window->height, (t_vec2){0, 0});
 		map_minimap_render_full(app->active_scene->map,
 			app->window->framebuffer, player_grid_pos);
 	}
 	else
+	{
+		framebuffer_dark_overlay(app->window->framebuffer,
+			app->active_scene->map->render_size + 4,
+			app->active_scene->map->render_size + 4,
+			(t_vec2){app->active_scene->map->render_pos[0] - 2,
+				app->active_scene->map->render_pos[1] - 2});
 		map_minimap_render_partial(app->active_scene->map,
 			app->window->framebuffer, player_grid_pos);
+	}
 }
 
 static void		ui_main_game_render(t_wolf3d *app)
@@ -99,7 +108,8 @@ void			ui_render(t_wolf3d *app)
 		ui_main_game_render(app);
 		if (app->active_scene->is_paused)
 		{
-			framebuffer_dark_overlay(app);
+			framebuffer_dark_overlay(app->window->framebuffer,
+				app->window->width, app->window->height, (t_vec2){0, 0});
 			ui_menu_render(app);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 14:01:04 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 14:51:50 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:14:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,92 @@ void			map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer)
 			}
 		}
 	}
+}
+
+static void		map_minimap_player_render(t_wolf3d_map *map,
+					t_framebuffer *framebuffer, t_vec2 player_pos)
+{
+	t_surface	player_image;
+
+	player_image.h = 4;
+	player_image.w = 4;
+	player_image.pixels = (uint32_t[16]){
+		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
+		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
+		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
+		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff};
+	if (player_pos[0] >= 0 && player_pos[0] < map->size &&
+		player_pos[1] >= 0 && player_pos[1] < map->size)
+		l3d_image_place(
+			&(t_surface){.h = framebuffer->height,
+			.w = framebuffer->width, .pixels = framebuffer->buffer},
+				&player_image,
+			(int32_t[2]){
+				(int32_t)map->render_pos[0] +
+					player_pos[0] * map->cell_render_size,
+				(int32_t)map->render_pos[1] +
+					player_pos[1] * map->cell_render_size,
+			}, 1.0);
+}
+
+void			map_minimap_render_full(t_wolf3d_map *map,
+					t_framebuffer *framebuffer, t_vec2 player_pos)
+{
+	int32_t		x;
+	int32_t		y;
+	t_surface	*image;
+
+	y = -1;
+	while (++y < map->size)
+	{
+		x = -1;
+		while (++x < map->size)
+		{
+			if ((map->grid[y * map->size + x] & c_floor))
+			{
+				image = hash_map_get(map->map_images, c_floor);
+				if (image != NULL)
+					l3d_image_place(
+					&(t_surface){.h = framebuffer->height,
+					.w = framebuffer->width, .pixels = framebuffer->buffer},
+						image,
+					(int32_t[2]){
+						(int32_t)map->render_pos[0] + x * map->cell_render_size,
+						(int32_t)map->render_pos[1] + y * map->cell_render_size,
+					}, 1.0);
+			}
+		}
+	}
+	map_minimap_player_render(map, framebuffer, player_pos);
+}
+
+void			map_minimap_render_partial(t_wolf3d_map *map,
+					t_framebuffer *framebuffer, t_vec2 player_pos)
+{
+	int32_t		x;
+	int32_t		y;
+	t_surface	*image;
+
+	y = -1;
+	while (++y < map->size)
+	{
+		x = -1;
+		while (++x < map->size)
+		{
+			if ((map->grid[y * map->size + x] & c_floor))
+			{
+				image = hash_map_get(map->map_images, c_floor);
+				if (image != NULL)
+					l3d_image_place(
+					&(t_surface){.h = framebuffer->height,
+					.w = framebuffer->width, .pixels = framebuffer->buffer},
+						image,
+					(int32_t[2]){
+						(int32_t)map->render_pos[0] + x * map->cell_render_size,
+						(int32_t)map->render_pos[1] + y * map->cell_render_size,
+					}, 1.0);
+			}
+		}
+	}
+	map_minimap_player_render(map, framebuffer, player_pos);
 }

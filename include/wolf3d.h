@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 14:51:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:01:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,6 +351,10 @@ void						wolf3d_debug_info_capture(t_wolf3d *app);
 void						map_boundary_render(t_wolf3d_map *map,
 								t_framebuffer *framebuffer,
 								uint32_t grid_color);
+void						map_minimap_render_full(t_wolf3d_map *map,
+								t_framebuffer *framebuffer, t_vec2 player_pos);
+void						map_minimap_render_partial(t_wolf3d_map *map,
+								t_framebuffer *framebuffer, t_vec2 player_pos);
 void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
 void						map_destroy(t_wolf3d_map *map);
 void						map_init_image_assets(t_hash_table **map_images);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 14:11:35 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:08:40 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,15 @@ static void		player_pos_to_grid_pos(t_wolf3d *app, t_vec2 grid_pos)
 
 static void		minimap_render(t_wolf3d *app)
 {
-	t_vec2		grid_pos;
+	t_vec2		player_grid_pos;
 
-	player_pos_to_grid_pos(app, grid_pos);
-	map_features_render(app->active_scene->map, app->window->framebuffer);
+	player_pos_to_grid_pos(app, player_grid_pos);
+	if (app->is_minimap_largened)
+		map_minimap_render_full(app->active_scene->map,
+			app->window->framebuffer, player_grid_pos);
+	else
+		map_minimap_render_partial(app->active_scene->map,
+			app->window->framebuffer, player_grid_pos);
 }
 
 static void		ui_main_game_render(t_wolf3d *app)

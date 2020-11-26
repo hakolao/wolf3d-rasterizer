@@ -6,32 +6,37 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 14:01:04 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 14:01:14 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:51:50 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void			map_grid_render(t_wolf3d_map *map, t_framebuffer *framebuffer,
-					t_vec2 pos, uint32_t grid_color)
+void			map_boundary_render(t_wolf3d_map *map, t_framebuffer *framebuffer,
+					uint32_t grid_color)
 {
 	int32_t		i;
 	float		interval;
 
 	interval = map->cell_render_size;
-	i = -1;
-	while (++i <= map->size)
+	i = 0;
+	while (i <= map->size)
 	{
 		l3d_line_draw(framebuffer->buffer,
 			(uint32_t[2]){framebuffer->width, framebuffer->height
-		}, (int32_t[2][2]){{pos[0] + (float)(i * interval), pos[1]},
-			{pos[0] + (float)(i * interval), pos[1] +
+		}, (int32_t[2][2]){{map->render_pos[0] + (float)(i * interval),
+			map->render_pos[1]},
+			{map->render_pos[0] + (float)(i * interval),
+				map->render_pos[1] +
 				map->render_size}}, grid_color);
 		l3d_line_draw(framebuffer->buffer,
 			(uint32_t[2]){framebuffer->width, framebuffer->height
-		}, (int32_t[2][2]){{pos[0], pos[1] + (float)(i * interval)},
-			{pos[0] + map->render_size, pos[1] + (float)(i * interval)}},
+		}, (int32_t[2][2]){{map->render_pos[0],
+			map->render_pos[1] + (float)(i * interval)},
+			{map->render_pos[0] + map->render_size,
+			map->render_pos[1] + (float)(i * interval)}},
 			grid_color);
+		i += map->size;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 14:00:20 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 14:25:33 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:50:00 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void			map_rescale_image_assets(t_wolf3d_map *map)
 	t_surface	*curr_image;
 	uint32_t	key;
 
-	size = (int32_t)map->render_size / map->size + 1;
+	size = ceil(map->cell_render_size);
 	i = -1;
 	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{

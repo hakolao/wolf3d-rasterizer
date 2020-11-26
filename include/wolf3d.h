@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 14:29:43 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:51:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,9 +348,9 @@ void						wolf3d_debug_info_capture(t_wolf3d *app);
 ** Map
 */
 
-void						map_grid_render(t_wolf3d_map *map,
+void						map_boundary_render(t_wolf3d_map *map,
 								t_framebuffer *framebuffer,
-								t_vec2 pos, uint32_t grid_color);
+								uint32_t grid_color);
 void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
 void						map_destroy(t_wolf3d_map *map);
 void						map_init_image_assets(t_hash_table **map_images);
@@ -366,7 +366,7 @@ void						map_editor_save_menu_create(t_map_editor *app);
 void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
 void						map_editor_draw_menu_create(t_map_editor *app);
 void						map_editor_map_init(t_map_editor *app, int size);
-void						map_editor_map_render(t_map_editor *app, t_vec2 pos);
+void						map_editor_map_render(t_map_editor *app);
 void						update_map_cell_features(t_map_editor *app);
 t_bool						modify_surround_pattern(uint32_t *cell,
 								int32_t rooms[9]);

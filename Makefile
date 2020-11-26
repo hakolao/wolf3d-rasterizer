@@ -28,10 +28,15 @@ SOURCES = main.c \
 			wolf3d.c \
 			player.c \
 			camera.c \
-			scene.c \
-			scene_map.c \
 			time.c \
 			debug.c \
+			scene/scene.c \
+			scene/scene_map.c \
+			scene/cleanup.c \
+			scene/assets.c \
+			scene/game_scenes.c \
+			map/map.c \
+			map/render.c \
 			render/render.c \
 			render/objects.c \
 			render/triangle.c \
@@ -52,6 +57,8 @@ MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			map_editor/menu.c \
 			map_editor/cells.c \
 			map_editor/patterns.c \
+			map/map.c \
+			map/render.c \
 			window/text.c \
 			window/window.c \
 			window/utils.c	\
@@ -89,6 +96,8 @@ $(MAP_EDITOR_NAME): $(MAP_EDITOR_OBJS)
 
 $(DIR_OBJ):
 	@mkdir -p temp
+	@mkdir -p temp/map
+	@mkdir -p temp/scene
 	@mkdir -p temp/window
 	@mkdir -p temp/window/buttons
 	@mkdir -p temp/render

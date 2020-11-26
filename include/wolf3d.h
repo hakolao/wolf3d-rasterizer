@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 13:26:47 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:02:18 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,15 +319,23 @@ void						set_render_triangle(t_wolf3d *app,
 /*
 ** Scene
 */
-void						scene_vertices_init(t_wolf3d *app,
+void						scene_minimap_init(t_wolf3d *app);
+void						scene_assets_load(t_scene *scene, t_scene_data *data);
+void						scene_main_game_data_set(t_scene_data *data);
+void						scene_main_menu_data_set(t_scene_data *data);
+void						scene_settings_menu_data_set(t_scene_data *data);
+t_scene						*scene_new(t_scene_data *data);
+void						scene_destroy(t_scene *scene);
+void						scene_next_select(t_wolf3d *app);
+void						scene_debug(t_scene *scene);
+void						scene_objects_generate(t_wolf3d *app,
 								t_scene *scene);
-t_scene						*new_scene(t_scene_data *data);
-void						destroy_scene(t_scene *scene);
-void						select_next_scene(t_wolf3d *app);
-void						debug_scene(t_scene *scene);
-void						generate_scene_objects(t_wolf3d *app,
-								t_scene *scene);
-void						read_and_init_scene_map(t_scene *scene);
+void						scene_map_init(t_scene *scene);
+void						scene_camera_destroy(t_scene *scene);
+void						scene_objects_destroy(t_scene *scene);
+void						scene_skybox_destroy(t_scene *scene);
+void						scene_models_destroy(t_scene *scene);
+void						scene_textures_destroy(t_scene *scene);
 
 /*
 ** Debug
@@ -336,19 +344,28 @@ void						wolf3d_debug_info_render(t_wolf3d *app);
 void						wolf3d_debug_info_capture(t_wolf3d *app);
 
 /*
-** Map Editor
+** Map
 */
 
+void						map_grid_render(t_wolf3d_map *map,
+								t_framebuffer *framebuffer,
+								t_vec2 pos, uint32_t grid_color);
+void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
+void						map_destroy(t_wolf3d_map *map);
 void						map_init_image_assets(t_hash_table **map_images);
 void						map_rescale_image_assets(t_wolf3d_map *map);
 void						map_set_render_params(t_wolf3d_map *map, float render_size,
 								t_vec2 render_pos);
+
+/*
+** Map Editor
+*/
+
 void						map_editor_save_menu_create(t_map_editor *app);
 void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
 void						map_editor_draw_menu_create(t_map_editor *app);
-void						map_init(t_map_editor *app, int size);
-void						map_render(t_map_editor *app, t_vec2 pos);
-void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
+void						map_editor_map_init(t_map_editor *app, int size);
+void						map_editor_map_render(t_map_editor *app, t_vec2 pos);
 void						update_map_cell_features(t_map_editor *app);
 t_bool						modify_surround_pattern(uint32_t *cell,
 								int32_t rooms[9]);

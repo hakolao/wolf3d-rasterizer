@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 12:40:48 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 13:51:58 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void				instantiate_cell_features(t_wolf3d *app,
 ** Models are copied and instantiated.
 */
 
-void			generate_scene_objects(t_wolf3d *app,
+void			scene_objects_generate(t_wolf3d *app,
 						t_scene *scene)
 {
 	int32_t			x;
@@ -112,7 +112,7 @@ void			generate_scene_objects(t_wolf3d *app,
 	l3d_skybox_create(scene->skybox, scene->skybox_textures, app->unit_size);
 }
 
-void				read_and_init_scene_map(t_scene *scene)
+void				scene_map_init(t_scene *scene)
 {
 	t_file_contents	*file;
 	char			header[4];

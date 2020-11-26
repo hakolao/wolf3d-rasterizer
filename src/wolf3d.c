@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 12:40:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 13:57:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ void		wolf3d_init(t_wolf3d *app)
 	app->unit_size = app->window->width;
 	init_player(app, (t_vec3){0, 0, 0});
 	app->next_scene_id = scene_id_main_menu;
-	select_next_scene(app);
+	scene_next_select(app);
 }
 
 static void		wolf3d_cleanup(t_wolf3d *app)
 {
 	thread_pool_destroy(app->thread_pool);
 	l3d_framebuffer_destroy(app->window->framebuffer);
-	destroy_scene(app->active_scene);
+	scene_destroy(app->active_scene);
 	SDL_DestroyRenderer(app->window->renderer);
 	SDL_DestroyWindow(app->window->window);
 	TTF_CloseFont(app->window->main_font);

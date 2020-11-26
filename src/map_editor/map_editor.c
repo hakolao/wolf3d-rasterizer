@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 13:26:41 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:03:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static void		main_loop(t_map_editor *app)
 		if (app->window->resized)
 			resize_dependent_recreate(app);
 		window_frame_clear(app->window);
-		map_render(app,
+		map_editor_map_render(app,
 			(t_vec2){(float)app->window->width / 2.0 - app->map->render_size / 2.0,
 			(float)app->window->height / 2.0 - app->map->render_size / 2.0});
 		map_editor_menu_render(app, (t_vec2){5, 20});
@@ -100,26 +100,9 @@ static void		main_loop(t_map_editor *app)
 
 static void		cleanup(t_map_editor *app)
 {
-	int32_t		i;
-	t_surface	*image;
-	uint32_t	key;
-
 	if (app->filename != NULL)
 		ft_strdel(&app->filename);
-	i = -1;
-	while (++i < (int32_t)sizeof(uint32_t) * 4)
-	{
-		key = 1 << i;
-		image = hash_map_get(app->map->map_images, key);
-		if (image)
-		{
-			free(image->pixels);
-			free(image);
-		}
-	}
-	hash_map_destroy(app->map->map_images);
-	free(app->map->grid);
-	free(app->map);
+	map_destroy(app->map);
 	button_group_destroy(app->select_menu);
 	thread_pool_destroy(app->thread_pool);
 	l3d_framebuffer_destroy(app->window->framebuffer);
@@ -158,9 +141,9 @@ int				main(int argc, char **argv)
 			else if (ft_match(argv[i], "--filename=*") && app.filename == NULL)
 				app.filename = ft_strdup(argv[i] + 11);
 		}
-		map_init(&app, size > 0 && size <= 50 ? size : INITIAL_MAP_SIZE);
+		map_editor_map_init(&app, size > 0 && size <= 50 ? size : INITIAL_MAP_SIZE);
 	} else
-		map_init(&app, INITIAL_MAP_SIZE);
+		map_editor_map_init(&app, INITIAL_MAP_SIZE);
 	main_loop(&app);
 	cleanup(&app);
 	return (EXIT_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 15:08:40 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:25:18 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,28 @@ static void		ui_menu_render(t_wolf3d *app)
 			app->window->main_font);
 }
 
+/*
+** / 2.0 because models are positioned with unitsize * 2
+*/
+
 static void		player_pos_to_grid_pos(t_wolf3d *app, t_vec2 grid_pos)
 {
-	grid_pos[0] = -(app->player.pos[2] / app->unit_size);
-	grid_pos[1] = (app->player.pos[0] / app->unit_size);
+	grid_pos[0] = -(app->player.pos[2] / app->unit_size / 2.0) + 0.5;
+	grid_pos[1] = (app->player.pos[0] / app->unit_size / 2.0) + 0.5;
+}
+
+static void		framebuffer_dark_overlay(t_wolf3d *app)
+{
+	int32_t		i;
+
+	i = -1;
+	while (++i < app->window->framebuffer->width *
+		app->window->framebuffer->height)
+	{
+		app->window->framebuffer->buffer[i] = l3d_color_blend_u32(
+			app->window->framebuffer->buffer[i],
+			0x000000FF, 0.5);
+	}
 }
 
 static void		minimap_render(t_wolf3d *app)
@@ -45,8 +63,11 @@ static void		minimap_render(t_wolf3d *app)
 
 	player_pos_to_grid_pos(app, player_grid_pos);
 	if (app->is_minimap_largened)
+	{
+		framebuffer_dark_overlay(app);
 		map_minimap_render_full(app->active_scene->map,
 			app->window->framebuffer, player_grid_pos);
+	}
 	else
 		map_minimap_render_partial(app->active_scene->map,
 			app->window->framebuffer, player_grid_pos);
@@ -65,20 +86,6 @@ static void		ui_main_game_render(t_wolf3d *app)
 		(int32_t[2][2]){{app->window->width / 2, app->window->height / 2 - 10},
 		{app->window->width / 2, app->window->height / 2 + 10}}, 0xFFFFFFFF);
 	minimap_render(app);
-}
-
-static void		framebuffer_dark_overlay(t_wolf3d *app)
-{
-	int32_t		i;
-
-	i = -1;
-	while (++i < app->window->framebuffer->width *
-		app->window->framebuffer->height)
-	{
-		app->window->framebuffer->buffer[i] = l3d_color_blend_u32(
-			app->window->framebuffer->buffer[i],
-			0x000000FF, 0.5);
-	}
 }
 
 void			ui_render(t_wolf3d *app)

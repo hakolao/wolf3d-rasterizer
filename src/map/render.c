@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 14:01:04 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 16:31:49 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 16:53:54 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,33 @@ void			map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer)
 	}
 }
 
+static void		map_minimap_player_dir_render(t_framebuffer *framebuffer,
+					t_player *player, t_vec2 player_render_pos,
+					float player_render_size)
+{
+	t_vec2		dir;
+
+	ml_vector2_copy((t_vec2){-player->forward[2], player->forward[0]}, dir);
+	ml_vector2_normalize(dir, dir);
+	l3d_line_draw(framebuffer->buffer,
+		(uint32_t[2]){framebuffer->width, framebuffer->height},
+		(int32_t[2][2]){{player_render_pos[0] + player_render_size / 2.0,
+			player_render_pos[1] + player_render_size / 2.0},
+			{player_render_pos[0] + player_render_size / 2.0 + 30 * dir[0],
+			player_render_pos[1] + player_render_size / 2.0 + 30 * dir[1]}},
+				0x00ff00ff);
+}
+
 static void		map_minimap_player_render(t_wolf3d_map *map,
 					t_framebuffer *framebuffer, t_player *player)
 {
 	t_surface	player_image;
+	t_vec2		player_render_pos;
+	float		player_render_size;
 
-	player_image.h = 4;
-	player_image.w = 4;
+	player_render_size = 4;
+	player_image.h = player_render_size;
+	player_image.w = player_render_size;
 	player_image.pixels = (uint32_t[16]){
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
@@ -92,16 +112,20 @@ static void		map_minimap_player_render(t_wolf3d_map *map,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff};
 	if (player->grid_pos[0] >= 0 && player->grid_pos[0] < map->size &&
 		player->grid_pos[1] >= 0 && player->grid_pos[1] < map->size)
+	{
+		ml_vector2_copy((t_vec2){map->render_pos[0] +
+			player->grid_pos[0] * map->cell_render_size,
+			map->render_pos[1] +
+			player->grid_pos[1] * map->cell_render_size},
+			player_render_pos);
 		l3d_image_place(
 			&(t_surface){.h = framebuffer->height,
 			.w = framebuffer->width, .pixels = framebuffer->buffer},
 				&player_image,
-			(int32_t[2]){
-				(int32_t)map->render_pos[0] +
-					player->grid_pos[0] * map->cell_render_size,
-				(int32_t)map->render_pos[1] +
-					player->grid_pos[1] * map->cell_render_size,
-			}, 1.0);
+			(int32_t[2]){player_render_pos[0], player_render_pos[1]}, 1.0);
+		map_minimap_player_dir_render(framebuffer, player, player_render_pos,
+			player_render_size);
+	}
 }
 
 void			map_minimap_render_full(t_wolf3d_map *map,
@@ -140,30 +164,33 @@ static void		map_minimap_partial_player_render(t_wolf3d_map *map,
 					t_player *player)
 {
 	t_surface	player_image;
+	t_vec2		player_render_pos;
+	float		player_render_size;
 
-	player_image.h = 4;
-	player_image.w = 4;
+	player_render_size = 4;
+	player_image.h = player_render_size;
+	player_image.w = player_render_size;
 	player_image.pixels = (uint32_t[16]){
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff};
-	if (player->grid_pos[0] >= 0 && player->grid_pos[0] < map->size &&
-		player->grid_pos[1] >= 0 && player->grid_pos[1] < map->size)
-		l3d_image_place(
-			&(t_surface){.h = framebuffer->height,
-			.w = framebuffer->width, .pixels = framebuffer->buffer},
-				&player_image,
-			(int32_t[2]){
-				(int32_t)map->render_pos[0] +
-					player->grid_pos[0] * map->cell_render_size
-					- player->grid_pos[0] * map->cell_render_size
-					+ minimap_size / 2.0,
-				(int32_t)map->render_pos[1] +
-					player->grid_pos[1] * map->cell_render_size
-					- player->grid_pos[1] * map->cell_render_size
-					+ minimap_size / 2.0,
-			}, 1.0);
+	ml_vector2_copy((t_vec2){map->render_pos[0] +
+		player->grid_pos[0] * map->cell_render_size
+		- player->grid_pos[0] * map->cell_render_size
+		+ minimap_size / 2.0,
+		map->render_pos[1] +
+		player->grid_pos[1] * map->cell_render_size
+		- player->grid_pos[1] * map->cell_render_size
+		+ minimap_size / 2.0},
+		player_render_pos);
+	l3d_image_place(
+		&(t_surface){.h = framebuffer->height,
+		.w = framebuffer->width, .pixels = framebuffer->buffer},
+			&player_image,
+		(int32_t[2]){player_render_pos[0], player_render_pos[1]}, 1.0);
+	map_minimap_player_dir_render(framebuffer, player, player_render_pos,
+		player_render_size);
 }
 
 void			map_minimap_render_partial(t_wolf3d_map *map,

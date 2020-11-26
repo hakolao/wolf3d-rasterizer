@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 15:43:20 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 16:22:50 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,9 @@ static void		minimap_render(t_wolf3d *app)
 			app->window->framebuffer, player_grid_pos);
 	}
 	else
-	{
-		framebuffer_dark_overlay(app->window->framebuffer,
-			app->active_scene->map->render_size + 4,
-			app->active_scene->map->render_size + 4,
-			(t_vec2){app->active_scene->map->render_pos[0] - 2,
-				app->active_scene->map->render_pos[1] - 2});
 		map_minimap_render_partial(app->active_scene->map,
-			app->window->framebuffer, player_grid_pos);
-	}
+			app->window->framebuffer, app->window->height * 0.3,
+			player_grid_pos);
 }
 
 static void		ui_main_game_render(t_wolf3d *app)

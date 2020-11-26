@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 14:29:12 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:57:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 static void		wolf3d_resize_dependent_recreate(t_wolf3d *app)
 {
+	float	minimap_render_size;
+
 	window_frame_recreate(app->window);
+	minimap_render_size = app->window->height * 0.8;
+	map_render_resize(app->active_scene->map, minimap_render_size,
+		(t_vec2){app->window->width - app->window->height * 0.3 - 10, 10});
 	app->window->resized = false;
 	while (app->window->is_hidden)
 		SDL_PollEvent(NULL);

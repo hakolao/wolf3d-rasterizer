@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 14:38:33 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:53:54 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 static void		update_minimap_size(t_wolf3d *app)
 {
-	float	minimap_render_size;
-
 	if (app->is_minimap_largened)
 	{
-		minimap_render_size = app->window->height * 0.8;
-		map_render_resize(app->active_scene->map, minimap_render_size,
-			(t_vec2){app->window->width / 2 - minimap_render_size / 2,
-				app->window->height / 2 - minimap_render_size / 2});
+		ml_vector2_copy((t_vec2){app->window->width / 2 -
+			app->active_scene->map->render_size / 2,
+				app->window->height / 2 -
+				app->active_scene->map->render_size / 2},
+			app->active_scene->map->render_pos);
 	}
 	else
 	{
-		minimap_render_size = app->window->height * 0.25;
-		map_render_resize(app->active_scene->map, minimap_render_size,
-			(t_vec2){app->window->width - minimap_render_size - 10, 10});
+		ml_vector2_copy((t_vec2){app->window->width -
+			app->window->height * 0.3 - 10, 10},
+			app->active_scene->map->render_pos);
 	}
 }
 

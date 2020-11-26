@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:55:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 14:55:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:55:55 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void			scene_minimap_init(t_wolf3d *app)
 	float				minimap_render_size;
 
 	map_init_image_assets(&app->active_scene->map->map_images);
-	minimap_render_size = app->window->height * 0.25;
+	minimap_render_size = app->window->height * 0.8;
 	map_render_resize(app->active_scene->map, minimap_render_size,
-		(t_vec2){app->window->width - minimap_render_size - 10, 10});
+		(t_vec2){app->window->width - app->window->height * 0.3 - 10, 10});
 }

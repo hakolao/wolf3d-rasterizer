@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 13:57:42 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 17:16:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void		select_scene(void *app_ptr)
 	data.scene_id = app->next_scene_id;
 	if (data.scene_id == scene_id_main_menu)
 		scene_main_menu_data_set(&data);
-	if (data.scene_id == scene_id_main_menu_settings)
+	else if (data.scene_id == scene_id_main_menu_settings)
 		scene_settings_menu_data_set(&data);
 	else if (data.scene_id == scene_id_main_game)
 		scene_main_game_data_set(&data);

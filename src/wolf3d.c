@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 15:57:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 17:15:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 		if (app->window->resized)
 			wolf3d_resize_dependent_recreate(app);
 		window_frame_clear(app->window);
-		handle_events(app);
 		if (app->is_loading)
 		{
 			loading_render(app);
@@ -42,14 +41,14 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			wolf3d_debug_info_capture(app);
 			continue ;
 		}
-		else
-		{
-			wolf3d_render(app);
-			if (app->is_debug)
-				wolf3d_debug_info_render(app);
-			window_frame_draw(app->window);
-			wolf3d_debug_info_capture(app);
-		}
+		handle_events(app);
+		if (app->is_loading)
+			continue ;
+		wolf3d_render(app);
+		if (app->is_debug)
+			wolf3d_debug_info_render(app);
+		window_frame_draw(app->window);
+		wolf3d_debug_info_capture(app);
 	}
 }
 
@@ -58,7 +57,7 @@ void		wolf3d_init(t_wolf3d *app)
 	app->active_scene = NULL;
 	app->is_running = true;
 	app->is_debug = true;
-	app->is_loading = false;
+	app->is_loading = true;
 	app->is_minimap_largened = false;
 	app->unit_size = app->window->width;
 	init_player(app, (t_vec3){0, 0, 0});

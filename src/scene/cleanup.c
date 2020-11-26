@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:44:07 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 13:44:44 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 17:30:56 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,6 @@ void		scene_models_destroy(t_scene *scene)
 	while (++i < (int32_t)sizeof(uint32_t) * 4)
 		if ((model = hash_map_get(scene->models, 1 << i)))
 			l3d_3d_object_destroy(model);
-	if ((model = hash_map_get(scene->models, (int)"bullet_hole")))
-	{
-		free(model->material->texture);
-		l3d_3d_object_destroy(model);
-	}
 	hash_map_destroy(scene->models);
 }
 
@@ -63,8 +58,6 @@ void		scene_objects_destroy(t_scene *scene)
 	i = -1;
 	while (++i < (int)scene->num_objects)
 		l3d_3d_object_destroy(scene->objects[i]);
-	if (scene->temp_objects)
-		l3d_temp_objects_destroy(&scene->temp_objects);
 }
 
 void		scene_camera_destroy(t_scene *scene)

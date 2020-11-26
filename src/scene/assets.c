@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:55:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 15:55:55 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 17:30:09 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,6 @@ void			scene_assets_load(t_scene *scene, t_scene_data *data)
 		"assets/skybox/right.bmp");
 	scene->skybox_textures[5] = l3d_read_bmp_image_32bit_rgba_surface(
 		"assets/skybox/bottom.bmp");
-	// Temp objects should not share materials with other objects,
-	// Their texture gets deleted when they are cleared.
-	hash_map_add(scene->models, (int)"bullet_hole",
-		l3d_plane_create(l3d_read_bmp_image_32bit_rgba_surface(
-			"assets/textures/bullet_hole.bmp")));
 }
 
 void			scene_minimap_init(t_wolf3d *app)

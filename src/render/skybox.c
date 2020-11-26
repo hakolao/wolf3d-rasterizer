@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 17:57:47 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 17:21:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void			rasterize_skybox(t_render_work *work)
 	t_triangle			r_triangle;
 	t_vertex			vtc[3];
 
+	if (!work->app->active_scene->skybox[0])
+		return ;
 	i = -1;
 	while (++i < 6)
 	{

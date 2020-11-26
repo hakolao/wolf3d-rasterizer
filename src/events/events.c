@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 15:53:54 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 17:31:05 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,6 @@ static void		handle_game_events(t_wolf3d *app, SDL_Event event)
 		main_menu_settings_event_handle(app, event);
 	else if (app->active_scene->scene_id == scene_id_main_game)
 	{
-		if (app->active_scene->temp_objects)
-			l3d_temp_objects_destroy_if_expired(
-				&app->active_scene->temp_objects,
-				SDL_GetTicks(), TEMP_OBJECT_EXPIRE_SEC * 1000);
 		if (app->active_scene->is_paused)
 		{
 			app->is_minimap_largened = false;

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 17:16:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 17:31:13 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ t_scene			*scene_new(t_scene_data *data)
 		scene_assets_load(scene, data);
 	if (data->map_filename)
 		scene_map_init(scene);
-	scene->temp_objects = NULL;
 	return (scene);
 }
 

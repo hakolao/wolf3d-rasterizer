@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:54:28 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 12:52:51 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,20 @@ static void		ui_menu_render(t_wolf3d *app)
 			app->window->main_font);
 }
 
+static void		player_pos_to_grid_pos(t_wolf3d *app, t_vec2 grid_pos)
+{
+	grid_pos[0] = -(app->player.pos[2] / app->unit_size);
+	grid_pos[1] = (app->player.pos[0] / app->unit_size);
+	ml_vector2_print(grid_pos);
+}
+
+static void		minimap_render(t_wolf3d *app)
+{
+	t_vec2		grid_pos;
+
+	player_pos_to_grid_pos(app, grid_pos);
+}
+
 static void		ui_main_game_render(t_wolf3d *app)
 {
 	l3d_line_draw(app->window->framebuffer->buffer,
@@ -45,6 +59,7 @@ static void		ui_main_game_render(t_wolf3d *app)
 			app->window->framebuffer->height},
 		(int32_t[2][2]){{app->window->width / 2, app->window->height / 2 - 10},
 		{app->window->width / 2, app->window->height / 2 + 10}}, 0xFFFFFFFF);
+	minimap_render(app);
 }
 
 static void		framebuffer_dark_overlay(t_wolf3d *app)
@@ -74,7 +89,7 @@ void			ui_render(t_wolf3d *app)
 		{
 			framebuffer_dark_overlay(app);
 			ui_menu_render(app);
-		}			
+		}
 	}
 }
 

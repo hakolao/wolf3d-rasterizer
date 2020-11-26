@@ -6,27 +6,27 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 14:33:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 13:24:18 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		rescale_image_assets(t_map_editor *app)
+void			map_rescale_image_assets(t_wolf3d_map *map)
 {
 	float		size;
 	int32_t		i;
 	t_surface	*curr_image;
 	uint32_t	key;
 
-	size = (int32_t)app->map->render_size / app->map->size + 1;
+	size = (int32_t)map->render_size / map->size + 1;
 	i = -1;
 	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{
 		key = 1 << i;
-		if ((curr_image = hash_map_get(app->map_images, key)))
+		if ((curr_image = hash_map_get(map->map_images, key)))
 		{
-			hash_map_add(app->map_images, key,
+			hash_map_add(map->map_images, key,
 				l3d_image_scaled(curr_image, size, size));
 			free(curr_image->pixels);
 			free(curr_image);
@@ -34,46 +34,44 @@ static void		rescale_image_assets(t_map_editor *app)
 	}
 }
 
-void			init_image_assets(t_map_editor *app)
+void			map_init_image_assets(t_hash_table **map_images)
 {
-	error_check(!(app->map_images = hash_map_create(10)),
+	error_check(!(*map_images = hash_map_create(10)),
 		"Failed to create hash table");
-	hash_map_add(app->map_images, c_floor,
+	hash_map_add(*map_images, c_floor,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/floor.bmp"));
-	hash_map_add(app->map_images, c_floor_start,
+	hash_map_add(*map_images, c_floor_start,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/floor_start.bmp"));
-	hash_map_add(app->map_images, c_wall_up,
+	hash_map_add(*map_images, c_wall_up,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_up.bmp"));
-	hash_map_add(app->map_images, c_wall_right,
+	hash_map_add(*map_images, c_wall_right,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_right.bmp"));
-	hash_map_add(app->map_images, c_wall_down,
+	hash_map_add(*map_images, c_wall_down,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_down.bmp"));
-	hash_map_add(app->map_images, c_wall_left,
+	hash_map_add(*map_images, c_wall_left,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/wall_left.bmp"));
-	hash_map_add(app->map_images, c_block_nw,
+	hash_map_add(*map_images, c_block_nw,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_nw.bmp"));
-	hash_map_add(app->map_images, c_block_ne,
+	hash_map_add(*map_images, c_block_ne,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_ne.bmp"));
-	hash_map_add(app->map_images, c_block_se,
+	hash_map_add(*map_images, c_block_se,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_se.bmp"));
-	hash_map_add(app->map_images, c_block_sw,
+	hash_map_add(*map_images, c_block_sw,
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_sw.bmp"));
 }
 
-void			rescale_map(t_map_editor *app)
+void			map_set_render_params(t_wolf3d_map *map, float render_size,
+					t_vec2 render_pos)
 {
-	app->map->render_size = app->window->height * 0.8;
-	app->map->cell_render_size =
-		(float)app->map->render_size / (float)app->map->size;
-	ml_vector2_copy((t_vec2){app->window->width / 2 - app->map->render_size / 2,
-			app->window->height / 2 - app->map->render_size / 2},
-		app->grid_pos);
-	rescale_image_assets(app);
+	map->render_size = render_size;
+	map->cell_render_size = map->render_size / (float)map->size;
+	ml_vector2_copy(render_pos, map->render_pos);
 }
 
-void			init_map(t_map_editor *app, int size)
+void			map_init(t_map_editor *app, int size)
 {
 	t_file_contents	*file;
+	float			render_size;
 	char			header[4];
 
 	error_check(!(app->map = malloc(sizeof(t_wolf3d_map))),
@@ -98,37 +96,38 @@ void			init_map(t_map_editor *app, int size)
 		ft_memcpy(app->map->grid, file->buf + 8, file->size - 8);
 		destroy_file_contents(file);
 	}
-	init_image_assets(app);
-	rescale_map(app);
+	map_init_image_assets(&app->map->map_images);
+	render_size = app->window->height * 0.8;
+	map_set_render_params(app->map, render_size,
+		(t_vec2){app->window->width / 2 - render_size / 2,
+			app->window->height / 2 - render_size / 2});
+	map_rescale_image_assets(app->map);
 }
 
-static void		map_grid_render(t_map_editor *app, t_vec2 pos, uint32_t color)
+static void		map_grid_render(t_wolf3d_map *map, t_framebuffer *framebuffer,
+					t_vec2 pos, uint32_t grid_color)
 {
-	uint32_t	*buffer;
 	int32_t		i;
 	float		interval;
 
-	buffer = app->window->framebuffer->buffer;
-	interval = app->map->cell_render_size;
+	interval = map->cell_render_size;
 	i = -1;
-	while (++i <= app->map->size)
+	while (++i <= map->size)
 	{
-		l3d_line_draw(buffer,
-			(uint32_t[2]){app->window->framebuffer->width,
-						app->window->framebuffer->height
+		l3d_line_draw(framebuffer->buffer,
+			(uint32_t[2]){framebuffer->width, framebuffer->height
 		}, (int32_t[2][2]){{pos[0] + (float)(i * interval), pos[1]},
 			{pos[0] + (float)(i * interval), pos[1] +
-				app->map->render_size}}, color);
-		l3d_line_draw(buffer,
-			(uint32_t[2]){app->window->framebuffer->width,
-						app->window->framebuffer->height
+				map->render_size}}, grid_color);
+		l3d_line_draw(framebuffer->buffer,
+			(uint32_t[2]){framebuffer->width, framebuffer->height
 		}, (int32_t[2][2]){{pos[0], pos[1] + (float)(i * interval)},
-			{pos[0] + app->map->render_size, pos[1] + (float)(i * interval)}},
-			color);
+			{pos[0] + map->render_size, pos[1] + (float)(i * interval)}},
+			grid_color);
 	}
 }
 
-static void		map_features_render(t_map_editor *app)
+void			map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer)
 {
 	int32_t		x;
 	int32_t		y;
@@ -137,29 +136,29 @@ static void		map_features_render(t_map_editor *app)
 	t_surface	*image;
 
 	y = -1;
-	while (++y < app->map->size)
+	while (++y < map->size)
 	{
 		x = -1;
-		while (++x < app->map->size)
+		while (++x < map->size)
 		{
 			i = -1;
 			while (++i < 32)
 			{
 				feature_flag = 1 << i;
-				if ((app->map->grid[y * app->map->size + x] & feature_flag))
+				if ((map->grid[y * map->size + x] & feature_flag))
 				{
-					image = hash_map_get(app->map_images, feature_flag);
+					image = hash_map_get(map->map_images, feature_flag);
 					if (image != NULL)
 						l3d_image_place(
-							&(t_surface){.h =
-									app->window->framebuffer->height,
-								.w = app->window->framebuffer->width,
-							.pixels = app->window->framebuffer->buffer},
-							image,
-							(int32_t[2]){
-								(int32_t)app->grid_pos[0] + x * app->map->cell_render_size,
-								(int32_t)app->grid_pos[1] + y * app->map->cell_render_size,
-							}, 1.0);
+						&(t_surface){
+						.h = framebuffer->height,
+						.w = framebuffer->width,
+						.pixels = framebuffer->buffer},
+						image,
+						(int32_t[2]){
+						(int32_t)map->render_pos[0] + x * map->cell_render_size,
+						(int32_t)map->render_pos[1] + y * map->cell_render_size,
+						}, 1.0);
 				}
 			}
 		}
@@ -168,9 +167,6 @@ static void		map_features_render(t_map_editor *app)
 
 void			map_render(t_map_editor *app, t_vec2 pos)
 {
-	uint32_t	color;
-
-	color = 0xFFFFFFFF;
-	map_features_render(app);
-	map_grid_render(app, pos, color);
+	map_features_render(app->map, app->window->framebuffer);
+	map_grid_render(app->map, app->window->framebuffer, pos, 0xFFFFFFFF);
 }

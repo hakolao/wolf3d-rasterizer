@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 15:28:51 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 13:26:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,9 @@ typedef struct						s_wolf3d_map
 {
 	int32_t					size;
 	float					render_size;
+	t_vec2					render_pos;
 	float					cell_render_size;
+	t_hash_table			*map_images;
 	uint32_t				*grid;
 }									t_wolf3d_map;
 
@@ -175,6 +177,7 @@ typedef struct						s_wolf3d
 	t_mouse					mouse;
 	t_keyboard				keyboard;
 	t_thread_pool			*thread_pool;
+	float					unit_size;
 }									t_wolf3d;
 
 /*
@@ -248,8 +251,6 @@ typedef struct						s_map_editor
 	t_button_group			*select_menu;
 	t_button_group			*save_menu;
 	t_wolf3d_map			*map;
-	t_hash_table			*map_images;
-	t_vec2					grid_pos;
 	t_vec2					mouse_grid_pos;
 	t_map_features			selected_feature;
 	char					*filename;
@@ -338,12 +339,16 @@ void						wolf3d_debug_info_capture(t_wolf3d *app);
 ** Map Editor
 */
 
+void						map_init_image_assets(t_hash_table **map_images);
+void						map_rescale_image_assets(t_wolf3d_map *map);
+void						map_set_render_params(t_wolf3d_map *map, float render_size,
+								t_vec2 render_pos);
 void						map_editor_save_menu_create(t_map_editor *app);
 void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
 void						map_editor_draw_menu_create(t_map_editor *app);
-void						init_map(t_map_editor *app, int size);
+void						map_init(t_map_editor *app, int size);
 void						map_render(t_map_editor *app, t_vec2 pos);
-void						rescale_map(t_map_editor *app);
+void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
 void						update_map_cell_features(t_map_editor *app);
 t_bool						modify_surround_pattern(uint32_t *cell,
 								int32_t rooms[9]);

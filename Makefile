@@ -31,13 +31,13 @@ SOURCES = main.c \
 			scene.c \
 			scene_map.c \
 			time.c \
-			ui.c \
 			debug.c \
 			render/render.c \
 			render/objects.c \
 			render/triangle.c \
 			render/skybox.c \
 			render/render_utils.c \
+			render/ui.c \
 			window/text.c \
 			window/window.c \
 			window/utils.c \

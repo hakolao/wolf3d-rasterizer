@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 14:15:55 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 12:40:48 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ static void				instantiate_cell_features(t_wolf3d *app,
 	t_3d_object		*model;
 	int32_t			i;
 	uint32_t		key;
-	float			unit_size;
 
-	unit_size = app->window->width;
 	i = -1;
 	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{
@@ -72,9 +70,9 @@ static void				instantiate_cell_features(t_wolf3d *app,
 			if ((model = hash_map_get(app->active_scene->models, key)))
 			{
 				app->active_scene->objects[*obj_i] =
-					l3d_object_instantiate(model, unit_size,
-					(t_vec3){(float)xy[1] * (2 * unit_size), unit_size,
-						-(float)xy[0] * (2 * unit_size)});
+					l3d_object_instantiate(model, app->unit_size,
+					(t_vec3){(float)xy[1] * (2 * app->unit_size), app->unit_size,
+						-(float)xy[0] * (2 * app->unit_size)});
 				(*obj_i)++;
 			}
 		}
@@ -105,14 +103,13 @@ void			generate_scene_objects(t_wolf3d *app,
 			if (!(cell & m_room))
 				continue;
 			if ((cell & m_start))
-				place_player(app, app->window->width, (int32_t[3]){x, y, 0});
+				place_player(app, app->unit_size, (int32_t[3]){x, y, 0});
 			instantiate_cell_features(app, cell, &obj_i, (int32_t[2]){x, y});
 		}
 	}
 	scene->num_objects = obj_i;
 	set_scene_collision_tree(scene);
-	l3d_skybox_create(scene->skybox, scene->skybox_textures,
-		app->window->width);
+	l3d_skybox_create(scene->skybox, scene->skybox_textures, app->unit_size);
 }
 
 void				read_and_init_scene_map(t_scene *scene)

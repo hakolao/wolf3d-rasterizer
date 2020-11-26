@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 15:02:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 13:26:41 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,15 @@
 
 static void		resize_dependent_recreate(t_map_editor *app)
 {
+	float	render_size;
+
 	window_frame_recreate(app->window);
+	render_size = app->window->height * 0.8;
+	map_set_render_params(app->map, render_size,
+		(t_vec2){app->window->width / 2 - render_size / 2,
+			app->window->height / 2 - render_size / 2});
+	map_rescale_image_assets(app->map);
 	app->window->resized = false;
-	rescale_map(app);
 	while (app->window->is_hidden)
 		SDL_PollEvent(NULL);
 }
@@ -24,9 +30,9 @@ static void		resize_dependent_recreate(t_map_editor *app)
 static void		update_mouse_grid_pos(t_map_editor *app)
 {
 	ml_vector2_copy((t_vec2){
-		ft_floor(((float)(app->mouse.x - app->grid_pos[0]) /
+		ft_floor(((float)(app->mouse.x - app->map->render_pos[0]) /
 			app->map->cell_render_size)),
-		ft_floor(((float)(app->mouse.y - app->grid_pos[1]) /
+		ft_floor(((float)(app->mouse.y - app->map->render_pos[1]) /
 			app->map->cell_render_size))},
 		app->mouse_grid_pos);
 }
@@ -104,14 +110,14 @@ static void		cleanup(t_map_editor *app)
 	while (++i < (int32_t)sizeof(uint32_t) * 4)
 	{
 		key = 1 << i;
-		image = hash_map_get(app->map_images, key);
+		image = hash_map_get(app->map->map_images, key);
 		if (image)
 		{
 			free(image->pixels);
 			free(image);
 		}
 	}
-	hash_map_destroy(app->map_images);
+	hash_map_destroy(app->map->map_images);
 	free(app->map->grid);
 	free(app->map);
 	button_group_destroy(app->select_menu);
@@ -152,9 +158,9 @@ int				main(int argc, char **argv)
 			else if (ft_match(argv[i], "--filename=*") && app.filename == NULL)
 				app.filename = ft_strdup(argv[i] + 11);
 		}
-		init_map(&app, size > 0 && size <= 50 ? size : INITIAL_MAP_SIZE);
+		map_init(&app, size > 0 && size <= 50 ? size : INITIAL_MAP_SIZE);
 	} else
-		init_map(&app, INITIAL_MAP_SIZE);
+		map_init(&app, INITIAL_MAP_SIZE);
 	main_loop(&app);
 	cleanup(&app);
 	return (EXIT_SUCCESS);

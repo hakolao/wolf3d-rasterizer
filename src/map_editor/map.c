@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 14:56:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 14:02:53 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:25:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,9 @@ void			map_editor_map_init(t_map_editor *app, int size)
 	}
 	map_init_image_assets(&app->map->map_images);
 	render_size = app->window->height * 0.8;
-	map_set_render_params(app->map, render_size,
+	map_render_resize(app->map, render_size,
 		(t_vec2){app->window->width / 2 - render_size / 2,
 			app->window->height / 2 - render_size / 2});
-	map_rescale_image_assets(app->map);
 }
 
 void			map_editor_map_render(t_map_editor *app, t_vec2 pos)

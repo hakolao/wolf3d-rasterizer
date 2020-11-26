@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 14:02:18 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:29:43 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ typedef struct						s_wolf3d
 	t_keyboard				keyboard;
 	t_thread_pool			*thread_pool;
 	float					unit_size;
+	t_bool					is_minimap_largened;
 }									t_wolf3d;
 
 /*
@@ -354,7 +355,7 @@ void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
 void						map_destroy(t_wolf3d_map *map);
 void						map_init_image_assets(t_hash_table **map_images);
 void						map_rescale_image_assets(t_wolf3d_map *map);
-void						map_set_render_params(t_wolf3d_map *map, float render_size,
+void						map_render_resize(t_wolf3d_map *map, float new_size,
 								t_vec2 render_pos);
 
 /*

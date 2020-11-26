@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 14:00:20 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 14:03:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:25:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ void			map_init_image_assets(t_hash_table **map_images)
 		l3d_read_bmp_image_32bit_rgba_surface("assets/map_editor/block_sw.bmp"));
 }
 
-void			map_set_render_params(t_wolf3d_map *map, float render_size,
-					t_vec2 render_pos)
+void			map_render_resize(t_wolf3d_map *map,
+					float new_size, t_vec2 new_pos)
 {
-	map->render_size = render_size;
+	map->render_size = new_size;
 	map->cell_render_size = map->render_size / (float)map->size;
-	ml_vector2_copy(render_pos, map->render_pos);
+	ml_vector2_copy(new_pos, map->render_pos);
+	map_rescale_image_assets(map);
 }
 
 void			map_destroy(t_wolf3d_map *map)

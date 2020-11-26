@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 18:16:02 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 14:03:53 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:35:37 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ static void		resize_dependent_recreate(t_map_editor *app)
 
 	window_frame_recreate(app->window);
 	render_size = app->window->height * 0.8;
-	map_set_render_params(app->map, render_size,
+	map_render_resize(app->map, render_size,
 		(t_vec2){app->window->width / 2 - render_size / 2,
 			app->window->height / 2 - render_size / 2});
-	map_rescale_image_assets(app->map);
 	app->window->resized = false;
 	while (app->window->is_hidden)
 		SDL_PollEvent(NULL);

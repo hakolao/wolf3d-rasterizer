@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 13:57:21 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 14:29:12 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void		wolf3d_init(t_wolf3d *app)
 	app->is_running = true;
 	app->is_debug = true;
 	app->is_loading = false;
+	app->is_minimap_largened = false;
 	app->unit_size = app->window->width;
 	init_player(app, (t_vec3){0, 0, 0});
 	app->next_scene_id = scene_id_main_menu;

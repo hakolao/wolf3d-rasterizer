@@ -34,7 +34,7 @@ SOURCES = main.c \
 			scene/scene_map.c \
 			scene/cleanup.c \
 			scene/assets.c \
-			scene/game_scenes.c \
+			scene/scene_data.c \
 			map/map.c \
 			map/render.c \
 			render/render.c \

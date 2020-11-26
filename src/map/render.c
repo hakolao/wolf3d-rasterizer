@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 14:01:04 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 16:25:08 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 16:31:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void			map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer)
 }
 
 static void		map_minimap_player_render(t_wolf3d_map *map,
-					t_framebuffer *framebuffer, t_vec2 player_pos)
+					t_framebuffer *framebuffer, t_player *player)
 {
 	t_surface	player_image;
 
@@ -90,22 +90,22 @@ static void		map_minimap_player_render(t_wolf3d_map *map,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff};
-	if (player_pos[0] >= 0 && player_pos[0] < map->size &&
-		player_pos[1] >= 0 && player_pos[1] < map->size)
+	if (player->grid_pos[0] >= 0 && player->grid_pos[0] < map->size &&
+		player->grid_pos[1] >= 0 && player->grid_pos[1] < map->size)
 		l3d_image_place(
 			&(t_surface){.h = framebuffer->height,
 			.w = framebuffer->width, .pixels = framebuffer->buffer},
 				&player_image,
 			(int32_t[2]){
 				(int32_t)map->render_pos[0] +
-					player_pos[0] * map->cell_render_size,
+					player->grid_pos[0] * map->cell_render_size,
 				(int32_t)map->render_pos[1] +
-					player_pos[1] * map->cell_render_size,
+					player->grid_pos[1] * map->cell_render_size,
 			}, 1.0);
 }
 
 void			map_minimap_render_full(t_wolf3d_map *map,
-					t_framebuffer *framebuffer, t_vec2 player_pos)
+					t_framebuffer *framebuffer, t_player *player)
 {
 	int32_t		x;
 	int32_t		y;
@@ -132,12 +132,12 @@ void			map_minimap_render_full(t_wolf3d_map *map,
 			}
 		}
 	}
-	map_minimap_player_render(map, framebuffer, player_pos);
+	map_minimap_player_render(map, framebuffer, player);
 }
 
 static void		map_minimap_partial_player_render(t_wolf3d_map *map,
 					t_framebuffer *framebuffer, float minimap_size,
-					t_vec2 player_pos)
+					t_player *player)
 {
 	t_surface	player_image;
 
@@ -148,20 +148,20 @@ static void		map_minimap_partial_player_render(t_wolf3d_map *map,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff,
 		0x00ff00ff, 0x00ff00ff, 0x00ff00ff, 0x00ff00ff};
-	if (player_pos[0] >= 0 && player_pos[0] < map->size &&
-		player_pos[1] >= 0 && player_pos[1] < map->size)
+	if (player->grid_pos[0] >= 0 && player->grid_pos[0] < map->size &&
+		player->grid_pos[1] >= 0 && player->grid_pos[1] < map->size)
 		l3d_image_place(
 			&(t_surface){.h = framebuffer->height,
 			.w = framebuffer->width, .pixels = framebuffer->buffer},
 				&player_image,
 			(int32_t[2]){
 				(int32_t)map->render_pos[0] +
-					player_pos[0] * map->cell_render_size
-					- player_pos[0] * map->cell_render_size
+					player->grid_pos[0] * map->cell_render_size
+					- player->grid_pos[0] * map->cell_render_size
 					+ minimap_size / 2.0,
 				(int32_t)map->render_pos[1] +
-					player_pos[1] * map->cell_render_size
-					- player_pos[1] * map->cell_render_size
+					player->grid_pos[1] * map->cell_render_size
+					- player->grid_pos[1] * map->cell_render_size
 					+ minimap_size / 2.0,
 			}, 1.0);
 }
@@ -169,7 +169,7 @@ static void		map_minimap_partial_player_render(t_wolf3d_map *map,
 void			map_minimap_render_partial(t_wolf3d_map *map,
 					t_framebuffer *framebuffer,
 					float minimap_size,
-					t_vec2 player_pos)
+					t_player *player)
 {
 	int32_t		x;
 	int32_t		y;
@@ -195,10 +195,10 @@ void			map_minimap_render_partial(t_wolf3d_map *map,
 				if (image != NULL)
 					l3d_image_place(&minimap, image,
 					(int32_t[2]){x * map->cell_render_size
-							- player_pos[0] * map->cell_render_size
+							- player->grid_pos[0] * map->cell_render_size
 							+ minimap_size / 2.0,
 						y * map->cell_render_size
-							- player_pos[1] * map->cell_render_size
+							- player->grid_pos[1] * map->cell_render_size
 							+ minimap_size / 2.0,
 					}, 1.0);
 			}
@@ -209,5 +209,5 @@ void			map_minimap_render_partial(t_wolf3d_map *map,
 			&minimap,
 		(int32_t[2]){map->render_pos[0], map->render_pos[1]}, 0.5);
 	map_minimap_partial_player_render(map, framebuffer,
-		minimap_size, player_pos);
+		minimap_size, player);
 }

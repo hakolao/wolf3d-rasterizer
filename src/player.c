@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 12:42:40 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 16:33:43 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void			init_player(t_wolf3d *app, t_vec3 pos)
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
 	ml_matrix4_id(app->player.inv_translation);
+	update_player_grid_pos(app);
 }
 
 static void		rotate_player(t_wolf3d *app)
@@ -52,6 +53,16 @@ void			rotate_player_horizontal(t_wolf3d *app, float angle)
 {
 	app->player.rot_x += app->player.rot_speed * angle;
 	rotate_player(app);
+}
+
+/*
+** / 2.0 because models are positioned with unitsize * 2
+*/
+
+void			update_player_grid_pos(t_wolf3d *app)
+{
+	app->player.grid_pos[0] = -(app->player.pos[2] / app->unit_size / 2.0) + 0.5;
+	app->player.grid_pos[1] = (app->player.pos[0] / app->unit_size / 2.0) + 0.5;
 }
 
 void			move_player(t_wolf3d *app, t_move dir)
@@ -89,4 +100,5 @@ void			move_player(t_wolf3d *app, t_move dir)
 	ml_matrix4_translation(app->player.pos[0],
 		app->player.pos[1], app->player.pos[2], app->player.translation);
 	ml_matrix4_inverse(app->player.translation, app->player.inv_translation);
+	update_player_grid_pos(app);
 }

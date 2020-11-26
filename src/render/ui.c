@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 16:22:50 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 16:32:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,6 @@ static void		ui_menu_render(t_wolf3d *app)
 			app->window->main_font);
 }
 
-/*
-** / 2.0 because models are positioned with unitsize * 2
-*/
-
-static void		player_pos_to_grid_pos(t_wolf3d *app, t_vec2 grid_pos)
-{
-	grid_pos[0] = -(app->player.pos[2] / app->unit_size / 2.0) + 0.5;
-	grid_pos[1] = (app->player.pos[0] / app->unit_size / 2.0) + 0.5;
-}
-
 static void		framebuffer_dark_overlay(t_framebuffer *framebuffer,
 					int32_t width, int32_t height, t_vec2 pos)
 {
@@ -60,20 +50,17 @@ static void		framebuffer_dark_overlay(t_framebuffer *framebuffer,
 
 static void		minimap_render(t_wolf3d *app)
 {
-	t_vec2		player_grid_pos;
-
-	player_pos_to_grid_pos(app, player_grid_pos);
 	if (app->is_minimap_largened)
 	{
 		framebuffer_dark_overlay(app->window->framebuffer,
 			app->window->width, app->window->height, (t_vec2){0, 0});
 		map_minimap_render_full(app->active_scene->map,
-			app->window->framebuffer, player_grid_pos);
+			app->window->framebuffer, &app->player);
 	}
 	else
 		map_minimap_render_partial(app->active_scene->map,
 			app->window->framebuffer, app->window->height * 0.3,
-			player_grid_pos);
+			&app->player);
 }
 
 static void		ui_main_game_render(t_wolf3d *app)

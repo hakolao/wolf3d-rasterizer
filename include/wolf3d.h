@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 16:12:21 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 16:33:15 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct						s_player
 	t_vec3					forward;
 	t_vec3					sideways;
 	t_vec3					up;
+	t_vec2					grid_pos;
 	t_bool					is_running;
 	float					speed;
 	float					rot_speed;
@@ -276,6 +277,7 @@ float						sin_time(float min, float max, float speed);
 /*
 ** Player
 */
+void						update_player_grid_pos(t_wolf3d *app);
 void						init_player(t_wolf3d *app, t_vec3 pos);
 void						move_player(t_wolf3d *app, t_move dir);
 void						rotate_player_vertical(t_wolf3d *app, float angle);
@@ -352,10 +354,10 @@ void						map_boundary_render(t_wolf3d_map *map,
 								t_framebuffer *framebuffer,
 								uint32_t grid_color);
 void						map_minimap_render_full(t_wolf3d_map *map,
-								t_framebuffer *framebuffer, t_vec2 player_pos);
+								t_framebuffer *framebuffer, t_player *player);
 void						map_minimap_render_partial(t_wolf3d_map *map,
 								t_framebuffer *framebuffer, float minimap_size,
-								t_vec2 player_pos);
+								t_player *player);
 void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
 void						map_destroy(t_wolf3d_map *map);
 void						map_init_image_assets(t_hash_table **map_images);

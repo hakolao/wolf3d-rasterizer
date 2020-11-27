@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 15:26:18 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 15:32:05 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void			player_init(t_wolf3d *app, t_vec3 pos)
 	app->player.rot_x = 0;
 	app->player.rot_y = 0;
 	app->player.collider_radius = 0.3 * app->unit_size;
+	app->player.collider_height = 0.8 * app->unit_size;
 	ml_matrix4_id(app->player.rotation);
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
@@ -132,14 +133,26 @@ static t_bool	sphere_collides_with_triangles(t_kd_tree *triangle_tree,
 	return (false);
 }
 
+/*
+** Player has two sphere colliders
+*/
+
 static t_bool	player_would_collide(t_wolf3d *app, t_vec3 add,
 					t_vec3 hit_normal)
 {
-	t_vec3	new_pos;
+	t_vec3	new_pos_up;
+	t_vec3	new_pos_down;
 
-	ml_vector3_add(app->player.pos, add, new_pos);
+	ml_vector3_add((t_vec3){app->player.pos[0],
+		app->player.pos[1] - app->player.collider_height / 2.0,
+		app->player.pos[2]}, add, new_pos_up);
+	ml_vector3_add((t_vec3){app->player.pos[0],
+		app->player.pos[1] + app->player.collider_height / 2.0,
+		app->player.pos[2]}, add, new_pos_down);
 	return (sphere_collides_with_triangles(app->active_scene->triangle_tree,
-		new_pos, app->player.collider_radius, hit_normal));
+		new_pos_down, app->player.collider_radius, hit_normal) ||
+		sphere_collides_with_triangles(app->active_scene->triangle_tree,
+		new_pos_up, app->player.collider_radius, hit_normal));
 }
 
 void			player_limit_movement(t_wolf3d *app, t_vec3 add)

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 14:58:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 15:27:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ typedef struct						s_player
 	float					rot_x;
 	float					rot_y;
 	float					collider_radius;
+	float					collider_height;
 	t_mat4					rotation;
 	t_mat4					inv_rotation;
 	t_mat4					translation;

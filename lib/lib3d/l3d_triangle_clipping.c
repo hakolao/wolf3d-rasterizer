@@ -153,9 +153,9 @@ static t_bool		create_one_clipped_triangle(t_triangle *triangle,
 	t_vec3 dir2;
 	//!reverse vertex order in both clipping functions
 	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
-				triangle->vtc[indices[0]]->pos, dir1);
+				triangle->vtc[indices[0] + 1]->pos, dir1);
 	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
-				triangle->vtc[(indices[0] + 1) % 3]->pos, dir2);
+				triangle->vtc[(indices[0]) % 3]->pos, dir2);
 	l3d_ray_set(dir1, triangle->vtc[(indices[0] + 2) % 3]->pos, &ray1);
 	l3d_ray_set(dir2, triangle->vtc[(indices[0] + 2) % 3]->pos, &ray2);
 	l3d_plane_ray_hit(plane, &ray1, hits[0]);
@@ -163,14 +163,14 @@ static t_bool		create_one_clipped_triangle(t_triangle *triangle,
 	ml_vector3_copy(triangle->vtc[(indices[0] + 2) % 3]->pos, result_tris[0].vtc[0]->pos);
 	ml_vector3_copy(hits[0], result_tris[0].vtc[1]->pos);
 	ml_vector3_copy(hits[1], result_tris[0].vtc[2]->pos);
-	if (!(l3d_interpolate_clipped_uv(triangle, (int[2]){indices[0], (indices[0] + 2) % 3}, hits[0], uvs[0])))
+	if (!(l3d_interpolate_clipped_uv(triangle, (int[2]){indices[0] + 1, (indices[0] + 2) % 3}, hits[0], uvs[0])))
 		return (false);
-	if (!(l3d_interpolate_clipped_uv(triangle, (int[2]){(indices[0] + 1) % 3, (indices[0] + 2) % 3}, hits[1], uvs[1])))
+	if (!(l3d_interpolate_clipped_uv(triangle, (int[2]){(indices[0]) % 3, (indices[0] + 2) % 3}, hits[1], uvs[1])))
 		return (false);
 	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris->uvs[0]);
 	ml_vector2_copy(uvs[0], result_tris[0].uvs[1]);
 	ml_vector2_copy(uvs[1], result_tris[0].uvs[2]);
-	result_tris[0].clipped = true;
+	// result_tris[0].clipped = true;
 	return (true);
 }
 

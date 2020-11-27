@@ -31,10 +31,10 @@ void				l3d_triangle_update(t_triangle *triangle)
 
 void				 l3d_triangle_normal_update(t_triangle *triangle)
 {
-	// if (!(triangle->clipped == true))
+	if (!(triangle->clipped == true))
 		ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
-	// else
-	// 	ml_vector3_cross(triangle->ac, triangle->ab, triangle->normal);
+	else
+		ml_vector3_cross(triangle->ac, triangle->ab, triangle->normal);
 }
 
 static void			calculate_tangent(t_triangle *triangle, float fraction,

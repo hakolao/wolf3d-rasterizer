@@ -100,16 +100,13 @@ void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
 	normal_from_color(normal_value, bumpnormal);
 	ml_vector3_mul(bumpnormal, 2, bumpnormal);
 	ml_vector3_sub(bumpnormal, (t_vec3){1.0, 1.0, 1.0}, bumpnormal);
+	// bumpnormal[2] *= -1.0;
+	// bumpnormal[0] *= -1.0;
+	// bumpnormal[1] *= -1.0;
 	ml_matrix3_column(triangle->tangent, triangle->bitangent,
 						triangle->normalized_normal, tbn);
 	ml_matrix3_mul_vec3(tbn, bumpnormal, resultnormal);
 	ml_vector3_normalize(resultnormal, res);
-	// ml_vector3_mul(res, 255, res);
-	(void)normal_value;
-	(void)bumpnormal;
-	(void)resultnormal;
-	(void)tbn;
-	(void)res;
 }
 
 void		fragment_shade_normal(t_vec3 light_vector, t_vec3 frag_normal,
@@ -125,7 +122,6 @@ void		fragment_shade_normal(t_vec3 light_vector, t_vec3 frag_normal,
 	while (++i < 3)
 	{
 		rgba[i] *= fabs(dot);
-		// rgba[i] = (uint32_t)(frag_normal[i]);
 	}
 	rgba[3] = 255;
 	*res = l3d_rgba_to_u32(rgba);

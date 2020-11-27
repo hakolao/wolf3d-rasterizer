@@ -25,6 +25,18 @@ void				l3d_triangle_update(t_triangle *triangle)
 	l3d_triangle_tangent_update(triangle);
 }
 
+/*
+** Updates triangle normals. (Usually used after vertice pos changes)
+*/
+
+void				 l3d_triangle_normal_update(t_triangle *triangle)
+{
+	// if (!(triangle->clipped == true))
+		ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
+	// else
+	// 	ml_vector3_cross(triangle->ac, triangle->ab, triangle->normal);
+}
+
 static void			calculate_tangent(t_triangle *triangle, float fraction,
 										float *deltas)
 {
@@ -64,6 +76,15 @@ void				l3d_triangle_tangent_update(t_triangle *triangle)
 	ml_vector3_normalize(triangle->tangent, triangle->tangent);
 	///
 	ml_vector3_cross(triangle->tangent, tempnormal, triangle->bitangent);
+	// if (triangle->clipped == true)
+	// {
+	// 	// ml_vector3_mul(triangle->bitangent, -1.0, triangle->bitangent);
+	// 	t_vec3 temp;
+	// 	ml_vector3_copy(triangle->bitangent, temp);
+	// 	ml_vector3_copy(triangle->tangent, triangle->bitangent);
+	// 	ml_vector3_copy(temp, triangle->tangent);
+	// }
+	
 	// t_vec3	temp;
 	// if (triangle->clipped == true)
 	// {

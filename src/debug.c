@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 18:17:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:50:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,18 @@ void			wolf3d_debug_info_render(t_wolf3d *app)
 	char	pos[64];
 	char	dir[64];
 
-	ml_vector3_to_str(app->player.pos, pos);
-	ml_vector3_to_str(app->player.forward, dir);
-	ft_sprintf(debug_info,
-		"fps: %u\n"
-		"delta time: %u\n"
-		"pos: %s"
-		"dir: %s",
-		app->info.fps,
-		app->info.delta_time,
-		pos,
-		dir);
+	if (app->active_scene->scene_id == scene_id_main_game)
+	{
+		ml_vector3_to_str(app->player.pos, pos);
+		ml_vector3_to_str(app->player.forward, dir);
+		ft_sprintf(debug_info,
+			"fps: %u\ndelta time: %u\n"
+			"pos: %sdir: %s",
+			app->info.fps, app->info.delta_time, pos, dir);
+	}
+	else
+		ft_sprintf(debug_info, "fps: %u\ndelta time: %u",
+		app->info.fps, app->info.delta_time);
 	window_text_render(app->window, (t_text_params){
 		.text = debug_info, .blend_ratio = 1.0,
 		.xy = (int[2]){5, 5},

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/27 14:58:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:51:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void				place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
 {
 	player_init(app,
 		(t_vec3){(float)xy_rot[1] * (2 * unit_size), 0,
-		(float)xy_rot[0] * (2 * unit_size)});
+		-(float)xy_rot[0] * (2 * unit_size)});
 	player_rotate_horizontal(app, xy_rot[2]);
 }
 
@@ -110,6 +110,7 @@ void			scene_objects_generate(t_wolf3d *app,
 	scene->num_objects = obj_i;
 	set_scene_collision_tree(scene);
 	l3d_skybox_create(scene->skybox, scene->skybox_textures, app->unit_size);
+	player_move(app, move_forward, 0.0);
 }
 
 void				scene_map_init(t_scene *scene)

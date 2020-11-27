@@ -136,8 +136,8 @@ static t_bool		create_two_clipped_triangles(t_triangle *triangle,
 	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris[1].uvs[0]);
 	ml_vector2_copy(uvs[0], result_tris[1].uvs[1]);
 	ml_vector2_copy(uvs[1], result_tris[1].uvs[2]);
-	result_tris[0].clipped = true;
-	result_tris[1].clipped = true;
+	result_tris[0].clipped = 2;
+	result_tris[1].clipped = 2;
 	return (true);
 }
 
@@ -170,7 +170,7 @@ static t_bool		create_one_clipped_triangle(t_triangle *triangle,
 	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris->uvs[0]);
 	ml_vector2_copy(uvs[0], result_tris[0].uvs[1]);
 	ml_vector2_copy(uvs[1], result_tris[0].uvs[2]);
-	// result_tris[0].clipped = true;
+	result_tris[0].clipped = 1;
 	return (true);
 }
 

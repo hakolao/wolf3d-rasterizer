@@ -18,9 +18,16 @@
 
 static void		update_triangle_vertex_zvalues(t_triangle *triangle)
 {
-	triangle->vtc_zvalue[0] = 1 / triangle->vtc[0]->pos[2];
-	triangle->vtc_zvalue[1] = 1 / triangle->vtc[1]->pos[2];
-	triangle->vtc_zvalue[2] = 1 / triangle->vtc[2]->pos[2];
+	int		i;
+
+	i = -1;
+	while (++i < 3)
+	{
+		if (triangle->vtc[i]->pos[2] > L3D_EPSILON)
+			triangle->vtc_zvalue[i] = 1 / triangle->vtc[i]->pos[2];
+		else
+			triangle->vtc_zvalue[i] = 1;
+	}
 }
 
 /*
@@ -96,6 +103,7 @@ static void		set_render_triangle(t_wolf3d *app,
 		ml_matrix4_mul_vec3(app->player.inv_rotation,
 			r_triangle->vtc[i]->pos, r_triangle->vtc[i]->pos);
 	}
+	triangle->clipped = 0;
 }
 
 static void		rasterize_work(void *params)

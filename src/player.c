@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 15:01:22 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 15:26:18 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void			player_init(t_wolf3d *app, t_vec3 pos)
 	app->player.rot_speed = PLAYER_ROTATION_SPEED;
 	app->player.rot_x = 0;
 	app->player.rot_y = 0;
-	app->player.collider_radius = 0.4 * app->unit_size;
+	app->player.collider_radius = 0.3 * app->unit_size;
 	ml_matrix4_id(app->player.rotation);
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
@@ -68,7 +68,7 @@ void			player_grid_pos_update(t_wolf3d *app)
 
 static t_bool	collider_ray_collides(t_kd_tree *triangle_tree,
 					t_vec3 collider_origin, t_vec3 collider_dir,
-					float collider_radius)
+					float collider_radius, t_vec3 hit_normal)
 {
 	t_vec3			add;
 	t_vec3			point_on_collider;
@@ -89,6 +89,7 @@ static t_bool	collider_ray_collides(t_kd_tree *triangle_tree,
 			ml_vector3_normalize(point_dir, point_dir);
 			if (ml_vector3_dot(closest_triangle_hit->normal, point_dir) <= 0)
 			{
+				ml_vector3_copy(closest_triangle_hit->normal, hit_normal);
 				l3d_delete_hits(&hits);
 				return (true);
 			}
@@ -103,7 +104,8 @@ static t_bool	collider_ray_collides(t_kd_tree *triangle_tree,
 */
 
 static t_bool	sphere_collides_with_triangles(t_kd_tree *triangle_tree,
-					t_vec3 collider_origin, float collider_radius)
+					t_vec3 collider_origin, float collider_radius,
+					t_vec3 hit_normal)
 {
 	t_vec3			dirs[6];
 	t_mat4			rot_90xy;
@@ -120,23 +122,37 @@ static t_bool	sphere_collides_with_triangles(t_kd_tree *triangle_tree,
 	while (++i < 6)
 	{
 		if (collider_ray_collides(triangle_tree,
-				collider_origin, dirs[i], collider_radius))
+				collider_origin, dirs[i], collider_radius, hit_normal))
 			return (true);
 		ml_matrix4_mul_vec3(rot_90xy, dirs[i], dirs[i]);
 		if (collider_ray_collides(triangle_tree,
-				collider_origin, dirs[i], collider_radius))
+				collider_origin, dirs[i], collider_radius, hit_normal))
 			return (true);
 	}
 	return (false);
 }
 
-static t_bool	player_would_collide(t_wolf3d *app, t_vec3 add)
+static t_bool	player_would_collide(t_wolf3d *app, t_vec3 add,
+					t_vec3 hit_normal)
 {
 	t_vec3	new_pos;
 
 	ml_vector3_add(app->player.pos, add, new_pos);
 	return (sphere_collides_with_triangles(app->active_scene->triangle_tree,
-		new_pos, app->player.collider_radius));
+		new_pos, app->player.collider_radius, hit_normal));
+}
+
+void			player_limit_movement(t_wolf3d *app, t_vec3 add)
+{
+	t_vec3		hit_normal;
+	t_vec3		projected;
+
+	if (player_would_collide(app, add, hit_normal))
+	{
+		ml_vector3_normalize(hit_normal, hit_normal);
+		ml_vector3_mul(hit_normal, ml_vector3_dot(add, hit_normal), projected);
+		ml_vector3_sub(add, projected, add);
+	}
 }
 
 void			player_move(t_wolf3d *app, t_move dir)
@@ -146,6 +162,7 @@ void			player_move(t_wolf3d *app, t_move dir)
 	t_vec3		sideways;
 	t_mat4		rotation_x;
 	float		speed;
+
 
 	ft_memset(add, 0, sizeof(t_vec3));
 	ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
@@ -160,8 +177,7 @@ void			player_move(t_wolf3d *app, t_move dir)
 		ml_vector3_mul(sideways, -speed * app->info.delta_time, add);
 	else if (dir == move_strafe_right)
 		ml_vector3_mul(sideways, speed * app->info.delta_time, add);
-	if (player_would_collide(app, add))
-		return ;
+	player_limit_movement(app, add);
 	ml_vector3_add(app->player.pos, add, app->player.pos);
 	ml_matrix4_translation(app->player.pos[0],
 		app->player.pos[1], app->player.pos[2], app->player.translation);

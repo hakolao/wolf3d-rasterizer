@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 12:25:42 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:22:14 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # include <SDL_ttf.h>
 
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
-# define GAME_FONT "assets/pixelated.ttf"
-# define DEBUG_FONT "assets/Roboto-Regular.ttf"
-# define FONT_SIZE 20
+# define GAME_FONT "assets/fonts/wolfenstein.ttf"
+# define DEBUG_FONT "assets/fonts/Roboto-Regular.ttf"
+# define FONT_SIZE 50
 
 /*
 **	Frame buffer
@@ -53,6 +53,7 @@ typedef struct						s_window
 	t_framebuffer			*framebuffer;
 	TTF_Font				*main_font;
 	TTF_Font				*debug_font;
+	TTF_Font				*title_font;
 	int32_t					width;
 	int32_t					height;
 	int32_t					pitch;
@@ -110,6 +111,7 @@ typedef struct						s_button_group
 ** Window
 */
 
+void						window_destroy(t_window *window);
 void						window_create(t_window **window_ref,
 								int32_t width, int32_t height);
 void						window_frame_recreate(t_window *window);

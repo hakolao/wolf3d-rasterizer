@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 16:57:43 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:14:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,8 @@ void		wolf3d_init(t_wolf3d *app)
 static void		wolf3d_cleanup(t_wolf3d *app)
 {
 	thread_pool_destroy(app->thread_pool);
-	l3d_framebuffer_destroy(app->window->framebuffer);
 	scene_destroy(app->active_scene);
-	SDL_DestroyRenderer(app->window->renderer);
-	SDL_DestroyWindow(app->window->window);
-	TTF_CloseFont(app->window->main_font);
-	TTF_CloseFont(app->window->debug_font);
-	free(app->window);
+	window_destroy(app->window);
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();

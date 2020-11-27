@@ -6,11 +6,20 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 16:32:21 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:20:28 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static void		ui_title_render(t_wolf3d *app)
+{
+	window_text_render_centered(app->window, (t_text_params){
+			.text = "Wolfenstein-Real3D", .blend_ratio = 1.0,
+			.xy = (int[2]){app->window->width / 2, FONT_SIZE * 2 + 10},
+			.text_color = (SDL_Color){255, 0, 0, 255}},
+			app->window->title_font);
+}
 
 static void		ui_menu_render(t_wolf3d *app)
 {
@@ -19,8 +28,9 @@ static void		ui_menu_render(t_wolf3d *app)
 	int32_t			i;
 	int32_t			selected_option;
 
+	ui_title_render(app);
 	row_height = 2 * FONT_SIZE;
-	y = app->window->height / 2 - row_height;
+	y = app->window->height / 1.5 - row_height;
 	selected_option = app->active_scene->selected_option;
 	i = -1;
 	while (++i < app->active_scene->menu_option_count)
@@ -98,6 +108,7 @@ void			ui_render(t_wolf3d *app)
 
 void			loading_render(t_wolf3d *app)
 {
+	ui_title_render(app);
 	window_text_render_centered(app->window, (t_text_params){
 		.text = "Loading...",
 		.blend_ratio = 1.0,

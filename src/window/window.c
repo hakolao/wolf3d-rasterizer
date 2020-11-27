@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 12:46:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:16:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,12 @@ void			window_frame_recreate(t_window *window)
 	error_check(window->main_font == NULL, TTF_GetError());
 	if (window->debug_font != NULL)
 		TTF_CloseFont(window->debug_font);
-	window->debug_font = TTF_OpenFont(DEBUG_FONT, FONT_SIZE);
+	window->debug_font = TTF_OpenFont(DEBUG_FONT, FONT_SIZE * 0.3);
 	error_check(window->debug_font == NULL, TTF_GetError());
+	if (window->title_font != NULL)
+		TTF_CloseFont(window->title_font);
+	window->title_font = TTF_OpenFont(GAME_FONT, FONT_SIZE * 2);
+	error_check(window->title_font == NULL, TTF_GetError());
 }
 
 void			window_create(t_window **window_ref,
@@ -102,9 +106,21 @@ void			window_create(t_window **window_ref,
 	window->framebuffer = NULL;
 	window->main_font = NULL;
 	window->debug_font = NULL;
+	window->title_font = NULL;
 	window_frame_recreate(window);
 	SDL_AddEventWatch(window_resize_callback, window);
 	window->resized = false;
 	window->is_fullscreen = false;
 	*window_ref = window;
+}
+
+void			window_destroy(t_window *window)
+{
+	l3d_framebuffer_destroy(window->framebuffer);
+	SDL_DestroyRenderer(window->renderer);
+	SDL_DestroyWindow(window->window);
+	TTF_CloseFont(window->main_font);
+	TTF_CloseFont(window->debug_font);
+	TTF_CloseFont(window->title_font);
+	free(window);
 }

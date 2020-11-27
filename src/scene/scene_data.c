@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_scenes.c                                      :+:      :+:    :+:   */
+/*   scene_data.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:48:19 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 13:58:02 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:05:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,9 @@ static void		main_scene_data_assets_set(t_scene_data *data)
 
 void		scene_main_game_data_set(t_scene_data *data)
 {
-	data->menu_options[0] = "Save";
-	data->menu_options[1] = "Main Menu";
-	data->menu_options[2] = "Exit Game";
-	data->menu_option_count = 3;
+	data->menu_options[0] = "Main Menu";
+	data->menu_options[1] = "Exit Game";
+	data->menu_option_count = 2;
 	data->main_camera = new_camera();
 	data->map_filename = ft_strdup("maps/bigone");
 	main_scene_data_assets_set(data);
@@ -68,10 +67,9 @@ void		scene_main_game_data_set(t_scene_data *data)
 void		scene_main_menu_data_set(t_scene_data *data)
 {
 	data->menu_options[0] = "Start Game";
-	data->menu_options[1] = "Load Game";
-	data->menu_options[2] = "Settings";
-	data->menu_options[3] = "Quit";
-	data->menu_option_count = 4;
+	data->menu_options[1] = "Settings";
+	data->menu_options[2] = "Quit";
+	data->menu_option_count = 3;
 }
 
 void		scene_settings_menu_data_set(t_scene_data *data)

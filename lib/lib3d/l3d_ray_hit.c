@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 16:46:56 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 13:07:11 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,14 +151,25 @@ void			l3d_delete_hits(t_hits **hits)
 ** hits.
 */
 
-t_bool			l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
+static t_bool	l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
 					t_hits **hits)
 {
-	*hits = NULL;
 	if (!l3d_kd_tree_ray_hit_recursive(node, ray, hits))
 		return (false);
 	return (true);
 }
+
+t_bool			l3d_kd_tree_ray_hits(t_kd_tree *triangle_tree,
+					t_vec3 origin, t_vec3 dir, t_hits **hits)
+{
+	t_ray			ray;
+
+	l3d_ray_set(dir, origin, &ray);
+	if (l3d_kd_tree_ray_hit(triangle_tree->root, &ray, hits))
+		return (true);
+	return (false);
+}
+
 
 /*
 **	Detects hit between a ray and an infinite plane in 3D. Stores the hit point
@@ -181,4 +192,25 @@ t_bool			l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 		return (true);
 	}
 	return (false);
+}
+
+void			l3d_get_closest_hit(t_hits *hits, t_hit **closest)
+{
+	t_hits	*head;
+	t_hit	*hit;
+
+	head = hits;
+	*closest = NULL;
+	while (head)
+	{
+		hit = (t_hit*)head->content;
+		if (*closest == NULL && hit != NULL && hit->t > 0.0 && hit->triangle)
+			*closest = hit;
+		if (hit != NULL && hit->triangle != NULL && hit->t > 0.0 &&
+			hit->t <= (*closest)->t)
+			*closest = hit;
+		head = head->next;
+	}
+	if (*closest && !(*closest)->triangle)
+		*closest = NULL;
 }

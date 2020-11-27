@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 17:30:22 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 13:09:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,11 +276,11 @@ float						sin_time(float min, float max, float speed);
 /*
 ** Player
 */
-void						update_player_grid_pos(t_wolf3d *app);
-void						init_player(t_wolf3d *app, t_vec3 pos);
-void						move_player(t_wolf3d *app, t_move dir);
-void						rotate_player_vertical(t_wolf3d *app, float angle);
-void						rotate_player_horizontal(t_wolf3d *app, float angle);
+void						player_grid_pos_update(t_wolf3d *app);
+void						player_init(t_wolf3d *app, t_vec3 pos);
+void						player_move(t_wolf3d *app, t_move dir);
+void						player_rotate_vertical(t_wolf3d *app, float angle);
+void						player_rotate_horizontal(t_wolf3d *app, float angle);
 
 /*
 ** Events
@@ -288,7 +288,7 @@ void						rotate_player_horizontal(t_wolf3d *app, float angle);
 void						handle_events(t_wolf3d *app);
 void						keyboard_state_set(t_wolf3d *app);
 void						mouse_state_set(t_wolf3d *app);
-void						shooting_handle(t_wolf3d *app);
+void						player_shoot(t_wolf3d *app);
 void						movement_handle(t_wolf3d *app);
 void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
 void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);

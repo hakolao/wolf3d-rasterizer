@@ -6,13 +6,13 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 16:33:43 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 13:09:05 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void			init_player(t_wolf3d *app, t_vec3 pos)
+void			player_init(t_wolf3d *app, t_vec3 pos)
 {
 	ft_memcpy(app->player.pos, pos, sizeof(t_vec3));
 	ft_memcpy(app->player.forward, &(t_vec3){0, 0, -1}, sizeof(t_vec3));
@@ -26,10 +26,10 @@ void			init_player(t_wolf3d *app, t_vec3 pos)
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
 	ml_matrix4_id(app->player.inv_translation);
-	update_player_grid_pos(app);
+	player_grid_pos_update(app);
 }
 
-static void		rotate_player(t_wolf3d *app)
+static void		player_rotate(t_wolf3d *app)
 {
 	t_mat4	rotation_y;
 	t_mat4	rotation_x;
@@ -43,29 +43,29 @@ static void		rotate_player(t_wolf3d *app)
 	ml_matrix4_inverse(rotation, app->player.inv_rotation);
 }
 
-void			rotate_player_vertical(t_wolf3d *app, float angle)
+void			player_rotate_vertical(t_wolf3d *app, float angle)
 {
 	app->player.rot_y += app->player.rot_speed * angle;
-	rotate_player(app);
+	player_rotate(app);
 }
 
-void			rotate_player_horizontal(t_wolf3d *app, float angle)
+void			player_rotate_horizontal(t_wolf3d *app, float angle)
 {
 	app->player.rot_x += app->player.rot_speed * angle;
-	rotate_player(app);
+	player_rotate(app);
 }
 
 /*
 ** / 2.0 because models are positioned with unitsize * 2
 */
 
-void			update_player_grid_pos(t_wolf3d *app)
+void			player_grid_pos_update(t_wolf3d *app)
 {
 	app->player.grid_pos[0] = -(app->player.pos[2] / app->unit_size / 2.0) + 0.5;
 	app->player.grid_pos[1] = (app->player.pos[0] / app->unit_size / 2.0) + 0.5;
 }
 
-void			move_player(t_wolf3d *app, t_move dir)
+void			player_move(t_wolf3d *app, t_move dir)
 {
 	t_vec3		add;
 	t_vec3		forward;
@@ -100,5 +100,28 @@ void			move_player(t_wolf3d *app, t_move dir)
 	ml_matrix4_translation(app->player.pos[0],
 		app->player.pos[1], app->player.pos[2], app->player.translation);
 	ml_matrix4_inverse(app->player.translation, app->player.inv_translation);
-	update_player_grid_pos(app);
+	player_grid_pos_update(app);
+}
+
+void			player_shoot(t_wolf3d *app)
+{
+	t_vec3			origin;
+	t_vec3			add;
+	t_hits			*hits;
+	t_hit			*closest_triangle_hit;
+
+	if (app->active_scene->scene_id == scene_id_main_game)
+	{
+		hits = NULL;
+		ml_vector3_mul(app->player.forward, NEAR_CLIP_DIST, add);
+		ml_vector3_add(app->player.pos, add, origin);
+		if (l3d_kd_tree_ray_hits(app->active_scene->bullet_tree, origin,
+			app->player.forward, &hits))
+		{
+			l3d_get_closest_hit(hits, &closest_triangle_hit);
+			if (closest_triangle_hit != NULL)
+				; //ToDo shoot (Add bullet to temp objects)
+			l3d_delete_hits(&hits);
+		}
+	}
 }

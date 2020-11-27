@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 16:37:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 13:04:46 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,8 +271,6 @@ void						l3d_kd_tree_print(t_kd_tree *tree);
 ** Ray
 */
 
-t_bool						l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
-								t_hits **hits);
 t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
 								t_ray *ray, t_hits **hits);
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
@@ -286,6 +284,9 @@ void						l3d_bounding_box_hit_record_set(float t,
 t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point);
 void						l3d_delete_hits(t_hits **hits);
+void						l3d_get_closest_hit(t_hits *hits, t_hit **closest);
+t_bool						l3d_kd_tree_ray_hits(t_kd_tree *triangle_tree,
+								t_vec3 origin, t_vec3 dir, t_hits **hits);
 
 /*
 ** Triangle vector

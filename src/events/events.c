@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 17:31:05 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 13:08:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void		handle_game_events(t_wolf3d *app, SDL_Event event)
 				mouse_motion_handle(app, event);
 			if (event.type == SDL_MOUSEBUTTONDOWN &&
 				event.button.button == SDL_BUTTON_LMASK)
-				shooting_handle(app);
+				player_shoot(app);
 		}
 	}
 }

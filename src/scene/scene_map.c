@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 17:22:15 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 13:09:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ static void				set_scene_collision_tree(t_scene *scene)
 
 static void				place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
 {
-	init_player(app,
+	player_init(app,
 		(t_vec3){(float)xy_rot[1] * (2 * unit_size), 0,
 		(float)xy_rot[0] * (2 * unit_size)});
-	rotate_player_horizontal(app, xy_rot[2]);
+	player_rotate_horizontal(app, xy_rot[2]);
 }
 
 static void				instantiate_cell_features(t_wolf3d *app,

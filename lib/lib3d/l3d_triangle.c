@@ -72,7 +72,10 @@ void				l3d_triangle_vec_midpoint(t_tri_vec *triangles, t_vec3 res)
 
 void				l3d_triangle_normal_update(t_triangle *triangle)
 {
-	ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
+	if (!(triangle->clipped == true))
+		ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
+	else
+		ml_vector3_cross(triangle->ac, triangle->ab, triangle->normal);
 }
 
 /*

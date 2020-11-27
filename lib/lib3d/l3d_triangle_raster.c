@@ -81,6 +81,7 @@ void		normal_from_color(uint32_t color, t_vec3 normal)
 	normal[0] = (float)rgba[0] / 255;
 	normal[1] = (float)rgba[1] / 255;
 	normal[2] = (float)rgba[2] / 255;
+	
 	(void)normal;
 	(void)color;
 	(void)rgba;
@@ -103,6 +104,7 @@ void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
 						triangle->normalized_normal, tbn);
 	ml_matrix3_mul_vec3(tbn, bumpnormal, resultnormal);
 	ml_vector3_normalize(resultnormal, res);
+	// ml_vector3_mul(res, 255, res);
 	(void)normal_value;
 	(void)bumpnormal;
 	(void)resultnormal;
@@ -120,11 +122,14 @@ void		fragment_shade_normal(t_vec3 light_vector, t_vec3 frag_normal,
 	i = -1;
 	dot = ml_vector3_dot(light_vector, frag_normal);
 	l3d_u32_to_rgba(frag, rgba);
-	while (++i < 4)
+	while (++i < 3)
 	{
 		rgba[i] *= fabs(dot);
+		// rgba[i] = (uint32_t)(frag_normal[i]);
 	}
+	rgba[3] = 255;
 	*res = l3d_rgba_to_u32(rgba);
+	(void)light_vector;
 }
 
 static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
@@ -140,6 +145,7 @@ static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 	uint32_t	color;
 
 	ml_vector3_set(light_vector, 0.0, 0.0, -1.0);
+	ml_vector3_set_all(frag_normal, 0.0);
 
 	offset_xy[0] = xy[0] + dimensionswh[0] * 0.5;
 	offset_xy[1] = xy[1] + dimensionswh[1] * 0.5;
@@ -154,6 +160,7 @@ static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 		color = l3d_sample_texture(triangle->material->texture,
 					(int[2]){triangle->material->width,
 					triangle->material->height}, uv);
+		color = l3d_rgba_to_u32((uint32_t[4]){200, 200, 200, 255});
 		fragment_shade_normal(light_vector, frag_normal, color, &color);
 		l3d_pixel_plot(buffers->framebuffer,
 						(uint32_t[2]){dimensionswh[0], dimensionswh[1]},

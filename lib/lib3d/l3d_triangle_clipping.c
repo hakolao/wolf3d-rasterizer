@@ -116,7 +116,6 @@ static t_bool		create_two_clipped_triangles(t_triangle *triangle,
 				   triangle->vtc[(indices[0] + 1) % 3]->pos, dir1);
 	ml_vector3_sub(triangle->vtc[indices[0]]->pos,
 				   triangle->vtc[(indices[0] + 2) % 3]->pos, dir2);
-
 	l3d_ray_set(dir1, triangle->vtc[indices[0]]->pos, &ray1);
 	l3d_ray_set(dir2, triangle->vtc[indices[0]]->pos, &ray2);
 	l3d_plane_ray_hit(plane, &ray1, hits[0]);
@@ -137,7 +136,9 @@ static t_bool		create_two_clipped_triangles(t_triangle *triangle,
 	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris[1].uvs[0]);
 	ml_vector2_copy(uvs[0], result_tris[1].uvs[1]);
 	ml_vector2_copy(uvs[1], result_tris[1].uvs[2]);
-	return true;
+	result_tris[0].clipped = true;
+	result_tris[1].clipped = true;
+	return (true);
 }
 
 static t_bool		create_one_clipped_triangle(t_triangle *triangle,
@@ -150,7 +151,7 @@ static t_bool		create_one_clipped_triangle(t_triangle *triangle,
 	t_ray ray2;
 	t_vec3 dir1;
 	t_vec3 dir2;
-
+	//!reverse vertex order in both clipping functions
 	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
 				triangle->vtc[indices[0]]->pos, dir1);
 	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
@@ -169,6 +170,7 @@ static t_bool		create_one_clipped_triangle(t_triangle *triangle,
 	ml_vector2_copy(triangle->uvs[(indices[0] + 2) % 3], result_tris->uvs[0]);
 	ml_vector2_copy(uvs[0], result_tris[0].uvs[1]);
 	ml_vector2_copy(uvs[1], result_tris[0].uvs[2]);
+	result_tris[0].clipped = true;
 	return (true);
 }
 
@@ -234,4 +236,5 @@ void			l3d_set_clipped_triangles(t_vertex *vtc, t_triangle *source,
 		dest_tris[0].vtc[i] = &vtc[3 + i];
 		dest_tris[1].vtc[i] = &vtc[6 + i];
 	}
+	(void)vtc;
 }

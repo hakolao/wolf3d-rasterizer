@@ -51,6 +51,7 @@ static void		render_triangle(t_wolf3d *app,
 		&app->active_scene->main_camera->viewplanes[0], clipped_triangles);
 	if (test_clip == 2)
 	{
+		// ft_printf("clip 2\n");
 		l3d_triangle_update(&clipped_triangles[0]);
 		l3d_triangle_update(&clipped_triangles[1]);
 		screen_intersection(app, &clipped_triangles[0]);
@@ -62,6 +63,7 @@ static void		render_triangle(t_wolf3d *app,
 	}
 	else if (test_clip ==1)
 	{
+		// ft_printf("clip 1\n");
 		l3d_triangle_update(&clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0]);
@@ -69,6 +71,7 @@ static void		render_triangle(t_wolf3d *app,
 	}
 	else
 	{
+		// ft_printf("clip 0\n");
 		l3d_triangle_update(triangle);
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle);

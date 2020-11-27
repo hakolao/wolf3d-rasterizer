@@ -14,7 +14,7 @@
 
 float		ml_vector3_dot(t_vec3 v1, t_vec3 v2)
 {
-	size_t		i;
+	int			i;
 	float		res;
 
 	i = -1;

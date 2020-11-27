@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 19:27:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 01:19:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:29:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void		map_editor_menu_render(t_map_editor *app, t_vec2 pos)
 	{
 		button_group_update_position(app->select_menu, pos);
 		button_group_update_position(app->save_menu,
-			(t_vec2){pos[0], pos[1] + 300});
+			(t_vec2){pos[0], pos[1] + 200});
 	}
 	button_group_render(app->select_menu);
 	button_group_render(app->save_menu);

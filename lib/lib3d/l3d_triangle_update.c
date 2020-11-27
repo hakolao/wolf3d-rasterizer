@@ -82,7 +82,7 @@ void				l3d_triangle_tangent_update(t_triangle *triangle)
 	ml_vector3_normalize(triangle->tangent, triangle->tangent);
 	///
 	ml_vector3_cross(triangle->tangent, tempnormal, triangle->bitangent);
-	if (triangle->clipped == 2 || triangle->clipped == 1)
+	if (triangle->clipped == true)
 	{
 		ml_vector3_mul(triangle->bitangent, -1.0, triangle->bitangent);
 	// 	t_vec3 temp;

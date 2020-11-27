@@ -98,7 +98,7 @@ typedef struct				s_triangle
 	t_vec3			tangent;
 	t_vec3			bitangent;
 	t_vec3			normalized_normal;
-	int				clipped;
+	t_bool			clipped;
 }							t_triangle;
 
 typedef struct			s_l3d_buffers

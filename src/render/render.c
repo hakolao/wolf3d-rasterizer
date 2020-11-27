@@ -23,10 +23,10 @@ static void		update_triangle_vertex_zvalues(t_triangle *triangle)
 	i = -1;
 	while (++i < 3)
 	{
-		if (triangle->vtc[i]->pos[2] > L3D_EPSILON)
+		// if (triangle->vtc[i]->pos[2] > L3D_EPSILON)
 			triangle->vtc_zvalue[i] = 1 / triangle->vtc[i]->pos[2];
-		else
-			triangle->vtc_zvalue[i] = 1;
+		// else
+		// 	triangle->vtc_zvalue[i] = 1;
 	}
 }
 

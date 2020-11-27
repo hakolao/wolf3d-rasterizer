@@ -156,7 +156,6 @@ static void		draw_pixel(t_l3d_buffers *buffers, uint32_t *dimensionswh,
 		color = l3d_sample_texture(triangle->material->texture,
 					(int[2]){triangle->material->width,
 					triangle->material->height}, uv);
-		color = l3d_rgba_to_u32((uint32_t[4]){200, 200, 200, 255});
 		fragment_shade_normal(light_vector, frag_normal, color, &color);
 		l3d_pixel_plot(buffers->framebuffer,
 						(uint32_t[2]){dimensionswh[0], dimensionswh[1]},

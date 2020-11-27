@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:36:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 13:09:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 16:03:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,21 @@ void		keyboard_state_set(t_wolf3d *app)
 
 void		movement_handle(t_wolf3d *app)
 {
+	float	speed;
+
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
+		speed = (app->player.is_running ?
+			app->player.speed * 1.5 : app->player.speed) *
+				app->info.delta_time;
 		if (app->keyboard.state[SDL_SCANCODE_W])
-			player_move(app, move_forward);
+			player_move(app, move_forward, speed);
 		if (app->keyboard.state[SDL_SCANCODE_A])
-			player_move(app, move_strafe_left);
+			player_move(app, move_strafe_left, speed);
 		if (app->keyboard.state[SDL_SCANCODE_S])
-			player_move(app, move_backward);
+			player_move(app, move_backward, speed);
 		if (app->keyboard.state[SDL_SCANCODE_D])
-			player_move(app, move_strafe_right);
+			player_move(app, move_strafe_right, speed);
 		if (app->keyboard.state[SDL_SCANCODE_LSHIFT])
 			app->player.is_running = true;
 		else

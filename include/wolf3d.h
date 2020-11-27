@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 15:27:33 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 16:17:00 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 
 # define PLAYER_SPEED 6.0
 # define PLAYER_ROTATION_SPEED 0.2
+# define GRAVITY_SPEED 9.81
 
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000
@@ -66,7 +67,9 @@ typedef enum						e_move
 	move_forward,
 	move_backward,
 	move_strafe_left,
-	move_strafe_right
+	move_strafe_right,
+	move_down,
+	move_up,
 }									t_move;
 
 typedef enum						e_scene_id
@@ -109,7 +112,7 @@ typedef struct						s_player
 	float					rot_x;
 	float					rot_y;
 	float					collider_radius;
-	float					collider_height;
+	float					player_height;
 	t_mat4					rotation;
 	t_mat4					inv_rotation;
 	t_mat4					translation;
@@ -280,9 +283,10 @@ float						sin_time(float min, float max, float speed);
 */
 void						player_grid_pos_update(t_wolf3d *app);
 void						player_init(t_wolf3d *app, t_vec3 pos);
-void						player_move(t_wolf3d *app, t_move dir);
+void						player_move(t_wolf3d *app, t_move dir, float speed);
 void						player_rotate_vertical(t_wolf3d *app, float angle);
 void						player_rotate_horizontal(t_wolf3d *app, float angle);
+void						player_apply_gravity(t_wolf3d *app);
 
 /*
 ** Events

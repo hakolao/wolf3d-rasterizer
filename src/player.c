@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 15:32:05 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 16:17:05 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void			player_init(t_wolf3d *app, t_vec3 pos)
 	app->player.rot_x = 0;
 	app->player.rot_y = 0;
 	app->player.collider_radius = 0.3 * app->unit_size;
-	app->player.collider_height = 0.8 * app->unit_size;
+	app->player.player_height = 1.75 * app->unit_size;
 	ml_matrix4_id(app->player.rotation);
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
@@ -144,10 +144,12 @@ static t_bool	player_would_collide(t_wolf3d *app, t_vec3 add,
 	t_vec3	new_pos_down;
 
 	ml_vector3_add((t_vec3){app->player.pos[0],
-		app->player.pos[1] - app->player.collider_height / 2.0,
+		app->player.pos[1] - app->player.player_height / 2.0 +
+			app->player.collider_radius,
 		app->player.pos[2]}, add, new_pos_up);
 	ml_vector3_add((t_vec3){app->player.pos[0],
-		app->player.pos[1] + app->player.collider_height / 2.0,
+		app->player.pos[1] + app->player.player_height / 2.0 -
+			app->player.collider_radius,
 		app->player.pos[2]}, add, new_pos_down);
 	return (sphere_collides_with_triangles(app->active_scene->triangle_tree,
 		new_pos_down, app->player.collider_radius, hit_normal) ||
@@ -168,28 +170,29 @@ void			player_limit_movement(t_wolf3d *app, t_vec3 add)
 	}
 }
 
-void			player_move(t_wolf3d *app, t_move dir)
+void			player_move(t_wolf3d *app, t_move dir, float speed)
 {
 	t_vec3		add;
 	t_vec3		forward;
 	t_vec3		sideways;
 	t_mat4		rotation_x;
-	float		speed;
-
 
 	ft_memset(add, 0, sizeof(t_vec3));
 	ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
 	ml_matrix4_mul_vec3(rotation_x, (t_vec3){0, 0, -1}, forward);
 	ml_matrix4_mul_vec3(rotation_x, (t_vec3){1, 0, 0}, sideways);
-	speed = app->player.is_running ? app->player.speed * 1.5 : app->player.speed;
 	if (dir == move_forward)
-		ml_vector3_mul(forward, speed * app->info.delta_time, add);
+		ml_vector3_mul(forward, speed, add);
 	else if (dir == move_backward)
-		ml_vector3_mul(forward, -speed * app->info.delta_time, add);
+		ml_vector3_mul(forward, -speed, add);
 	else if (dir == move_strafe_left)
-		ml_vector3_mul(sideways, -speed * app->info.delta_time, add);
+		ml_vector3_mul(sideways, -speed, add);
 	else if (dir == move_strafe_right)
-		ml_vector3_mul(sideways, speed * app->info.delta_time, add);
+		ml_vector3_mul(sideways, speed, add);
+	else if (dir == move_up)
+		ml_vector3_mul((t_vec3){0, -1, 0}, speed, add);
+	else if (dir == move_down)
+		ml_vector3_mul((t_vec3){0, 1, 0}, speed, add);
 	player_limit_movement(app, add);
 	ml_vector3_add(app->player.pos, add, app->player.pos);
 	ml_matrix4_translation(app->player.pos[0],

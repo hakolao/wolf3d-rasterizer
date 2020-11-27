@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/27 13:08:02 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 16:16:54 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void		update_minimap_size(t_wolf3d *app)
 	}
 }
 
-static void		handle_game_events(t_wolf3d *app, SDL_Event event)
+static void		handle_game_input_events(t_wolf3d *app, SDL_Event event)
 {
 	if (app->active_scene->scene_id == scene_id_main_menu)
 		main_menu_event_handle(app, event);
@@ -68,6 +68,29 @@ static void		handle_game_input_state(t_wolf3d *app)
 	movement_handle(app);
 }
 
+static void		handle_general_input_events(t_wolf3d *app, SDL_Event event)
+{
+	if (event.type == SDL_QUIT)
+		app->is_running = false;
+	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+	{
+		if (app->active_scene->scene_id == scene_id_main_game)
+			app->active_scene->is_paused = !app->active_scene->is_paused;
+		else
+			app->is_running = false;
+	}
+	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
+		app->is_debug = !app->is_debug;
+	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_f)
+	{
+		app->window->is_fullscreen = !app->window->is_fullscreen;
+		if (app->window->is_fullscreen)
+			SDL_SetWindowFullscreen(app->window->window, SDL_WINDOW_FULLSCREEN);
+		else
+			SDL_SetWindowFullscreen(app->window->window, 0);
+	}
+}
+
 void			handle_events(t_wolf3d *app)
 {
 	SDL_Event	event;
@@ -76,25 +99,7 @@ void			handle_events(t_wolf3d *app)
 		handle_game_input_state(app);
 	while (SDL_PollEvent(&event))
 	{
-		if (event.type == SDL_QUIT)
-			app->is_running = false;
-		if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-		{
-			if (app->active_scene->scene_id == scene_id_main_game)
-				app->active_scene->is_paused = !app->active_scene->is_paused;
-			else
-				app->is_running = false;
-		}
-		if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
-			app->is_debug = !app->is_debug;
-		if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_f)
-		{
-			app->window->is_fullscreen = !app->window->is_fullscreen;
-			if (app->window->is_fullscreen)
-				SDL_SetWindowFullscreen(app->window->window, SDL_WINDOW_FULLSCREEN);
-			else
-				SDL_SetWindowFullscreen(app->window->window, 0);
-		}
-		handle_game_events(app, event);
+		handle_general_input_events(app, event);
+		handle_game_input_events(app, event);
 	}
 }

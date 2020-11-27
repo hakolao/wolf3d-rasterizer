@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/26 17:31:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 14:58:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void			scene_destroy(t_scene *scene)
 {
 	if (scene->map_filename != NULL)
 		ft_strdel(&scene->map_filename);
-	if (scene->bullet_tree)
-		l3d_kd_tree_destroy(scene->bullet_tree);
+	if (scene->triangle_tree)
+		l3d_kd_tree_destroy(scene->triangle_tree);
 	if (scene->map != NULL)
 		map_destroy(scene->map);
 	if (scene->textures)

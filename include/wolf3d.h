@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 13:09:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 14:58:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct						s_player
 	float					rot_speed;
 	float					rot_x;
 	float					rot_y;
+	float					collider_radius;
 	t_mat4					rotation;
 	t_mat4					inv_rotation;
 	t_mat4					translation;
@@ -147,7 +148,7 @@ typedef struct						s_scene
 	t_wolf3d_map			*map;
 	t_3d_object				*objects[MAX_NUM_OBJECTS];
 	uint32_t				num_objects;
-	t_kd_tree				*bullet_tree;
+	t_kd_tree				*triangle_tree;
 	t_triangle				*triangle_ref[MAX_NUM_TRIANGLES];
 	uint32_t				num_triangles;
 	t_camera				*main_camera;

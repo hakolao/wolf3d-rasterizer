@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/27 13:09:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 14:58:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ static void				scene_set_triangle_refs(t_scene *scene)
 
 static void				set_scene_collision_tree(t_scene *scene)
 {
-	scene->bullet_tree = NULL;
+	scene->triangle_tree = NULL;
 	if (scene->num_objects > 0)
 	{
 		scene_set_triangle_refs(scene);
-		l3d_kd_tree_create_or_update(&scene->bullet_tree,
+		l3d_kd_tree_create_or_update(&scene->triangle_tree,
 			scene->triangle_ref, scene->num_triangles);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 13:07:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 14:31:15 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ t_bool			l3d_kd_tree_ray_hits(t_kd_tree *triangle_tree,
 {
 	t_ray			ray;
 
+	*hits = NULL;
 	l3d_ray_set(dir, origin, &ray);
 	if (l3d_kd_tree_ray_hit(triangle_tree->root, &ray, hits))
 		return (true);

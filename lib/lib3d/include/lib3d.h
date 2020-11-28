@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 18:30:42 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:13:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,17 @@ typedef enum				e_shading_opts
 	e_shading_normal_map = 1 << 1,
 }							t_shading_opts;
 
+typedef struct				s_surface
+{
+	uint32_t		*pixels;
+	uint32_t		w;
+	uint32_t		h;
+}							t_surface;
+
 typedef struct				s_material
 {
-	uint32_t		*texture;
-	uint32_t		width;
-	uint32_t		height;
+	t_surface		*texture;
+	t_surface		*normal_map;
 	t_shading_opts	shading_opts;
 }							t_material;
 
@@ -252,13 +258,6 @@ typedef struct				s_kd_tree
 	t_kd_node		*root;
 }							t_kd_tree;
 
-typedef struct				s_surface
-{
-	uint32_t		*pixels;
-	uint32_t		w;
-	uint32_t		h;
-}							t_surface;
-
 typedef struct				s_temp_object
 {
 	uint32_t				creation_time;
@@ -400,7 +399,7 @@ void						l3d_calculate_barycoords(
 void						l3d_interpolate_uv(t_triangle *triangle,
 												float *barycoords,
 												t_vec2 point_uv);
-uint32_t					l3d_sample_texture(t_material *material, t_vec2 uv_point);
+uint32_t					l3d_sample_texture(t_surface *material, t_vec2 uv_point);
 
 
 /*

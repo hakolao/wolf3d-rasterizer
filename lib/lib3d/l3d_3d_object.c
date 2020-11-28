@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 18:17:58 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:11:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ void			l3d_3d_object_debug_print(t_3d_object *obj)
 
 	ft_printf("Obj: vertices %d, triangles %d\n", obj->num_vertices, obj->num_triangles);
 	if (obj->material)
-		ft_printf("Material: width %d, height %d, texture: %p\n",
-			obj->material->width, obj->material->height, obj->material->texture);
+		ft_printf("Material: width %d, height %d, pixels: %p\n",
+			obj->material->texture->w, obj->material->texture->h,
+				obj->material->texture->pixels);
 	else
 		ft_printf("Material: NULL");
 	ft_printf("Pos: ");

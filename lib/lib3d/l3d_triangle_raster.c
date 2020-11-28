@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 18:55:56 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:09:16 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ static uint32_t	pixel_depth_shaded(uint32_t pixel, float z_val)
 		1.0 - (ft_abs(z_val) * intensity)));
 }
 
-static uint32_t	pixel_texture_shaded(uint32_t pixel, t_material *material,
+static uint32_t	pixel_texture_shaded(uint32_t pixel, t_surface *texture,
 					t_vec2 uv)
 {
-	return (l3d_color_blend_u32(pixel, l3d_sample_texture(material, uv), 1.0));
+	return (l3d_color_blend_u32(pixel, l3d_sample_texture(texture, uv), 1.0));
 }
 
 static void		draw_pixel(t_sub_framebuffer *buffers,
@@ -100,7 +100,8 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 		clamp_uv(uv);
 		pixel = L3D_DEFAULT_COLOR;
 		if (triangle->material)
-			pixel = pixel_texture_shaded(pixel, triangle->material, uv);
+			pixel = pixel_texture_shaded(pixel,
+				triangle->material->texture, uv);
 		if (triangle->material->shading_opts & e_shading_depth)
 			pixel = pixel_depth_shaded(pixel, z_val);
 		// if (triangle->material->shading_opts & e_shading_normal_map)
@@ -363,7 +364,7 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 **	index = x + width * y;
 */
 
-uint32_t		l3d_sample_texture(t_material *material,
+uint32_t		l3d_sample_texture(t_surface *texture,
 									t_vec2 uv_point)
 {
 	int			index;
@@ -372,18 +373,18 @@ uint32_t		l3d_sample_texture(t_material *material,
 	uint32_t	default_color;
 
 	default_color = L3D_DEFAULT_COLOR;
-	if (!material)
+	if (!texture->pixels)
 		return (default_color);
-	x = floor(uv_point[0] * material->width);
-	y = floor(uv_point[1] * material->height);
-	if (x >= (int32_t)material->width)
-		x = (float)(material->width - 1);
-	if (y >= (int32_t)material->height)
-		y = (float)(material->height - 1);
-	index = (int)floor(x) + (int)(floor(y * material->width));
-	if (index >= (int32_t)material->width * (int32_t)material->height)
-		index = material->width * material->height - 1;
+	x = floor(uv_point[0] * texture->w);
+	y = floor(uv_point[1] * texture->h);
+	if (x >= (int32_t)texture->w)
+		x = (float)(texture->w - 1);
+	if (y >= (int32_t)texture->h)
+		y = (float)(texture->h - 1);
+	index = (int)floor(x) + (int)(floor(y * texture->w));
+	if (index >= (int32_t)texture->w * (int32_t)texture->h)
+		index = texture->w * texture->h - 1;
 	else if (index < 0)
 		index = 0;
-	return (material->texture[index]);
+	return (texture->pixels[index]);
 }

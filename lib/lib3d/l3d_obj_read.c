@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:11 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 00:15:43 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:10:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,7 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
 
 	l3d_object = l3d_3d_object_create(obj->num_vertices, obj->num_triangles);
 	if (texture)
-	{
-		l3d_object->material->texture = texture->pixels;
-		l3d_object->material->width = texture->w;
-		l3d_object->material->height = texture->h;
-	}
+		l3d_object->material->texture = texture;
 	obj_to_3d_object(obj, l3d_object);
 	l3d_object->num_triangles = obj->num_triangles;
 	l3d_object->num_vertices = obj->num_vertices;

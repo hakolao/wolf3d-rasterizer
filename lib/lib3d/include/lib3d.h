@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/27 13:04:46 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 17:49:46 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 
 /*
 ** Must be divisible by 2
+** refers to split in x dir and y dir
+** 4 seems to be the best
 */
 # define L3D_BUFFER_SPLIT_SIZE 4
 

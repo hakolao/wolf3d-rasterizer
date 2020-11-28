@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 17:46:54 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 17:44:56 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,11 @@ static void		wolf3d_cleanup(t_wolf3d *app)
 
 void			wolf3d_run(t_wolf3d *app)
 {
-	app->thread_pool = thread_pool_create(NUM_THREADS);
+	int32_t	cpu_count;
+
+	cpu_count = SDL_GetCPUCount();
+	app->thread_pool = thread_pool_create(
+		cpu_count >= 4 ? cpu_count : NUM_THREADS_DEFAULT);
 	error_check(SDL_Init(SDL_INIT_VIDEO) != 0, SDL_GetError());
 	error_check(TTF_Init() == -1, TTF_GetError());
 	window_create(&app->window, WIDTH, HEIGHT);

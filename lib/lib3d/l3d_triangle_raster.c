@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 18:45:08 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 18:55:56 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 			pixel = pixel_texture_shaded(pixel, triangle->material, uv);
 		if (triangle->material->shading_opts & e_shading_depth)
 			pixel = pixel_depth_shaded(pixel, z_val);
+		// if (triangle->material->shading_opts & e_shading_normal_map)
+		// 	pixel = pixel_depth_shaded(pixel, params...);
 		l3d_pixel_plot(buffers->buffer, (uint32_t[2]){buffers->width,
 				buffers->height}, offset_xy, pixel);
 	}

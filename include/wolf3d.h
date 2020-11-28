@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 16:17:00 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 16:42:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,7 +281,8 @@ float						sin_time(float min, float max, float speed);
 /*
 ** Player
 */
-void						player_grid_pos_update(t_wolf3d *app);
+void						pos_to_grid_pos(t_vec3 pos, t_vec2 grid_pos,
+								float unit_size);
 void						player_init(t_wolf3d *app, t_vec3 pos);
 void						player_move(t_wolf3d *app, t_move dir, float speed);
 void						player_rotate_vertical(t_wolf3d *app, float angle);

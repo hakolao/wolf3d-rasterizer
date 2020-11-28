@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 16:53:39 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 18:45:08 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,28 +65,46 @@ static float	calculate_z_val(float baryc[3], t_triangle *triangle)
 			baryc[2] * triangle->vtc_zvalue[2])));
 }
 
+static uint32_t	pixel_depth_shaded(uint32_t pixel, float z_val)
+{
+	float	intensity;
+
+	intensity = 10.0;
+	return (l3d_color_blend_u32(pixel, 0x000000ff,
+		1.0 - (ft_abs(z_val) * intensity)));
+}
+
+static uint32_t	pixel_texture_shaded(uint32_t pixel, t_material *material,
+					t_vec2 uv)
+{
+	return (l3d_color_blend_u32(pixel, l3d_sample_texture(material, uv), 1.0));
+}
+
 static void		draw_pixel(t_sub_framebuffer *buffers,
 								int32_t xy[2], t_triangle *triangle)
 {
-	float		zpixel;
 	float		baryc[3];
 	t_vec2		uv;
 	float		z_val;
 	int32_t		offset_xy[2];
+	uint32_t	pixel;
 
 	offset_xy[0] = xy[0] + buffers->x_offset;
 	offset_xy[1] = xy[1] + buffers->y_offset;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	zpixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
-		buffers->width, buffers->height}, offset_xy);
 	z_val = calculate_z_val(baryc, triangle);
-	if (z_val <= zpixel)
+	if (z_val <= l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
+		buffers->width, buffers->height}, offset_xy))
 	{
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
-		l3d_pixel_plot(buffers->buffer,
-			(uint32_t[2]){buffers->width, buffers->height},
-			offset_xy, l3d_sample_texture(triangle->material, uv));
+		pixel = L3D_DEFAULT_COLOR;
+		if (triangle->material)
+			pixel = pixel_texture_shaded(pixel, triangle->material, uv);
+		if (triangle->material->shading_opts & e_shading_depth)
+			pixel = pixel_depth_shaded(pixel, z_val);
+		l3d_pixel_plot(buffers->buffer, (uint32_t[2]){buffers->width,
+				buffers->height}, offset_xy, pixel);
 	}
 }
 
@@ -351,7 +369,7 @@ uint32_t		l3d_sample_texture(t_material *material,
 	float		y;
 	uint32_t	default_color;
 
-	default_color = 0xFF00FFFF;
+	default_color = L3D_DEFAULT_COLOR;
 	if (!material)
 		return (default_color);
 	x = floor(uv_point[0] * material->width);
@@ -365,5 +383,5 @@ uint32_t		l3d_sample_texture(t_material *material,
 		index = material->width * material->height - 1;
 	else if (index < 0)
 		index = 0;
-	return (l3d_color_blend_u32(default_color, material->texture[index], 1.0));
+	return (material->texture[index]);
 }

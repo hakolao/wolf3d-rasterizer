@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 17:49:46 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 18:30:42 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@
 
 # define L3D_MAX_OBJ_TRIANGLES 16384
 # define L3D_MAX_OBJ_VERTICES 16384
+
+# define L3D_DEFAULT_COLOR 0xFF00FFFF
 
 /*
 ** OBJ file temporary structs. They are used in transfering obj data to final
@@ -79,11 +81,18 @@ typedef struct				s_ray
 	t_vec3			dir_inv;
 }							t_ray;
 
+typedef enum				e_shading_opts
+{
+	e_shading_depth = 1,
+	e_shading_normal_map = 1 << 1,
+}							t_shading_opts;
+
 typedef struct				s_material
 {
-	uint32_t	*texture;
-	uint32_t	width;
-	uint32_t	height;
+	uint32_t		*texture;
+	uint32_t		width;
+	uint32_t		height;
+	t_shading_opts	shading_opts;
 }							t_material;
 
 /*
@@ -358,7 +367,8 @@ void						l3d_3d_object_set_vertex(t_vertex *vertex,
 								t_vec3 pos);
 t_3d_object					*l3d_3d_object_copy(t_3d_object *src);
 void						l3d_3d_object_debug_print(t_3d_object *obj);
-
+void						l3d_object_set_shading_opts(t_3d_object *obj,
+								t_shading_opts opts);
 
 /*
 ** OBJ reading

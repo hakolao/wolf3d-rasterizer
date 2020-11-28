@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/25 15:54:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 18:17:58 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,4 +144,11 @@ void			l3d_3d_object_set_vertex(t_vertex *vertex, t_vec3 pos)
 {
 	ml_vector3_copy(pos, vertex->pos);
 	vertex->color = 0xFFFFFFFF;
+}
+
+void			l3d_object_set_shading_opts(t_3d_object *obj,
+					t_shading_opts opts)
+{
+	if (obj->material != NULL)
+		obj->material->shading_opts = opts;
 }

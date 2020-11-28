@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:11 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:10:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:15:42 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,16 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 ** array. Saves the number of objects to inputed num_objects ref.
 */
 
-static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
+static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture,
+							t_surface *normal_map)
 {
 	t_3d_object	*l3d_object;
 
 	l3d_object = l3d_3d_object_create(obj->num_vertices, obj->num_triangles);
 	if (texture)
 		l3d_object->material->texture = texture;
+	if (normal_map)
+		l3d_object->material->normal_map = normal_map;
 	obj_to_3d_object(obj, l3d_object);
 	l3d_object->num_triangles = obj->num_triangles;
 	l3d_object->num_vertices = obj->num_vertices;
@@ -103,7 +106,8 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture)
 ** is not returned.
 */
 
-t_3d_object				*l3d_read_obj(const char *filename, t_surface *texture)
+t_3d_object				*l3d_read_obj(const char *filename, t_surface *texture,
+							t_surface *normal_map)
 {
 	t_file_contents	*obj_file;
 	t_obj			obj;
@@ -113,5 +117,5 @@ t_3d_object				*l3d_read_obj(const char *filename, t_surface *texture)
 	if (!l3d_is_valid_obj(&obj))
 		return (NULL);
 	destroy_file_contents(obj_file);
-	return (l3d_3d_object_from_obj(&obj, texture));
+	return (l3d_3d_object_from_obj(&obj, texture, normal_map));
 }

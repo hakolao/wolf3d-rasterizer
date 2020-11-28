@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:48:19 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/27 17:05:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:18:44 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@ static void		main_scene_data_assets_set(t_scene_data *data)
 	data->texture_files[7] = NULL;
 	data->texture_files[8] = NULL;
 	data->texture_files[9] = NULL;
+	// ToDo: Vesa add normal map files here: (corresponding bitflag keys below)
+	data->normal_map_files[0] = NULL;
+	data->normal_map_files[1] = NULL;
+	data->normal_map_files[2] = NULL;
+	data->normal_map_files[3] = NULL;
+	data->normal_map_files[4] = NULL;
+	data->normal_map_files[5] = NULL;
+	data->normal_map_files[6] = NULL;
+	data->normal_map_files[7] = NULL;
+	data->normal_map_files[8] = NULL;
+	data->normal_map_files[9] = NULL;
 	data->model_files[0] = "assets/models/room_tiles/room_floor.obj";
 	data->model_files[1] = NULL;
 	data->model_files[2] = "assets/models/room_tiles/wall_up.obj";

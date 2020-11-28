@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/28 18:45:48 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:21:09 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ typedef struct						s_scene_data
 	t_camera				*main_camera;
 	char					*map_filename;
 	char					*texture_files[NUM_ASSETS];
+	char					*normal_map_files[NUM_ASSETS];
 	char					*model_files[NUM_ASSETS];
 	uint32_t				asset_keys[NUM_ASSETS];
 	uint32_t				num_assets_to_load;
@@ -164,6 +165,7 @@ typedef struct						s_scene
 	t_scene_id				scene_id;
 	char					*map_filename;
 	t_hash_table			*textures;
+	t_hash_table			*normal_maps;
 	t_hash_table			*models;
 	t_surface				*skybox_textures[6];
 	t_3d_object				*skybox[6];
@@ -345,6 +347,7 @@ void						scene_objects_destroy(t_scene *scene);
 void						scene_skybox_destroy(t_scene *scene);
 void						scene_models_destroy(t_scene *scene);
 void						scene_textures_destroy(t_scene *scene);
+void						scene_normal_maps_destroy(t_scene *scene);
 
 /*
 ** Debug

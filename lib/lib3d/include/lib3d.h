@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:13:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:16:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,8 +373,8 @@ void						l3d_object_set_shading_opts(t_3d_object *obj,
 ** OBJ reading
 */
 
-t_3d_object					*l3d_read_obj(const char *filename,
-								t_surface *texture);
+t_3d_object					*l3d_read_obj(const char *filename, t_surface *texture,
+								t_surface *normal_map);
 
 /*
 ** Math utils (could be moved somewhere else...)

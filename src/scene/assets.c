@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:55:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 17:30:09 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:23:27 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,18 @@ void			scene_assets_load(t_scene *scene, t_scene_data *data)
 	while (++i < (int32_t)data->num_assets_to_load)
 	{
 		key = data->asset_keys[i];
-		if (data->texture_files[i] != NULL && data->model_files[i] != NULL)
-		{
+		if (data->texture_files[i] != NULL)
 			hash_map_add(scene->textures, key,
 				l3d_read_bmp_image_32bit_rgba_surface(data->texture_files[i]));
+		if (data->normal_map_files[i] != NULL)
+			hash_map_add(scene->normal_maps, key,
+				l3d_read_bmp_image_32bit_rgba_surface(data->normal_map_files[i]));
+		if (data->model_files[i] != NULL)
+		{
 			hash_map_add(scene->models, key,
 				l3d_read_obj(data->model_files[i],
-					hash_map_get(scene->textures, key)));
+					hash_map_get(scene->textures, key),
+					hash_map_get(scene->normal_maps, key)));
 		}
 	}
 	scene->skybox_textures[0] = l3d_read_bmp_image_32bit_rgba_surface(

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 14:58:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/28 19:21:35 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void			scene_destroy(t_scene *scene)
 		map_destroy(scene->map);
 	if (scene->textures)
 		scene_textures_destroy(scene);
+	if (scene->normal_maps)
+		scene_normal_maps_destroy(scene);
 	if (scene->models)
 		scene_models_destroy(scene);
 	if (scene->skybox[0])

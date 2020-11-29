@@ -123,7 +123,7 @@ uint32_t pixel_normal_shaded(uint32_t pixel, t_triangle *triangle, t_vec2 uv)
 	t_vec3 light_vector;
 
 	ml_vector3_set(light_vector, 0.0, 0.0, -1.0);
-	ml_vector3_set_all(frag_normal, 0.0);
+	// ml_vector3_set_all(frag_normal, 0.0);
 	calc_bumped_normal(triangle, uv, frag_normal);
 	(void)triangle;
 	(void)uv;

@@ -6,13 +6,13 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/29 15:55:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 19:59:16 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		minimap_size_update(t_wolf3d *app)
+void			minimap_size_update(t_wolf3d *app)
 {
 	if (app->is_minimap_largened)
 	{

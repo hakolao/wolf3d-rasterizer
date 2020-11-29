@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/29 15:30:39 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 19:59:56 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 static void		wolf3d_resize_dependent_recreate(t_wolf3d *app)
 {
-	float	minimap_render_size;
-
 	app->window->resized = false;
 	if (app->window->is_hidden)
 	{
@@ -26,11 +24,7 @@ static void		wolf3d_resize_dependent_recreate(t_wolf3d *app)
 	{
 		window_frame_recreate(app->window);
 		if (app->active_scene->map)
-		{
-			minimap_render_size = app->window->height * 0.8;
-			map_render_resize(app->active_scene->map, minimap_render_size,
-			(t_vec2){app->window->width - app->window->height * 0.3 - 10, 10});
-		}
+			minimap_size_update(app);
 	}
 }
 

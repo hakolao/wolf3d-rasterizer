@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/29 16:20:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 19:59:40 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,6 +377,7 @@ void						map_init_image_assets(t_hash_table **map_images);
 void						map_rescale_image_assets(t_wolf3d_map *map);
 void						map_render_resize(t_wolf3d_map *map, float new_size,
 								t_vec2 render_pos);
+void						minimap_size_update(t_wolf3d *app);
 
 /*
 ** Map Editor

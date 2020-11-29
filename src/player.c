@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/29 16:29:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 19:46:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ static void		player_rotate(t_wolf3d *app)
 void			player_rotate_vertical(t_wolf3d *app, float angle)
 {
 	app->player.rot_y += app->player.rot_speed * angle;
+	if (app->player.rot_y > 90.0)
+		app->player.rot_y = 90.0;
+	if (app->player.rot_y < -90.0)
+		app->player.rot_y = -90.0;
 	player_rotate(app);
 }
 

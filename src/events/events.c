@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/29 19:59:16 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 20:24:22 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ static void		game_input_state_handle(t_wolf3d *app)
 
 static void		general_input_events_handle(t_wolf3d *app, SDL_Event event)
 {
+	int32_t	i;
+
 	if (event.type == SDL_QUIT)
 		app->is_running = false;
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
@@ -94,6 +96,27 @@ static void		general_input_events_handle(t_wolf3d *app, SDL_Event event)
 	}
 	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
 		app->is_debug = !app->is_debug;
+	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_n &&
+		app->active_scene->scene_id == scene_id_main_game)
+	{
+		app->is_normal_map = !app->is_normal_map;
+		if (app->is_normal_map)
+		{
+			i = -1;
+			while (++i < (int32_t)app->active_scene->num_objects)
+				l3d_object_set_shading_opts(app->active_scene->objects[i],
+					app->active_scene->objects[i]->material->shading_opts |
+						e_shading_normal_map);
+		}
+		else
+		{
+			i = -1;
+			while (++i < (int32_t)app->active_scene->num_objects)
+				l3d_object_set_shading_opts(app->active_scene->objects[i],
+					app->active_scene->objects[i]->material->shading_opts ^
+						e_shading_normal_map);
+		}
+	}
 	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_f)
 	{
 		app->window->is_fullscreen = !app->window->is_fullscreen;

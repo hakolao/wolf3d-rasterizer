@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scene_map.c                                        :+:      :+:    :+:   */
+/*   scene_generate.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:19:51 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 20:19:09 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void				instantiate_cell_features(t_wolf3d *app,
 					(t_vec3){(float)xy[1] * (2 * app->unit_size), app->unit_size,
 						-(float)xy[0] * (2 * app->unit_size)});
 				l3d_object_set_shading_opts(app->active_scene->objects[*obj_i],
-					e_shading_depth | e_shading_normal_map);
+					e_shading_depth);
 				(*obj_i)++;
 			}
 		}

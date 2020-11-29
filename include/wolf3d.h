@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/29 19:59:40 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 20:22:31 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ typedef struct						s_wolf3d
 	t_bool					is_running;
 	t_bool					is_debug;
 	t_bool					is_loading;
+	t_bool					is_normal_map;
 	t_info					info;
 	t_window				*window;
 	t_scene_id				next_scene_id;

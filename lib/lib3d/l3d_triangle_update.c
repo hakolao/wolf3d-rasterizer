@@ -74,30 +74,16 @@ void				l3d_triangle_tangent_update(t_triangle *triangle)
 		fraction = 1.0;
 	calculate_tangent(triangle, fraction, deltas);
 	ml_vector3_normalize(triangle->tangent, triangle->tangent);
-	//	triangle->tangent = normalize(tangent - dot(tangent, normal) * normal);
+
 	ml_vector3_normalize(triangle->normal, triangle->normalized_normal);
 	ml_vector3_normalize(triangle->normal, tempnormal);
 	ml_vector3_mul(tempnormal, ml_vector3_dot(triangle->tangent, tempnormal) , temptangent);
 	ml_vector3_sub(triangle->tangent, temptangent, triangle->tangent);
 	ml_vector3_normalize(triangle->tangent, triangle->tangent);
-	///
+
 	ml_vector3_cross(triangle->tangent, tempnormal, triangle->bitangent);
 	if (triangle->clipped == true)
 	{
 		ml_vector3_mul(triangle->bitangent, -1.0, triangle->bitangent);
-	// 	t_vec3 temp;
-	// 	ml_vector3_copy(triangle->bitangent, temp);
-	// 	ml_vector3_copy(triangle->tangent, triangle->bitangent);
-	// 	ml_vector3_copy(temp, triangle->tangent);
 	}
-	
-	// t_vec3	temp;
-	// if (triangle->clipped == true)
-	// {
-	// 	ml_vector3_copy(triangle->bitangent, temp);
-	// 	ml_vector3_copy(triangle->tangent, triangle->bitangent);
-	// 	ml_vector3_copy(temp, triangle->tangent);
-	// }
-	// if (triangle->clipped == true)
-	// 	ml_vector3_mul(triangle->bitangent, -1.0, triangle->bitangent);
 }

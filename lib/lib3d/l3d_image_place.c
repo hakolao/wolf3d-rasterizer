@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:12 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/26 15:36:27 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 /*
 ** Usage:
-**	l3d_framebuffer_image_place(
+**	l3d_image_place(
 **		&(t_surface){
 **			.h = app->window->height,
 **			.w = app->window->width,
-**			.pixels = app->window->buffers->framebuffer},
+**			.pixels = app->window->buffers->framebuffer->buffer},
 **		&(t_surface){
 **			.h = height,
 **			.w = width,
@@ -26,7 +26,7 @@
 **		(int32_t[2]){50, 50}, 1.0);
 */
 
-void				l3d_framebuffer_image_place(t_surface *frame,
+void				l3d_image_place(t_surface *frame,
 					t_surface *image, int32_t pos_xy[2], float blend_ratio)
 {
 	uint32_t		frame_pixel;

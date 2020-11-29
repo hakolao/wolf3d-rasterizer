@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 19:27:17 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:29:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,13 @@ static void			on_menu_button_click(t_button *self, void *params)
 
 	app = params;
 	if (self->id == 0)
-		app->selected_feature = c_floor;
+		app->selected_feature = m_room;
 	else if (self->id == 1)
-		app->selected_feature = c_floor_start;
+		app->selected_feature = m_start;
 	else if (self->id == 2)
-		app->selected_feature = c_wall_up;
+		app->selected_feature = m_enemy;
 	else if (self->id == 3)
-		app->selected_feature = c_wall_right;
-	else if (self->id == 4)
-		app->selected_feature = c_wall_down;
-	else if (self->id == 5)
-		app->selected_feature = c_wall_left;
-	else if (self->id == 6)
-		app->selected_feature = c_clear;
+		app->selected_feature = m_clear;
 }
 
 static void			save_map(t_map_editor *app)
@@ -61,11 +55,14 @@ static void			save_map(t_map_editor *app)
 	if ((fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1 &&
 		ft_dprintf(2, "Failed to open file %s\n", filename))
 		exit(EXIT_FAILURE);
+	write(fd, "MAP\0", 4);
+	ft_memcpy(bytes, &app->map->size, sizeof(uint32_t));
+	write(fd, &bytes, sizeof(uint32_t));
 	i = -1;
 	while (++i < app->map->size * app->map->size)
 	{
 		ft_memcpy(bytes, &app->map->grid[i], sizeof(uint32_t));
-		write(fd, &bytes, 4);
+		write(fd, &bytes, sizeof(uint32_t));
 	}
 	ft_printf("Saved %s\n", filename);
 	if ((fd = close(fd)) == -1 &&
@@ -135,21 +132,18 @@ void				map_editor_save_menu_create(t_map_editor *app)
 void				map_editor_draw_menu_create(t_map_editor *app)
 {
 	int32_t		i;
-	const char	*options[7];
+	const char	*options[4];
 	t_button	**buttons;
 	uint32_t	num_buttons;
 	t_surface	**surfaces;
 	t_surface	**down_surfaces;
 	SDL_Surface	*tmp_surface;
 
-	num_buttons = 7;
-	options[0] = "Floor";
+	num_buttons = 4;
+	options[0] = "Room";
 	options[1] = "Start";
-	options[2] = "WallUp";
-	options[3] = "WallRight";
-	options[4] = "WallDown";
-	options[5] = "WallLeft";
-	options[6] = "Clear";
+	options[2] = "Enemy";
+	options[3] = "Clear";
 	error_check(!(buttons = malloc(sizeof(t_button*) * num_buttons)),
 		"Failed to malloc buttons in menu creation");
 	error_check(!(surfaces = malloc(sizeof(t_surface*) * num_buttons)),
@@ -191,7 +185,7 @@ void		map_editor_menu_render(t_map_editor *app, t_vec2 pos)
 	{
 		button_group_update_position(app->select_menu, pos);
 		button_group_update_position(app->save_menu,
-			(t_vec2){pos[0], pos[1] + 300});
+			(t_vec2){pos[0], pos[1] + 200});
 	}
 	button_group_render(app->select_menu);
 	button_group_render(app->save_menu);

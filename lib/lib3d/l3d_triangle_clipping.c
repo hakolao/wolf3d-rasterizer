@@ -153,7 +153,7 @@ static t_bool		create_one_clipped_triangle(t_triangle *triangle,
 	t_vec3 dir2;
 	//!reverse vertex order in both clipping functions
 	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
-				triangle->vtc[indices[0] + 1]->pos, dir1);
+				triangle->vtc[(indices[0] + 1) % 3]->pos, dir1);
 	ml_vector3_sub(triangle->vtc[(indices[0] + 2) % 3]->pos,
 				triangle->vtc[(indices[0]) % 3]->pos, dir2);
 	l3d_ray_set(dir1, triangle->vtc[(indices[0] + 2) % 3]->pos, &ray1);
@@ -163,7 +163,7 @@ static t_bool		create_one_clipped_triangle(t_triangle *triangle,
 	ml_vector3_copy(triangle->vtc[(indices[0] + 2) % 3]->pos, result_tris[0].vtc[0]->pos);
 	ml_vector3_copy(hits[0], result_tris[0].vtc[1]->pos);
 	ml_vector3_copy(hits[1], result_tris[0].vtc[2]->pos);
-	if (!(l3d_interpolate_clipped_uv(triangle, (int[2]){indices[0] + 1, (indices[0] + 2) % 3}, hits[0], uvs[0])))
+	if (!(l3d_interpolate_clipped_uv(triangle, (int[2]){(indices[0] + 1) % 3, (indices[0] + 2) % 3}, hits[0], uvs[0])))
 		return (false);
 	if (!(l3d_interpolate_clipped_uv(triangle, (int[2]){(indices[0]) % 3, (indices[0] + 2) % 3}, hits[1], uvs[1])))
 		return (false);
@@ -212,17 +212,20 @@ int				l3d_clip_triangle(t_triangle *triangle, t_plane *plane,
 	}
 }
 
-
 void			l3d_set_clipped_triangles(t_vertex *vtc, t_triangle *source,
 											t_triangle *dest_tris)
 {
 	int i;
 
 	i = -1;
+	ft_memset(&dest_tris[0], 0, sizeof(t_triangle));
+	ft_memset(&dest_tris[1], 0, sizeof(t_triangle));
 	dest_tris[0].material = source->material;
 	dest_tris[1].material = source->material;
 	dest_tris[0].is_single_sided = source->is_single_sided;
 	dest_tris[1].is_single_sided = source->is_single_sided;
+	ml_vector3_copy(source->normal, dest_tris[0].normal);
+	ml_vector3_copy(source->normal, dest_tris[1].normal);
 	while (++i < 3)
 	{
 		vtc[3 + i].color = 0;

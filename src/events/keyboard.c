@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:36:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:55:57 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:20:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,39 +20,24 @@ void		keyboard_state_set(t_wolf3d *app)
 
 void		keyboard_state_handle(t_wolf3d *app)
 {
+	float	speed;
+
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
+		speed = (app->player.is_running ?
+			app->player.speed * 1.5 : app->player.speed) *
+				app->info.delta_time;
 		if (app->keyboard.state[SDL_SCANCODE_W])
-			move_player(app, move_forward);
+			player_move(app, move_forward, speed);
 		if (app->keyboard.state[SDL_SCANCODE_A])
-			move_player(app, move_strafe_left);
+			player_move(app, move_strafe_left, speed);
 		if (app->keyboard.state[SDL_SCANCODE_S])
-			move_player(app, move_backward);
+			player_move(app, move_backward, speed);
 		if (app->keyboard.state[SDL_SCANCODE_D])
-			move_player(app, move_strafe_right);
-	}
-}
-
-void 		main_menu_event_handle(t_wolf3d *app, SDL_Event event)
-{
-	if (event.type == SDL_KEYUP)
-	{
-		if (event.key.keysym.sym == SDLK_UP)
-			app->active_scene->selected_option--;
-		else if (event.key.keysym.sym == SDLK_DOWN)
-			app->active_scene->selected_option++;
-		if (app->active_scene->selected_option >=
-			app->active_scene->menu_option_count)
-			app->active_scene->selected_option = 0;
-		if (app->active_scene->selected_option < 0)
-			app->active_scene->selected_option =
-				app->active_scene->menu_option_count - 1;
-		if (event.key.keysym.sym == SDLK_RETURN)
-		{
-			if (app->active_scene->selected_option == menu_action_start_game)
-				set_active_scene(app, scene_id_main_game);
-			else if (app->active_scene->selected_option == menu_action_quit_game)
-				app->is_running = false;
-		}
+			player_move(app, move_strafe_right, speed);
+		if (app->keyboard.state[SDL_SCANCODE_LSHIFT])
+			app->player.is_running = true;
+		else
+			app->player.is_running = false;
 	}
 }

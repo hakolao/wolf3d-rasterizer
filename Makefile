@@ -28,24 +28,37 @@ SOURCES = main.c \
 			wolf3d.c \
 			player.c \
 			camera.c \
-			scene.c \
-			scene_map.c \
 			time.c \
 			debug.c \
+			scene/scene.c \
+			scene/scene_generate.c \
+			scene/cleanup.c \
+			scene/assets.c \
+			scene/scene_data.c \
+			map/map.c \
+			map/render.c \
 			render/render.c \
+			render/objects.c \
+			render/triangle.c \
+			render/skybox.c \
 			render/render_utils.c \
-			window/ui.c \
+			render/ui.c \
 			window/text.c \
 			window/window.c \
 			window/utils.c \
 			events/mouse.c \
-			events/keyboard.c \
+			events/menu_events.c \
+			events/events.c \
+			events/keyboard.c
 
 MAP_EDITOR_NAME = wolf3d_editor
 MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			map_editor/map.c \
 			map_editor/menu.c \
-			window/ui.c \
+			map_editor/cells.c \
+			map_editor/patterns.c \
+			map/map.c \
+			map/render.c \
 			window/text.c \
 			window/window.c \
 			window/utils.c	\
@@ -83,6 +96,8 @@ $(MAP_EDITOR_NAME): $(MAP_EDITOR_OBJS)
 
 $(DIR_OBJ):
 	@mkdir -p temp
+	@mkdir -p temp/map
+	@mkdir -p temp/scene
 	@mkdir -p temp/window
 	@mkdir -p temp/window/buttons
 	@mkdir -p temp/render

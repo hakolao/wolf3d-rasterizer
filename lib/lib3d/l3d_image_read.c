@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 13:33:28 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/24 16:25:16 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,10 @@ static void		l3d_handle_bmp_pixels(t_image_data *image,
 					t_bmp_file_header *header)
 {
 	int32_t			i;
-	unsigned char	*temp_row[L3D_MAX_BMP_WIDTH * 4];
+	unsigned char	*temp_row;
 	uint32_t		width;
 
+	temp_row = malloc(sizeof(char) * image->width * image->bytes_per_pixel);
 	if (header->height > 0)
 	{
 		i = -1;
@@ -55,6 +56,7 @@ static void		l3d_handle_bmp_pixels(t_image_data *image,
 				temp_row, width);
 		}
 	}
+	free(temp_row);
 	i = 0;
 	while (i < (int32_t)(header->size - header->data_offset))
 	{
@@ -124,4 +126,16 @@ void			l3d_read_bmp_image_32bit_rgba(const char *filename,
 	*width = image.width;
 	*height = image.height;
 	free(image.pixels);
+}
+
+t_surface		*l3d_read_bmp_image_32bit_rgba_surface(const char *filename)
+{
+	t_surface	*surface;
+
+	surface = malloc(sizeof(t_surface));
+	if (!surface)
+		return (NULL);
+	l3d_read_bmp_image_32bit_rgba(filename, &surface->pixels,
+		&surface->w, &surface->h);
+	return (surface);
 }

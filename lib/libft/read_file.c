@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 15:30:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/09/30 01:29:50 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/24 16:40:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,28 @@ static t_bool				add_to_buffer(t_file_contents *contents,
 {
 	void			*tmp;
 
-	if (i == 0 && (contents->buf = malloc(ret)))
-		ft_memcpy(contents->buf, buf, ret);
+	if (i == 0)
+	{
+		contents->capacity = FILE_READ_BUF * 4;
+		if ((contents->buf = malloc(contents->capacity)))
+			ft_memcpy(contents->buf, buf, ret);
+	}
 	else if (i == 0)
 		return (false);
 	else
 	{
-		tmp = contents->buf;
-		if (!((contents->buf = malloc(i * FILE_READ_BUF + ret))))
-			return (false);
-		ft_memcpy(contents->buf, tmp, (i * FILE_READ_BUF));
-		ft_memcpy(contents->buf + i * FILE_READ_BUF, buf, ret);
-		free(tmp);
+		if (contents->size + ret > contents->capacity)
+		{
+			tmp = contents->buf;
+			if (!((contents->buf = malloc(contents->capacity * 2))))
+				return (false);
+			contents->capacity *= 2;
+			ft_memcpy(contents->buf, tmp, contents->size);
+			free(tmp);
+		}
+		ft_memcpy(contents->buf + contents->size, buf, ret);
 	}
-	contents->size = i * FILE_READ_BUF + ret;
+	contents->size += ret;
 	return (true);
 }
 
@@ -44,6 +52,9 @@ static t_file_contents		*read_while(int fd)
 	i = 0;
 	if (!(contents = malloc(sizeof(*contents))))
 		return (NULL);
+	contents->size = 0;
+	contents->capacity = 0;
+	contents->buf = NULL;
 	while ((ret = read(fd, buf, FILE_READ_BUF)) > 0)
 	{
 		if (!add_to_buffer(contents, buf, i, ret))

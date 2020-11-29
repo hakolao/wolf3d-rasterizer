@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 14:27:20 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:52:56 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/23 17:45:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ uint32_t	l3d_pixel_get(uint32_t *buffer, uint32_t dimensions_wh[2],
 float		l3d_pixel_get_float(float *buffer, uint32_t dimensions_wh[2],
 								int32_t xy[2])
 {
-	if (xy[0] < 0 || xy[0] >= (int32_t)dimensions_wh[0] ||
-		xy[1] < 0 || xy[1] >= (int32_t)dimensions_wh[1])
+	if (xy[0] < 0 || xy[0] >= (float)dimensions_wh[0] ||
+		xy[1] < 0 || xy[1] >= (float)dimensions_wh[1])
 		return (FLT_MAX);
 	return (buffer[xy[1] * dimensions_wh[0] + xy[0]]);
 }
@@ -42,8 +42,8 @@ float		l3d_pixel_get_float(float *buffer, uint32_t dimensions_wh[2],
 void		l3d_pixel_plot_float(float *buffer, uint32_t dimensions_wh[2],
 					int32_t xy[2], float value)
 {
-	if (xy[0] < 0 || xy[0] >= (int32_t)dimensions_wh[0] ||
-		xy[1] < 0 || xy[1] >= (int32_t)dimensions_wh[1])
+	if (xy[0] < 0 || xy[0] >= (float)dimensions_wh[0] ||
+		xy[1] < 0 || xy[1] >= (float)dimensions_wh[1])
 		return;
 	buffer[xy[1] * dimensions_wh[0] + xy[0]] = value;
 }

@@ -6,7 +6,7 @@
 #    By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/29 14:50:34 by ohakola           #+#    #+#              #
-#    Updated: 2020/11/16 13:53:38 by ohakola+vei      ###   ########.fr        #
+#    Updated: 2020/11/25 14:09:32 by ohakola+vei      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,9 @@ SOURCES = l3d_triangle.c \
 			l3d_color.c \
 			l3d_image_read.c \
 			l3d_triangle_raster.c \
-			l3d_triangle_clipping.c
+			l3d_triangle_clipping.c \
+			l3d_procedural_gen.c \
+			l3d_buffers.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/07 14:34:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:27 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
+/*   Updated: 2020/11/29 15:32:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,25 @@
 # define L3D_EPSILON 0.0000001
 # define L3D_SINGLE_SIDED 1
 # define L3D_MAX_KD_TREE_DEPTH 10
-# define L3D_MIN_KD_NODE_NUM_TRIANGLES 2
+/*
+** L3D_MIN_KD_NODE_NUM_TRIANGLES should be > 2
+** Else tree_create_recursive will leave a triangle vector leak
+** ToDo: Fix in the algorithm...
+*/
+# define L3D_MIN_KD_NODE_NUM_TRIANGLES 4
 # define L3D_TRI_VEC_INITIAL_CAPACITY 10
 
-# define L3D_MAX_OBJECTS 32
-# define L3D_MAX_TRIANGLES 16384
-# define L3D_MAX_VERTICES 16384
+/*
+** Must be divisible by 2
+** refers to split in x dir and y dir
+** 4 seems to be the best
+*/
+# define L3D_BUFFER_SPLIT_SIZE 4
+
+# define L3D_MAX_OBJ_TRIANGLES 16384
+# define L3D_MAX_OBJ_VERTICES 16384
+
+# define L3D_DEFAULT_COLOR 0xFF00FFFF
 
 /*
 ** OBJ file temporary structs. They are used in transfering obj data to final
@@ -68,12 +81,25 @@ typedef struct				s_ray
 	t_vec3			dir_inv;
 }							t_ray;
 
+typedef enum				e_shading_opts
+{
+	e_shading_depth = 1,
+	e_shading_normal_map = 1 << 1,
+	e_shading_zero_alpha = 1 << 2,
+}							t_shading_opts;
+
+typedef struct				s_surface
+{
+	uint32_t		*pixels;
+	uint32_t		w;
+	uint32_t		h;
+}							t_surface;
+
 typedef struct				s_material
 {
-	uint32_t	*texture;
-	uint32_t	*normal_map;
-	uint32_t	width;
-	uint32_t	height;
+	t_surface		*texture;
+	t_surface		*normal_map;
+	t_shading_opts	shading_opts;
 }							t_material;
 
 /*
@@ -84,6 +110,7 @@ typedef struct				s_material
 typedef struct				s_triangle
 {
 	t_vertex		*vtc[3];
+	uint32_t		vtc_indices[3];
 	t_vec2			uvs[3];
 	t_vec3			normals[3];
 	t_vec3			center;
@@ -91,21 +118,38 @@ typedef struct				s_triangle
 	t_bool			is_single_sided;
 	t_vec3			ab;
 	t_vec3			ac;
-	t_vertex		*ordered_vtc[3];
 	t_material		*material;
 	t_vec2			points_2d[3];
-	float			vtc_zvalue[3];
 	t_vec3			tangent;
 	t_vec3			bitangent;
 	t_vec3			normalized_normal;
 	t_bool			clipped;
+	t_vec3			vtc_zvalue;
 }							t_triangle;
 
-typedef struct			s_l3d_buffers
+typedef struct			s_sub_framebuffer
 {
-	uint32_t		*framebuffer;
+	uint32_t		*buffer;
 	float			*zbuffer;
-}						t_l3d_buffers;
+	int32_t			width;
+	int32_t			height;
+	int32_t			x_start;
+	int32_t			y_start;
+	int32_t			parent_width;
+	int32_t			parent_height;
+	float			x_offset;
+	float			y_offset;
+}						t_sub_framebuffer;
+
+typedef struct			s_framebuffer
+{
+	uint32_t			*buffer;
+	int32_t				width;
+	int32_t				height;
+	t_sub_framebuffer	**sub_buffers;
+	int32_t				num_x;
+	int32_t				num_y;
+}						t_framebuffer;
 
 /*
 ** Ray hit is saved to this hit record struct. Add params if needed.
@@ -219,12 +263,13 @@ typedef struct				s_kd_tree
 	t_kd_node		*root;
 }							t_kd_tree;
 
-typedef struct				s_surface
+typedef struct				s_temp_object
 {
-	uint32_t		*pixels;
-	uint32_t		w;
-	uint32_t		h;
-}							t_surface;
+	uint32_t				creation_time;
+	t_3d_object				*obj;
+}							t_temp_object;
+
+typedef	t_list				t_temp_objects;
 
 /*
 ** Kd tree
@@ -241,8 +286,6 @@ void						l3d_kd_tree_print(t_kd_tree *tree);
 ** Ray
 */
 
-t_bool						l3d_kd_tree_ray_hit(t_kd_node *node, t_ray *ray,
-								t_hits **hits);
 t_bool						l3d_triangle_ray_hit(t_triangle *triangle,
 								t_ray *ray, t_hits **hits);
 t_bool						l3d_bounding_box_ray_hit(t_box3d *box,
@@ -256,6 +299,9 @@ void						l3d_bounding_box_hit_record_set(float t,
 t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point);
 void						l3d_delete_hits(t_hits **hits);
+void						l3d_get_closest_hit(t_hits *hits, t_hit **closest);
+t_bool						l3d_kd_tree_ray_hits(t_kd_tree *triangle_tree,
+								t_vec3 origin, t_vec3 dir, t_hits **hits);
 
 /*
 ** Triangle vector
@@ -309,6 +355,8 @@ void						l3d_bounding_box_set(t_tri_vec *triangles,
 ** 3d objects
 */
 
+void						l3d_3d_object_rotate_matrix(t_3d_object *object,
+								t_mat4 rotation);
 void						l3d_3d_object_transform(t_3d_object *obj,
 								t_mat4 transform);
 void						l3d_3d_object_translate(t_3d_object *object,
@@ -322,13 +370,17 @@ t_3d_object					*l3d_3d_object_create(uint32_t num_vertices,
 void						l3d_3d_object_destroy(t_3d_object *object);
 void						l3d_3d_object_set_vertex(t_vertex *vertex,
 								t_vec3 pos);
+t_3d_object					*l3d_3d_object_copy(t_3d_object *src);
+void						l3d_3d_object_debug_print(t_3d_object *obj);
+void						l3d_object_set_shading_opts(t_3d_object *obj,
+								t_shading_opts opts);
 
 /*
 ** OBJ reading
 */
 
-t_3d_object					*l3d_read_obj(const char *filename,
-										const char *texture, const char *normal_map);
+t_3d_object					*l3d_read_obj(const char *filename, t_surface *texture,
+								t_surface *normal_map);
 
 /*
 ** Math utils (could be moved somewhere else...)
@@ -342,11 +394,9 @@ double						l3d_rand_d(void);
 **	Triangle rasterization
 */
 
-void						l3d_triangle_raster(t_l3d_buffers *buffers,
-												uint32_t *dimensions,
+void						l3d_triangle_raster(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
-void						l3d_triangle_set_zbuffer(t_l3d_buffers *buffers,
-												uint32_t *dimensions,
+void						l3d_triangle_set_zbuffer(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
 void						l3d_calculate_barycoords(
 													t_vec2 *triangle_points_2d,
@@ -355,8 +405,7 @@ void						l3d_calculate_barycoords(
 void						l3d_interpolate_uv(t_triangle *triangle,
 												float *barycoords,
 												t_vec2 point_uv);
-uint32_t					l3d_sample_texture(uint32_t *texture_data,
-											int *dimensions, t_vec2 uv_point);
+uint32_t					l3d_sample_texture(t_surface *material, t_vec2 uv_point);
 
 
 /*
@@ -393,12 +442,15 @@ void						l3d_triangle_2d_draw(uint32_t *buffer,
 void						l3d_read_bmp_image_32bit_rgba(const char *filename,
 								uint32_t **pixels_out, uint32_t *width,
 								uint32_t *height);
+t_surface					*l3d_read_bmp_image_32bit_rgba_surface(
+								const char *filename);
+
 
 /*
 ** Buffer image copying / placing
 */
 
-void						l3d_framebuffer_image_place(t_surface *frame,
+void						l3d_image_place(t_surface *frame,
 								t_surface *image, int32_t pos_xy[2],
 								float blend_ratio);
 t_surface					*l3d_image_scaled(t_surface *image,
@@ -413,5 +465,35 @@ uint32_t					l3d_color_blend_u32(uint32_t color1,
 								uint32_t color2, float ratio);
 void						l3d_u32_to_rgba(uint32_t color, uint32_t rgba[4]);
 uint32_t					l3d_triangle_normal_color(t_triangle *triangle);
+
+/*
+** Framebuffer utils
+*/
+
+t_framebuffer				*l3d_framebuffer_create(int32_t width,
+													int32_t height);
+void						l3d_framebuffer_destroy(t_framebuffer *framebuffer);
+void						l3d_framebuffer_recreate(t_framebuffer **framebuffer,
+												int32_t width, int32_t height);
+void						l3d_buffer_float_clear(float *buffer,
+									uint32_t size, float clear_value);
+void						l3d_buffer_uint32_clear(uint32_t *buffer,
+									uint32_t size, uint32_t clear_value);
+
+/*
+** Procedural gen
+*/
+void						l3d_skybox_create(t_3d_object *skybox[6],
+												t_surface *skybox_textures[6],
+												float unit_size);
+t_3d_object					*l3d_plane_create(t_surface	*texture);
+t_3d_object					*l3d_object_instantiate(t_3d_object *model,
+								float unit_size, t_vec3 pos);
+void						l3d_temp_objects_add(t_temp_objects **temp_objects,
+								t_3d_object *object, uint32_t creation_time);
+void						l3d_temp_objects_destroy(t_temp_objects **temp_objects);
+void						l3d_temp_objects_destroy_if_expired(t_temp_objects **temp_objects,
+													uint32_t current_time,
+													uint32_t diff_limit);
 
 #endif

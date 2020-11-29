@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 16:40:10 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/11 17:16:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/27 17:22:14 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # include <SDL_ttf.h>
 
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
-# define GAME_FONT "assets/pixelated.ttf"
-# define DEBUG_FONT "assets/Roboto-Regular.ttf"
-# define FONT_SIZE 20
+# define GAME_FONT "assets/fonts/wolfenstein.ttf"
+# define DEBUG_FONT "assets/fonts/Roboto-Regular.ttf"
+# define FONT_SIZE 50
 
 /*
 **	Frame buffer
@@ -50,9 +50,10 @@ typedef struct						s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
-	t_l3d_buffers			*buffers;
+	t_framebuffer			*framebuffer;
 	TTF_Font				*main_font;
 	TTF_Font				*debug_font;
+	TTF_Font				*title_font;
 	int32_t					width;
 	int32_t					height;
 	int32_t					pitch;
@@ -60,6 +61,7 @@ typedef struct						s_window
 	SDL_Window				*window;
 	uint32_t				window_id;
 	t_bool					is_hidden;
+	t_bool					is_fullscreen;
 }									t_window;
 
 
@@ -109,11 +111,14 @@ typedef struct						s_button_group
 ** Window
 */
 
+void						window_destroy(t_window *window);
 void						window_create(t_window **window_ref,
 								int32_t width, int32_t height);
 void						window_frame_recreate(t_window *window);
 void						window_frame_draw(t_window *window);
 void						window_frame_clear(t_window *window);
+void						window_resize(t_window *window,
+								int32_t width, int32_t height);
 
 /*
 ** Text

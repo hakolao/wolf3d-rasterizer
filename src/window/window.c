@@ -6,11 +6,21 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:19:50 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:56:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/27 17:16:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+void			window_resize(t_window *window, int32_t width, int32_t height)
+{
+	SDL_SetWindowSize(window->window, width, height);
+	window->width = width;
+	window->height = height;
+	SDL_SetWindowPosition(window->window,
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	window_frame_recreate(window);
+}
 
 static int		window_resize_callback(void *data, SDL_Event *event)
 {
@@ -40,29 +50,14 @@ static int		window_resize_callback(void *data, SDL_Event *event)
 
 void			window_frame_clear(t_window *window)
 {
-	int			i;
-	uint32_t	color;
-
-	i = 0;
-	color = 0x000000FF;
-	while (i < window->width * window->height)
-	{
-		window->buffers->framebuffer[i] = color;
-		window->buffers->framebuffer[i + 1] = color;
-		window->buffers->framebuffer[i + 2] = color;
-		window->buffers->framebuffer[i + 3] = color;
-		window->buffers->zbuffer[i] = INT32_MAX;
-		window->buffers->zbuffer[i + 1] = INT32_MAX;
-		window->buffers->zbuffer[i + 2] = INT32_MAX;
-		window->buffers->zbuffer[i + 3] = INT32_MAX;
-		i += 4;
-	}
+	l3d_buffer_uint32_clear(window->framebuffer->buffer,
+		window->framebuffer->width * window->framebuffer->height, 0x000000FF);
 }
 
 void			window_frame_draw(t_window *window)
 {
-	SDL_UpdateTexture(window->frame, NULL, window->buffers->framebuffer,
-		window->width * 4);
+	SDL_UpdateTexture(window->frame, NULL, window->framebuffer->buffer,
+		window->framebuffer->width * 4);
 	SDL_RenderCopy(window->renderer, window->frame, NULL, NULL);
 	SDL_RenderPresent(window->renderer);
 }
@@ -75,28 +70,19 @@ void			window_frame_recreate(t_window *window)
 		PIXEL_FORMAT, SDL_TEXTUREACCESS_STREAMING, window->width,
 		window->height);
 	error_check(window->frame == NULL, SDL_GetError());
-	if (window->buffers != NULL)
-	{
-		free(window->buffers->framebuffer);
-		free(window->buffers->zbuffer);
-		free(window->buffers);
-	}
-	error_check(!(window->buffers = malloc(sizeof(t_l3d_buffers))),
-		"Failed to malloc wolf3d buffers struct");
-	error_check(!(window->buffers->framebuffer = (uint32_t*)malloc(sizeof(uint32_t) *
-		window->width * window->height)),
-		"Failed to malloc framebuffer in resize");
-	error_check(!(window->buffers->zbuffer = (float*)malloc(sizeof(float) *
-		window->width * window->height)),
-		"Failed to malloc zbuffer in resize");
+	l3d_framebuffer_recreate(&window->framebuffer, window->width, window->height);
 	if (window->main_font != NULL)
 		TTF_CloseFont(window->main_font);
 	window->main_font = TTF_OpenFont(GAME_FONT, FONT_SIZE);
 	error_check(window->main_font == NULL, TTF_GetError());
 	if (window->debug_font != NULL)
 		TTF_CloseFont(window->debug_font);
-	window->debug_font = TTF_OpenFont(DEBUG_FONT, FONT_SIZE);
+	window->debug_font = TTF_OpenFont(DEBUG_FONT, FONT_SIZE * 0.3);
 	error_check(window->debug_font == NULL, TTF_GetError());
+	if (window->title_font != NULL)
+		TTF_CloseFont(window->title_font);
+	window->title_font = TTF_OpenFont(GAME_FONT, FONT_SIZE * 2);
+	error_check(window->title_font == NULL, TTF_GetError());
 }
 
 void			window_create(t_window **window_ref,
@@ -107,7 +93,7 @@ void			window_create(t_window **window_ref,
 	error_check((window = (t_window*)malloc(sizeof(t_window))) == NULL,
 		"Window malloc failed");
 	window->window = SDL_CreateWindow(NAME, SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_RESIZABLE);
+		SDL_WINDOWPOS_CENTERED, width, height, 0);
 	window->width = width;
 	window->height = height;
 	error_check(window->window == NULL, SDL_GetError());
@@ -117,11 +103,24 @@ void			window_create(t_window **window_ref,
 	window->window_id = SDL_GetWindowID(window->window);
 	window->is_hidden = false;
 	window->frame = NULL;
-	window->buffers = NULL;
+	window->framebuffer = NULL;
 	window->main_font = NULL;
 	window->debug_font = NULL;
+	window->title_font = NULL;
 	window_frame_recreate(window);
 	SDL_AddEventWatch(window_resize_callback, window);
 	window->resized = false;
+	window->is_fullscreen = false;
 	*window_ref = window;
+}
+
+void			window_destroy(t_window *window)
+{
+	l3d_framebuffer_destroy(window->framebuffer);
+	SDL_DestroyRenderer(window->renderer);
+	SDL_DestroyWindow(window->window);
+	TTF_CloseFont(window->main_font);
+	TTF_CloseFont(window->debug_font);
+	TTF_CloseFont(window->title_font);
+	free(window);
 }

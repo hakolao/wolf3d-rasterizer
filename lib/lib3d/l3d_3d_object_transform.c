@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 14:59:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:20 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/25 16:26:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,27 @@ void			l3d_3d_object_scale(t_3d_object *object,
 	l3d_3d_object_transform(object, scale);
 	ml_matrix4_mul(object->scale, scale, new_scale);
 	ft_memcpy(object->scale, new_scale, sizeof(t_mat4));
+	l3d_3d_object_translate(object,
+		old_pos[0], old_pos[1], old_pos[2]);
+	ml_vector3_copy(old_pos, object->position);
+}
+
+/*
+** Move object to 0, 0, 0, rotate, move back
+*/
+
+void			l3d_3d_object_rotate_matrix(t_3d_object *object,
+					t_mat4 rotation)
+{
+	t_vec3	old_pos;
+	t_mat4	new_rotation;
+
+	ml_vector3_copy(object->position, old_pos);
+	l3d_3d_object_translate(object,
+		-object->position[0], -object->position[1], -object->position[2]);
+	l3d_3d_object_transform(object, rotation);
+	ml_matrix4_mul(object->rotation, rotation, new_rotation);
+	ft_memcpy(object->rotation, new_rotation, sizeof(t_mat4));
 	l3d_3d_object_translate(object,
 		old_pos[0], old_pos[1], old_pos[2]);
 	ml_vector3_copy(old_pos, object->position);

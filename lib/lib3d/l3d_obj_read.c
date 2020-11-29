@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 15:27:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:52:58 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/11/24 13:16:11 by ohakola+vei       #+#    #+#             */
+/*   Updated: 2020/11/28 19:15:42 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@
 
 void					l3d_obj_content_allocate(t_obj *o)
 {
-	error_check(!(o->v = malloc(sizeof(t_vec3) * L3D_MAX_VERTICES)),
+	error_check(!(o->v = malloc(sizeof(t_vec3) * L3D_MAX_OBJ_VERTICES)),
 		"Failed to malloc obj vs");
-	error_check(!(o->vt = malloc(sizeof(t_vec2) * L3D_MAX_VERTICES)),
+	error_check(!(o->vt = malloc(sizeof(t_vec2) * L3D_MAX_OBJ_VERTICES)),
 		"Failed to malloc obj v textures");
-	error_check(!(o->vn = malloc(sizeof(t_vec3) * L3D_MAX_VERTICES)),
+	error_check(!(o->vn = malloc(sizeof(t_vec3) * L3D_MAX_OBJ_VERTICES)),
 		"Failed to malloc obj v normals");
 	error_check(!(o->triangles =
-		malloc(sizeof(uint32_t) * 9 * L3D_MAX_TRIANGLES)),
+		malloc(sizeof(uint32_t) * 9 * L3D_MAX_OBJ_TRIANGLES)),
 		"Failed to malloc obj triangles");
 }
 
@@ -64,16 +64,17 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 			v_i = read_obj->triangles[i * 9 + j * 3 + 0] - 1;
 			vt_i = read_obj->triangles[i * 9 + j * 3 + 1] - 1;
 			vn_i = read_obj->triangles[i * 9 + j * 3 + 2] - 1;
-			error_check(obj->vertices[v_i] == NULL && !(obj->vertices[v_i] =
-				malloc(sizeof(t_vertex))), "Failed to malloc vertex");
 			l3d_3d_object_set_vertex(obj->vertices[v_i], read_obj->v[v_i]);
 			ml_vector2_copy(read_obj->vt[vt_i], obj->triangles[i].uvs[j]);
 			ml_vector3_copy(read_obj->vn[vn_i], obj->triangles[i].normals[j]);
 		}
+		obj->triangles[i].vtc_indices[0] = read_obj->triangles[i * 9 + 0 * 3 + 0] - 1;
+		obj->triangles[i].vtc_indices[1] = read_obj->triangles[i * 9 + 1 * 3 + 0] - 1;
+		obj->triangles[i].vtc_indices[2] = read_obj->triangles[i * 9 + 2 * 3 + 0] - 1;
 		l3d_triangle_set(&obj->triangles[i], (t_vertex*[3]){
-			obj->vertices[read_obj->triangles[i * 9 + 0 * 3 + 0] - 1],
-			obj->vertices[read_obj->triangles[i * 9 + 1 * 3 + 0] - 1],
-			obj->vertices[read_obj->triangles[i * 9 + 2 * 3 + 0] - 1]}, obj);
+			obj->vertices[obj->triangles[i].vtc_indices[0]],
+			obj->vertices[obj->triangles[i].vtc_indices[1]],
+			obj->vertices[obj->triangles[i].vtc_indices[2]]}, obj);
 	}
 }
 
@@ -83,18 +84,15 @@ static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
 */
 
 static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture,
-												t_surface *normal_map)
+							t_surface *normal_map)
 {
 	t_3d_object	*l3d_object;
 
 	l3d_object = l3d_3d_object_create(obj->num_vertices, obj->num_triangles);
 	if (texture)
-	{
-		l3d_object->material->texture = texture->pixels;
-		l3d_object->material->normal_map = normal_map->pixels;
-		l3d_object->material->width = texture->w;
-		l3d_object->material->height = texture->h;
-	}
+		l3d_object->material->texture = texture;
+	if (normal_map)
+		l3d_object->material->normal_map = normal_map;
 	obj_to_3d_object(obj, l3d_object);
 	l3d_object->num_triangles = obj->num_triangles;
 	l3d_object->num_vertices = obj->num_vertices;
@@ -108,36 +106,16 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture,
 ** is not returned.
 */
 
-t_3d_object				*l3d_read_obj(const char *filename, const char *txtfile,
-										const char *normal_map_file)
+t_3d_object				*l3d_read_obj(const char *filename, t_surface *texture,
+							t_surface *normal_map)
 {
 	t_file_contents	*obj_file;
-	t_surface		texture;
-	t_surface		normal_map;
-	t_surface		*texture_ptr;
-	t_surface		*normal_map_ptr;
 	t_obj			obj;
 
 	error_check(!(obj_file = read_file(filename)), "Failed read obj file");
-	if (normal_map_file == NULL)
-		normal_map_ptr = NULL;
-		else
-	{
-		l3d_read_bmp_image_32bit_rgba(normal_map_file,
-			&normal_map.pixels, &normal_map.w, &normal_map.h);
-		normal_map_ptr = &normal_map;
-	}
-	if (txtfile == NULL)
-		texture_ptr = NULL;
-	else
-	{
-		l3d_read_bmp_image_32bit_rgba(txtfile,
-			&texture.pixels, &texture.w, &texture.h);
-		texture_ptr = &texture;
-	}
 	l3d_obj_str_parse((char*)obj_file->buf, &obj);
 	if (!l3d_is_valid_obj(&obj))
 		return (NULL);
 	destroy_file_contents(obj_file);
-	return (l3d_3d_object_from_obj(&obj, texture_ptr, normal_map_ptr));
+	return (l3d_3d_object_from_obj(&obj, texture, normal_map));
 }

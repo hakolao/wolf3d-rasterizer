@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:55:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:23:27 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 16:47:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ void			scene_assets_load(t_scene *scene, t_scene_data *data)
 	int32_t		i;
 	uint32_t	key;
 
-	scene->models = hash_map_create(data->num_assets_to_load);
-	scene->textures = hash_map_create(data->num_assets_to_load);
+	scene->models = hash_map_create(32);
+	scene->textures = hash_map_create(32);
+	scene->normal_maps = hash_map_create(32);
 	i = -1;
 	while (++i < (int32_t)data->num_assets_to_load)
 	{

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:35:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/29 15:29:31 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 16:20:16 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,24 @@ void					mouse_state_set(t_wolf3d *app)
 	app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 }
 
+void					mouse_state_handle(t_wolf3d *app)
+{
+	if (!app->player.is_shooting && (app->mouse.state & SDL_BUTTON_LMASK))
+	{
+		app->player.is_shooting = true;
+		player_shoot(app, SDL_GetTicks());
+	}
+	else if (!(app->mouse.state & SDL_BUTTON_LMASK))
+	{
+		app->player.is_shooting = false;
+	}
+	if (app->player.is_shooting)
+		player_shoot(app, SDL_GetTicks());
+}
+
 void					mouse_events_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_MOUSEMOTION)
 		mouse_motion_handle(app, event);
-	if (event.type == SDL_MOUSEBUTTONDOWN &&
-		event.button.button == SDL_BUTTON_LMASK)
-		player_shoot(app);
 }
 

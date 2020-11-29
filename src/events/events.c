@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/29 15:28:10 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:55:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static void		game_input_events_handle(t_wolf3d *app, SDL_Event event)
 static void		game_input_state_handle(t_wolf3d *app)
 {
 	mouse_state_set(app);
+	mouse_state_handle(app);
 	keyboard_state_set(app);
 	keyboard_state_handle(app);
 }

@@ -6,13 +6,13 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/27 16:16:54 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:28:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		update_minimap_size(t_wolf3d *app)
+static void		minimap_size_update(t_wolf3d *app)
 {
 	if (app->is_minimap_largened)
 	{
@@ -30,45 +30,57 @@ static void		update_minimap_size(t_wolf3d *app)
 	}
 }
 
-static void		handle_game_input_events(t_wolf3d *app, SDL_Event event)
+static void		main_game_input_events_handle(t_wolf3d *app, SDL_Event event)
+{
+	if (app->active_scene->is_paused)
+	{
+		app->is_minimap_largened = false;
+		minimap_size_update(app);
+		main_game_menu_event_handle(app, event);
+	}
+	else
+	{
+		if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_m)
+		{
+			app->is_minimap_largened = !app->is_minimap_largened;
+			minimap_size_update(app);
+		}
+		mouse_events_handle(app, event);
+	}
+}
+
+/*
+** Handle events that are SDL input events (system events)
+*/
+
+static void		game_input_events_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (app->active_scene->scene_id == scene_id_main_menu)
 		main_menu_event_handle(app, event);
 	else if (app->active_scene->scene_id == scene_id_main_menu_settings)
 		main_menu_settings_event_handle(app, event);
 	else if (app->active_scene->scene_id == scene_id_main_game)
-	{
-		if (app->active_scene->is_paused)
-		{
-			app->is_minimap_largened = false;
-			update_minimap_size(app);
-			main_game_menu_event_handle(app, event);
-		}
-		else
-		{
-			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_m)
-			{
-				app->is_minimap_largened = !app->is_minimap_largened;
-				update_minimap_size(app);
-			}
-			if (event.type == SDL_MOUSEMOTION)
-				mouse_motion_handle(app, event);
-			if (event.type == SDL_MOUSEBUTTONDOWN &&
-				event.button.button == SDL_BUTTON_LMASK)
-				player_shoot(app);
-		}
-	}
+		main_game_input_events_handle(app, event);
 }
 
+/*
+** Handle events and behavior that's dependent on keyboard or mouse state
+** (what buttons are down, what buttons are up)
+*/
 
-static void		handle_game_input_state(t_wolf3d *app)
+static void		game_input_state_handle(t_wolf3d *app)
 {
 	mouse_state_set(app);
 	keyboard_state_set(app);
-	movement_handle(app);
+	keyboard_state_handle(app);
 }
 
-static void		handle_general_input_events(t_wolf3d *app, SDL_Event event)
+/*
+** Handle events that aren't related to menus or game, like exiting or esc
+** or setting to full screen, or disabling debug info
+*/
+
+static void		general_input_events_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_QUIT)
 		app->is_running = false;
@@ -91,15 +103,19 @@ static void		handle_general_input_events(t_wolf3d *app, SDL_Event event)
 	}
 }
 
-void			handle_events(t_wolf3d *app)
+/*
+** Main API for event handling in wolf3d
+*/
+
+void			events_handle(t_wolf3d *app)
 {
 	SDL_Event	event;
 
 	if (!app->active_scene->is_paused)
-		handle_game_input_state(app);
+		game_input_state_handle(app);
 	while (SDL_PollEvent(&event))
 	{
-		handle_general_input_events(app, event);
-		handle_game_input_events(app, event);
+		general_input_events_handle(app, event);
+		game_input_events_handle(app, event);
 	}
 }

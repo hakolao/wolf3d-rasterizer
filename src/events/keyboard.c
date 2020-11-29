@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:36:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 16:03:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:20:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		keyboard_state_set(t_wolf3d *app)
 	app->keyboard.state = SDL_GetKeyboardState(NULL);
 }
 
-void		movement_handle(t_wolf3d *app)
+void		keyboard_state_handle(t_wolf3d *app)
 {
 	float	speed;
 

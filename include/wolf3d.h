@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/28 19:21:09 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:29:43 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,12 +294,12 @@ void						player_apply_gravity(t_wolf3d *app);
 /*
 ** Events
 */
-void						handle_events(t_wolf3d *app);
+void						mouse_events_handle(t_wolf3d *app, SDL_Event event);
+void						events_handle(t_wolf3d *app);
 void						keyboard_state_set(t_wolf3d *app);
 void						mouse_state_set(t_wolf3d *app);
 void						player_shoot(t_wolf3d *app);
-void						movement_handle(t_wolf3d *app);
-void						mouse_motion_handle(t_wolf3d *app, SDL_Event event);
+void						keyboard_state_handle(t_wolf3d *app);
 void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);
 void 						main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event);
 void 						main_game_menu_event_handle(t_wolf3d *app, SDL_Event event);

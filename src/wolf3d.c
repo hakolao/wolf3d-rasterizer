@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/28 17:44:56 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:30:39 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void		wolf3d_main_loop(t_wolf3d *app)
 			wolf3d_debug_info_capture(app);
 			continue ;
 		}
-		handle_events(app);
+		events_handle(app);
 		if (app->is_loading)
 			continue ;
 		wolf3d_render(app);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/29 15:39:30 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:47:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,6 @@ static uint32_t	pixel_depth_shaded(uint32_t pixel, float z_val)
 		1.0 - (ft_abs(z_val) * intensity)));
 }
 
-static uint32_t	pixel_texture_shaded(uint32_t pixel, t_surface *texture,
-					t_vec2 uv)
-{
-	return (l3d_color_blend_u32(pixel, l3d_sample_texture(texture, uv), 1.0));
-}
-
 static void		draw_pixel(t_sub_framebuffer *buffers,
 								int32_t xy[2], t_triangle *triangle)
 {
@@ -99,13 +93,21 @@ static void		draw_pixel(t_sub_framebuffer *buffers,
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
 		pixel = L3D_DEFAULT_COLOR;
+		// Shade texture first
 		if (triangle->material)
-			pixel = pixel_texture_shaded(pixel,
-				triangle->material->texture, uv);
+			pixel = l3d_sample_texture(triangle->material->texture, uv);
+		// If texture has alpha value of 0, don't color the pixel
+		// It was also ignored in zbuffer
+		if ((triangle->material->shading_opts & e_shading_zero_alpha) &&
+			(pixel & 255) == 0)
+			return ;
+		// Shade depth
 		if (triangle->material->shading_opts & e_shading_depth)
 			pixel = pixel_depth_shaded(pixel, z_val);
+		// ToDo: Vesa: Shade normal map
 		// if (triangle->material->shading_opts & e_shading_normal_map)
 		// 	pixel = pixel_depth_shaded(pixel, params...);
+		// Plot pixel
 		l3d_pixel_plot(buffers->buffer, (uint32_t[2]){buffers->width,
 				buffers->height}, offset_xy, pixel);
 	}

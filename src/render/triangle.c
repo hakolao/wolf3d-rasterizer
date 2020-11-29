@@ -50,8 +50,8 @@ void			render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
 		&app->active_scene->main_camera->viewplanes[0], clipped_triangles);
 	if (test_clip == 2)
 	{
-		l3d_triangle_tangent_update(&clipped_triangles[0]);
-		l3d_triangle_tangent_update(&clipped_triangles[1]);
+		l3d_triangle_update(&clipped_triangles[0]);
+		l3d_triangle_update(&clipped_triangles[1]);
 		screen_intersection(app, &clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[1]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0], app->unit_size);
@@ -61,14 +61,13 @@ void			render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
 	}
 	else if (test_clip == 1)
 	{
-		l3d_triangle_tangent_update(&clipped_triangles[0]);
+		l3d_triangle_update(&clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0], app->unit_size);
 		rasterize(sub_buffer, &clipped_triangles[0], passes);
 	}
 	else
 	{
-		l3d_triangle_tangent_update(triangle);
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle, app->unit_size);
 		rasterize(sub_buffer, triangle, passes);

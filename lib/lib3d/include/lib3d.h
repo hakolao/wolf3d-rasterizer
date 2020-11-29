@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:16:38 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:32:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef enum				e_shading_opts
 {
 	e_shading_depth = 1,
 	e_shading_normal_map = 1 << 1,
+	e_shading_zero_alpha = 1 << 2,
 }							t_shading_opts;
 
 typedef struct				s_surface

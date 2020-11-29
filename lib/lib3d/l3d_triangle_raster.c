@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:09:16 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/29 15:39:30 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,22 @@ static void		scan_line(t_sub_framebuffer *buffers,
 	}
 }
 
+static t_bool	is_zero_alpha(t_triangle *triangle, float baryc[3])
+{
+	t_vec2		uv;
+
+	if (triangle->material &&
+		(triangle->material->shading_opts & e_shading_zero_alpha) &&
+		triangle->material->texture)
+	{
+		l3d_interpolate_uv(triangle, baryc, uv);
+		clamp_uv(uv);
+		if ((l3d_sample_texture(triangle->material->texture, uv) & 255) == 0)
+			return (true);
+	}
+	return (false);
+}
+
 static void		draw_zpixel(t_sub_framebuffer *buffers,
 								int32_t xy[2], t_triangle *triangle)
 {
@@ -149,6 +165,8 @@ static void		draw_zpixel(t_sub_framebuffer *buffers,
 	pixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height
 	}, offset_xy);
+	if (is_zero_alpha(triangle, baryc))
+		return ;
 	z_val = calculate_z_val(baryc, triangle);
 	if (z_val <= pixel)
 	{

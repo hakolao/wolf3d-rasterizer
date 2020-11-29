@@ -31,7 +31,7 @@ SOURCES = main.c \
 			time.c \
 			debug.c \
 			scene/scene.c \
-			scene/scene_map.c \
+			scene/scene_generate.c \
 			scene/cleanup.c \
 			scene/assets.c \
 			scene/scene_data.c \

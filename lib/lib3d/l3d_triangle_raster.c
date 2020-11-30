@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/29 20:25:05 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 16:09:42 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,22 +426,18 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 	float	az;
 	float	bz;
 	float	cz;
+	float	inv_denom;
 
-	az = 1 / triangle->vtc[0]->pos[2];
-	bz = 1 / triangle->vtc[1]->pos[2];
-	cz = 1 / triangle->vtc[2]->pos[2];
+	az = 1.0 / triangle->vtc[0]->pos[2];
+	bz = 1.0 / triangle->vtc[1]->pos[2];
+	cz = 1.0 / triangle->vtc[2]->pos[2];
+	inv_denom = 1.0 / (baryc[0] * az + baryc[1] * bz + baryc[2] * cz);
 	uv[0] = ((baryc[0] * triangle->uvs[0][0]) * az +
 			(baryc[1] * triangle->uvs[1][0]) * bz +
-			(baryc[2] * triangle->uvs[2][0]) * cz) /
-			((baryc[0] * 1) * az +
-			(baryc[1] * 1) * bz +
-			(baryc[2] * 1) * cz);
+			(baryc[2] * triangle->uvs[2][0]) * cz) * inv_denom;
 	uv[1] = 1 - ((baryc[0] * triangle->uvs[0][1]) * az +
 			(baryc[1] * triangle->uvs[1][1]) * bz +
-			(baryc[2] * triangle->uvs[2][1]) * cz) /
-			((baryc[0] * 1) * az +
-			(baryc[1] * 1) * bz +
-			(baryc[2] * 1) * cz);
+			(baryc[2] * triangle->uvs[2][1]) * cz) * inv_denom;
 }
 
 /*
@@ -451,8 +447,7 @@ void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
 **	index = x + width * y;
 */
 
-uint32_t		l3d_sample_texture(t_surface *texture,
-									t_vec2 uv_point)
+uint32_t		l3d_sample_texture(t_surface *texture, t_vec2 uv_point)
 {
 	int			index;
 	float		x;

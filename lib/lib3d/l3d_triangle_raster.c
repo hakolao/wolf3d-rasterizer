@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/30 16:09:42 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 16:30:28 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,19 @@ static float	calculate_z_val(float baryc[3], t_triangle *triangle)
 			baryc[2] * triangle->vtc_zvalue[2])));
 }
 
-void		normal_from_color(uint32_t color, t_vec3 normal)
+void			normal_from_color(uint32_t color, t_vec3 normal)
 {
 	uint32_t	rgba[4];
+	float		inv_255;
 
+	inv_255 = 0.00392156862745098;
 	l3d_u32_to_rgba(color, rgba);
-	normal[0] = (float)rgba[0] * 0.00392156862745098;
-	normal[1] = (float)rgba[1] * 0.00392156862745098;
-	normal[2] = (float)rgba[2] * 0.00392156862745098;
-
-	(void)normal;
-	(void)color;
-	(void)rgba;
+	normal[0] = (float)rgba[0] * inv_255;
+	normal[1] = (float)rgba[1] * inv_255;
+	normal[2] = (float)rgba[2] * inv_255;
 }
 
-void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
+void			calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
 {
 	uint32_t	normal_value;
 	t_vec3		bumpnormal;
@@ -91,12 +89,9 @@ void		calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
 	ml_vector3_mul(bumpnormal, 2, bumpnormal);
 	ml_vector3_sub(bumpnormal, (t_vec3){1.0, 1.0, 1.0}, bumpnormal);
 	ml_matrix3_column(triangle->tangent, triangle->bitangent,
-						triangle->normalized_normal, tbn);
+		triangle->normalized_normal, tbn);
 	ml_matrix3_mul_vec3(tbn, bumpnormal, resultnormal);
 	ml_vector3_normalize(resultnormal, res);
-	(void)triangle;
-	(void)uv;
-	(void)res;
 }
 
 uint32_t		fragment_shade_normal(t_vec3 light_vector, t_vec3 frag_normal,
@@ -123,10 +118,7 @@ uint32_t pixel_normal_shaded(uint32_t pixel, t_triangle *triangle, t_vec2 uv)
 	t_vec3 light_vector;
 
 	ml_vector3_set(light_vector, 0.0, 0.0, -1.0);
-	// ml_vector3_set_all(frag_normal, 0.0);
 	calc_bumped_normal(triangle, uv, frag_normal);
-	(void)triangle;
-	(void)uv;
 	return (fragment_shade_normal(light_vector, frag_normal, pixel));
 }
 

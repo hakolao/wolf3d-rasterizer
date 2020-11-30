@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:06:37 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/30 16:22:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 16:26:50 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,11 @@ uint32_t		l3d_color_blend_u32(uint32_t color1, uint32_t color2,
 
 uint32_t		l3d_triangle_normal_color(t_triangle *triangle)
 {
-	t_vec3		normal;
 	uint32_t	color;
 
-	ml_vector3_normalize(triangle->normal, normal);
 	color = 0x0;
-	color += (uint32_t)(255 * fabs(normal[0])) << 8;
-	color += (uint32_t)(255 * fabs(normal[1])) << 16;
-	color += (uint32_t)(255 * fabs(normal[2])) << 24;
+	color |= (uint32_t)(255 * fabs(triangle->normalized_normal[0])) << 8;
+	color |= (uint32_t)(255 * fabs(triangle->normalized_normal[1])) << 16;
+	color |= (uint32_t)(255 * fabs(triangle->normalized_normal[2])) << 24;
 	return (color);
 }

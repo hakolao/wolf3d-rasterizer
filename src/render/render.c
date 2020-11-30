@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-static void		sub_buffer_clear(t_render_work *work)
+static void		clear_buffers(t_render_work *work)
 {
 	t_sub_framebuffer	*sub_buffer;
 
@@ -23,13 +23,13 @@ static void		sub_buffer_clear(t_render_work *work)
 		sub_buffer->width * sub_buffer->height, FLT_MAX);
 }
 
-static void		sub_buffer_rasterize(t_render_work *work)
+static void		rasterize(t_render_work *work)
 {
 	rasterize_skybox(work);
 	rasterize_objects(work);
 }
 
-static void		sub_buffer_draw(t_render_work *work)
+static void		draw_buffers(t_render_work *work)
 {
 	t_sub_framebuffer	*sub_buffer;
 	t_framebuffer		*framebuffer;
@@ -49,9 +49,9 @@ static void		rasterize_work(void *params)
 	t_render_work		*work;
 
 	work = params;
-	sub_buffer_clear(work);
-	sub_buffer_rasterize(work);
-	sub_buffer_draw(work);
+	clear_buffers(work);
+	rasterize(work);
+	draw_buffers(work);
 	free(work);
 }
 

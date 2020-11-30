@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:38:53 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/30 15:40:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 18:59:28 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static t_bool	triangle_outside_render_area(t_triangle *triangle,
 			xy3[1] + sub_buffer->y_offset >= sub_buffer->height));
 }
 
-static void		rasterize(t_sub_framebuffer *sub_buffer,
+static void		rasterize_triangle(t_sub_framebuffer *sub_buffer,
 							t_triangle *triangle, t_render_pass passes)
 {
 	if (triangle_outside_render_area(triangle, sub_buffer))
@@ -86,21 +86,21 @@ void			render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
 		screen_intersection(app, &clipped_triangles[1]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0], app->unit_size);
 		update_triangle_vertex_zvalues(&clipped_triangles[1], app->unit_size);
-		rasterize(sub_buffer, &clipped_triangles[0], passes);
-		rasterize(sub_buffer, &clipped_triangles[1], passes);
+		rasterize_triangle(sub_buffer, &clipped_triangles[0], passes);
+		rasterize_triangle(sub_buffer, &clipped_triangles[1], passes);
 	}
 	else if (test_clip == 1)
 	{
 		l3d_triangle_update(&clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0], app->unit_size);
-		rasterize(sub_buffer, &clipped_triangles[0], passes);
+		rasterize_triangle(sub_buffer, &clipped_triangles[0], passes);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle, app->unit_size);
-		rasterize(sub_buffer, triangle, passes);
+		rasterize_triangle(sub_buffer, triangle, passes);
 	}
 }
 

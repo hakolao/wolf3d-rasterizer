@@ -12,30 +12,46 @@
 
 #include "wolf3d.h"
 
-static void		rasterize_work(void *params)
+static void		sub_buffer_clear(t_render_work *work)
 {
-	t_render_work		*work;
 	t_sub_framebuffer	*sub_buffer;
-	t_framebuffer		*framebuffer;
 
-	work = params;
 	sub_buffer = work->sub_buffer;
-	framebuffer = work->app->window->framebuffer;
-	// First clear sub buffers
 	l3d_buffer_uint32_clear(sub_buffer->buffer,
 		sub_buffer->width * sub_buffer->height, 0x000000FF);
 	l3d_buffer_float_clear(sub_buffer->zbuffer,
 		sub_buffer->width * sub_buffer->height, FLT_MAX);
-	// Render everything on sub buffers
+}
+
+static void		sub_buffer_rasterize(t_render_work *work)
+{
 	rasterize_skybox(work);
 	rasterize_objects(work);
-	// Place sub buffers onto main buffer
+}
+
+static void		sub_buffer_draw(t_render_work *work)
+{
+	t_sub_framebuffer	*sub_buffer;
+	t_framebuffer		*framebuffer;
+
+	sub_buffer = work->sub_buffer;
+	framebuffer = work->app->window->framebuffer;
 	l3d_image_place(
 		&(t_surface){.h = framebuffer->height, .w = framebuffer->width,
 			.pixels = framebuffer->buffer},
 		&(t_surface){.h = sub_buffer->height, .w = sub_buffer->width,
 			.pixels = sub_buffer->buffer},
 		(int32_t[2]){sub_buffer->x_start, sub_buffer->y_start}, 1.0);
+}
+
+static void		rasterize_work(void *params)
+{
+	t_render_work		*work;
+
+	work = params;
+	sub_buffer_clear(work);
+	sub_buffer_rasterize(work);
+	sub_buffer_draw(work);
 	free(work);
 }
 

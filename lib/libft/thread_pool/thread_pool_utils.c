@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_pool_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/16 16:50:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/10/18 21:45:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/11/30 14:22:10 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,31 +53,39 @@ t_thread_work			*thread_pool_work_get(t_thread_pool *thread_pool)
 	return (work);
 }
 
+static t_bool			thread_pool_signal_end(t_thread_pool *tp)
+{
+	if (!tp->stop && tp->num_threads_working == 0 && tp->num_jobs == 0)
+	{
+		pthread_cond_signal(&tp->threads_vacant_all);
+		return (true);
+	}
+	return (false);
+}
+
 t_bool					thread_pool_worker_synchronize(t_thread_pool *tp)
 {
 	t_thread_work	*work;
-	t_bool			work_was_done;
 
-	work_was_done = false;
 	pthread_mutex_lock(&tp->work_mutex);
 	while (!tp->stop && tp->num_jobs == 0)
 		pthread_cond_wait(&tp->work_to_process, &tp->work_mutex);
 	if (tp->stop)
 		return (false);
-	work = thread_pool_work_get(tp);
+	if ((work = thread_pool_work_get(tp)) == NULL)
+	{
+		thread_pool_signal_end(tp);
+		pthread_mutex_unlock(&tp->work_mutex);
+		return (true);
+	}
 	tp->num_threads_working++;
 	pthread_mutex_unlock(&tp->work_mutex);
-	if (work != NULL)
-	{
-		work->work_func(work->params);
-		thread_pool_work_destroy(work);
-		work_was_done = true;
-	}
+	work->work_func(work->params);
+	thread_pool_work_destroy(work);
 	pthread_mutex_lock(&tp->work_mutex);
-	tp->num_jobs -= work_was_done ? 1 : 0;
+	tp->num_jobs--;
 	tp->num_threads_working--;
-	if (!tp->stop && tp->num_threads_working == 0 && tp->num_jobs == 0)
-		pthread_cond_signal(&tp->threads_vacant_all);
+	thread_pool_signal_end(tp);
 	pthread_mutex_unlock(&tp->work_mutex);
 	return (true);
 }

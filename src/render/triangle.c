@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:38:53 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 18:21:28 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 15:40:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,39 @@ static void		update_triangle_vertex_zvalues(t_triangle *triangle,
 		(triangle->vtc[2]->pos[2] / unit_size + L3D_EPSILON);
 }
 
+/*
+** If all points are on the same side outside screen bounds, don't render
+*/
+
+static t_bool	triangle_outside_render_area(t_triangle *triangle,
+					t_sub_framebuffer *sub_buffer)
+{
+	t_vec2		xy1;
+	t_vec2		xy2;
+	t_vec2		xy3;
+
+	ml_vector2_copy(triangle->points_2d[0], xy1);
+	ml_vector2_copy(triangle->points_2d[1], xy2);
+	ml_vector2_copy(triangle->points_2d[2], xy3);
+	return ((xy1[0] + sub_buffer->x_offset < 0.0 &&
+			xy2[0] + sub_buffer->x_offset < 0.0 &&
+			xy3[0] + sub_buffer->x_offset < 0.0) ||
+			(xy1[0] + sub_buffer->x_offset >= sub_buffer->width &&
+			xy2[0] + sub_buffer->x_offset >= sub_buffer->width &&
+			xy3[0] + sub_buffer->x_offset >= sub_buffer->width) ||
+			(xy1[1] + sub_buffer->y_offset < 0.0 &&
+			xy2[1] + sub_buffer->y_offset < 0.0 &&
+			xy3[1] + sub_buffer->y_offset < 0.0) ||
+			(xy1[1] + sub_buffer->y_offset >= sub_buffer->height &&
+			xy2[1] + sub_buffer->y_offset >= sub_buffer->height &&
+			xy3[1] + sub_buffer->y_offset >= sub_buffer->height));
+}
+
 static void		rasterize(t_sub_framebuffer *sub_buffer,
 							t_triangle *triangle, t_render_pass passes)
 {
+	if (triangle_outside_render_area(triangle, sub_buffer))
+		return ;
 	if ((passes & rpass_zbuffer))
 		l3d_triangle_set_zbuffer(sub_buffer, triangle);
 	if ((passes & rpass_rasterize))

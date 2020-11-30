@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/30 13:46:00 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 14:38:09 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,7 +361,7 @@ void						wolf3d_debug_info_render(t_wolf3d *app);
 void						wolf3d_debug_info_capture(t_wolf3d *app);
 uint64_t					wolf3d_performance_counter_start();
 void						wolf3d_performance_counter_end(uint64_t start_time,
-								char *task_name);
+								char *task_name, float delta_limit);
 
 /*
 ** Map

@@ -14,37 +14,22 @@
 
 static void		rasterize_work(void *params)
 {
-	t_render_work	*work;
-
-	work = params;
-	rasterize_skybox(work);
-	rasterize_objects(work);
-	free(work);
-}
-
-static void		clear_work(void *params)
-{
-	t_render_work 	*work;
-	t_sub_framebuffer	*sub_buffer;
-
-	work = params;
-	sub_buffer = work->sub_buffer;
-	l3d_buffer_uint32_clear(sub_buffer->buffer,
-		sub_buffer->width * sub_buffer->height, 0x000000FF);
-	l3d_buffer_float_clear(sub_buffer->zbuffer,
-		sub_buffer->width * sub_buffer->height, FLT_MAX);
-	free(work);
-}
-
-static void		draw_work(void *params)
-{
-	t_render_work 	*work;
+	t_render_work		*work;
 	t_sub_framebuffer	*sub_buffer;
 	t_framebuffer		*framebuffer;
 
 	work = params;
-	framebuffer = work->app->window->framebuffer;
 	sub_buffer = work->sub_buffer;
+	framebuffer = work->app->window->framebuffer;
+	// First clear sub buffers
+	l3d_buffer_uint32_clear(sub_buffer->buffer,
+		sub_buffer->width * sub_buffer->height, 0x000000FF);
+	l3d_buffer_float_clear(sub_buffer->zbuffer,
+		sub_buffer->width * sub_buffer->height, FLT_MAX);
+	// Render everything on sub buffers
+	rasterize_skybox(work);
+	rasterize_objects(work);
+	// Place sub buffers onto main buffer
 	l3d_image_place(
 		&(t_surface){.h = framebuffer->height, .w = framebuffer->width,
 			.pixels = framebuffer->buffer},
@@ -54,8 +39,7 @@ static void		draw_work(void *params)
 	free(work);
 }
 
-static void		render_work_parallel(t_wolf3d *app,
-								void render_work(void *params))
+static void		render_work_parallel(t_wolf3d *app)
 {
 	int32_t				i;
 	t_render_work 		*work;
@@ -68,7 +52,7 @@ static void		render_work_parallel(t_wolf3d *app,
 			"Failed to malloc rasterize work");
 		work->sub_buffer = app->window->framebuffer->sub_buffers[i];
 		work->app = app;
-		thread_pool_add_work(app->thread_pool, render_work, work);
+		thread_pool_add_work(app->thread_pool, rasterize_work, work);
 	}
 	thread_pool_wait(app->thread_pool);
 }
@@ -77,12 +61,7 @@ void			wolf3d_render(t_wolf3d *app)
 {
 	if (app->active_scene->main_camera != NULL)
 	{
-		// First clear sub buffers
-		render_work_parallel(app, clear_work);
-		// Render everything on sub buffers
-		render_work_parallel(app, rasterize_work);
-		// Place sub buffers onto main buffer
-		render_work_parallel(app, draw_work);
+		render_work_parallel(app);
 	}
 	ui_render(app);
 }

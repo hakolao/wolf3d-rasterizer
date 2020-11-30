@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 14:05:45 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:10:37 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 13:09:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ static void			l3d_plane_set_vertices(t_3d_object *plane)
 	l3d_triangle_set(&plane->triangles[1], (t_vertex*[3]){
 		plane->vertices[0], plane->vertices[2], plane->vertices[3]}, plane);
 }
+
+/*
+** Creates a plane facing down.
+** ToDo: Face some other direction...
+*/
 
 t_3d_object			*l3d_plane_create(t_surface	*texture)
 {
@@ -75,7 +80,7 @@ void				l3d_skybox_create(t_3d_object *skybox[6],
 	l3d_3d_object_translate(skybox[2], 0, -scale, 0);
 	l3d_3d_object_rotate(skybox[3], 90, -180, 90);
 	l3d_3d_object_translate(skybox[3], 0, 0, scale);
-	l3d_3d_object_rotate(skybox[4], 0, 270, 90);
+	l3d_3d_object_rotate(skybox[4], 0, -90, 90);
 	l3d_3d_object_translate(skybox[4], scale, 0, 0);
 	l3d_3d_object_translate(skybox[5], 0, scale, 0);
 	l3d_3d_object_rotate(skybox[5], 0, -90, 180);

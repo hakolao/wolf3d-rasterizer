@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 18:17:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 17:50:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 13:01:07 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,18 @@ void			wolf3d_debug_info_render(t_wolf3d *app)
 {
 	char	debug_info[1024];
 	char	pos[64];
+	char	grid_pos[64];
 	char	dir[64];
 
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
 		ml_vector3_to_str(app->player.pos, pos);
 		ml_vector3_to_str(app->player.forward, dir);
+		ml_vector2_to_str(app->player.grid_pos, grid_pos);
 		ft_sprintf(debug_info,
 			"fps: %u\ndelta time: %u\n"
-			"pos: %sdir: %s",
-			app->info.fps, app->info.delta_time, pos, dir);
+			"pos: %sdir: %sgrid_pos:%s",
+			app->info.fps, app->info.delta_time, pos, dir, grid_pos);
 	}
 	else
 		ft_sprintf(debug_info, "fps: %u\ndelta time: %u",

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:06:37 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:15 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/11/30 16:22:13 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ uint32_t		l3d_color_blend_u32(uint32_t color1, uint32_t color2,
 				float ratio)
 {
 	float		i_ratio;
-	uint32_t	rgba_color1[4];
-	uint32_t	rgba_color2[4];
+	float		alpha;
 	uint32_t	new_color[4];
 
 	if (ratio > 1.f)
@@ -39,14 +38,17 @@ uint32_t		l3d_color_blend_u32(uint32_t color1, uint32_t color2,
 	else if (ratio < 0.f)
 		ratio = 0.f;
 	i_ratio = 1.f - ratio;
-	l3d_u32_to_rgba(color1, rgba_color1);
-	l3d_u32_to_rgba(color2, rgba_color2);
-	if (rgba_color2[3] == 0)
+	alpha = color2 & 255;
+	if (alpha == 0)
 		return (color1);
-	new_color[0] = (int)((rgba_color1[0] * i_ratio) + (rgba_color2[0] * ratio));
-	new_color[1] = (int)((rgba_color1[1] * i_ratio) + (rgba_color2[1] * ratio));
-	new_color[2] = (int)((rgba_color1[2] * i_ratio) + (rgba_color2[2] * ratio));
-	new_color[3] = (int)((rgba_color1[3] * i_ratio) + (rgba_color2[3] * ratio));
+	new_color[0] = (int)((((color1 >> 24) & 255) * i_ratio) +
+		((color2 >> 24) & 255) * ratio);
+	new_color[1] = (int)((((color1 >> 16) & 255) * i_ratio) +
+		((color2 >> 16) & 255) * ratio);
+	new_color[2] = (int)((((color1 >> 8) & 255) * i_ratio) +
+		((color2 >> 8) & 255) * ratio);
+	new_color[3] = (int)(((color1 & 255) * i_ratio) +
+		alpha * ratio);
 	return (l3d_rgba_to_u32(new_color));
 }
 

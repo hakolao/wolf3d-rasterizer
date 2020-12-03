@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 15:06:37 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/30 16:26:50 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 23:34:58 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,17 @@ uint32_t		l3d_color_blend_u32(uint32_t color1, uint32_t color2,
 	float		alpha;
 	uint32_t	new_color[4];
 
-	if (ratio > 1.f)
-		ratio = 1.f;
-	else if (ratio < 0.f)
-		ratio = 0.f;
-	i_ratio = 1.f - ratio;
 	alpha = color2 & 255;
 	if (alpha == 0)
 		return (color1);
+	if (ratio >= 1.f)
+	{
+		ratio = 1.f;
+		return (color2);
+	}
+	else if (ratio < 0.f)
+		ratio = 0.f;
+	i_ratio = 1.f - ratio;
 	new_color[0] = (int)((((color1 >> 24) & 255) * i_ratio) +
 		((color2 >> 24) & 255) * ratio);
 	new_color[1] = (int)((((color1 >> 16) & 255) * i_ratio) +

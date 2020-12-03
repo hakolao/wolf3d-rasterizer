@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/29 20:19:09 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 14:51:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,24 @@ static void				scene_set_triangle_refs(t_scene *scene)
 	int		k;
 	int		num_triangles;
 
+	if (scene->triangle_ref != NULL)
+		free(scene->triangle_ref);
 	i = -1;
 	num_triangles = 0;
+	while (++i < (int)scene->num_objects)
+		num_triangles += scene->objects[i]->num_triangles;
+	scene->num_triangles = num_triangles;
+	error_check(!(scene->triangle_ref =
+		malloc(sizeof(t_triangle*) * num_triangles)),
+		"Failed to malloc triangle ref");
+	i = -1;
 	k = 0;
 	while (++i < (int)scene->num_objects)
 	{
 		j = -1;
 		while (++j < scene->objects[i]->num_triangles)
-		{
-			scene->triangle_ref[k] = &scene->objects[i]->triangles[j];
-			num_triangles++;
-			k++;
-		}
+			scene->triangle_ref[k++] = &scene->objects[i]->triangles[j];
 	}
-	scene->num_triangles = num_triangles;
 }
 
 static void				set_scene_collision_tree(t_scene *scene)

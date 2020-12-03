@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/30 14:38:09 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 14:50:46 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@
 # define FAR_CLIP_DIST 100000
 
 # define MAX_NUM_OBJECTS 16384
-# define MAX_NUM_TRIANGLES 65536
 
 # define NUM_ASSETS 64
 # define TEMP_OBJECT_EXPIRE_SEC 100
@@ -156,7 +155,7 @@ typedef struct						s_scene
 	t_3d_object				*objects[MAX_NUM_OBJECTS];
 	uint32_t				num_objects;
 	t_kd_tree				*triangle_tree;
-	t_triangle				*triangle_ref[MAX_NUM_TRIANGLES];
+	t_triangle				**triangle_ref;
 	uint32_t				num_triangles;
 	t_camera				*main_camera;
 	t_triangle				*screen_triangles;

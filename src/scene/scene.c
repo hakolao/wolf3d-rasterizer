@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/28 19:21:35 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 14:49:11 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_scene			*scene_new(t_scene_data *data)
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;
 	scene->map_filename = data->map_filename;
+	scene->triangle_ref = NULL;
 	ft_memset(scene->skybox, 0, sizeof(t_3d_object*) * 6);
 	if (data->num_assets_to_load > 0)
 		scene_assets_load(scene, data);
@@ -93,6 +94,11 @@ void			scene_destroy(t_scene *scene)
 		scene_models_destroy(scene);
 	if (scene->skybox[0])
 		scene_skybox_destroy(scene);
+	if (scene->triangle_ref)
+	{
+		free(scene->triangle_ref);
+		scene->triangle_ref = NULL;
+	}
 	scene_objects_destroy(scene);
 	scene_camera_destroy(scene);
 	free(scene);

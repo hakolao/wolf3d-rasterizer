@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:48:19 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 22:38:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 23:21:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ static void		main_scene_data_assets_set(t_scene_data *data)
 	data->model_files[7] = NULL;
 	data->model_files[8] = NULL;
 	data->model_files[9] = NULL;
-	data->model_files[10] = "assets/models/room_models/corner_nw.obj";
-	data->model_files[11] = "assets/models/room_models/corner_ne.obj";
-	data->model_files[12] = "assets/models/room_models/corner_se.obj";
-	data->model_files[13] = "assets/models/room_models/corner_sw.obj";
+	// data->model_files[10] = "assets/models/room_models/corner_nw.obj";
+	// data->model_files[11] = "assets/models/room_models/corner_ne.obj";
+	// data->model_files[12] = "assets/models/room_models/corner_se.obj";
+	// data->model_files[13] = "assets/models/room_models/corner_sw.obj";
 	data->asset_keys[0] = c_floor;
 	data->asset_keys[1] = c_floor_start;
 	data->asset_keys[2] = c_wall_up;

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 22:40:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 23:16:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,8 +246,7 @@ typedef enum						e_map_prefabs
 	p_corner_nw = c_floor | c_wall_up | c_wall_left | c_corner_nw,
 	p_corner_ne = c_floor | c_wall_up | c_wall_right | c_corner_ne,
 	p_middle_floor = c_floor,
-	p_all = p_dead_all | c_block_nw | c_block_ne | c_block_se | c_block_sw |
-		c_corner_sw | c_corner_se | c_corner_nw | c_corner_ne
+	p_all = p_dead_all | c_block_nw | c_block_ne | c_block_se | c_block_sw
 }									t_map_prefabs;
 
 typedef struct						s_map_editor

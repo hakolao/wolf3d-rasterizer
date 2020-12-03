@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 16:09:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 00:19:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,15 @@ static void		minimap_render(t_wolf3d *app)
 	if (app->is_minimap_largened)
 	{
 		framebuffer_dark_overlay(app->window->framebuffer,
-			app->window->width, app->window->height, (t_vec2){0, 0});
+			app->window->framebuffer->width,
+			app->window->framebuffer->height, (t_vec2){0, 0});
 		map_minimap_render_full(app->active_scene->map,
 			app->window->framebuffer, &app->player);
 	}
 	else
 		map_minimap_render_partial(app->active_scene->map,
-			app->window->framebuffer, app->window->height * 0.3,
+			app->window->framebuffer,
+			app->window->framebuffer->height * 0.3,
 			&app->player);
 }
 

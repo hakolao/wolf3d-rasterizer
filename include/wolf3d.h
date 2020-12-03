@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 14:50:46 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 16:02:31 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ typedef struct						s_player
 	t_vec2					grid_pos;
 	t_bool					is_running;
 	t_bool					is_shooting;
+	t_bool					is_moving;
 	float					speed;
 	float					rot_speed;
 	float					rot_x;

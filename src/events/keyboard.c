@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 14:36:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/29 15:20:21 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 15:59:46 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ void		keyboard_state_handle(t_wolf3d *app)
 			player_move(app, move_backward, speed);
 		if (app->keyboard.state[SDL_SCANCODE_D])
 			player_move(app, move_strafe_right, speed);
+		if (!(app->keyboard.state[SDL_SCANCODE_W]) &&
+			!(app->keyboard.state[SDL_SCANCODE_A]) &&
+			!(app->keyboard.state[SDL_SCANCODE_S]) &&
+			!(app->keyboard.state[SDL_SCANCODE_D]))
+			app->player.is_moving = false;
 		if (app->keyboard.state[SDL_SCANCODE_LSHIFT])
 			app->player.is_running = true;
 		else

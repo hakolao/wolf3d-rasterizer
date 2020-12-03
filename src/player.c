@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/29 19:46:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 15:57:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ void			player_move(t_wolf3d *app, t_move dir, float speed)
 	t_vec3		sideways;
 	t_mat4		rotation_x;
 
+	app->player.is_moving = true;
 	ft_memset(add, 0, sizeof(t_vec3));
 	ml_matrix4_rotation_y(ml_rad(app->player.rot_x), rotation_x);
 	ml_matrix4_mul_vec3(rotation_x, (t_vec3){0, 0, -1}, forward);

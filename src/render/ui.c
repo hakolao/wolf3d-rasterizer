@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 17:20:28 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 16:09:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,35 @@ static void		minimap_render(t_wolf3d *app)
 
 static void		ui_main_game_render(t_wolf3d *app)
 {
+	int32_t	offset;
+	int32_t	length;
+
+	offset = 0;
+	length = 10;
+	if (app->player.is_moving)
+		offset += 5;
+	if (app->player.is_running)
+		offset += 5;
 	l3d_line_draw(app->window->framebuffer->buffer,
 		(uint32_t[2]){app->window->framebuffer->width,
 			app->window->framebuffer->height},
-		(int32_t[2][2]){{app->window->width / 2 - 10, app->window->height / 2},
-		{app->window->width / 2 + 10, app->window->height / 2}}, 0xFFFFFFFF);
+		(int32_t[2][2]){{app->window->width / 2 + offset, app->window->height / 2},
+		{app->window->width / 2 + (offset + length), app->window->height / 2}}, 0xFFFFFFFF);
 	l3d_line_draw(app->window->framebuffer->buffer,
 		(uint32_t[2]){app->window->framebuffer->width,
 			app->window->framebuffer->height},
-		(int32_t[2][2]){{app->window->width / 2, app->window->height / 2 - 10},
-		{app->window->width / 2, app->window->height / 2 + 10}}, 0xFFFFFFFF);
+		(int32_t[2][2]){{app->window->width / 2, app->window->height / 2 - (offset + length)},
+		{app->window->width / 2, app->window->height / 2 - offset}}, 0xFFFFFFFF);
+	l3d_line_draw(app->window->framebuffer->buffer,
+		(uint32_t[2]){app->window->framebuffer->width,
+			app->window->framebuffer->height},
+		(int32_t[2][2]){{app->window->width / 2 - (offset + length), app->window->height / 2},
+		{app->window->width / 2 - offset, app->window->height / 2}}, 0xFFFFFFFF);
+	l3d_line_draw(app->window->framebuffer->buffer,
+		(uint32_t[2]){app->window->framebuffer->width,
+			app->window->framebuffer->height},
+		(int32_t[2][2]){{app->window->width / 2, app->window->height / 2 + (offset + length)},
+		{app->window->width / 2, app->window->height / 2 + offset}}, 0xFFFFFFFF);
 	minimap_render(app);
 }
 

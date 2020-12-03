@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 17:10:47 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 21:18:52 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -487,7 +487,7 @@ void						l3d_skybox_create(t_3d_object *skybox[6],
 												float unit_size);
 t_3d_object					*l3d_plane_create(t_surface	*texture);
 t_3d_object					*l3d_object_instantiate(t_3d_object *model,
-								float unit_size, t_vec3 pos);
+								float unit_size);
 void						l3d_temp_objects_add(t_temp_objects **temp_objects,
 								t_3d_object *object, uint32_t creation_time);
 void						l3d_temp_objects_destroy(t_temp_objects **temp_objects);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 15:57:53 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 22:47:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void			player_init(t_wolf3d *app, t_vec3 pos)
 	app->player.rot_speed = PLAYER_ROTATION_SPEED;
 	app->player.rot_x = 0;
 	app->player.rot_y = 0;
-	app->player.collider_radius = 0.35 * app->unit_size;
 	app->player.player_height = 1.75 * app->unit_size;
 	app->player.fire_rate_per_sec = 4.0;
 	ml_matrix4_id(app->player.rotation);
@@ -73,124 +72,6 @@ void			pos_to_grid_pos(t_vec3 pos, t_vec2 grid_pos, float unit_size)
 	grid_pos[1] = (pos[0] / unit_size / 2.0) + 0.5;
 }
 
-static t_bool	collider_ray_collides(t_kd_tree *triangle_tree,
-					t_vec3 collider_origin, t_vec3 collider_dir,
-					float collider_radius, t_vec3 hit_normal)
-{
-	t_vec3			add;
-	t_vec3			point_on_collider;
-	t_hits			*hits;
-	t_hit			*closest_triangle_hit;
-	t_vec3			point_dir;
-
-	ml_vector3_mul(collider_dir, collider_radius, add);
-	ml_vector3_add(collider_origin, add, point_on_collider);
-	if (l3d_kd_tree_ray_hits(triangle_tree,
-		collider_origin, collider_dir, &hits))
-	{
-		l3d_get_closest_hit(hits, &closest_triangle_hit);
-		if (closest_triangle_hit != NULL)
-		{
-			ml_vector3_sub(point_on_collider,
-				closest_triangle_hit->hit_point, point_dir);
-			ml_vector3_normalize(point_dir, point_dir);
-			if (ml_vector3_dot(closest_triangle_hit->normal, point_dir) <= 0)
-			{
-				ml_vector3_copy(closest_triangle_hit->normal, hit_normal);
-				l3d_delete_hits(&hits);
-				return (true);
-			}
-		}
-		l3d_delete_hits(&hits);
-	}
-	return (false);
-}
-
-static t_bool	sphere_collides_with_triangles(t_kd_tree *triangle_tree,
-					t_vec3 collider_origin, float collider_radius,
-					t_vec3 hit_normal)
-{
-	t_vec3			dirs[6];
-	t_vec3			rand_dir;
-	int32_t			i;
-
-	ml_vector3_set(dirs[0], 1, 0, 0);
-	ml_vector3_set(dirs[1], -1, 0, 0);
-	ml_vector3_set(dirs[2], 0, 1, 0);
-	ml_vector3_set(dirs[3], 0, -1, 0);
-	ml_vector3_set(dirs[4], 0, 0, 1);
-	ml_vector3_set(dirs[5], 0, 0, -1);
-	i = -1;
-	while (++i < 6)
-	{
-		if (collider_ray_collides(triangle_tree,
-				collider_origin, dirs[i], collider_radius, hit_normal))
-			return (true);
-	}
-	i = -1;
-	while (++i < 18)
-	{
-		ml_vector3_copy((t_vec3){l3d_rand_d(), l3d_rand_d(), l3d_rand_d()},
-			rand_dir);
-		if (collider_ray_collides(triangle_tree,
-				collider_origin, rand_dir, collider_radius, hit_normal))
-			return (true);
-	}
-	return (false);
-}
-
-/*
-** Player has two sphere colliders
-*/
-
-static t_bool	player_would_collide(t_wolf3d *app, t_vec3 add,
-					t_vec3 hit_normal)
-{
-	t_vec3	new_pos_up;
-	t_vec3	new_pos_down;
-
-	ml_vector3_add((t_vec3){app->player.pos[0],
-		app->player.pos[1] - app->player.player_height / 2.0 +
-			app->player.collider_radius,
-		app->player.pos[2]}, add, new_pos_up);
-	ml_vector3_add((t_vec3){app->player.pos[0],
-		app->player.pos[1] + app->player.player_height / 2.0 -
-			app->player.collider_radius,
-		app->player.pos[2]}, add, new_pos_down);
-	return (sphere_collides_with_triangles(app->active_scene->triangle_tree,
-		new_pos_down, app->player.collider_radius, hit_normal) ||
-		sphere_collides_with_triangles(app->active_scene->triangle_tree,
-		new_pos_up, app->player.collider_radius, hit_normal));
-}
-
-void			player_limit_movement(t_wolf3d *app, t_vec3 add)
-{
-	t_vec3		hit_normal;
-	t_vec3		projected;
-	t_vec2		grid_pos;
-	t_vec2		new_pos;
-
-	// If player collides, slide (e.g. walls)
-	if (player_would_collide(app, add, hit_normal))
-	{
-		ml_vector3_normalize(hit_normal, hit_normal);
-		ml_vector3_mul(hit_normal, ml_vector3_dot(add, hit_normal), projected);
-		ml_vector3_sub(add, projected, add);
-	}
-	// Corners are tough, for them nudge player backwards if somehow manages
-	// to get outta bounds
-	ml_vector3_add(app->player.pos, add, new_pos);
-	pos_to_grid_pos(new_pos, grid_pos, app->unit_size);
-	if (!(grid_pos[0] >= 0 && grid_pos[0] < app->active_scene->map->size &&
-		grid_pos[1] >= 0 && grid_pos[1] < app->active_scene->map->size &&
-		(app->active_scene->map->grid[(int32_t)grid_pos[1] *
-		app->active_scene->map->size + (int32_t)grid_pos[0]] &
-		c_floor)))
-	{
-		ml_vector3_copy((t_vec3){0, 0, 0}, add);
-	}
-}
-
 void			player_move(t_wolf3d *app, t_move dir, float speed)
 {
 	t_vec3		add;
@@ -215,7 +96,6 @@ void			player_move(t_wolf3d *app, t_move dir, float speed)
 		ml_vector3_mul((t_vec3){0, -1, 0}, speed, add);
 	else if (dir == move_down)
 		ml_vector3_mul((t_vec3){0, 1, 0}, speed, add);
-	player_limit_movement(app, add);
 	ml_vector3_add(app->player.pos, add, app->player.pos);
 	ml_matrix4_translation(app->player.pos[0],
 		app->player.pos[1], app->player.pos[2], app->player.translation);

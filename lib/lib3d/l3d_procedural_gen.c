@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 14:05:45 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 17:13:21 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 21:18:58 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,12 @@ void				l3d_skybox_create(t_3d_object *skybox[6],
 */
 
 t_3d_object			*l3d_object_instantiate(t_3d_object *model,
-						float unit_size, t_vec3 pos)
+						float unit_size)
 {
 	t_3d_object	*new_obj;
 
 	new_obj = l3d_3d_object_copy(model);
 	l3d_3d_object_scale(new_obj, unit_size, unit_size, unit_size);
-	l3d_3d_object_translate(new_obj, pos[0], pos[1], pos[2]);
 	return (new_obj);
 }
 

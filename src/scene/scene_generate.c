@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 14:51:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 22:12:08 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,12 @@ static void				instantiate_cell_features(t_wolf3d *app,
 			if ((model = hash_map_get(app->active_scene->models, key)))
 			{
 				app->active_scene->objects[*obj_i] =
-					l3d_object_instantiate(model, app->unit_size,
-					(t_vec3){(float)xy[1] * (2 * app->unit_size), app->unit_size,
-						-(float)xy[0] * (2 * app->unit_size)});
+					l3d_object_instantiate(model, app->unit_size);
+				l3d_3d_object_rotate(app->active_scene->objects[*obj_i],
+					90, 90, 0);
+				l3d_3d_object_translate(app->active_scene->objects[*obj_i],
+					(float)xy[1] * (2 * app->unit_size), app->unit_size,
+						-(float)xy[0] * (2 * app->unit_size));
 				l3d_object_set_shading_opts(app->active_scene->objects[*obj_i],
 					e_shading_depth);
 				(*obj_i)++;

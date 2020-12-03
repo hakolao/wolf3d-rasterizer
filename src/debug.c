@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 18:17:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/30 14:46:49 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 23:43:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,5 @@ void			wolf3d_performance_counter_end(uint64_t start_time,
 		start_time) * 1000.0 /
 		(float)SDL_GetPerformanceFrequency();
 	if (delta_limit == 0.0 || delta_time > delta_limit)
-		ft_printf("%s: Profiler time: %f\n", delta_time, task_name);
+		ft_printf("%s: Profiler time: %f\n", task_name, delta_time);
 }

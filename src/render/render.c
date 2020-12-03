@@ -49,8 +49,11 @@ static void		rasterize_work(void *params)
 	t_render_work		*work;
 
 	work = params;
-	clear_buffers(work);
-	rasterize(work);
+	if (!work->app->active_scene->is_paused)
+	{
+		clear_buffers(work);
+		rasterize(work);
+	}
 	draw_buffers(work);
 	free(work);
 }

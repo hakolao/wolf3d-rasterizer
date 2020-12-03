@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
+#    By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/15 14:43:04 by ohakola           #+#    #+#              #
-#    Updated: 2020/11/03 15:50:46 by ohakola          ###   ########.fr        #
+#    Updated: 2020/12/03 23:52:53 by ohakola+vei      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,9 +36,7 @@ SOURCES = ft_atoi.c \
 		ft_strnstr.c \
 		ft_toupper.c \
 		ft_memcpy.c \
-		ft_memcpy_utils.c \
 		ft_memccpy.c \
-		ft_memset_utils.c \
 		ft_memset.c \
 		ft_memmove.c \
 		ft_memchr.c \

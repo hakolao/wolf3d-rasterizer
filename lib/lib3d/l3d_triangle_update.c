@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 22:30:39 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:52:45 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 15:52:37 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void				l3d_triangle_update(t_triangle *triangle)
 
 void				 l3d_triangle_normal_update(t_triangle *triangle)
 {
-	// if (!(triangle->clipped2 == true))
-		ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
-	// else
-	// 	ml_vector3_cross(triangle->ac, triangle->ab, triangle->normal);
+	ml_vector3_cross(triangle->ab, triangle->ac, triangle->normal);
 	if (ml_vector3_mag(triangle->normal) < L3D_EPSILON)
 		ml_vector3_set_all(triangle->normal, 1.0);
 }
@@ -52,8 +49,6 @@ static void			calculate_tangent(t_triangle *triangle, float fraction,
 	}
 	if (ml_vector3_mag(triangle->tangent) < L3D_EPSILON)
 		ml_vector3_set_all(triangle->tangent, 1.0);
-	// if (triangle->clipped == 2)
-	// 	ml_vector3_mul(triangle->tangent, -1.0, triangle->tangent);
 }
 
 void				l3d_triangle_tangent_update(t_triangle *triangle)

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 21:18:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 23:50:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@
 # define L3D_TRI_VEC_INITIAL_CAPACITY 10
 
 /*
-** Must be divisible by 2
 ** refers to split in x dir and y dir
-** 4 seems to be the best
 */
-# define L3D_BUFFER_SPLIT_SIZE 4
+# define L3D_BUFFER_SPLIT_SIZE_X 4
+# define L3D_BUFFER_SPLIT_SIZE_Y 2
 
 # define L3D_MAX_OBJ_TRIANGLES 16384
 # define L3D_MAX_OBJ_VERTICES 16384

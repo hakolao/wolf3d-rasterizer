@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:47:57 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/24 17:31:54 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 23:45:54 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ t_framebuffer				*l3d_framebuffer_create(int32_t width, int32_t height)
 	error_check(!(framebuffer->buffer =
 		malloc(sizeof(uint32_t) * width * height)),
 		"Failed to malloc frame buffer");
-	framebuffer->num_x = L3D_BUFFER_SPLIT_SIZE;
-	framebuffer->num_y = L3D_BUFFER_SPLIT_SIZE;
+	framebuffer->num_x = L3D_BUFFER_SPLIT_SIZE_X;
+	framebuffer->num_y = L3D_BUFFER_SPLIT_SIZE_Y;
 	framebuffer->width = width;
 	framebuffer->height = height;
 	error_check(!(framebuffer->sub_buffers = malloc(sizeof(t_sub_framebuffer*) *
@@ -100,7 +100,7 @@ void						l3d_framebuffer_destroy(t_framebuffer *framebuffer)
 void						l3d_framebuffer_recreate(t_framebuffer **buffer,
 												int32_t width, int32_t height)
 {
-	
+
 	if (buffer != NULL && *buffer != NULL)
 		l3d_framebuffer_destroy(*buffer);
 	*buffer = l3d_framebuffer_create(width, height);

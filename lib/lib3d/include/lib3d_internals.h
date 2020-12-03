@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 16:07:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/20 00:02:46 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 16:32:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ typedef struct				s_raster_data
 	float	slope_ab;
 	float	slope_bc;
 	float	slope_ac;
-	t_bool	is_zbuffer;
 }							t_raster_data;
 
 /*

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 16:02:31 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 16:35:00 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,6 @@
 
 # define NUM_ASSETS 64
 # define TEMP_OBJECT_EXPIRE_SEC 100
-
-typedef enum						e_render_pass
-{
-	rpass_rasterize = 1,
-	rpass_zbuffer = 1 << 1
-}									t_render_pass;
 
 /*
 ** Forward declarations
@@ -327,8 +321,9 @@ void						wolf3d_render(t_wolf3d *app);
 void						loading_render(t_wolf3d *app);
 void						rasterize_skybox(t_render_work *work);
 void						rasterize_objects(t_render_work *work);
-void						render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
-									t_triangle *triangle, t_render_pass passes);
+void						render_triangle(t_wolf3d *app,
+								t_sub_framebuffer *sub_buffer,
+								t_triangle *triangle);
 void						set_render_triangle(t_wolf3d *app,
 									t_triangle *r_triangle,
 									t_triangle *triangle, t_vertex *vtc);

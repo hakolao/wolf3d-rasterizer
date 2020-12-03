@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 14:05:45 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/30 13:09:59 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 17:13:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_3d_object			*l3d_plane_create(t_surface	*texture)
 	ml_vector2_copy((t_vec2){0, 1}, plane->triangles[1].uvs[0]);
 	ml_vector2_copy((t_vec2){1, 0}, plane->triangles[1].uvs[1]);
 	ml_vector2_copy((t_vec2){0, 0}, plane->triangles[1].uvs[2]);
+	l3d_object_set_shading_opts(plane, e_shading_ignore_zpass);
 	return (plane);
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   triangle.c                                         :+:      :+:    :+:   */
+/*   rasterize.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:38:53 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/30 18:59:28 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 17:05:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,15 @@ static t_bool	triangle_outside_render_area(t_triangle *triangle,
 }
 
 static void		rasterize_triangle(t_sub_framebuffer *sub_buffer,
-							t_triangle *triangle, t_render_pass passes)
+							t_triangle *triangle)
 {
 	if (triangle_outside_render_area(triangle, sub_buffer))
 		return ;
-	if ((passes & rpass_zbuffer))
-		l3d_triangle_set_zbuffer(sub_buffer, triangle);
-	if ((passes & rpass_rasterize))
-		l3d_triangle_raster(sub_buffer, triangle);
+	l3d_triangle_raster(sub_buffer, triangle);
 }
 
 void			render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
-									t_triangle *triangle, t_render_pass passes)
+									t_triangle *triangle)
 {
 	t_triangle	clipped_triangles[2];
 	t_vertex	vtc[9];
@@ -86,21 +83,21 @@ void			render_triangle(t_wolf3d *app, t_sub_framebuffer *sub_buffer,
 		screen_intersection(app, &clipped_triangles[1]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0], app->unit_size);
 		update_triangle_vertex_zvalues(&clipped_triangles[1], app->unit_size);
-		rasterize_triangle(sub_buffer, &clipped_triangles[0], passes);
-		rasterize_triangle(sub_buffer, &clipped_triangles[1], passes);
+		rasterize_triangle(sub_buffer, &clipped_triangles[0]);
+		rasterize_triangle(sub_buffer, &clipped_triangles[1]);
 	}
 	else if (test_clip == 1)
 	{
 		l3d_triangle_update(&clipped_triangles[0]);
 		screen_intersection(app, &clipped_triangles[0]);
 		update_triangle_vertex_zvalues(&clipped_triangles[0], app->unit_size);
-		rasterize_triangle(sub_buffer, &clipped_triangles[0], passes);
+		rasterize_triangle(sub_buffer, &clipped_triangles[0]);
 	}
 	else
 	{
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle, app->unit_size);
-		rasterize_triangle(sub_buffer, triangle, passes);
+		rasterize_triangle(sub_buffer, triangle);
 	}
 }
 

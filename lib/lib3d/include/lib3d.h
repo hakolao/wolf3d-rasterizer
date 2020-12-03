@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 15:52:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 17:10:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef enum				e_shading_opts
 	e_shading_depth = 1,
 	e_shading_normal_map = 1 << 1,
 	e_shading_zero_alpha = 1 << 2,
+	e_shading_ignore_zpass = 1 << 3,
 }							t_shading_opts;
 
 typedef struct				s_surface
@@ -395,8 +396,6 @@ double						l3d_rand_d(void);
 */
 
 void						l3d_triangle_raster(t_sub_framebuffer *buffers,
-												t_triangle *triangle);
-void						l3d_triangle_set_zbuffer(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
 void						l3d_calculate_barycoords(
 													t_vec2 *triangle_points_2d,

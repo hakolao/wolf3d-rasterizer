@@ -39,7 +39,7 @@ SOURCES = main.c \
 			map/render.c \
 			render/render.c \
 			render/objects.c \
-			render/triangle.c \
+			render/rasterize.c \
 			render/skybox.c \
 			render/render_utils.c \
 			render/ui.c \

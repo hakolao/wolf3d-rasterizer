@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 17:21:04 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/03 16:33:47 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void			rasterize_skybox(t_render_work *work)
 			triangle = work->app->active_scene->skybox[i]->triangles + j;
 			set_skybox_render_triangle(work->app, &r_triangle, triangle, vtc);
 			if (is_rendered(work->app, &r_triangle))
-				render_triangle(work->app, work->sub_buffer, &r_triangle,
-					rpass_rasterize);
+				render_triangle(work->app, work->sub_buffer, &r_triangle);
 		}
 	}
 }

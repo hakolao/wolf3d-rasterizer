@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/04 22:02:38 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 23:40:32 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 ** ToDo: Fix in the algorithm...
 */
 # define L3D_MIN_KD_NODE_NUM_TRIANGLES 4
-# define L3D_TRI_VEC_INITIAL_CAPACITY 10
+# define L3D_TRI_VEC_INITIAL_CAPACITY 30
 
 /*
 ** refers to split in x dir and y dir

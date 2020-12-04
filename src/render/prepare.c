@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/04 23:52:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 23:57:22 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,6 @@ static void		add_skybox_render_triangles(t_wolf3d *app,
 		j = -1;
 		while (++j < app->active_scene->skybox[i]->num_triangles)
 		{
-			if (triangle_behind_player(app,
-				app->active_scene->skybox[i]->triangles + j))
-				continue ;
 			prepare_skybox_render_triangle(app, &r_triangle,
 				app->active_scene->skybox[i]->triangles + j, vtc);
 			if (is_rendered(app, &r_triangle))

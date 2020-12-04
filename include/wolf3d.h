@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/04 23:51:54 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 00:36:45 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,8 @@ void						clip_and_add_to_render_triangles(t_wolf3d *app,
 void						rasterize_triangles(t_render_work *work);
 t_bool						triangle_behind_player(t_wolf3d *app,
 								t_triangle *triangle);
+t_bool						triangle_too_far(t_wolf3d *app, t_triangle *triangle);
+
 /*
 ** Scene
 */

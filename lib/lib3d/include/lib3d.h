@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/04 23:40:32 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 00:28:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,6 +314,7 @@ t_tri_vec					*l3d_triangle_vec_empty(void);
 t_tri_vec					*l3d_triangle_vec(t_triangle **triangles,
 								uint32_t num_triangles);
 void						l3d_triangle_vec_delete(t_tri_vec *vector);
+t_tri_vec					*l3d_triangle_vec_with_capacity(uint32_t capacity);
 
 /*
 ** Triangles

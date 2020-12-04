@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 00:52:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 01:03:41 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,6 @@ static void		order_corners_y(t_vec2 *ordered_corners, t_vec2 *points_2d)
 	ml_vector2_copy(points_2d[indices[2]], ordered_corners[2]);
 	indices[1] = 3 - (indices[0] + indices[2]);
 	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
-}
-
-void			clamp_bary(float *barycoords)
-{
-	if (barycoords[0] > 1.0)
-		barycoords[0] = 1.0;
-	else if (barycoords[0] < 0.0)
-		barycoords[0] = 0.0;
-	if (barycoords[1] > 1.0)
-		barycoords[1] = 1.0;
-	else if (barycoords[1] < 0.0)
-		barycoords[1] = 0.0;
-	if (barycoords[2] > 1.0)
-		barycoords[2] = 1.0;
-	else if (barycoords[2] < 0.0)
-		barycoords[2] = 0.0;
 }
 
 void			clamp_uv(t_vec2 uv)
@@ -126,7 +110,7 @@ static uint32_t	pixel_depth_shaded(uint32_t pixel, float z_val)
 {
 	float	intensity;
 
-	intensity = 10.0;
+	intensity = 7.0;
 	return (l3d_color_blend_u32(pixel, 0x000000ff,
 		1.0 - (ft_abs(z_val) * intensity)));
 }
@@ -134,7 +118,7 @@ static uint32_t	pixel_depth_shaded(uint32_t pixel, float z_val)
 static void		draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 							t_triangle *triangle)
 {
-	float		baryc[3];
+	t_vec3		baryc;
 	t_vec2		uv;
 	float		z_val;
 	int32_t		offset_xy[2];
@@ -269,31 +253,30 @@ void			l3d_triangle_raster(t_sub_framebuffer *buffers, t_triangle *triangle)
 **	Calculates the barycentric coordinates for a 2d point
 */
 
-void			l3d_calculate_barycoords(t_vec2 *triangle_points_2d,
-										t_vec2 point,
-										float *baryc)
+void			l3d_calculate_barycoords(t_vec2 points_2d[3], t_vec2 point,
+					t_vec3 baryc)
 {
 	float denom;
 	float inv_denom;
 
-	denom = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
-			(triangle_points_2d[0][0] - triangle_points_2d[2][0]) +
-			(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
-			(triangle_points_2d[0][1] - triangle_points_2d[2][1]));
+	denom = ((points_2d[1][1] - points_2d[2][1]) *
+			(points_2d[0][0] - points_2d[2][0]) +
+			(points_2d[2][0] - points_2d[1][0]) *
+			(points_2d[0][1] - points_2d[2][1]));
 
 	if (fabs(denom) < L3D_EPSILON)
 	{
 		denom =  denom < 0 ? -1.0 * L3D_EPSILON : L3D_EPSILON;
 	}
 	inv_denom = 1 / denom;
-	baryc[0] = ((triangle_points_2d[1][1] - triangle_points_2d[2][1]) *
-				(point[0] - triangle_points_2d[2][0]) +
-				(triangle_points_2d[2][0] - triangle_points_2d[1][0]) *
-				(point[1] - triangle_points_2d[2][1])) * inv_denom;
-	baryc[1] = ((triangle_points_2d[2][1] - triangle_points_2d[0][1]) *
-				(point[0] - triangle_points_2d[2][0]) +
-				(triangle_points_2d[0][0] - triangle_points_2d[2][0]) *
-				(point[1] - triangle_points_2d[2][1])) * inv_denom;
+	baryc[0] = ((points_2d[1][1] - points_2d[2][1]) *
+				(point[0] - points_2d[2][0]) +
+				(points_2d[2][0] - points_2d[1][0]) *
+				(point[1] - points_2d[2][1])) * inv_denom;
+	baryc[1] = ((points_2d[2][1] - points_2d[0][1]) *
+				(point[0] - points_2d[2][0]) +
+				(points_2d[0][0] - points_2d[2][0]) *
+				(point[1] - points_2d[2][1])) * inv_denom;
 	baryc[2] = 1 - baryc[0] - baryc[1];
 }
 

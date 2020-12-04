@@ -23,12 +23,6 @@ static void		clear_buffers(t_render_work *work)
 		sub_buffer->width * sub_buffer->height, FLT_MAX);
 }
 
-static void		rasterize(t_render_work *work)
-{
-	rasterize_skybox(work);
-	rasterize_objects(work);
-}
-
 static void		draw_buffers(t_render_work *work)
 {
 	t_sub_framebuffer	*sub_buffer;
@@ -44,7 +38,7 @@ static void		draw_buffers(t_render_work *work)
 		(int32_t[2]){sub_buffer->x_start, sub_buffer->y_start}, 1.0);
 }
 
-static void		rasterize_work(void *params)
+static void		render_work(void *params)
 {
 	t_render_work		*work;
 
@@ -52,7 +46,7 @@ static void		rasterize_work(void *params)
 	if (!work->app->active_scene->is_paused)
 	{
 		clear_buffers(work);
-		rasterize(work);
+		rasterize_triangles(work);
 	}
 	draw_buffers(work);
 	free(work);
@@ -62,7 +56,9 @@ static void		render_work_parallel(t_wolf3d *app)
 {
 	int32_t				i;
 	t_render_work 		*work;
+	t_tri_vec			*render_triangles;
 
+	render_triangles = prepare_render_triangles(app);
 	i = -1;
 	while (++i < app->window->framebuffer->num_x *
 		app->window->framebuffer->num_y)
@@ -71,9 +67,11 @@ static void		render_work_parallel(t_wolf3d *app)
 			"Failed to malloc rasterize work");
 		work->sub_buffer = app->window->framebuffer->sub_buffers[i];
 		work->app = app;
-		thread_pool_add_work(app->thread_pool, rasterize_work, work);
+		work->render_triangles = render_triangles;
+		thread_pool_add_work(app->thread_pool, render_work, work);
 	}
 	thread_pool_wait(app->thread_pool);
+	destroy_render_triangles(render_triangles);
 }
 
 void			wolf3d_render(t_wolf3d *app)

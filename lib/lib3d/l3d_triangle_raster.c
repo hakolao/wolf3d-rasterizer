@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 17:15:18 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 23:04:20 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,21 +150,15 @@ static void		draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 		l3d_interpolate_uv(triangle, baryc, uv);
 		clamp_uv(uv);
 		pixel = L3D_DEFAULT_COLOR;
-		// Shade texture first
 		if (triangle->material)
 			pixel = l3d_sample_texture(triangle->material->texture, uv);
-		// If texture has alpha value of 0, don't color the pixel
-		// It was also ignored in zbuffer
 		if ((triangle->material->shading_opts & e_shading_zero_alpha) &&
 			(pixel & 255) == 0)
 			return ;
-		//Normal map shading
 		if (triangle->material->shading_opts & e_shading_normal_map)
 			pixel = pixel_normal_shaded(pixel, triangle, uv);
-		// Shade depth
 		if (triangle->material->shading_opts & e_shading_depth)
 			pixel = pixel_depth_shaded(pixel, z_val);
-		// Plot pixel
 		l3d_pixel_plot(buffers->buffer, (uint32_t[2]){buffers->width,
 				buffers->height}, offset_xy, pixel);
 		if (!(triangle->material->shading_opts & e_shading_ignore_zpass))
@@ -197,47 +191,6 @@ static void		scan_line(t_sub_framebuffer *buffers,
 		x++;
 	}
 }
-
-// static t_bool	is_zero_alpha(t_triangle *triangle, float baryc[3])
-// {
-// 	t_vec2		uv;
-
-// 	if (triangle->material &&
-// 		(triangle->material->shading_opts & e_shading_zero_alpha) &&
-// 		triangle->material->texture)
-// 	{
-// 		l3d_interpolate_uv(triangle, baryc, uv);
-// 		clamp_uv(uv);
-// 		if ((l3d_sample_texture(triangle->material->texture, uv) & 255) == 0)
-// 			return (true);
-// 	}
-// 	return (false);
-// }
-
-// static void		draw_zpixel(t_sub_framebuffer *buffers,
-// 								int32_t xy[2], t_triangle *triangle)
-// {
-// 	float		pixel;
-// 	float		baryc[3];
-// 	float		z_val;
-// 	int32_t		offset_xy[2];
-
-// 	offset_xy[0] = xy[0] + buffers->x_offset;
-// 	offset_xy[1] = xy[1] + buffers->y_offset;
-// 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-// 	pixel = l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
-// 		buffers->width, buffers->height
-// 	}, offset_xy);
-// 	if (is_zero_alpha(triangle, baryc))
-// 		return ;
-// 	z_val = calculate_z_val(baryc, triangle);
-// 	if (z_val <= pixel)
-// 	{
-// 		l3d_pixel_plot_float(buffers->zbuffer,
-// 			(uint32_t[2]){buffers->width, buffers->height},
-// 			offset_xy, z_val);
-// 	}
-// }
 
 static void		raster_upper(t_sub_framebuffer *bufs,
 								t_triangle *tri, t_raster_data *data)

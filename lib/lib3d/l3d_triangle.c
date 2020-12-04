@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 14:55:40 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/04 22:02:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 22:19:57 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_triangle			*l3d_triangle_copy(t_triangle *src, t_bool new_vertices)
 		{
 			error_check(!(dst->vtc[i] = malloc(sizeof(t_vertex))),
 				"Failed to malloc vtc for tri");
-			ft_memset(dst->vtc[i], 0, sizeof(t_vertex));
+			ft_memcpy(dst->vtc[i], src->vtc[i], sizeof(t_vertex));
 		}
 	}
 	return (dst);

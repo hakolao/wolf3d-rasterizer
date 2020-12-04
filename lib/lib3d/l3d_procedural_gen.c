@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 14:05:45 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 21:18:58 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 22:52:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ t_3d_object			*l3d_plane_create(t_surface	*texture)
 	ml_vector2_copy((t_vec2){0, 1}, plane->triangles[1].uvs[0]);
 	ml_vector2_copy((t_vec2){1, 0}, plane->triangles[1].uvs[1]);
 	ml_vector2_copy((t_vec2){0, 0}, plane->triangles[1].uvs[2]);
-	l3d_object_set_shading_opts(plane, e_shading_ignore_zpass);
 	return (plane);
 }
 
@@ -70,6 +69,7 @@ void				l3d_skybox_create(t_3d_object *skybox[6],
 	while (++i < 6)
 	{
 		skybox[i] = l3d_plane_create(skybox_textures[i]);
+		l3d_object_set_shading_opts(skybox[i], e_shading_ignore_zpass);
 		l3d_3d_object_scale(skybox[i],
 			scale, scale, scale);
 	}

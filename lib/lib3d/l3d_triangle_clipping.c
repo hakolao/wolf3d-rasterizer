@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 15:34:58 by veilo             #+#    #+#             */
-/*   Updated: 2020/11/16 13:52:49 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 22:59:57 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,26 +218,15 @@ void			l3d_set_clipped_triangles(t_vertex *vtc, t_triangle *source,
 	int i;
 
 	i = -1;
-	ft_memset(&dest_tris[0], 0, sizeof(t_triangle));
-	ft_memset(&dest_tris[1], 0, sizeof(t_triangle));
-	dest_tris[0].material = source->material;
-	dest_tris[1].material = source->material;
-	dest_tris[0].is_single_sided = source->is_single_sided;
-	dest_tris[1].is_single_sided = source->is_single_sided;
-	ml_vector3_copy(source->normal, dest_tris[0].normal);
-	ml_vector3_copy(source->normal, dest_tris[1].normal);
+	ft_memcpy(&dest_tris[0], source, sizeof(t_triangle));
+	ft_memcpy(&dest_tris[1], source, sizeof(t_triangle));
 	while (++i < 3)
 	{
+		vtc[i].color = 0;
 		vtc[3 + i].color = 0;
-		vtc[6 + i].color = 0;
-		ml_vector3_copy(source->normals[i], dest_tris[0].normals[i]);
-		ml_vector3_copy(source->normals[i], dest_tris[1].normals[i]);
-		ml_vector2_copy(source->uvs[i], dest_tris[0].uvs[i]);
-		ml_vector2_copy(source->uvs[i], dest_tris[1].uvs[i]);
+		ml_vector3_set_all(vtc[i].pos, 0.0);
 		ml_vector3_set_all(vtc[3 + i].pos, 0.0);
-		ml_vector3_set_all(vtc[6 + i].pos, 0.0);
-		dest_tris[0].vtc[i] = &vtc[3 + i];
-		dest_tris[1].vtc[i] = &vtc[6 + i];
+		dest_tris[0].vtc[i] = &vtc[i];
+		dest_tris[1].vtc[i] = &vtc[3 + i];
 	}
-	(void)vtc;
 }

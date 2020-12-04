@@ -38,9 +38,9 @@ SOURCES = main.c \
 			map/map.c \
 			map/render.c \
 			render/render.c \
-			render/objects.c \
+			render/prepare.c \
 			render/rasterize.c \
-			render/skybox.c \
+			render/prepare_clip.c \
 			render/render_utils.c \
 			render/ui.c \
 			window/text.c \

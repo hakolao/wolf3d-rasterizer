@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 21:54:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 13:58:30 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 14:29:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static t_kd_node	*tree_create_recursive(t_tri_vec *triangles, uint32_t depth,
 
 	node = l3d_kd_node_create(triangles);
 	node->uuid = (*num_nodes)++;
+	node->depth = depth;
 	if (triangles->size == 0 || triangles->size == 1)
 		return (node);
 	node->axis = l3d_bounding_box_longest_axis(node->bounding_box);
@@ -33,17 +34,15 @@ static t_kd_node	*tree_create_recursive(t_tri_vec *triangles, uint32_t depth,
 	right_tris = l3d_triangle_vec_empty();
 	l3d_kd_tree_split_triangles(triangles, node->axis, left_tris, right_tris);
 	if ((left_tris->size < L3D_MIN_KD_NODE_NUM_TRIANGLES ||
-		right_tris->size < L3D_MIN_KD_NODE_NUM_TRIANGLES))
+		right_tris->size < L3D_MIN_KD_NODE_NUM_TRIANGLES) ||
+		depth >= L3D_MAX_KD_TREE_DEPTH)
 	{
 		l3d_triangle_vec_delete(left_tris);
 		l3d_triangle_vec_delete(right_tris);
 		return (node);
 	}
-	if (depth < L3D_MAX_KD_TREE_DEPTH)
-	{
-		node->left = tree_create_recursive(left_tris, depth + 1, num_nodes);
-		node->right = tree_create_recursive(right_tris, depth + 1, num_nodes);
-	}
+	node->left = tree_create_recursive(left_tris, depth + 1, num_nodes);
+	node->right = tree_create_recursive(right_tris, depth + 1, num_nodes);
 	return (node);
 }
 
@@ -58,9 +57,9 @@ t_kd_tree			*l3d_kd_tree_create(t_triangle **triangles,
 	t_kd_tree		*tree;
 	t_tri_vec		*triangle_vector;
 
-	triangle_vector = l3d_triangle_vec(triangles, num_triangles);
 	if (!(tree = malloc(sizeof(t_kd_tree))))
 		return (NULL);
+	triangle_vector = l3d_triangle_vec(triangles, num_triangles);
 	tree->num_nodes = 0;
 	tree->root = tree_create_recursive(triangle_vector, 0, &tree->num_nodes);
 	return (tree);

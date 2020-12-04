@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 23:50:33 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 14:29:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,7 @@ struct						s_kd_node
 	t_tri_vec		*triangles;
 	t_kd_node		*left;
 	t_kd_node		*right;
+	int32_t			depth;
 };
 
 /*

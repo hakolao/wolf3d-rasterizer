@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 00:28:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 01:14:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,21 +109,21 @@ typedef struct				s_material
 
 typedef struct				s_triangle
 {
+	t_bool			is_single_sided;
+	t_bool			clipped;
+	t_material		*material;
 	t_vertex		*vtc[3];
 	uint32_t		vtc_indices[3];
+	t_vec2			points_2d[3];
 	t_vec2			uvs[3];
 	t_vec3			normals[3];
 	t_vec3			center;
 	t_vec3			normal;
-	t_bool			is_single_sided;
 	t_vec3			ab;
 	t_vec3			ac;
-	t_material		*material;
-	t_vec2			points_2d[3];
 	t_vec3			tangent;
 	t_vec3			bitangent;
 	t_vec3			normalized_normal;
-	t_bool			clipped;
 	t_vec3			vtc_zvalue;
 }							t_triangle;
 

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/04 14:29:59 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 22:02:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,6 +329,9 @@ void						l3d_triangle_vec_midpoint(t_tri_vec *triangles,
 void						l3d_triangle_centroid_update(t_triangle *triangle);
 void						l3d_triangle_normal_update(t_triangle *triangle);
 void						l3d_triangle_tangent_update(t_triangle *triangle);
+void						l3d_triangle_destroy(t_triangle *triangle,
+								t_bool with_vertices);
+t_triangle					*l3d_triangle_copy(t_triangle *src, t_bool new_vertices);
 
 /*
 **	Triangle clipping

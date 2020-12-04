@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 14:55:40 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:52:37 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 22:02:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,42 @@ void				l3d_triangle_set(t_triangle *triangle, t_vertex *vtc[3],
 	triangle->vtc[2] = vtc[2];
 	l3d_triangle_centroid_update(triangle);
 	l3d_triangle_normal_update(triangle);
+}
+
+t_triangle			*l3d_triangle_copy(t_triangle *src, t_bool new_vertices)
+{
+	t_triangle	*dst;
+	int32_t		i;
+
+	error_check(!(dst = malloc(sizeof(t_triangle))), "Failed to malloc tri");
+	ft_memcpy(dst, src, sizeof(t_triangle));
+	if (new_vertices)
+	{
+		i = -1;
+		while (++i < 3)
+		{
+			error_check(!(dst->vtc[i] = malloc(sizeof(t_vertex))),
+				"Failed to malloc vtc for tri");
+			ft_memset(dst->vtc[i], 0, sizeof(t_vertex));
+		}
+	}
+	return (dst);
+}
+
+void				l3d_triangle_destroy(t_triangle *triangle,
+						t_bool with_vertices)
+{
+	int32_t	i;
+
+	if (with_vertices)
+	{
+		i = -1;
+		while (++i < 3)
+		{
+			free(triangle->vtc[i]);
+			triangle->vtc[i] = NULL;
+		}
+	}
+	free(triangle);
+	triangle = NULL;
 }

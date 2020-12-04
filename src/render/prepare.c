@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/04 23:06:40 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/04 23:36:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void		prepare_skybox_render_triangle(t_wolf3d *app,
 	r_triangle->clipped = false;
 }
 
-static void		perpare_object_triangles(t_wolf3d *app,
+static void		add_objects_render_triangles(t_wolf3d *app,
 					t_tri_vec *render_triangles)
 {
 	int					i;
@@ -83,7 +83,7 @@ static void		perpare_object_triangles(t_wolf3d *app,
 	}
 }
 
-static void		perpare_skybox_triangles(t_wolf3d *app,
+static void		add_skybox_render_triangles(t_wolf3d *app,
 					t_tri_vec *render_triangles)
 {
 	int					i;
@@ -106,21 +106,6 @@ static void		perpare_skybox_triangles(t_wolf3d *app,
 	}
 }
 
-/*
-** Prepares triangles for parallel rendering
-*/
-
-t_tri_vec		*prepare_render_triangles(t_wolf3d *app)
-{
-	t_tri_vec			*render_triangles;
-
-	render_triangles = l3d_triangle_vec_empty();
-	perpare_skybox_triangles(app, render_triangles);
-	perpare_object_triangles(app, render_triangles);
-	return (render_triangles);
-}
-
-
 void			destroy_render_triangles(t_tri_vec *render_triangles)
 {
 	int32_t		i;
@@ -131,4 +116,18 @@ void			destroy_render_triangles(t_tri_vec *render_triangles)
 		l3d_triangle_destroy(render_triangles->triangles[i], true);
 	}
 	l3d_triangle_vec_delete(render_triangles);
+}
+
+/*
+** Prepares triangles for parallel rendering
+*/
+
+t_tri_vec		*prepare_render_triangles(t_wolf3d *app)
+{
+	t_tri_vec			*render_triangles;
+
+	render_triangles = l3d_triangle_vec_empty();
+	add_skybox_render_triangles(app, render_triangles);
+	add_objects_render_triangles(app, render_triangles);
+	return (render_triangles);
 }

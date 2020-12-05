@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:11 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:15:42 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 14:56:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture,
 	l3d_object->num_triangles = obj->num_triangles;
 	l3d_object->num_vertices = obj->num_vertices;
 	l3d_obj_content_free(obj);
+	l3d_object_aabb_update(l3d_object);
 	return (l3d_object);
 }
 

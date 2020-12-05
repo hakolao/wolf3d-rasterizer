@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/08 14:59:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/25 16:26:49 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 14:55:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void			l3d_3d_object_transform(t_3d_object *obj, t_mat4 transform)
 	j = -1;
 	while (++j < obj->num_triangles)
 		l3d_triangle_update(&obj->triangles[j]);
+	l3d_object_aabb_update(obj);
 }
 
 void			l3d_3d_object_translate(t_3d_object *object,

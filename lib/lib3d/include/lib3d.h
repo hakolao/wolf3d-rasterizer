@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 01:14:38 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 14:52:49 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,7 @@ typedef struct				s_3d_object
 	t_mat4			rotation;
 	t_mat4			scale;
 	t_vec3			position;
+	t_box3d			aabb;
 }							t_3d_object;
 
 /*
@@ -355,6 +356,7 @@ int							l3d_triangle_clipping_case(t_triangle *triangle,
 t_axis 						l3d_bounding_box_longest_axis(t_box3d bounding_box);
 void						l3d_bounding_box_set(t_tri_vec *triangles,
 								t_box3d *res);
+void						l3d_object_aabb_update(t_3d_object *obj);
 
 /*
 ** 3d objects

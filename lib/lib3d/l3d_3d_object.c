@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:11:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 14:53:51 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_3d_object		*l3d_3d_object_copy(t_3d_object *src)
 	ml_matrix4_copy(src->scale, dst->scale);
 	ml_vector3_copy(src->position, dst->position);
 	ml_matrix4_copy(src->rotation, dst->rotation);
+	ft_memcpy(&dst->aabb, &src->aabb, sizeof(t_box3d));
 	ft_memcpy(dst->material, src->material, sizeof(t_material));
 	i = -1;
 	while (++i < src->num_vertices)
@@ -98,6 +99,7 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 
 	error_check(!(object = malloc(sizeof(*object))),
 		"Failed to malloc 3d obj");
+	ft_memset(object, 0, sizeof(t_3d_object));
 	error_check(!(object->vertices = malloc(sizeof(t_vertex*) * num_vertices)),
 		"Failed to malloc 3d obj vertices");
 	i = -1;
@@ -112,7 +114,6 @@ t_3d_object		*l3d_3d_object_create(uint32_t num_vertices,
 	ml_matrix4_id(object->rotation);
 	ml_matrix4_id(object->scale);
 	ml_vector3_set(object->position, 0, 0, 0);
-	ft_memset(object->material, 0, sizeof(t_material));
 	object->num_triangles = num_triangles;
 	object->num_vertices = num_vertices;
 	return (object);
@@ -152,4 +153,37 @@ void			l3d_object_set_shading_opts(t_3d_object *obj,
 {
 	if (obj->material != NULL)
 		obj->material->shading_opts = opts;
+}
+
+void			l3d_object_aabb_update(t_3d_object *obj)
+{
+	int		i;
+	int		j;
+	float	min;
+	float	max;
+
+	i = -1;
+	while (++i < (int)obj->num_triangles)
+	{
+		j = -1;
+		while (++j < 3)
+		{
+			min = l3d_fmin(obj->triangles[i].vtc[0]->pos[j], l3d_fmin(
+				obj->triangles[i].vtc[1]->pos[j],
+				obj->triangles[i].vtc[2]->pos[j]));
+			obj->aabb.xyz_min[j] = obj->aabb.xyz_min[j] < min ? obj->aabb.xyz_min[j] : min;
+			max = l3d_fmax(obj->triangles[i].vtc[0]->pos[j], l3d_fmax(
+				obj->triangles[i].vtc[1]->pos[j],
+				obj->triangles[i].vtc[2]->pos[j]));
+			obj->aabb.xyz_min[j] = obj->aabb.xyz_min[j] > max ? obj->aabb.xyz_min[j] : max;
+		}
+	}
+	ml_vector3_copy((t_vec3){obj->aabb.xyz_max[0] - obj->aabb.xyz_min[0],
+		obj->aabb.xyz_max[1] - obj->aabb.xyz_min[1],
+		obj->aabb.xyz_max[2] - obj->aabb.xyz_min[2],
+	}, obj->aabb.size);
+	ml_vector3_copy((t_vec3){obj->aabb.xyz_min[0] + obj->aabb.size[0] / 2.,
+		obj->aabb.xyz_min[1] + obj->aabb.size[1] / 2.,
+		obj->aabb.xyz_min[2] + obj->aabb.size[2] / 2.,
+	}, obj->aabb.center);
 }

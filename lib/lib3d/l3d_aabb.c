@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 15:28:15 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 15:38:16 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 15:41:46 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,14 @@ void				l3d_object_aabb_update(t_3d_object *obj)
 		}
 	}
 	l3d_aabb_set_size_and_center(&obj->aabb);
+}
+
+t_bool				l3d_aabb_collides(t_box3d *left, t_box3d *right)
+{
+	return ((left->xyz_min[0] < right->xyz_max[0] &&
+			left->xyz_max[0] > right->xyz_min[0] &&
+			left->xyz_min[1] < right->xyz_max[1] &&
+			left->xyz_max[1] > right->xyz_min[1] &&
+			left->xyz_min[2] < right->xyz_max[2] &&
+			left->xyz_max[2] > right->xyz_min[2]));
 }

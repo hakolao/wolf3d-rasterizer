@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 15:24:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 15:41:55 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,7 @@ void						l3d_bounding_box_set(t_tri_vec *triangles,
 								t_box3d *res);
 void						l3d_object_aabb_update(t_3d_object *obj);
 void						l3d_bounding_box_debug(t_box3d aabb);
+t_bool						l3d_aabb_collides(t_box3d *left, t_box3d *right);
 
 /*
 ** 3d objects

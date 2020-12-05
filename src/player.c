@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 15:39:34 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 15:42:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,8 @@ static void		check_collisions(t_wolf3d *app)
 		ml_vector3_sub(obj->position, player->pos, diff);
 		if (ml_vector3_mag(diff) > distance_limit)
 			continue ;
-		if (obj->aabb.xyz_min[0] < player->aabb.xyz_max[0] &&
-			obj->aabb.xyz_max[0] > player->aabb.xyz_min[0] &&
-			obj->aabb.xyz_min[1] < player->aabb.xyz_max[1] &&
-			obj->aabb.xyz_max[1] > player->aabb.xyz_min[1] &&
-			obj->aabb.xyz_min[2] < player->aabb.xyz_max[2] &&
-			obj->aabb.xyz_max[2] > player->aabb.xyz_min[2])
-		{
+		if (l3d_aabb_collides(&obj->aabb, &player->aabb))
 			ft_printf("Player collides with something at:\n");
-		}
 	}
 }
 

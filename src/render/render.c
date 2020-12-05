@@ -43,10 +43,13 @@ static void		render_work(void *params)
 	t_render_work		*work;
 
 	work = params;
-	if (!work->app->active_scene->is_paused)
+	if (work->app->is_first_render ||
+		(!work->app->active_scene->is_paused &&
+			(work->app->player.is_rotating || work->app->player.is_moving)))
 	{
 		clear_buffers(work);
 		rasterize_triangles(work);
+		work->app->is_first_render = false;
 	}
 	draw_buffers(work);
 	free(work);

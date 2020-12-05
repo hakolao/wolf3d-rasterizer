@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 16:00:00 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 14:49:11 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 19:27:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void		select_scene(void *app_ptr)
 	t_wolf3d			*app;
 
 	app = app_ptr;
+	app->is_first_render = true;
 	if (app->active_scene != NULL)
 		scene_destroy(app->active_scene);
 	ft_memset(&data, 0, sizeof(data));

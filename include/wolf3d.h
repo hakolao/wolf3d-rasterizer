@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 19:07:44 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 19:26:16 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct						s_player
 	t_bool					is_running;
 	t_bool					is_shooting;
 	t_bool					is_moving;
+	t_bool					is_rotating;
 	float					speed;
 	float					rot_speed;
 	float					rot_x;
@@ -169,6 +170,7 @@ typedef struct						s_wolf3d
 	t_bool					is_debug;
 	t_bool					is_loading;
 	t_bool					is_normal_map;
+	t_bool					is_first_render;
 	t_info					info;
 	t_window				*window;
 	t_scene_id				next_scene_id;

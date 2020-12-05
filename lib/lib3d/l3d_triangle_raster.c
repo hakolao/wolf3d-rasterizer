@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:11:09 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 18:57:52 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 22:36:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,15 +153,15 @@ static void		draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 }
 
 static void		scan_line(t_sub_framebuffer *buffers,
-							int32_t *limits, t_triangle *triangle)
+							float *limits, t_triangle *triangle)
 {
 	int32_t			x;
 	int32_t			y;
 	int32_t			end_x;
 
-	y = limits[2];
-	x = limits[0];
-	end_x = limits[1];
+	y = floor(limits[2]);
+	x = floor(limits[0]);
+	end_x = floor(limits[1]);
 	while (x < end_x)
 	{
 		if (x + buffers->x_offset < 0)
@@ -179,9 +179,9 @@ static void		scan_line(t_sub_framebuffer *buffers,
 static void		raster_upper(t_sub_framebuffer *bufs,
 								t_triangle *tri, t_raster_data *data)
 {
-	int32_t		x;
-	int32_t		y;
-	int32_t		end_x;
+	float		x;
+	float		y;
+	float		end_x;
 
 	y = data->y1;
 	while (y < data->y2)
@@ -196,9 +196,9 @@ static void		raster_upper(t_sub_framebuffer *bufs,
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
-			scan_line(bufs, (int32_t[3]){x, end_x + 1, y}, tri);
+			scan_line(bufs, (float[3]){x, end_x + 1, y}, tri);
 		else if (x > end_x)
-			scan_line(bufs, (int32_t[3]){end_x, x + 1, y}, tri);
+			scan_line(bufs, (float[3]){end_x, x + 1, y}, tri);
 		y++;
 	}
 }
@@ -206,9 +206,9 @@ static void		raster_upper(t_sub_framebuffer *bufs,
 static void		raster_lower(t_sub_framebuffer *bufs,
 								t_triangle *tri, t_raster_data *data)
 {
-	int32_t		x;
-	int32_t		y;
-	int32_t		end_x;
+	float		x;
+	float		y;
+	float		end_x;
 
 	y = data->y2;
 	while (y < data->y3)
@@ -223,9 +223,9 @@ static void		raster_lower(t_sub_framebuffer *bufs,
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
-			scan_line(bufs, (int32_t[3]){x, end_x + 1, y}, tri);
+			scan_line(bufs, (float[3]){x, end_x + 1, y}, tri);
 		else if (x > end_x)
-			scan_line(bufs, (int32_t[3]){end_x, x + 1, y}, tri);
+			scan_line(bufs, (float[3]){end_x, x + 1, y}, tri);
 		y++;
 	}
 }

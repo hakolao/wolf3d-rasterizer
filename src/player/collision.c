@@ -6,11 +6,16 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 17:17:47 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 17:19:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:58:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+/*
+** https://gamedev.stackexchange.com/questions/49956/
+** collision-detection-smooth-wall-sliding-no-bounce-effect
+*/
 
 static void		limit_movement_add_by_collision(t_vec3 collision_normal,
 					t_vec3 dir_add)

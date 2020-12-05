@@ -49,7 +49,6 @@ static void		render_work(void *params)
 	{
 		clear_buffers(work);
 		rasterize_triangles(work);
-		work->app->is_first_render = false;
 	}
 	draw_buffers(work);
 	free(work);
@@ -75,6 +74,7 @@ static void		render_work_parallel(t_wolf3d *app)
 	}
 	thread_pool_wait(app->thread_pool);
 	destroy_render_triangles(render_triangles);
+	app->is_first_render = false;
 }
 
 void			wolf3d_render(t_wolf3d *app)

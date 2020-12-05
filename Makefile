@@ -36,6 +36,7 @@ SOURCES = main.c \
 			scene/scene_generate.c \
 			scene/cleanup.c \
 			scene/assets.c \
+			scene/scene_asset_files.c \
 			scene/scene_data.c \
 			map/map.c \
 			map/render.c \

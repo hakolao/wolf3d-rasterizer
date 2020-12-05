@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 17:24:00 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:55:56 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,6 +342,7 @@ t_bool						triangle_too_far(t_wolf3d *app, t_triangle *triangle);
 /*
 ** Scene
 */
+void						main_scene_data_asset_files_set(t_scene_data *data);
 void						scene_minimap_init(t_wolf3d *app);
 void						scene_assets_load(t_scene *scene, t_scene_data *data);
 void						scene_main_game_data_set(t_scene_data *data);

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 14:58:53 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:21:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,8 @@ void						player_move(t_wolf3d *app, t_move dir, float speed);
 void						player_rotate_vertical(t_wolf3d *app, float angle);
 void						player_rotate_horizontal(t_wolf3d *app, float angle);
 void						player_apply_gravity(t_wolf3d *app);
+void						collision_limit_player(t_wolf3d *app, t_vec3 add);
+void						player_update_aabb(t_player *player);
 
 /*
 ** Events

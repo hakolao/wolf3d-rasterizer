@@ -26,7 +26,9 @@ INCLUDES = -I ./include \
 FLAGS = -Wall -Wextra -Werror -O3
 SOURCES = main.c \
 			wolf3d.c \
-			player.c \
+			player/player.c \
+			player/collision.c \
+			player/movement.c \
 			camera.c \
 			time.c \
 			debug.c \
@@ -103,6 +105,7 @@ $(DIR_OBJ):
 	@mkdir -p temp/render
 	@mkdir -p temp/events
 	@mkdir -p temp/map_editor
+	@mkdir -p temp/player
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
 	@$(CC) $(FLAGS) $(INCLUDES) -c -o $@ $<

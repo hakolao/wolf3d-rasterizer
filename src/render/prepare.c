@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/06 01:22:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 01:23:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static void		add_objects_render_triangles(t_wolf3d *app,
 		while (++j < app->active_scene->objects[i]->num_triangles)
 		{
 			triangle = app->active_scene->objects[i]->triangles + j;
-			if (triangle_too_far(app, triangle) ||
-				triangle_behind_player(app, triangle))
+			if (triangle_behind_player(app, triangle) ||
+				triangle_too_far(app, triangle))
 				continue ;
 			prepare_render_triangle(app, &r_triangle, triangle, vtc);
 			if (is_rendered(app, &r_triangle))

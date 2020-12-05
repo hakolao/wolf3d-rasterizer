@@ -6,12 +6,11 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 19:06:14 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 19:07:26 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 00:22:06 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
 
 t_bool			triangle_behind_player(t_wolf3d *app,
 					t_triangle *triangle)

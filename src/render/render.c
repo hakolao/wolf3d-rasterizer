@@ -61,6 +61,7 @@ static void		render_work_parallel(t_wolf3d *app)
 	t_tri_vec			*render_triangles;
 
 	render_triangles = prepare_render_triangles(app);
+	app->triangles_in_view = render_triangles->size;
 	i = -1;
 	while (++i < app->window->framebuffer->num_x *
 		app->window->framebuffer->num_y)

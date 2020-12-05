@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 22:47:41 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 00:22:19 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ typedef struct						s_wolf3d
 	t_thread_pool			*thread_pool;
 	float					unit_size;
 	t_bool					is_minimap_largened;
+	int32_t					triangles_in_view;
 }									t_wolf3d;
 
 /*

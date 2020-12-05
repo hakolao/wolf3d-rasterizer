@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 13:57:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 17:27:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:36:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void		update_ceiling(uint32_t *cell)
 	float		ceiling_p;
 
 	ceiling_p = l3d_rand_d();
-	if (ceiling_p < 0.1)
+	if (ceiling_p < 0.9)
 		*cell |= p_ceiling;
 }
 

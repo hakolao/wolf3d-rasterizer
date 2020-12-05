@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:44:07 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/28 19:20:44 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 18:45:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		scene_textures_destroy(t_scene *scene)
 	int32_t		i;
 
 	i = -1;
-	while (++i < (int32_t)sizeof(uint32_t) * 4)
+	while (++i < (int32_t)sizeof(uint32_t) * 8)
 	{
 		if ((texture = hash_map_get(scene->textures, 1 << i)))
 			free(texture->pixels);
@@ -32,7 +32,7 @@ void		scene_normal_maps_destroy(t_scene *scene)
 	int32_t		i;
 
 	i = -1;
-	while (++i < (int32_t)sizeof(uint32_t) * 4)
+	while (++i < (int32_t)sizeof(uint32_t) * 8)
 	{
 		if ((normal_map = hash_map_get(scene->normal_maps, 1 << i)))
 			free(normal_map->pixels);
@@ -46,7 +46,7 @@ void		scene_models_destroy(t_scene *scene)
 	int32_t		i;
 
 	i = -1;
-	while (++i < (int32_t)sizeof(uint32_t) * 4)
+	while (++i < (int32_t)sizeof(uint32_t) * 8)
 		if ((model = hash_map_get(scene->models, 1 << i)))
 			l3d_3d_object_destroy(model);
 	hash_map_destroy(scene->models);

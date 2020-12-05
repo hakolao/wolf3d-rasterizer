@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scene_files.c                                      :+:      :+:    :+:   */
+/*   scene_asset_files.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 17:55:19 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 17:56:08 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 18:38:59 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void		main_scene_texture_files_set(t_scene_data *data)
 	data->texture_files[12] = "assets/textures/rock.bmp";
 	data->texture_files[13] = "assets/textures/rock.bmp";
 	data->texture_files[14] = "assets/textures/rock.bmp";
+	data->texture_files[15] = "assets/textures/rock.bmp";
 }
 
 static void		main_scene_normal_files_set(t_scene_data *data)
@@ -48,6 +49,7 @@ static void		main_scene_normal_files_set(t_scene_data *data)
 	data->normal_map_files[12] = "assets/textures/rock_normal.bmp";
 	data->normal_map_files[13] = "assets/textures/rock_normal.bmp";
 	data->normal_map_files[14] = "assets/textures/rock_normal.bmp";
+	data->normal_map_files[15] = "assets/textures/rock_normal.bmp";
 }
 
 static void		main_scene_model_files_set(t_scene_data *data)
@@ -67,6 +69,7 @@ static void		main_scene_model_files_set(t_scene_data *data)
 	data->model_files[12] = "assets/models/room_models/corner_filler_se.obj";
 	data->model_files[13] = "assets/models/room_models/corner_filler_sw.obj";
 	data->model_files[14] = "assets/models/room_models/ceiling.obj";
+	data->model_files[15] = "assets/models/room_models/hole_in_ceiling.obj";
 }
 
 /*
@@ -93,7 +96,8 @@ void			main_scene_data_asset_files_set(t_scene_data *data)
 	data->asset_keys[12] = c_corner_se;
 	data->asset_keys[13] = c_corner_sw;
 	data->asset_keys[14] = c_ceiling;
-	data->num_assets_to_load = 15;
+	data->asset_keys[15] = c_ceiling_window;
+	data->num_assets_to_load = 16;
 	main_scene_texture_files_set(data);
 	main_scene_normal_files_set(data);
 	main_scene_model_files_set(data);

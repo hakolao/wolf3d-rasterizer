@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:09:54 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 17:36:40 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 18:45:09 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void				instantiate_cell_features(t_wolf3d *app,
 	uint32_t		key;
 
 	i = -1;
-	while (++i < (int32_t)sizeof(uint32_t) * 4)
+	while (++i < (int32_t)sizeof(uint32_t) * 8)
 	{
 		key = 1 << i;
 		if ((cell & key))

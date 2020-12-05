@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 13:57:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 17:36:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 18:39:57 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ static void		get_neighbor_rooms(t_map_editor *app, int32_t x, int32_t y,
 
 static void		update_ceiling(uint32_t *cell)
 {
-	float		ceiling_p;
+	float		window_p;
 
-	ceiling_p = l3d_rand_d();
-	if (ceiling_p < 0.9)
-		*cell |= p_ceiling;
+	window_p = l3d_rand_d();
+	if (window_p < 0.2)
+		*cell |= c_ceiling_window;
+	else
+		*cell |= c_ceiling;
 }
 
 void			update_map_cell_features(t_map_editor *app)

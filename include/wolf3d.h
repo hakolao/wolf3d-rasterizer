@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 00:36:45 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 14:58:53 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct						s_player
 	t_mat4					inv_rotation;
 	t_mat4					translation;
 	t_mat4					inv_translation;
+	t_box3d					aabb;
 }									t_player;
 
 typedef struct						s_wolf3d_map

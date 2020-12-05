@@ -6,11 +6,22 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 22:47:36 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 15:07:33 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static void		player_update_aabb(t_player *player)
+{
+	player->aabb.xyz_min[0] = player->pos[0] - player->aabb.size[0] / 2.0;
+	player->aabb.xyz_min[1] = player->pos[1] - player->aabb.size[1] / 2.0;
+	player->aabb.xyz_min[2] = player->pos[2] - player->aabb.size[2] / 2.0;
+	player->aabb.xyz_max[0] = player->pos[0] + player->aabb.size[0] / 2.0;
+	player->aabb.xyz_max[1] = player->pos[1] + player->aabb.size[1] / 2.0;
+	player->aabb.xyz_max[2] = player->pos[2] + player->aabb.size[2] / 2.0;
+	ml_vector3_copy(player->pos, player->aabb.center);
+}
 
 void			player_init(t_wolf3d *app, t_vec3 pos)
 {
@@ -25,11 +36,15 @@ void			player_init(t_wolf3d *app, t_vec3 pos)
 	app->player.rot_y = 0;
 	app->player.player_height = 1.75 * app->unit_size;
 	app->player.fire_rate_per_sec = 4.0;
+	app->player.aabb.size[0] = app->unit_size;
+	app->player.aabb.size[1] = app->player.player_height;
+	app->player.aabb.size[2] = app->unit_size;
 	ml_matrix4_id(app->player.rotation);
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
 	ml_matrix4_id(app->player.inv_translation);
 	pos_to_grid_pos(app->player.pos, app->player.grid_pos, app->unit_size);
+	player_update_aabb(&app->player);
 }
 
 static void		player_rotate(t_wolf3d *app)
@@ -101,6 +116,7 @@ void			player_move(t_wolf3d *app, t_move dir, float speed)
 		app->player.pos[1], app->player.pos[2], app->player.translation);
 	ml_matrix4_inverse(app->player.translation, app->player.inv_translation);
 	pos_to_grid_pos(app->player.pos, app->player.grid_pos, app->unit_size);
+	player_update_aabb(&app->player);
 }
 
 /*

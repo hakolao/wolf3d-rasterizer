@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 17:17:47 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 17:58:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 23:03:02 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,29 @@ void			collision_limit_player(t_wolf3d *app, t_vec3 add)
 			}
 		}
 	}
+}
+
+/*
+** / 2.0 because models are positioned with unitsize * 2
+*/
+
+void			pos_to_grid_pos(t_vec3 pos, t_vec2 grid_pos, float unit_size)
+{
+	grid_pos[0] = -(pos[2] / unit_size / 2.0) + 0.5;
+	grid_pos[1] = (pos[0] / unit_size / 2.0) + 0.5;
+}
+
+void			position_limit_player(t_wolf3d *app, t_vec3 add)
+{
+	t_vec2	grid_pos;
+	t_vec3	future_pos;
+	t_bool	in_room;
+
+	ml_vector3_add(app->player.pos, add, future_pos);
+	pos_to_grid_pos(future_pos, grid_pos, app->unit_size);
+	in_room = grid_pos[0] < 0 || grid_pos[1] >= app->active_scene->map->size ||
+		(app->active_scene->map->grid[(int32_t)grid_pos[1] *
+			app->active_scene->map->size + (int32_t)grid_pos[0]] & c_floor);
+	if (!in_room)
+		ml_vector3_copy((t_vec3){0, 0, 0}, add);
 }

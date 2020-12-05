@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 18:17:31 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 19:07:44 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,6 +336,12 @@ void						rasterize_triangles(t_render_work *work);
 t_bool						triangle_behind_player(t_wolf3d *app,
 								t_triangle *triangle);
 t_bool						triangle_too_far(t_wolf3d *app, t_triangle *triangle);
+void						prepare_skybox_render_triangle(t_wolf3d *app,
+								t_triangle *r_triangle,
+								t_triangle *triangle, t_vertex *vtc);
+void						prepare_render_triangle(t_wolf3d *app,
+								t_triangle *r_triangle,
+								t_triangle *triangle, t_vertex *vtc);
 
 /*
 ** Scene

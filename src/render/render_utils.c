@@ -6,44 +6,11 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 17:10:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 17:41:57 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 19:06:27 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-t_bool			triangle_behind_player(t_wolf3d *app,
-					t_triangle *triangle)
-{
-	t_vec3		player_to_corner[3];
-	int32_t		i;
-
-	i = -1;
-	while (++i < 3)
-		ml_vector3_sub(triangle->vtc[i]->pos, app->player.pos,
-			player_to_corner[i]);
-	return (ml_vector3_dot(player_to_corner[0], app->player.forward) < 0 &&
-		ml_vector3_dot(player_to_corner[1], app->player.forward) < 0 &&
-		ml_vector3_dot(player_to_corner[2], app->player.forward) < 0);
-}
-
-t_bool			triangle_too_far(t_wolf3d *app, t_triangle *triangle)
-{
-	float		too_far;
-	t_vec3		player_to_corner[3];
-	int32_t		i;
-
-	too_far = app->unit_size * 30;
-	i = -1;
-	while (++i < 3)
-		ml_vector3_sub(triangle->vtc[i]->pos, app->player.pos,
-			player_to_corner[i]);
-	if (ml_vector3_mag(player_to_corner[0]) > too_far &&
-		ml_vector3_mag(player_to_corner[1]) > too_far  &&
-		ml_vector3_mag(player_to_corner[2]) > too_far )
-			return (true);
-	return (false);
-}
 
 static void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits)
 {

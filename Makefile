@@ -42,6 +42,7 @@ SOURCES = main.c \
 			map/render.c \
 			render/render.c \
 			render/prepare.c \
+			render/prepare_utils.c \
 			render/rasterize.c \
 			render/prepare_clip.c \
 			render/render_utils.c \

@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 17:55:56 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 18:09:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,6 @@ typedef enum						e_scene_id
 typedef struct						s_camera
 {
 	t_vec3					origin;
-	float					fov;
-	float					screen_dist;
-	int						width;
-	int						height;
 	float					near_clip;
 	float					far_clip;
 	t_plane					viewplanes[6];

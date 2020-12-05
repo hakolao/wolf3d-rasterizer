@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:10:29 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/27 14:31:15 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 16:00:21 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,21 @@
 
 t_bool			l3d_bounding_box_ray_hit(t_box3d *box, t_ray *ray, t_hits **hits)
 {
-	float	t[9];
+	float	t[8];
 
-	t[1] = (box->xyz_min[0] - ray->origin[0]) * ray->dir_inv[0];
-	t[2] = (box->xyz_max[0] - ray->origin[0]) * ray->dir_inv[0];
-	t[3] = (box->xyz_min[1] - ray->origin[1]) * ray->dir_inv[1];
-	t[4] = (box->xyz_max[1] - ray->origin[1]) * ray->dir_inv[1];
-	t[5] = (box->xyz_min[2] - ray->origin[2]) * ray->dir_inv[2];
-	t[6] = (box->xyz_max[2] - ray->origin[2]) * ray->dir_inv[2];
-	t[7] = l3d_fmax(l3d_fmax(l3d_fmin(t[1], t[2]), l3d_fmin(t[3], t[4])),
-		l3d_fmin(t[5], t[6]));
-	t[8] = l3d_fmin(l3d_fmin(l3d_fmax(t[1], t[2]), l3d_fmax(t[3], t[4])),
-		l3d_fmax(t[5], t[6]));
-	if (t[8] < 0 || t[7] > t[8])
+	t[0] = (box->xyz_min[0] - ray->origin[0]) * ray->dir_inv[0];
+	t[1] = (box->xyz_max[0] - ray->origin[0]) * ray->dir_inv[0];
+	t[2] = (box->xyz_min[1] - ray->origin[1]) * ray->dir_inv[1];
+	t[3] = (box->xyz_max[1] - ray->origin[1]) * ray->dir_inv[1];
+	t[4] = (box->xyz_min[2] - ray->origin[2]) * ray->dir_inv[2];
+	t[5] = (box->xyz_max[2] - ray->origin[2]) * ray->dir_inv[2];
+	t[6] = l3d_fmax(l3d_fmax(l3d_fmin(t[0], t[1]), l3d_fmin(t[2], t[3])),
+		l3d_fmin(t[4], t[5]));
+	t[7] = l3d_fmin(l3d_fmin(l3d_fmax(t[0], t[1]), l3d_fmax(t[2], t[3])),
+		l3d_fmax(t[4], t[5]));
+	if (t[7] < 0 || t[6] > t[7])
 		return (false);
-	l3d_bounding_box_hit_record_set(t[7], ray, hits);
+	l3d_bounding_box_hit_record_set(t, ray, hits);
 	return (true);
 }
 

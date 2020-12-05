@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 21:10:30 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 15:41:55 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:05:38 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,7 +296,7 @@ void						l3d_ray_set(t_vec3 dir, t_vec3 origin, t_ray *ray);
 void						l3d_triangle_hit_record_set(float afuvt[5],
 								t_ray *ray,
 								t_triangle *triangle, t_hits **hits);
-void						l3d_bounding_box_hit_record_set(float t,
+void						l3d_bounding_box_hit_record_set(float t[8],
 								t_ray *ray, t_hits **hits);
 t_bool						l3d_plane_ray_hit(t_plane *plane, t_ray *ray,
 									t_vec3 hit_point);
@@ -359,6 +359,8 @@ void						l3d_bounding_box_set(t_tri_vec *triangles,
 void						l3d_object_aabb_update(t_3d_object *obj);
 void						l3d_bounding_box_debug(t_box3d aabb);
 t_bool						l3d_aabb_collides(t_box3d *left, t_box3d *right);
+void						l3d_get_aabb_hit_record(t_box3d *origin, t_box3d *target,
+								t_hit **hit);
 
 /*
 ** 3d objects

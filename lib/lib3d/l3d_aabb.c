@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 15:28:15 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 15:41:46 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:05:31 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,24 @@ t_bool				l3d_aabb_collides(t_box3d *left, t_box3d *right)
 			left->xyz_max[1] > right->xyz_min[1] &&
 			left->xyz_min[2] < right->xyz_max[2] &&
 			left->xyz_max[2] > right->xyz_min[2]));
+}
+
+void				l3d_get_aabb_hit_record(t_box3d *origin, t_box3d *target,
+						t_hit **hit)
+{
+	t_vec3		dir;
+	t_ray		ray;
+	t_hits		*hits;
+
+	ml_vector3_sub(target->center, origin->center, dir);
+	l3d_ray_set(dir, origin->center, &ray);
+	hits = NULL;
+	if (l3d_bounding_box_ray_hit(target, &ray, &hits))
+	{
+		error_check(!(*hit = malloc(sizeof(t_hit))), "Failed to malloc hit");
+		ft_memcpy(*hit, ((t_hit*)hits->content), sizeof(t_hit));
+		l3d_delete_hits(&hits);
+	}
+	else
+		*hit = NULL;
 }

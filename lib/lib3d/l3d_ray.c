@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 22:24:15 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:52:51 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 16:06:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void						l3d_triangle_hit_record_set(float afuvt[5],
 		ft_lstadd(hits, ft_lstnew(&hit, sizeof(t_hit)));
 }
 
-void						l3d_bounding_box_hit_record_set(float t,
+void						l3d_bounding_box_hit_record_set(float t[8],
 								t_ray *ray, t_hits **hits)
 {
 	t_hit	hit;
@@ -55,9 +55,21 @@ void						l3d_bounding_box_hit_record_set(float t,
 	if (t < 0)
 		return ;
 	ft_memset(&hit, 0, sizeof(t_hit));
-	hit.t = t;
+	hit.t = t[6];
 	ml_vector3_mul(ray->dir, hit.t, add);
 	ml_vector3_add(ray->origin, add, hit.hit_point);
+	if (t[6] == t[0])
+		ml_vector3_copy((t_vec3){-1, 0, 0}, hit.normal);
+	else if (t[6] == t[1])
+		ml_vector3_copy((t_vec3){1, 0, 0}, hit.normal);
+	else if (t[6] == t[2])
+		ml_vector3_copy((t_vec3){0, -1, 0}, hit.normal);
+	else if (t[6] == t[3])
+		ml_vector3_copy((t_vec3){0, 1, 0}, hit.normal);
+	else if (t[6] == t[4])
+		ml_vector3_copy((t_vec3){0, 0, -1}, hit.normal);
+	else if (t[6] == t[5])
+		ml_vector3_copy((t_vec3){0, 0, 1}, hit.normal);
 	if (*hits == NULL)
 		*hits = ft_lstnew(&hit, sizeof(t_hit));
 	else

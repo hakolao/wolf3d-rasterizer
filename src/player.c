@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 13:20:38 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 15:07:33 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 15:39:34 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void			player_init(t_wolf3d *app, t_vec3 pos)
 	app->player.rot_y = 0;
 	app->player.player_height = 1.75 * app->unit_size;
 	app->player.fire_rate_per_sec = 4.0;
-	app->player.aabb.size[0] = app->unit_size;
+	app->player.aabb.size[0] = app->unit_size / 2.0;
 	app->player.aabb.size[1] = app->player.player_height;
-	app->player.aabb.size[2] = app->unit_size;
+	app->player.aabb.size[2] = app->unit_size / 2.0;
 	ml_matrix4_id(app->player.rotation);
 	ml_matrix4_id(app->player.inv_rotation);
 	ml_matrix4_id(app->player.translation);
@@ -87,6 +87,35 @@ void			pos_to_grid_pos(t_vec3 pos, t_vec2 grid_pos, float unit_size)
 	grid_pos[1] = (pos[0] / unit_size / 2.0) + 0.5;
 }
 
+static void		check_collisions(t_wolf3d *app)
+{
+	int32_t		i;
+	t_3d_object	*obj;
+	t_player	*player;
+	t_vec3		diff;
+	float		distance_limit;
+
+	player = &app->player;
+	distance_limit = app->unit_size * 3;
+	i = -1;
+	while (++i < (int32_t)app->active_scene->num_objects)
+	{
+		obj = app->active_scene->objects[i];
+		ml_vector3_sub(obj->position, player->pos, diff);
+		if (ml_vector3_mag(diff) > distance_limit)
+			continue ;
+		if (obj->aabb.xyz_min[0] < player->aabb.xyz_max[0] &&
+			obj->aabb.xyz_max[0] > player->aabb.xyz_min[0] &&
+			obj->aabb.xyz_min[1] < player->aabb.xyz_max[1] &&
+			obj->aabb.xyz_max[1] > player->aabb.xyz_min[1] &&
+			obj->aabb.xyz_min[2] < player->aabb.xyz_max[2] &&
+			obj->aabb.xyz_max[2] > player->aabb.xyz_min[2])
+		{
+			ft_printf("Player collides with something at:\n");
+		}
+	}
+}
+
 void			player_move(t_wolf3d *app, t_move dir, float speed)
 {
 	t_vec3		add;
@@ -117,6 +146,7 @@ void			player_move(t_wolf3d *app, t_move dir, float speed)
 	ml_matrix4_inverse(app->player.translation, app->player.inv_translation);
 	pos_to_grid_pos(app->player.pos, app->player.grid_pos, app->unit_size);
 	player_update_aabb(&app->player);
+	check_collisions(app);
 }
 
 /*

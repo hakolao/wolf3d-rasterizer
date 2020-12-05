@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 13:16:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 14:53:51 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 15:28:51 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,37 +153,4 @@ void			l3d_object_set_shading_opts(t_3d_object *obj,
 {
 	if (obj->material != NULL)
 		obj->material->shading_opts = opts;
-}
-
-void			l3d_object_aabb_update(t_3d_object *obj)
-{
-	int		i;
-	int		j;
-	float	min;
-	float	max;
-
-	i = -1;
-	while (++i < (int)obj->num_triangles)
-	{
-		j = -1;
-		while (++j < 3)
-		{
-			min = l3d_fmin(obj->triangles[i].vtc[0]->pos[j], l3d_fmin(
-				obj->triangles[i].vtc[1]->pos[j],
-				obj->triangles[i].vtc[2]->pos[j]));
-			obj->aabb.xyz_min[j] = obj->aabb.xyz_min[j] < min ? obj->aabb.xyz_min[j] : min;
-			max = l3d_fmax(obj->triangles[i].vtc[0]->pos[j], l3d_fmax(
-				obj->triangles[i].vtc[1]->pos[j],
-				obj->triangles[i].vtc[2]->pos[j]));
-			obj->aabb.xyz_min[j] = obj->aabb.xyz_min[j] > max ? obj->aabb.xyz_min[j] : max;
-		}
-	}
-	ml_vector3_copy((t_vec3){obj->aabb.xyz_max[0] - obj->aabb.xyz_min[0],
-		obj->aabb.xyz_max[1] - obj->aabb.xyz_min[1],
-		obj->aabb.xyz_max[2] - obj->aabb.xyz_min[2],
-	}, obj->aabb.size);
-	ml_vector3_copy((t_vec3){obj->aabb.xyz_min[0] + obj->aabb.size[0] / 2.,
-		obj->aabb.xyz_min[1] + obj->aabb.size[1] / 2.,
-		obj->aabb.xyz_min[2] + obj->aabb.size[2] / 2.,
-	}, obj->aabb.center);
 }

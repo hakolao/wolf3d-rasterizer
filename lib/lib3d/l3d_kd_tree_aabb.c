@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/29 15:03:24 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:17 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 15:27:26 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,3 +95,4 @@ t_axis				l3d_bounding_box_longest_axis(t_box3d bounding_box)
 			break ;
 	return (i);
 }
+

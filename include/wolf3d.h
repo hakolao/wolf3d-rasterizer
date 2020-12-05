@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 17:21:33 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:24:00 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,7 @@ typedef enum						e_cell_features
 	c_corner_ne = 1 << 12,
 	c_corner_se = 1 << 13,
 	c_corner_sw = 1 << 14,
+	c_ceiling = 1 << 15,
 }									t_cell_features;
 
 
@@ -247,7 +248,8 @@ typedef enum						e_map_prefabs
 	p_corner_nw = c_floor | c_wall_up | c_wall_left | c_corner_nw,
 	p_corner_ne = c_floor | c_wall_up | c_wall_right | c_corner_ne,
 	p_middle_floor = c_floor,
-	p_all = p_dead_all | c_block_nw | c_block_ne | c_block_se | c_block_sw
+	p_ceiling = c_floor | c_ceiling,
+	p_all = p_dead_all | c_block_nw | c_block_ne | c_block_se | c_block_sw | p_ceiling,
 }									t_map_prefabs;
 
 typedef struct						s_map_editor

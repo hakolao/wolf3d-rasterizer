@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 13:57:03 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/03 22:34:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 17:27:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,15 @@ static void		get_neighbor_rooms(t_map_editor *app, int32_t x, int32_t y,
 	neighbors[8] = room_at(app, x + 1, y + 1);
 }
 
+static void		update_ceiling(uint32_t *cell)
+{
+	float		ceiling_p;
+
+	ceiling_p = l3d_rand_d();
+	if (ceiling_p < 0.1)
+		*cell |= p_ceiling;
+}
+
 void			update_map_cell_features(t_map_editor *app)
 {
 	int32_t		y;
@@ -54,12 +63,13 @@ void			update_map_cell_features(t_map_editor *app)
 				continue ;
 			get_neighbor_rooms(app, x, y, rooms, cell);
 			*cell ^= (p_all & *cell);
-			if (modify_dead_end_pattern(cell, rooms) ||
-				modify_corner_pattern(cell, rooms) ||
-				modify_corridor_pattern(cell, rooms) ||
-				modify_wall_pattern(cell, rooms) ||
-				modify_surround_pattern(cell, rooms))
+			if (modify_dead_end_pattern(cell,
+				rooms) || modify_corner_pattern(cell,
+				rooms) || modify_corridor_pattern(cell,
+				rooms) || modify_wall_pattern(cell,
+				rooms) || modify_surround_pattern(cell, rooms))
 				;
+			update_ceiling(cell);
 		}
 	}
 }

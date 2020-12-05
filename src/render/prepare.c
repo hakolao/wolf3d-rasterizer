@@ -6,11 +6,20 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/06 01:23:23 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 01:42:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static t_bool	object_behind_player(t_wolf3d *app,
+					t_3d_object *obj)
+{
+	t_vec3		player_to_obj;
+
+	ml_vector3_sub(obj->position, app->player.pos, player_to_obj);
+	return (ml_vector3_dot(player_to_obj, app->player.forward) < 0);
+}
 
 static t_bool	object_too_far(t_wolf3d *app, t_3d_object *obj)
 {
@@ -25,6 +34,11 @@ static t_bool	object_too_far(t_wolf3d *app, t_3d_object *obj)
 	return (false);
 }
 
+/*
+** The checks inside this function optimize the amount of triangles
+** prepared for rendering.
+*/
+
 static void		add_objects_render_triangles(t_wolf3d *app,
 					t_tri_vec *render_triangles)
 {
@@ -37,7 +51,8 @@ static void		add_objects_render_triangles(t_wolf3d *app,
 	i = -1;
 	while (++i < (int)app->active_scene->num_objects)
 	{
-		if (object_too_far(app, app->active_scene->objects[i]))
+		if (object_behind_player(app, app->active_scene->objects[i]) ||
+			object_too_far(app, app->active_scene->objects[i]))
 			continue ;
 		j = -1;
 		while (++j < app->active_scene->objects[i]->num_triangles)

@@ -6,11 +6,24 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/06 00:22:53 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 01:22:36 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static t_bool	object_too_far(t_wolf3d *app, t_3d_object *obj)
+{
+	float		too_far;
+	t_vec3		player_to_obj;
+
+	too_far = app->unit_size * 35;
+	ml_vector3_sub(obj->position, app->player.pos,
+		player_to_obj);
+	if (ml_vector3_mag(player_to_obj) > too_far)
+		return (true);
+	return (false);
+}
 
 static void		add_objects_render_triangles(t_wolf3d *app,
 					t_tri_vec *render_triangles)
@@ -24,6 +37,8 @@ static void		add_objects_render_triangles(t_wolf3d *app,
 	i = -1;
 	while (++i < (int)app->active_scene->num_objects)
 	{
+		if (object_too_far(app, app->active_scene->objects[i]))
+			continue ;
 		j = -1;
 		while (++j < app->active_scene->objects[i]->num_triangles)
 		{

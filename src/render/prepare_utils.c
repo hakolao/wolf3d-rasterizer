@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 19:06:14 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/06 00:22:06 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 01:20:04 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_bool			triangle_too_far(t_wolf3d *app, t_triangle *triangle)
 	t_vec3		player_to_corner[3];
 	int32_t		i;
 
-	too_far = app->unit_size * 25;
+	too_far = app->unit_size * 35;
 	i = -1;
 	while (++i < 3)
 		ml_vector3_sub(triangle->vtc[i]->pos, app->player.pos,

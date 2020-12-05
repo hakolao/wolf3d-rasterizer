@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/06 01:42:29 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 01:48:51 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,13 @@
 static t_bool	object_behind_player(t_wolf3d *app,
 					t_3d_object *obj)
 {
-	t_vec3		player_to_obj;
+	t_vec3		player_to_obj1;
+	t_vec3		player_to_obj2;
 
-	ml_vector3_sub(obj->position, app->player.pos, player_to_obj);
-	return (ml_vector3_dot(player_to_obj, app->player.forward) < 0);
+	ml_vector3_sub(obj->aabb.xyz_min, app->player.pos, player_to_obj1);
+	ml_vector3_sub(obj->aabb.xyz_max, app->player.pos, player_to_obj2);
+	return (ml_vector3_dot(player_to_obj1, app->player.forward) < 0 &&
+		ml_vector3_dot(player_to_obj2, app->player.forward) < 0);
 }
 
 static t_bool	object_too_far(t_wolf3d *app, t_3d_object *obj)

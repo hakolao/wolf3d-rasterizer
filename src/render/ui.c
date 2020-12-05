@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 16:14:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 18:03:28 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/05 18:04:29 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static void		ui_title_render(t_wolf3d *app)
 {
 	window_text_render_centered(app->window, (t_text_params){
 			.text = "Wolfenstein-Real3D", .blend_ratio = 1.0,
-			.xy = (int[2]){app->window->framebuffer->width / 2, FONT_SIZE * 2 + 10},
+			.xy = (int[2]){app->window->framebuffer->width / 2,
+				FONT_SIZE * 2 + 10},
 			.text_color = (SDL_Color){255, 0, 0, 255}},
 			app->window->title_font);
 }
@@ -37,7 +38,8 @@ static void		ui_menu_render(t_wolf3d *app)
 		window_text_render_centered(app->window, (t_text_params){
 			.text = app->active_scene->menu_options[i],
 			.blend_ratio = 1.0,
-			.xy = (int[2]){app->window->framebuffer->width / 2, y + i * row_height},
+			.xy =
+			(int[2]){app->window->framebuffer->width / 2, y + i * row_height},
 			.text_color = selected_option == i ?
 			(SDL_Color){255, 255, 255, 255} : (SDL_Color){255, 0, 0, 255}},
 			app->window->main_font);
@@ -137,7 +139,8 @@ void			ui_render(t_wolf3d *app)
 		if (app->active_scene->is_paused)
 		{
 			framebuffer_dark_overlay(app->window->framebuffer,
-				app->window->framebuffer->width, app->window->framebuffer->height, (t_vec2){0, 0});
+				app->window->framebuffer->width,
+					app->window->framebuffer->height, (t_vec2){0, 0});
 			ui_menu_render(app);
 		}
 	}
@@ -149,7 +152,8 @@ void			loading_render(t_wolf3d *app)
 	window_text_render_centered(app->window, (t_text_params){
 		.text = "Loading...",
 		.blend_ratio = 1.0,
-		.xy = (int32_t[2]){app->window->framebuffer->width / 2, app->window->framebuffer->height / 2},
+		.xy = (int32_t[2]){app->window->framebuffer->width / 2,
+			app->window->framebuffer->height / 2},
 		.text_color = (SDL_Color){255, 255, 255, 255}},
 		app->window->main_font);
 }

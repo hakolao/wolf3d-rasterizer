@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#              #
-#    Updated: 2020/12/06 18:26:27 by ohakola          ###   ########.fr        #
+#    Updated: 2020/12/06 18:49:22 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,8 @@ SOURCES = l3d_triangle.c \
 			l3d_texture_sample.c \
 			l3d_baryc.c \
 			l3d_triangle_clipping.c \
+			l3d_triangle_clipping_clip.c \
+			l3d_triangle_clipping_utils.c \
 			l3d_procedural_gen.c \
 			l3d_buffers.c \
 			l3d_buffer_clear.c

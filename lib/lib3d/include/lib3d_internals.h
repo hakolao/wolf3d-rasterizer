@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:22:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:53:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,19 @@ void						l3d_kd_tree_split_triangles(t_tri_vec *triangles,
 								t_tri_vec *right_tris);
 t_kd_node					*l3d_kd_node_create(t_tri_vec *triangles);
 void						l3d_kd_node_destroy(t_kd_node *root);
+
+/*
+** Triangle clipping
+*/
+t_bool						l3d_interpolate_clipped_uv(t_triangle *triangle,
+								int32_t *limits, t_vec3 hit, t_vec2 result);
+int32_t						l3d_triangle_clipping_case(t_triangle *triangle,
+								t_plane *near, int32_t *point_indices);
+t_bool						create_one_clipped_triangle(t_triangle *triangle,
+								t_plane *plane, int32_t *indices,
+								t_triangle *result_tris);
+t_bool						create_two_clipped_triangles(t_triangle *triangle,
+								t_plane *plane, int32_t *indices,
+								t_triangle *result_tris);
 
 #endif

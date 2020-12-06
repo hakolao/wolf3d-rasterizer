@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:36:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 00:07:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,8 @@ void						main_menu_settings_event_handle(t_wolf3d *app,
 								SDL_Event event);
 void						main_game_menu_event_handle(t_wolf3d *app,
 								SDL_Event event);
+void						general_input_events_handle(t_wolf3d *app,
+								SDL_Event event);
 
 /*
 ** Camera
@@ -381,6 +383,9 @@ void						map_rescale_image_assets(t_wolf3d_map *map);
 void						map_render_resize(t_wolf3d_map *map, float new_size,
 								t_vec2 render_pos);
 void						minimap_size_update(t_wolf3d *app);
+void						player_dir_render(t_framebuffer *framebuffer,
+								t_player *player, t_vec2 player_render_pos,
+								float player_render_size);
 
 /*
 ** Map Editor

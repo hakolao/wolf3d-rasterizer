@@ -39,6 +39,8 @@ SOURCES = main.c \
 			scene/scene_data.c \
 			map/map.c \
 			map/render.c \
+			map/minimap.c \
+			map/minimap_player.c \
 			render/render.c \
 			render/prepare.c \
 			render/prepare_utils.c \

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:22:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 23:46:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void			l3d_read_bmp_image_32bit_rgba(const char *filename,
 	free(image.pixels);
 }
 
-t_surface		*l3d_read_bmp_image_32bit_rgba_surface(const char *filename)
+t_surface		*l3d_read_bmp_32bit_rgba_surface(const char *filename)
 {
 	t_surface	*surface;
 

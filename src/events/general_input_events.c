@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:40:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:43:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 23:55:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void		handle_general_keyup_events(t_wolf3d *app, SDL_Event event)
 ** or setting to full screen, or disabling debug info
 */
 
-static void		general_input_events_handle(t_wolf3d *app, SDL_Event event)
+void			general_input_events_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_QUIT)
 		app->is_running = false;

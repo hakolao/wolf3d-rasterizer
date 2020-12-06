@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:22:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 17:49:40 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d.h"
 
-static t_sub_framebuffer	*l3d_framebuffer_sub_create(t_framebuffer *parent,
+static t_sub_framebuffer	*l3d_subbuffer_create(t_framebuffer *parent,
 														int32_t x, int32_t y)
 {
 	t_sub_framebuffer	*sub_buffer;
@@ -26,7 +26,8 @@ static t_sub_framebuffer	*l3d_framebuffer_sub_create(t_framebuffer *parent,
 	sub_buffer->x_start = x * sub_buffer->width;
 	sub_buffer->y_start = y * sub_buffer->height;
 	sub_buffer->x_offset = sub_buffer->parent_width * 0.5 - sub_buffer->x_start;
-	sub_buffer->y_offset = sub_buffer->parent_height * 0.5 - sub_buffer->y_start;
+	sub_buffer->y_offset = sub_buffer->parent_height * 0.5 -
+		sub_buffer->y_start;
 	error_check(!(
 		sub_buffer->buffer = malloc(sizeof(uint32_t) *
 			sub_buffer->height * sub_buffer->width)),
@@ -48,37 +49,34 @@ static void					l3d_framebuffer_sub_destroy(
 	free(sub_buffer);
 }
 
-t_framebuffer				*l3d_framebuffer_create(int32_t width, int32_t height)
+t_framebuffer				*l3d_framebuffer_create(int32_t width,
+								int32_t height)
 {
-	t_framebuffer	*framebuffer;
+	t_framebuffer	*fbuffer;
 	int32_t			x;
 	int32_t			y;
 	int32_t			index;
 
-	error_check(!(framebuffer = malloc(sizeof(t_framebuffer))),
-		"Failed to malloc frame buffer");
-	error_check(!(framebuffer->buffer =
-		malloc(sizeof(uint32_t) * width * height)),
-		"Failed to malloc frame buffer");
-	framebuffer->num_x = L3D_BUFFER_SPLIT_SIZE_X;
-	framebuffer->num_y = L3D_BUFFER_SPLIT_SIZE_Y;
-	framebuffer->width = width;
-	framebuffer->height = height;
-	error_check(!(framebuffer->sub_buffers = malloc(sizeof(t_sub_framebuffer*) *
-				framebuffer->num_y * framebuffer->num_x)),
-			"Failed to malloc frame sub buffers");
+	error_check(!(fbuffer = malloc(sizeof(t_framebuffer))), "!mallocf");
+	error_check(!(fbuffer->buffer =
+		malloc(sizeof(uint32_t) * width * height)), "Failed to malloc fbuffer");
+	fbuffer->num_x = L3D_BUFFER_SPLIT_SIZE_X;
+	fbuffer->num_y = L3D_BUFFER_SPLIT_SIZE_Y;
+	fbuffer->width = width;
+	fbuffer->height = height;
+	error_check(!(fbuffer->sub_buffers = malloc(sizeof(t_sub_framebuffer*) *
+		fbuffer->num_y * fbuffer->num_x)), "Failed to malloc sbuffer");
 	y = -1;
-	while (++y < framebuffer->num_y)
+	while (++y < fbuffer->num_y)
 	{
 		x = -1;
-		while (++x < framebuffer->num_x)
+		while (++x < fbuffer->num_x)
 		{
-			index = y * framebuffer->num_x + x;
-			framebuffer->sub_buffers[index] =
-				l3d_framebuffer_sub_create(framebuffer, x, y);
+			index = y * fbuffer->num_x + x;
+			fbuffer->sub_buffers[index] = l3d_subbuffer_create(fbuffer, x, y);
 		}
 	}
-	return (framebuffer);
+	return (fbuffer);
 }
 
 void						l3d_framebuffer_destroy(t_framebuffer *framebuffer)
@@ -100,40 +98,7 @@ void						l3d_framebuffer_destroy(t_framebuffer *framebuffer)
 void						l3d_framebuffer_recreate(t_framebuffer **buffer,
 												int32_t width, int32_t height)
 {
-
 	if (buffer != NULL && *buffer != NULL)
 		l3d_framebuffer_destroy(*buffer);
 	*buffer = l3d_framebuffer_create(width, height);
-}
-
-void						l3d_buffer_uint32_clear(uint32_t *buffer,
-									uint32_t size, uint32_t clear_value)
-{
-	int32_t		i;
-
-	i = 0;
-	while (i < (int32_t)size)
-	{
-		buffer[i] = clear_value;
-		buffer[i + 1] = clear_value;
-		buffer[i + 2] = clear_value;
-		buffer[i + 3] = clear_value;
-		i += 4;
-	}
-}
-
-void						l3d_buffer_float_clear(float *buffer,
-									uint32_t size, float clear_value)
-{
-	int32_t		i;
-
-	i = 0;
-	while (i < (int32_t)size)
-	{
-		buffer[i] = clear_value;
-		buffer[i + 1] = clear_value;
-		buffer[i + 2] = clear_value;
-		buffer[i + 3] = clear_value;
-		i += 4;
-	}
 }

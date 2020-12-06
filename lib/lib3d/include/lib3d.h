@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:22:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 17:39:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define L3D_EPSILON 0.0000001
 # define L3D_SINGLE_SIDED 1
 # define L3D_MAX_KD_TREE_DEPTH 10
+
 /*
 ** L3D_MIN_KD_NODE_NUM_TRIANGLES should be > 2
 ** Else tree_create_recursive will leave a triangle vector leak
@@ -127,7 +128,7 @@ typedef struct				s_triangle
 	t_vec3			vtc_zvalue;
 }							t_triangle;
 
-typedef struct			s_sub_framebuffer
+typedef struct				s_sub_framebuffer
 {
 	uint32_t		*buffer;
 	float			*zbuffer;
@@ -139,9 +140,9 @@ typedef struct			s_sub_framebuffer
 	int32_t			parent_height;
 	float			x_offset;
 	float			y_offset;
-}						t_sub_framebuffer;
+}							t_sub_framebuffer;
 
-typedef struct			s_framebuffer
+typedef struct				s_framebuffer
 {
 	uint32_t			*buffer;
 	int32_t				width;
@@ -149,7 +150,7 @@ typedef struct			s_framebuffer
 	t_sub_framebuffer	**sub_buffers;
 	int32_t				num_x;
 	int32_t				num_y;
-}						t_framebuffer;
+}							t_framebuffer;
 
 /*
 ** Ray hit is saved to this hit record struct. Add params if needed.
@@ -217,10 +218,10 @@ typedef struct				s_3d_object
 
 typedef enum				e_axis
 {
-					l3d_axis_x,
-					l3d_axis_y,
-					l3d_axis_z,
-					l3d_axis_none,
+	l3d_axis_x,
+	l3d_axis_y,
+	l3d_axis_z,
+	l3d_axis_none,
 }							t_axis;
 
 /*
@@ -321,8 +322,8 @@ t_tri_vec					*l3d_triangle_vec_with_capacity(uint32_t capacity);
 ** Triangles
 */
 
-void						l3d_triangle_set(t_triangle *triangle, t_vertex *vtc[3],
-								t_3d_object *obj);
+void						l3d_triangle_set(t_triangle *triangle,
+								t_vertex *vtc[3], t_3d_object *obj);
 void						l3d_triangle_update(t_triangle *triangle);
 void						l3d_triangles_midpoint(t_triangle **triangles,
 								uint32_t num_triangles, t_vec3 res);
@@ -333,7 +334,8 @@ void						l3d_triangle_normal_update(t_triangle *triangle);
 void						l3d_triangle_tangent_update(t_triangle *triangle);
 void						l3d_triangle_destroy(t_triangle *triangle,
 								t_bool with_vertices);
-t_triangle					*l3d_triangle_copy(t_triangle *src, t_bool new_vertices);
+t_triangle					*l3d_triangle_copy(t_triangle *src,
+								t_bool new_vertices);
 
 /*
 **	Triangle clipping
@@ -349,18 +351,18 @@ int							l3d_triangle_clipping_case(t_triangle *triangle,
 														t_plane *plane,
 														int *point_indices);
 
-	/*
+/*
 ** Bounding box
 */
 
-t_axis 						l3d_bounding_box_longest_axis(t_box3d bounding_box);
+t_axis						l3d_bounding_box_longest_axis(t_box3d bounding_box);
 void						l3d_bounding_box_set(t_tri_vec *triangles,
 								t_box3d *res);
 void						l3d_object_aabb_update(t_3d_object *obj);
 void						l3d_bounding_box_debug(t_box3d aabb);
 t_bool						l3d_aabb_collides(t_box3d *left, t_box3d *right);
-void						l3d_get_aabb_hit_record(t_box3d *origin, t_box3d *target,
-								t_hit **hit);
+void						l3d_get_aabb_hit_record(t_box3d *origin,
+								t_box3d *target, t_hit **hit);
 
 /*
 ** 3d objects
@@ -390,7 +392,8 @@ void						l3d_object_set_shading_opts(t_3d_object *obj,
 ** OBJ reading
 */
 
-t_3d_object					*l3d_read_obj(const char *filename, t_surface *texture,
+t_3d_object					*l3d_read_obj(const char *filename,
+								t_surface *texture,
 								t_surface *normal_map);
 
 /*
@@ -414,8 +417,8 @@ void						l3d_calculate_barycoords(
 void						l3d_interpolate_uv(t_triangle *triangle,
 												float *barycoords,
 												t_vec2 point_uv);
-uint32_t					l3d_sample_texture(t_surface *material, t_vec2 uv_point);
-
+uint32_t					l3d_sample_texture(t_surface *material,
+								t_vec2 uv_point);
 
 /*
 ** Plot pixel
@@ -428,10 +431,11 @@ void						l3d_pixel_plot(uint32_t *buffer,
 uint32_t					l3d_pixel_get(uint32_t *buffer,
 												uint32_t dimensions_wh[2],
 												int32_t xy[2]);
-float						l3d_pixel_get_float(float *buffer, uint32_t dimensions_wh[2],
-												int32_t xy[2]);
-void						l3d_pixel_plot_float(float *buffer, uint32_t dimensions_wh[2],
-												int32_t xy[2], float value);
+float						l3d_pixel_get_float(float *buffer,
+								uint32_t dimensions_wh[2], int32_t xy[2]);
+void						l3d_pixel_plot_float(float *buffer,
+								uint32_t dimensions_wh[2], int32_t xy[2],
+								float value);
 
 /*
 ** Line draw
@@ -453,7 +457,6 @@ void						l3d_read_bmp_image_32bit_rgba(const char *filename,
 								uint32_t *height);
 t_surface					*l3d_read_bmp_image_32bit_rgba_surface(
 								const char *filename);
-
 
 /*
 ** Buffer image copying / placing
@@ -482,8 +485,9 @@ uint32_t					l3d_triangle_normal_color(t_triangle *triangle);
 t_framebuffer				*l3d_framebuffer_create(int32_t width,
 													int32_t height);
 void						l3d_framebuffer_destroy(t_framebuffer *framebuffer);
-void						l3d_framebuffer_recreate(t_framebuffer **framebuffer,
-												int32_t width, int32_t height);
+void						l3d_framebuffer_recreate(
+								t_framebuffer **framebuffer,
+								int32_t width, int32_t height);
 void						l3d_buffer_float_clear(float *buffer,
 									uint32_t size, float clear_value);
 void						l3d_buffer_uint32_clear(uint32_t *buffer,
@@ -500,9 +504,11 @@ t_3d_object					*l3d_object_instantiate(t_3d_object *model,
 								float unit_size);
 void						l3d_temp_objects_add(t_temp_objects **temp_objects,
 								t_3d_object *object, uint32_t creation_time);
-void						l3d_temp_objects_destroy(t_temp_objects **temp_objects);
-void						l3d_temp_objects_destroy_if_expired(t_temp_objects **temp_objects,
-													uint32_t current_time,
-													uint32_t diff_limit);
+void						l3d_temp_objects_destroy(
+								t_temp_objects **temp_objects);
+void						l3d_temp_objects_destroy_if_expired(
+								t_temp_objects **temp_objects,
+								uint32_t current_time,
+								uint32_t diff_limit);
 
 #endif

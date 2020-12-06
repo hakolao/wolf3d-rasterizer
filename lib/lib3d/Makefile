@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#              #
-#    Updated: 2020/12/06 17:27:52 by ohakola          ###   ########.fr        #
+#    Updated: 2020/12/06 17:50:30 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ LIBGMATRIX = ../libgmatrix
 DIR_SRC = ./
 DIR_OBJ = temp
 SOURCES = l3d_triangle.c \
+			l3d_triangle_copy.c \
 			l3d_triangle_update.c \
 			l3d_triangle_vector.c \
 			l3d_ray.c \
@@ -26,6 +27,7 @@ SOURCES = l3d_triangle.c \
 			l3d_obj_read_utils1.c \
 			l3d_obj_read_utils2.c \
 			l3d_3d_object.c \
+			l3d_3d_object_copy.c \
 			l3d_3d_object_transform.c \
 			l3d_kd_tree.c \
 			l3d_kd_tree_node.c \
@@ -42,7 +44,8 @@ SOURCES = l3d_triangle.c \
 			l3d_shading.c \
 			l3d_triangle_clipping.c \
 			l3d_procedural_gen.c \
-			l3d_buffers.c
+			l3d_buffers.c \
+			l3d_buffer_clear.c
 
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:28:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 17:36:20 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void			l3d_3d_object_debug_print(t_3d_object *obj)
 {
 	int32_t	i;
 
-	ft_printf("Obj: vertices %d, triangles %d\n", obj->num_vertices, obj->num_triangles);
+	ft_printf("Obj: vertices %d, triangles %d\n", obj->num_vertices,
+		obj->num_triangles);
 	if (obj->material)
 		ft_printf("Material: width %d, height %d, pixels: %p\n",
 			obj->material->texture->w, obj->material->texture->h,
@@ -33,47 +34,6 @@ void			l3d_3d_object_debug_print(t_3d_object *obj)
 	i = -1;
 	while (++i < obj->num_vertices)
 		ml_vector3_print(obj->vertices[i]->pos);
-}
-
-/*
-** Deeply copies 3d object, though the material
-** texture pointer data isn't copied.
-*/
-
-t_3d_object		*l3d_3d_object_copy(t_3d_object *src)
-{
-	t_3d_object	*dst;
-	int32_t		i;
-	int32_t		j;
-
-	dst = l3d_3d_object_create(src->num_vertices, src->num_triangles);
-	if (!dst || !src)
-		return (NULL);
-	ml_matrix4_copy(src->scale, dst->scale);
-	ml_vector3_copy(src->position, dst->position);
-	ml_matrix4_copy(src->rotation, dst->rotation);
-	ft_memcpy(&dst->aabb, &src->aabb, sizeof(t_box3d));
-	ft_memcpy(dst->material, src->material, sizeof(t_material));
-	i = -1;
-	while (++i < src->num_vertices)
-		ft_memcpy(dst->vertices[i], src->vertices[i], sizeof(t_vertex));
-	i = -1;
-	while (++i < src->num_triangles)
-	{
-		l3d_triangle_set(&dst->triangles[i], (t_vertex*[3]){
-			dst->vertices[src->triangles[i].vtc_indices[0]],
-			dst->vertices[src->triangles[i].vtc_indices[1]],
-			dst->vertices[src->triangles[i].vtc_indices[2]]}, dst);
-		j = -1;
-		while (++j < 3)
-		{
-			ml_vector2_copy(src->triangles[i].uvs[j], dst->triangles[i].uvs[j]);
-			dst->triangles[i].vtc_indices[j] = src->triangles[i].vtc_indices[j];
-			ml_vector2_copy(src->triangles[i].normals[j],
-				dst->triangles[i].normals[j]);
-		}
-	}
-	return (dst);
 }
 
 /*

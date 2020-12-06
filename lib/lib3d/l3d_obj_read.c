@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:23:06 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 17:48:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@ void					l3d_obj_content_allocate(t_obj *o)
 		"Failed to malloc obj triangles");
 }
 
-/*
-** Frees obj data struct's malloced content
-*/
-
-void					l3d_obj_content_free(t_obj *o)
+static void				set_3d_object_triangles_and_indices(
+							t_obj *in, t_3d_object *out, int32_t i)
 {
-	free(o->v);
-	free(o->vt);
-	free(o->vn);
-	free(o->triangles);
+	out->triangles[i].vtc_indices[0] = in->triangles[i * 9 + 0 * 3 + 0] - 1;
+	out->triangles[i].vtc_indices[1] = in->triangles[i * 9 + 1 * 3 + 0] - 1;
+	out->triangles[i].vtc_indices[2] = in->triangles[i * 9 + 2 * 3 + 0] - 1;
+	l3d_triangle_set(&out->triangles[i], (t_vertex*[3]){
+		out->vertices[out->triangles[i].vtc_indices[0]],
+		out->vertices[out->triangles[i].vtc_indices[1]],
+		out->vertices[out->triangles[i].vtc_indices[2]]}, out);
 }
 
 /*
@@ -47,34 +47,28 @@ void					l3d_obj_content_free(t_obj *o)
 ** read...
 */
 
-static void				obj_to_3d_object(t_obj *read_obj, t_3d_object *obj)
+static void				obj_to_3d_object(t_obj *in, t_3d_object *out)
 {
-	int		i;
-	int		j;
-	int		v_i;
-	int		vt_i;
-	int		vn_i;
+	int32_t		i;
+	int32_t		j;
+	int32_t		v_i;
+	int32_t		vt_i;
+	int32_t		vn_i;
 
 	i = -1;
-	while (++i < (int)read_obj->num_triangles)
+	while (++i < (int32_t)in->num_triangles)
 	{
 		j = -1;
 		while (++j < 3)
 		{
-			v_i = read_obj->triangles[i * 9 + j * 3 + 0] - 1;
-			vt_i = read_obj->triangles[i * 9 + j * 3 + 1] - 1;
-			vn_i = read_obj->triangles[i * 9 + j * 3 + 2] - 1;
-			l3d_3d_object_set_vertex(obj->vertices[v_i], read_obj->v[v_i]);
-			ml_vector2_copy(read_obj->vt[vt_i], obj->triangles[i].uvs[j]);
-			ml_vector3_copy(read_obj->vn[vn_i], obj->triangles[i].normals[j]);
+			v_i = in->triangles[i * 9 + j * 3 + 0] - 1;
+			vt_i = in->triangles[i * 9 + j * 3 + 1] - 1;
+			vn_i = in->triangles[i * 9 + j * 3 + 2] - 1;
+			l3d_3d_object_set_vertex(out->vertices[v_i], in->v[v_i]);
+			ml_vector2_copy(in->vt[vt_i], out->triangles[i].uvs[j]);
+			ml_vector3_copy(in->vn[vn_i], out->triangles[i].normals[j]);
 		}
-		obj->triangles[i].vtc_indices[0] = read_obj->triangles[i * 9 + 0 * 3 + 0] - 1;
-		obj->triangles[i].vtc_indices[1] = read_obj->triangles[i * 9 + 1 * 3 + 0] - 1;
-		obj->triangles[i].vtc_indices[2] = read_obj->triangles[i * 9 + 2 * 3 + 0] - 1;
-		l3d_triangle_set(&obj->triangles[i], (t_vertex*[3]){
-			obj->vertices[obj->triangles[i].vtc_indices[0]],
-			obj->vertices[obj->triangles[i].vtc_indices[1]],
-			obj->vertices[obj->triangles[i].vtc_indices[2]]}, obj);
+		set_3d_object_triangles_and_indices(in, out, i);
 	}
 }
 
@@ -96,7 +90,10 @@ static t_3d_object		*l3d_3d_object_from_obj(t_obj *obj, t_surface *texture,
 	obj_to_3d_object(obj, l3d_object);
 	l3d_object->num_triangles = obj->num_triangles;
 	l3d_object->num_vertices = obj->num_vertices;
-	l3d_obj_content_free(obj);
+	free(obj->v);
+	free(obj->vt);
+	free(obj->vn);
+	free(obj->triangles);
 	l3d_object_aabb_update(l3d_object);
 	return (l3d_object);
 }

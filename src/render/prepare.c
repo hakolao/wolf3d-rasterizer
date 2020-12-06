@@ -6,11 +6,31 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 17:46:05 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/06 01:48:51 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 02:14:11 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+static t_bool	object_inside_viewbox(t_wolf3d *app, t_3d_object *obj)
+{
+	// int32_t	i;
+	// int32_t	is_inside;
+
+	// is_inside = true;
+	// i = 0;
+	// while (++i < 5)
+	// {
+	// 	if (ml_vector3_dot(obj->aabb.xyz_min,
+	// 		app->active_scene->main_camera->viewplanes[i].normal) > 0 &&
+	// 		ml_vector3_dot(obj->aabb.xyz_max,
+	// 		app->active_scene->main_camera->viewplanes[i].normal) > 0)
+	// 		return (false);
+	// }
+	(void)app;
+	(void)obj;
+	return (true);
+}
 
 static t_bool	object_behind_player(t_wolf3d *app,
 					t_3d_object *obj)
@@ -54,7 +74,8 @@ static void		add_objects_render_triangles(t_wolf3d *app,
 	i = -1;
 	while (++i < (int)app->active_scene->num_objects)
 	{
-		if (object_behind_player(app, app->active_scene->objects[i]) ||
+		if (!object_inside_viewbox(app, app->active_scene->objects[i]) ||
+			object_behind_player(app, app->active_scene->objects[i]) ||
 			object_too_far(app, app->active_scene->objects[i]))
 			continue ;
 		j = -1;

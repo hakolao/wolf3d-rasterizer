@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:10:05 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:38:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,6 +391,9 @@ void						player_dir_render(t_framebuffer *framebuffer,
 ** Map Editor
 */
 
+t_surface					*convert_sdl_surface_to_t_surface(SDL_Surface *src);
+t_bool						rooms_eq_pattern(int32_t rooms[9],
+								int32_t pattern[9]);
 void						update_mouse_grid_pos(t_map_editor *app);
 void						handle_feature_placement(t_map_editor *app);
 void						map_editor_save_menu_create(t_map_editor *app);

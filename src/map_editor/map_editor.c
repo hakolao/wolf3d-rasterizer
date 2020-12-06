@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:10:14 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:39:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static void		init_map_editor(t_map_editor *app,
 					int argc, char **argv)
 {
 	int32_t			size;
+	int32_t			i;
 
 	if (argc > 1)
 	{
@@ -84,17 +85,16 @@ static void		init_map_editor(t_map_editor *app,
 			else if (ft_match(argv[i], "--filename=*") && app->filename == NULL)
 				app->filename = ft_strdup(argv[i] + 11);
 		}
-		map_editor_map_init(&app,
+		map_editor_map_init(app,
 			size > 0 && size <= 50 ? size : INITIAL_MAP_SIZE);
 	}
 	else
-		map_editor_map_init(&app, INITIAL_MAP_SIZE);
+		map_editor_map_init(app, INITIAL_MAP_SIZE);
 }
 
 int				main(int argc, char **argv)
 {
 	t_map_editor	app;
-	int32_t			i;
 
 	app.thread_pool = thread_pool_create(NUM_THREADS_DEFAULT);
 	app.is_running = true;

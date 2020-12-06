@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   collision.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/05 17:17:47 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/06 02:19:12 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 23:25:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

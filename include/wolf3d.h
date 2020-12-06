@@ -3,12 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 16:54:37 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 23:31:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+** Wolf3d ray cast software renderer project has been written
+** by Okko Hakola & Vesa Eilo
+*/
 
 #ifndef WOLF3D_H
 # define WOLF3D_H
@@ -21,39 +26,22 @@
 
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
-
 # define INITIAL_MAP_SIZE 15
-
 # define NUM_THREADS_DEFAULT 4
-
 # define WIDTH 1280
 # define HEIGHT 720
 # define MAP_EDITOR_WIDTH 1280
 # define MAP_EDITOR_HEIGHT 720
 # define OPTIONAL_PATTERN 2
-
 # define NAME "Wolf3D"
 # define SCREEN_INTERSECT_MAX FLT_MAX
-
-/*
-**	Player control macros
-*/
-
 # define PLAYER_SPEED 6.0
 # define PLAYER_ROTATION_SPEED 0.2
-# define GRAVITY_SPEED 9.81
-
 # define NEAR_CLIP_DIST 10
 # define FAR_CLIP_DIST 100000
-
 # define MAX_NUM_OBJECTS 16384
-
 # define NUM_ASSETS 64
 # define TEMP_OBJECT_EXPIRE_SEC 100
-
-/*
-** Forward declarations
-*/
 
 typedef enum						e_move
 {
@@ -71,13 +59,6 @@ typedef enum						e_scene_id
 	scene_id_main_menu_settings,
 	scene_id_main_game,
 }									t_scene_id;
-
-/*
-**	Camera screen distance is the distance of the
-**	virtual, screen through which the rays are projected,
-**	from the camera in world units. The virtual screen dimensions
-**	and the screen distance determine the field of view and vice versa.
-*/
 
 typedef struct						s_camera
 {
@@ -121,10 +102,6 @@ typedef struct						s_wolf3d_map
 	t_hash_table			*map_images;
 	uint32_t				*grid;
 }									t_wolf3d_map;
-
-/*
-**	Typedefs related to app and scene management
-*/
 
 typedef struct						s_scene_data
 {
@@ -233,12 +210,16 @@ typedef enum						e_map_prefabs
 {
 	p_corr_vert = c_floor | c_wall_right | c_wall_left,
 	p_corr_horz = c_floor | c_wall_up | c_wall_down,
-	p_dead_up = c_floor | c_wall_left | c_wall_up | c_wall_right | c_corner_ne | c_corner_ne,
-	p_dead_right = c_floor | c_wall_up | c_wall_right | c_wall_down | c_corner_se | c_corner_ne,
-	p_dead_down = c_floor | c_wall_right | c_wall_down | c_wall_left | c_corner_se | c_corner_sw,
-	p_dead_left = c_floor | c_wall_down | c_wall_left | c_wall_up | c_corner_sw | c_corner_nw,
-	p_dead_all = c_floor | c_wall_up | c_wall_right | c_wall_down | c_wall_left |
-		c_corner_se | c_corner_ne | c_corner_sw | c_corner_nw,
+	p_dead_up = c_floor | c_wall_left | c_wall_up | c_wall_right |
+		c_corner_ne | c_corner_ne,
+	p_dead_right = c_floor | c_wall_up | c_wall_right | c_wall_down |
+		c_corner_se | c_corner_ne,
+	p_dead_down = c_floor | c_wall_right | c_wall_down | c_wall_left |
+		c_corner_se | c_corner_sw,
+	p_dead_left = c_floor | c_wall_down | c_wall_left | c_wall_up |
+		c_corner_sw | c_corner_nw,
+	p_dead_all = c_floor | c_wall_up | c_wall_right | c_wall_down |
+		c_wall_left | c_corner_se | c_corner_ne | c_corner_sw | c_corner_nw,
 	p_wall_up = c_floor | c_wall_up,
 	p_wall_right = c_floor | c_wall_right,
 	p_wall_down = c_floor | c_wall_down,
@@ -250,7 +231,8 @@ typedef enum						e_map_prefabs
 	p_middle_floor = c_floor,
 	p_ceiling = c_floor | c_ceiling,
 	p_ceiling_window = c_floor | c_ceiling_window,
-	p_all = p_dead_all | c_block_nw | c_block_ne | c_block_se | c_block_sw | p_ceiling,
+	p_all = p_dead_all | c_block_nw | c_block_ne | c_block_se |
+		c_block_sw | p_ceiling,
 }									t_map_prefabs;
 
 typedef struct						s_map_editor
@@ -270,8 +252,9 @@ typedef struct						s_map_editor
 }									t_map_editor;
 
 /*
-** For threading
+** For parallelization
 */
+
 typedef struct						s_render_work
 {
 	t_wolf3d				*app;
@@ -280,11 +263,6 @@ typedef struct						s_render_work
 }									t_render_work;
 
 void						wolf3d_run(t_wolf3d *app);
-
-/*
-** Time
-*/
-float						sin_time(float min, float max, float speed);
 
 /*
 ** Player
@@ -311,9 +289,12 @@ void						mouse_state_handle(t_wolf3d *app);
 void						player_shoot(t_wolf3d *app,
 								uint32_t curr_time);
 void						keyboard_state_handle(t_wolf3d *app);
-void 						main_menu_event_handle(t_wolf3d *app, SDL_Event event);
-void 						main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event);
-void 						main_game_menu_event_handle(t_wolf3d *app, SDL_Event event);
+void 						main_menu_event_handle(t_wolf3d *app,
+								SDL_Event event);
+void 						main_menu_settings_event_handle(t_wolf3d *app,
+								SDL_Event event);
+void 						main_game_menu_event_handle(t_wolf3d *app,
+								SDL_Event event);
 
 
 /*
@@ -332,14 +313,16 @@ void						ui_render(t_wolf3d *app);
 void						wolf3d_render(t_wolf3d *app);
 void						loading_render(t_wolf3d *app);
 t_tri_vec					*prepare_render_triangles(t_wolf3d *app);
-void						destroy_render_triangles(t_tri_vec *render_triangles);
+void						destroy_render_triangles(
+								t_tri_vec *render_triangles);
 void						clip_and_add_to_render_triangles(t_wolf3d *app,
 								t_tri_vec *r_triangle_vec,
 								t_triangle *triangle);
 void						rasterize_triangles(t_render_work *work);
 t_bool						triangle_inside_viewbox(t_wolf3d *app,
 								t_triangle *triangle);
-t_bool						triangle_too_far(t_wolf3d *app, t_triangle *triangle);
+t_bool						triangle_too_far(t_wolf3d *app,
+								t_triangle *triangle);
 void						prepare_skybox_render_triangle(t_wolf3d *app,
 								t_triangle *r_triangle,
 								t_triangle *triangle, t_vertex *vtc);
@@ -352,7 +335,8 @@ void						prepare_render_triangle(t_wolf3d *app,
 */
 void						main_scene_data_asset_files_set(t_scene_data *data);
 void						scene_minimap_init(t_wolf3d *app);
-void						scene_assets_load(t_scene *scene, t_scene_data *data);
+void						scene_assets_load(t_scene *scene,
+								t_scene_data *data);
 void						scene_main_game_data_set(t_scene_data *data);
 void						scene_main_menu_data_set(t_scene_data *data);
 void						scene_settings_menu_data_set(t_scene_data *data);
@@ -391,7 +375,8 @@ void						map_minimap_render_full(t_wolf3d_map *map,
 void						map_minimap_render_partial(t_wolf3d_map *map,
 								t_framebuffer *framebuffer, float minimap_size,
 								t_player *player);
-void						map_features_render(t_wolf3d_map *map, t_framebuffer *framebuffer);
+void						map_features_render(t_wolf3d_map *map,
+								t_framebuffer *framebuffer);
 void						map_destroy(t_wolf3d_map *map);
 void						map_init_image_assets(t_hash_table **map_images);
 void						map_rescale_image_assets(t_wolf3d_map *map);
@@ -404,7 +389,8 @@ void						minimap_size_update(t_wolf3d *app);
 */
 
 void						map_editor_save_menu_create(t_map_editor *app);
-void						map_editor_menu_render(t_map_editor *app, t_vec2 pos);
+void						map_editor_menu_render(t_map_editor *app,
+								t_vec2 pos);
 void						map_editor_draw_menu_create(t_map_editor *app);
 void						map_editor_map_init(t_map_editor *app, int size);
 void						map_editor_map_render(t_map_editor *app);

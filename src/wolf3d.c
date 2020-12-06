@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/24 15:08:03 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 19:26:46 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 23:22:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void		wolf3d_resize_dependent_recreate(t_wolf3d *app)
 
 static void		wolf3d_main_loop(t_wolf3d *app)
 {
-
 	while (app->is_running)
 	{
 		app->info.performance_start = SDL_GetPerformanceCounter();

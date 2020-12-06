@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/26 14:01:04 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/26 16:53:54 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 23:26:07 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

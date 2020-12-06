@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/13 18:17:51 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 23:50:01 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 23:24:04 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ void			wolf3d_debug_info_render(t_wolf3d *app)
 			app->active_scene->skybox[0]->num_triangles * 6,
 		app->triangles_in_view);
 		window_text_render(app->window, (t_text_params){
-			.text = debug_info, .blend_ratio = 1.0,
-			.xy = (int[2]){5, 5},
+			.text = debug_info, .blend_ratio = 1.0, .xy = (int[2]){5, 5},
 			.text_color = (SDL_Color){255, 255, 255, 0}},
 			app->window->debug_font);
 	}
@@ -35,8 +34,7 @@ void			wolf3d_debug_info_render(t_wolf3d *app)
 		ft_sprintf(debug_info, "fps: %u\ndelta time: %u",
 		app->info.fps, app->info.delta_time);
 		window_text_render(app->window, (t_text_params){
-			.text = debug_info, .blend_ratio = 1.0,
-			.xy = (int[2]){5, 5},
+			.text = debug_info, .blend_ratio = 1.0, .xy = (int[2]){5, 5},
 			.text_color = (SDL_Color){255, 255, 255, 0}},
 			app->window->debug_font);
 }

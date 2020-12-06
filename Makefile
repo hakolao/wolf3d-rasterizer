@@ -30,7 +30,6 @@ SOURCES = main.c \
 			player/collision.c \
 			player/movement.c \
 			camera.c \
-			time.c \
 			debug.c \
 			scene/scene.c \
 			scene/scene_generate.c \

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 00:07:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:10:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,6 +391,8 @@ void						player_dir_render(t_framebuffer *framebuffer,
 ** Map Editor
 */
 
+void						update_mouse_grid_pos(t_map_editor *app);
+void						handle_feature_placement(t_map_editor *app);
 void						map_editor_save_menu_create(t_map_editor *app);
 void						map_editor_menu_render(t_map_editor *app,
 								t_vec2 pos);

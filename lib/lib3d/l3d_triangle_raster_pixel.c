@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 18:15:15 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:23:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:27:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ void			l3d_raster_draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 
 	offset_xy[0] = xy[0] + buffers->x_offset;
 	offset_xy[1] = xy[1] + buffers->y_offset;
-	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]},
-		baryc);
+	l3d_calculate_baryc(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
 	z_val = l3d_z_val(baryc, triangle);
 	if (z_val < l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height}, offset_xy))

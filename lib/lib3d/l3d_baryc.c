@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 18:03:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:24:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:27:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 **	Calculates the barycentric coordinates for a 2d point
 */
 
-void			l3d_calculate_barycoords(t_vec2 points_2d[3], t_vec2 point,
+void			l3d_calculate_baryc(t_vec2 points_2d[3], t_vec2 point,
 					t_vec3 baryc)
 {
 	float denom;

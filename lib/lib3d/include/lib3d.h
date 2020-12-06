@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:16:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:27:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,7 +410,7 @@ double						l3d_rand_d(void);
 
 void						l3d_triangle_raster(t_sub_framebuffer *buffers,
 												t_triangle *triangle);
-void						l3d_calculate_barycoords(
+void						l3d_calculate_baryc(
 													t_vec2 *triangle_points_2d,
 													t_vec2 point,
 													float *barycoords);

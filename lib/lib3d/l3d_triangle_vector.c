@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_triangle_vector.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/23 13:53:28 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/05 00:28:18 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:23:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_kd_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/22 21:54:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/04 14:29:53 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:22:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

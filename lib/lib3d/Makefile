@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+         #
+#    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/09/29 14:50:34 by ohakola           #+#    #+#              #
-#    Updated: 2020/12/05 15:32:30 by ohakola+vei      ###   ########.fr        #
+#    Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#              #
+#    Updated: 2020/12/06 17:27:52 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SOURCES = l3d_triangle.c \
 			l3d_color.c \
 			l3d_image_read.c \
 			l3d_triangle_raster.c \
+			l3d_shading.c \
 			l3d_triangle_clipping.c \
 			l3d_procedural_gen.c \
 			l3d_buffers.c

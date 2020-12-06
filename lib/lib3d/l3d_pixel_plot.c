@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_pixel_plot.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/30 14:27:20 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/23 17:45:07 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:23:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

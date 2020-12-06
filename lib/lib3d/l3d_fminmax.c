@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_fminmax.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 15:01:27 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:14 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:22:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

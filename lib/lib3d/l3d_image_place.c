@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l3d_image_place.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/05 14:47:33 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 23:33:34 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:26:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,31 +55,28 @@ void				l3d_image_place(t_surface *frame,
 t_surface			*l3d_image_scaled(t_surface *image,
 										int32_t dest_x, int32_t dest_y)
 {
-	float		scale_x;
-	float		scale_y;
+	float		scales[2];
 	int32_t		x;
 	int32_t		y;
 	t_surface	*image_out;
 	int32_t		i;
 
-	error_check(!(image_out = malloc(sizeof(t_surface))),
-		"Failed to malloc surface");
-	error_check(!(image_out->pixels =
-		malloc(sizeof(uint32_t) * dest_x * dest_y)), "Failed to malloc pixels");
+	error_check(!(image_out = malloc(sizeof(t_surface))), "!Malloc surface");
+	error_check(!(image_out->pixels = malloc(sizeof(uint32_t) * dest_x *
+		dest_y)), "Failed to malloc pixels");
 	image_out->w = dest_x;
 	image_out->h = dest_y;
-	scale_x = (float)image->w / (float)dest_x;
-	scale_y = (float)image->h / (float)dest_y;
+	scales[0] = (float)image->w / (float)dest_x;
+	scales[1] = (float)image->h / (float)dest_y;
 	y = -1;
 	while (++y < (int32_t)image_out->h)
 	{
 		x = -1;
 		while (++x < (int32_t)image_out->w)
 		{
-			i = (int32_t)((float)y * scale_y) * image->w +
-				(int32_t)((float)x * scale_x);
-			image_out->pixels[y * image_out->w + x] =
-				image->pixels[i];
+			i = (int32_t)((float)y * scales[1]) * image->w +
+				(int32_t)((float)x * scales[0]);
+			image_out->pixels[y * image_out->w + x] = image->pixels[i];
 		}
 	}
 	return (image_out);

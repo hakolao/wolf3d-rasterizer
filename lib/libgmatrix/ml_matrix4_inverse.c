@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ml_matrix4_inverse.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 17:19:48 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:54:55 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:17:23 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:19:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

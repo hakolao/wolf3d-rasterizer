@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libgmatrix.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/17 13:11:01 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/30 13:00:03 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:17:23 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:20:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

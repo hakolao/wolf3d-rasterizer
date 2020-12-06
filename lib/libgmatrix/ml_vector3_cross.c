@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ml_vector3_cross.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 17:02:09 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:55:29 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:17:23 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:18:21 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

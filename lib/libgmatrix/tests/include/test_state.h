@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_state.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 20:05:49 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:53:55 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:17:23 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:19:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

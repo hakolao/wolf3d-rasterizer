@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ml_print1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/16 17:05:25 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/16 13:55:07 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:17:23 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:21:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,19 @@ void		ml_matrix4_to_str(t_mat4 m, char *res)
 		m[0][1], m[1][1], m[2][1], m[3][1],
 		m[0][2], m[1][2], m[2][2], m[3][2],
 		m[0][3], m[1][3], m[2][3], m[3][3]);
+}
+
+void		ml_vector4_print(t_vec4 v)
+{
+	ft_printf("Vec4[%.2f, %.2f, %.2f, %.2f]\n", v[0], v[1], v[2], v[3]);
+}
+
+void		ml_vector3_print(t_vec3 v)
+{
+	ft_printf("Vec3[%.2f, %.2f, %.2f]\n", v[0], v[1], v[2]);
+}
+
+void		ml_vector2_print(t_vec2 v)
+{
+	ft_printf("Vec2[%.2f, %.2f]\n", v[0], v[1]);
 }

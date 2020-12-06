@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 15:28:15 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 17:05:31 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 16:41:17 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,20 @@ void				l3d_object_aabb_update(t_3d_object *obj)
 	int		i;
 	int		j;
 
-	ml_vector3_copy((t_vec3){INT32_MIN, INT32_MIN, INT32_MIN}, obj->aabb.xyz_max);
-	ml_vector3_copy((t_vec3){INT32_MAX, INT32_MAX, INT32_MAX}, obj->aabb.xyz_min);
+	ml_vector3_copy((t_vec3){INT32_MIN, INT32_MIN, INT32_MIN},
+		obj->aabb.xyz_max);
+	ml_vector3_copy((t_vec3){INT32_MAX, INT32_MAX, INT32_MAX},
+		obj->aabb.xyz_min);
 	i = -1;
 	while (++i < (int)obj->num_vertices)
 	{
 		j = -1;
 		while (++j < 3)
 		{
-			obj->aabb.xyz_min[j] = l3d_fmin(obj->aabb.xyz_min[j], obj->vertices[i]->pos[j]);
-			obj->aabb.xyz_max[j] = l3d_fmax(obj->aabb.xyz_max[j], obj->vertices[i]->pos[j]);
+			obj->aabb.xyz_min[j] =
+				l3d_fmin(obj->aabb.xyz_min[j], obj->vertices[i]->pos[j]);
+			obj->aabb.xyz_max[j] =
+				l3d_fmax(obj->aabb.xyz_max[j], obj->vertices[i]->pos[j]);
 		}
 	}
 	l3d_aabb_set_size_and_center(&obj->aabb);

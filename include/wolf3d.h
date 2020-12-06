@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/24 15:06:23 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 00:22:19 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 16:54:37 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,7 +337,7 @@ void						clip_and_add_to_render_triangles(t_wolf3d *app,
 								t_tri_vec *r_triangle_vec,
 								t_triangle *triangle);
 void						rasterize_triangles(t_render_work *work);
-t_bool						triangle_behind_player(t_wolf3d *app,
+t_bool						triangle_inside_viewbox(t_wolf3d *app,
 								t_triangle *triangle);
 t_bool						triangle_too_far(t_wolf3d *app, t_triangle *triangle);
 void						prepare_skybox_render_triangle(t_wolf3d *app,

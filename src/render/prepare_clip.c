@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 22:28:06 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/04 23:00:13 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 16:41:23 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,13 @@ void			clip_and_add_to_render_triangles(t_wolf3d *app,
 	t_triangle	clipped_triangles[2];
 	t_vertex	vtc[6];
 	int32_t		test_clip;
+	t_plane		near;
 
+	near.d = NEAR_CLIP_DIST;
+	ml_vector3_set(near.origin, 0, 0, -NEAR_CLIP_DIST);
+	ml_vector3_set(near.normal, 0, 0, -1);
 	l3d_set_clipped_triangles(vtc, triangle, clipped_triangles);
-	test_clip = l3d_clip_triangle(triangle,
-		&app->active_scene->main_camera->viewplanes[0], clipped_triangles);
+	test_clip = l3d_clip_triangle(triangle, &near, clipped_triangles);
 	if (test_clip == 2)
 		add_two_clipped_triangles(app, render_triangles, clipped_triangles);
 	else if (test_clip == 1)

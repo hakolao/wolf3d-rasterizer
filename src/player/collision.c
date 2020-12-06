@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 17:17:47 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 23:03:02 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 02:19:12 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ void			position_limit_player(t_wolf3d *app, t_vec3 add)
 
 	ml_vector3_add(app->player.pos, add, future_pos);
 	pos_to_grid_pos(future_pos, grid_pos, app->unit_size);
-	in_room = grid_pos[0] < 0 || grid_pos[1] >= app->active_scene->map->size ||
+	in_room = grid_pos[0] >= 0 && grid_pos[0] < app->active_scene->map->size &&
+		grid_pos[1] >= 0 && grid_pos[1] < app->active_scene->map->size &&
 		(app->active_scene->map->grid[(int32_t)grid_pos[1] *
 			app->active_scene->map->size + (int32_t)grid_pos[0]] & c_floor);
 	if (!in_room)

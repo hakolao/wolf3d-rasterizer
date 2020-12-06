@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   l3d_3d_object_copy.c                               :+:      :+:    :+:   */
+/*   l3d_3d_object_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:34:25 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:34:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:05:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,11 @@ t_3d_object		*l3d_3d_object_copy(t_3d_object *src)
 		ft_memcpy(dst->vertices[i], src->vertices[i], sizeof(t_vertex));
 	l3d_3d_object_triangle_copy_and_set(dst, src);
 	return (dst);
+}
+
+void			l3d_object_set_shading_opts(t_3d_object *obj,
+					t_shading_opts opts)
+{
+	if (obj->material != NULL)
+		obj->material->shading_opts = opts;
 }

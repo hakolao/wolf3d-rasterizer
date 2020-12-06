@@ -6,7 +6,7 @@
 #    By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#              #
-#    Updated: 2020/12/06 17:50:30 by ohakola          ###   ########.fr        #
+#    Updated: 2020/12/06 18:12:07 by ohakola          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,13 @@ SOURCES = l3d_triangle.c \
 			l3d_triangle_vector.c \
 			l3d_ray.c \
 			l3d_ray_hit.c \
+			l3d_ray_hit_utils.c \
 			l3d_rand.c \
 			l3d_obj_read.c \
 			l3d_obj_read_utils1.c \
 			l3d_obj_read_utils2.c \
 			l3d_3d_object.c \
-			l3d_3d_object_copy.c \
+			l3d_3d_object_utils.c \
 			l3d_3d_object_transform.c \
 			l3d_kd_tree.c \
 			l3d_kd_tree_node.c \
@@ -41,7 +42,11 @@ SOURCES = l3d_triangle.c \
 			l3d_color.c \
 			l3d_image_read.c \
 			l3d_triangle_raster.c \
+			l3d_triangle_raster_utils.c \
 			l3d_shading.c \
+			l3d_uv.c \
+			l3d_texture_sample.c \
+			l3d_baryc.c \
 			l3d_triangle_clipping.c \
 			l3d_procedural_gen.c \
 			l3d_buffers.c \

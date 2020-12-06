@@ -6,114 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:23:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:11:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d_internals.h"
-
-static void		order_corners_y(t_vec2 *ordered_corners, t_vec2 *points_2d)
-{
-	size_t	indices[3];
-
-	ft_min_double_idx((double[3]){points_2d[0][1],
-									points_2d[1][1],
-									points_2d[2][1]},
-						3, &(indices[0]));
-	ml_vector2_copy(points_2d[indices[0]], ordered_corners[0]);
-	ft_max_double_idx((double[3]){points_2d[0][1],
-									points_2d[1][1],
-									points_2d[2][1]},
-						3, &(indices[2]));
-	ml_vector2_copy(points_2d[indices[2]], ordered_corners[2]);
-	indices[1] = 3 - (indices[0] + indices[2]);
-	ml_vector2_copy(points_2d[indices[1]], ordered_corners[1]);
-}
-
-void			clamp_uv(t_vec2 uv)
-{
-	if (uv[0] > 1.0)
-		uv[0] = 1.0;
-	else if (uv[0] < 0.0)
-		uv[0] = 0.0;
-	if (uv[1] > 1.0)
-		uv[1] = 1.0;
-	else if (uv[1] < 0.0)
-		uv[1] = 0.0;
-}
-
-static float	calculate_z_val(float baryc[3], t_triangle *triangle)
-{
-	return (((baryc[0] * triangle->vtc_zvalue[0] +
-			baryc[1] * triangle->vtc_zvalue[1] +
-			baryc[2] * triangle->vtc_zvalue[2])));
-}
-
-void			normal_from_color(uint32_t color, t_vec3 normal)
-{
-	uint32_t	rgba[4];
-	float		inv_255;
-
-	inv_255 = 0.00392156862745098;
-	l3d_u32_to_rgba(color, rgba);
-	normal[0] = (float)rgba[0] * inv_255;
-	normal[1] = (float)rgba[1] * inv_255;
-	normal[2] = (float)rgba[2] * inv_255;
-}
-
-void			calc_bumped_normal(t_triangle *triangle, t_vec2 uv, t_vec3 res)
-{
-	uint32_t	normal_value;
-	t_vec3		bumpnormal;
-	t_vec3		resultnormal;
-	t_mat3		tbn;
-
-	normal_value = l3d_sample_texture(triangle->material->normal_map, uv);
-	normal_from_color(normal_value, bumpnormal);
-	ml_vector3_mul(bumpnormal, 2, bumpnormal);
-	ml_vector3_sub(bumpnormal, (t_vec3){1.0, 1.0, 1.0}, bumpnormal);
-	ml_matrix3_column(triangle->tangent, triangle->bitangent,
-		triangle->normalized_normal, tbn);
-	ml_matrix3_mul_vec3(tbn, bumpnormal, resultnormal);
-	ml_vector3_normalize(resultnormal, res);
-}
-
-uint32_t		fragment_shade_normal(t_vec3 light_vector, t_vec3 frag_normal,
-									uint32_t frag)
-{
-	float		dot;
-	uint32_t	rgba[4];
-	int			i;
-
-	i = -1;
-	dot = ml_vector3_dot(light_vector, frag_normal);
-	l3d_u32_to_rgba(frag, rgba);
-	while (++i < 3)
-	{
-		rgba[i] *= fabs(dot);
-	}
-	rgba[3] = 255;
-	return (l3d_rgba_to_u32(rgba));
-}
-
-uint32_t pixel_normal_shaded(uint32_t pixel, t_triangle *triangle, t_vec2 uv)
-{
-	t_vec3 frag_normal;
-	t_vec3 light_vector;
-
-	ml_vector3_set(light_vector, 0.0, 0.0, -1.0);
-	calc_bumped_normal(triangle, uv, frag_normal);
-	return (fragment_shade_normal(light_vector, frag_normal, pixel));
-}
-
-static uint32_t	pixel_depth_shaded(uint32_t pixel, float z_val)
-{
-	float	intensity;
-
-	intensity = 5.0;
-	return (l3d_color_blend_u32(pixel, 0x000000ff,
-		1.0 - (ft_abs(z_val) * intensity)));
-}
 
 static void		draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 							t_triangle *triangle)
@@ -127,12 +24,12 @@ static void		draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 	offset_xy[0] = xy[0] + buffers->x_offset;
 	offset_xy[1] = xy[1] + buffers->y_offset;
 	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	z_val = calculate_z_val(baryc, triangle);
+	z_val = l3d_z_val(baryc, triangle);
 	if (z_val < l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
 		buffers->width, buffers->height}, offset_xy))
 	{
 		l3d_interpolate_uv(triangle, baryc, uv);
-		clamp_uv(uv);
+		l3d_clamp_uv(uv);
 		pixel = L3D_DEFAULT_COLOR;
 		if (triangle->material)
 			pixel = l3d_sample_texture(triangle->material->texture, uv);
@@ -140,9 +37,9 @@ static void		draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 			(pixel & 255) == 0)
 			return ;
 		if (triangle->material->shading_opts & e_shading_normal_map)
-			pixel = pixel_normal_shaded(pixel, triangle, uv);
+			pixel = l3d_pixel_normal_shaded(pixel, triangle, uv);
 		if (triangle->material->shading_opts & e_shading_depth)
-			pixel = pixel_depth_shaded(pixel, z_val);
+			pixel = l3d_pixel_depth_shaded(pixel, z_val);
 		l3d_pixel_plot(buffers->buffer, (uint32_t[2]){buffers->width,
 				buffers->height}, offset_xy, pixel);
 		if (!(triangle->material->shading_opts & e_shading_ignore_zpass))
@@ -235,7 +132,7 @@ void			l3d_triangle_raster(t_sub_framebuffer *buffers, t_triangle *triangle)
 	t_raster_data	data;
 	t_vec2			ordered_points_2d[3];
 
-	order_corners_y(ordered_points_2d, triangle->points_2d);
+	l3d_order_corners_y(ordered_points_2d, triangle->points_2d);
 	data.x1 = floor(ordered_points_2d[0][0]);
 	data.x2 = floor(ordered_points_2d[1][0]);
 	data.x3 = floor(ordered_points_2d[2][0]);
@@ -247,91 +144,4 @@ void			l3d_triangle_raster(t_sub_framebuffer *buffers, t_triangle *triangle)
 	data.slope_ab = (data.x2 - data.x1) / (data.y2 - data.y1);
 	raster_upper(buffers, triangle, &data);
 	raster_lower(buffers, triangle, &data);
-}
-
-/*
-**	Calculates the barycentric coordinates for a 2d point
-*/
-
-void			l3d_calculate_barycoords(t_vec2 points_2d[3], t_vec2 point,
-					t_vec3 baryc)
-{
-	float denom;
-	float inv_denom;
-
-	denom = ((points_2d[1][1] - points_2d[2][1]) *
-			(points_2d[0][0] - points_2d[2][0]) +
-			(points_2d[2][0] - points_2d[1][0]) *
-			(points_2d[0][1] - points_2d[2][1]));
-
-	if (fabs(denom) < L3D_EPSILON)
-	{
-		denom =  denom < 0 ? -1.0 * L3D_EPSILON : L3D_EPSILON;
-	}
-	inv_denom = 1 / denom;
-	baryc[0] = ((points_2d[1][1] - points_2d[2][1]) *
-				(point[0] - points_2d[2][0]) +
-				(points_2d[2][0] - points_2d[1][0]) *
-				(point[1] - points_2d[2][1])) * inv_denom;
-	baryc[1] = ((points_2d[2][1] - points_2d[0][1]) *
-				(point[0] - points_2d[2][0]) +
-				(points_2d[0][0] - points_2d[2][0]) *
-				(point[1] - points_2d[2][1])) * inv_denom;
-	baryc[2] = 1 - baryc[0] - baryc[1];
-}
-
-/*
-**	Interpolates the uv coordinates for a 2d point based on barycentric
-**	coordinates
-*/
-
-void			l3d_interpolate_uv(t_triangle *triangle, float *baryc,
-									t_vec2 uv)
-{
-	float	az;
-	float	bz;
-	float	cz;
-	float	inv_denom;
-
-	az = 1.0 / triangle->vtc[0]->pos[2];
-	bz = 1.0 / triangle->vtc[1]->pos[2];
-	cz = 1.0 / triangle->vtc[2]->pos[2];
-	inv_denom = 1.0 / (baryc[0] * az + baryc[1] * bz + baryc[2] * cz);
-	uv[0] = ((baryc[0] * triangle->uvs[0][0]) * az +
-			(baryc[1] * triangle->uvs[1][0]) * bz +
-			(baryc[2] * triangle->uvs[2][0]) * cz) * inv_denom;
-	uv[1] = 1 - ((baryc[0] * triangle->uvs[0][1]) * az +
-			(baryc[1] * triangle->uvs[1][1]) * bz +
-			(baryc[2] * triangle->uvs[2][1]) * cz) * inv_denom;
-}
-
-/*
-**	Samples the texture with given uv_coordinates
-**	x = (floor(U * (width)));
-**	y = (floor(V * (height)));
-**	index = x + width * y;
-*/
-
-uint32_t		l3d_sample_texture(t_surface *texture, t_vec2 uv_point)
-{
-	int			index;
-	float		x;
-	float		y;
-	uint32_t	default_color;
-
-	default_color = L3D_DEFAULT_COLOR;
-	if (!texture->pixels)
-		return (default_color);
-	x = floor(uv_point[0] * texture->w);
-	y = floor(uv_point[1] * texture->h);
-	if (x >= (int32_t)texture->w)
-		x = (float)(texture->w - 1);
-	if (y >= (int32_t)texture->h)
-		y = (float)(texture->h - 1);
-	index = (int)floor(x) + (int)(floor(y * texture->w));
-	if (index >= (int32_t)texture->w * (int32_t)texture->h)
-		index = texture->w * texture->h - 1;
-	else if (index < 0)
-		index = 0;
-	return (texture->pixels[index]);
 }

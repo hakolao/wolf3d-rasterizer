@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:39:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:11:34 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,6 +419,13 @@ void						l3d_interpolate_uv(t_triangle *triangle,
 												t_vec2 point_uv);
 uint32_t					l3d_sample_texture(t_surface *material,
 								t_vec2 uv_point);
+void						l3d_order_corners_y(t_vec2 *ordered_corners,
+								t_vec2 *points_2d);
+float						l3d_z_val(float baryc[3], t_triangle *triangle);
+uint32_t					l3d_pixel_depth_shaded(uint32_t pixel, float z_val);
+uint32_t					l3d_pixel_normal_shaded(uint32_t pixel,
+								t_triangle *triangle, t_vec2 uv);
+void						l3d_clamp_uv(t_vec2 uv);
 
 /*
 ** Plot pixel

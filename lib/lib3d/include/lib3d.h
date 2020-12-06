@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:11:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:16:13 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,6 +426,9 @@ uint32_t					l3d_pixel_depth_shaded(uint32_t pixel, float z_val);
 uint32_t					l3d_pixel_normal_shaded(uint32_t pixel,
 								t_triangle *triangle, t_vec2 uv);
 void						l3d_clamp_uv(t_vec2 uv);
+void						l3d_raster_draw_pixel(t_sub_framebuffer *buffers,
+									int32_t xy[2],
+									t_triangle *triangle);
 
 /*
 ** Plot pixel

@@ -6,48 +6,11 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:11:10 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 18:24:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d_internals.h"
-
-static void		draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
-							t_triangle *triangle)
-{
-	t_vec3		baryc;
-	t_vec2		uv;
-	float		z_val;
-	int32_t		offset_xy[2];
-	uint32_t	pixel;
-
-	offset_xy[0] = xy[0] + buffers->x_offset;
-	offset_xy[1] = xy[1] + buffers->y_offset;
-	l3d_calculate_barycoords(triangle->points_2d, (t_vec2){xy[0], xy[1]}, baryc);
-	z_val = l3d_z_val(baryc, triangle);
-	if (z_val < l3d_pixel_get_float(buffers->zbuffer, (uint32_t[2]){
-		buffers->width, buffers->height}, offset_xy))
-	{
-		l3d_interpolate_uv(triangle, baryc, uv);
-		l3d_clamp_uv(uv);
-		pixel = L3D_DEFAULT_COLOR;
-		if (triangle->material)
-			pixel = l3d_sample_texture(triangle->material->texture, uv);
-		if ((triangle->material->shading_opts & e_shading_zero_alpha) &&
-			(pixel & 255) == 0)
-			return ;
-		if (triangle->material->shading_opts & e_shading_normal_map)
-			pixel = l3d_pixel_normal_shaded(pixel, triangle, uv);
-		if (triangle->material->shading_opts & e_shading_depth)
-			pixel = l3d_pixel_depth_shaded(pixel, z_val);
-		l3d_pixel_plot(buffers->buffer, (uint32_t[2]){buffers->width,
-				buffers->height}, offset_xy, pixel);
-		if (!(triangle->material->shading_opts & e_shading_ignore_zpass))
-			l3d_pixel_plot_float(buffers->zbuffer,
-				(uint32_t[2]){buffers->width, buffers->height},
-				offset_xy, z_val);
-	}
-}
 
 static void		scan_line(t_sub_framebuffer *buffers,
 							float *limits, t_triangle *triangle)
@@ -67,8 +30,8 @@ static void		scan_line(t_sub_framebuffer *buffers,
 			continue ;
 		}
 		else if (x + buffers->x_offset >= buffers->width)
-			break;
-		draw_pixel(buffers, (int32_t[2]){x, y}, triangle);
+			break ;
+		l3d_raster_draw_pixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
 	}
 }
@@ -89,7 +52,7 @@ static void		raster_upper(t_sub_framebuffer *bufs,
 			continue ;
 		}
 		else if (y + bufs->y_offset >= bufs->height)
-			break;
+			break ;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
@@ -116,7 +79,7 @@ static void		raster_lower(t_sub_framebuffer *bufs,
 			continue ;
 		}
 		else if (y + bufs->y_offset >= bufs->height)
-			break;
+			break ;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
@@ -127,7 +90,8 @@ static void		raster_lower(t_sub_framebuffer *bufs,
 	}
 }
 
-void			l3d_triangle_raster(t_sub_framebuffer *buffers, t_triangle *triangle)
+void			l3d_triangle_raster(t_sub_framebuffer *buffers,
+					t_triangle *triangle)
 {
 	t_raster_data	data;
 	t_vec2			ordered_points_2d[3];

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:48:37 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ static void		limit_movement_add_by_collision(t_vec3 collision_normal,
 	ml_vector3_sub(dir_add, direction_wall_part, dir_add);
 }
 
+static void		set_future_player(t_wolf3d *app, t_vec3 add,
+					t_player *future_player)
+{
+	ft_memcpy(future_player, &app->player, sizeof(t_player));
+	ml_vector3_add(future_player->pos, add, future_player->pos);
+	player_update_aabb(future_player);
+}
+
 void			collision_limit_player(t_wolf3d *app, t_vec3 add)
 {
 	int32_t		i;
@@ -35,9 +43,7 @@ void			collision_limit_player(t_wolf3d *app, t_vec3 add)
 	t_vec3		diff;
 	t_hit		*hit;
 
-	ft_memcpy(&future_player, &app->player, sizeof(t_player));
-	ml_vector3_add(future_player.pos, add, future_player.pos);
-	player_update_aabb(&future_player);
+	set_future_player(app, add, &future_player);
 	i = -1;
 	while (++i < (int32_t)app->active_scene->num_objects)
 	{

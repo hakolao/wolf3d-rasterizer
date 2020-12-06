@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:40 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:49:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void			player_init(t_wolf3d *app, t_vec3 pos)
 /*
 ** 	Clicking shoots right away. Else, fired according to fire rate
 ** // ToDo: Add various weapons & fire rates etc.
+** // ToDo: Add bullet temp objects to hit surface
 */
 
 void			player_shoot(t_wolf3d *app, uint32_t curr_time)
@@ -72,7 +73,7 @@ void			player_shoot(t_wolf3d *app, uint32_t curr_time)
 	{
 		l3d_get_closest_hit(hits, &closest_triangle_hit);
 		if (closest_triangle_hit != NULL)
-			; //ToDo shoot (Add bullet to temp objects)
+			;
 		l3d_delete_hits(&hits);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_pool_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/16 16:50:19 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/30 14:22:10 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:16:05 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:16:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

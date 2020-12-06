@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/19 13:47:36 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 23:52:15 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:13:19 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:14:50 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

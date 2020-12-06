@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/14 15:30:06 by ohakola           #+#    #+#             */
-/*   Updated: 2020/11/24 16:40:02 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:15:37 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:15:38 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

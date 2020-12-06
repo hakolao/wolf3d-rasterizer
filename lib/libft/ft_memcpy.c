@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
+/*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/19 13:33:56 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/03 23:52:39 by ohakola+vei      ###   ########.fr       */
+/*   Created: 2020/12/06 17:15:27 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/06 17:15:28 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

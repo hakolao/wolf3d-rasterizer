@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:38:37 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:45:39 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,56 +42,55 @@ static void			on_menu_button_click(t_button *self, void *params)
 		app->selected_feature = m_clear;
 }
 
+static void			set_menu_button_surfaces(t_map_editor *app,
+						const char *option,
+						t_surface **surface, t_surface **down_surface)
+{
+	SDL_Surface	*tmp_surface;
+
+	tmp_surface = surface_from_font(app->window,
+		(t_text_params){.text = option, .blend_ratio = 1.0,
+		.text_color = (SDL_Color){255, 0, 0, 255}}, app->window->main_font);
+	*surface = convert_sdl_surface_to_t_surface(tmp_surface);
+	SDL_FreeSurface(tmp_surface);
+	tmp_surface = surface_from_font(app->window,
+		(t_text_params){.text = option, .blend_ratio = 1.0,
+		.text_color = (SDL_Color){255, 255, 255, 255}},
+		app->window->main_font);
+	*down_surface = convert_sdl_surface_to_t_surface(tmp_surface);
+	SDL_FreeSurface(tmp_surface);
+}
+
 void				map_editor_draw_menu_create(t_map_editor *app)
 {
 	int32_t		i;
-	const char	*options[4];
 	t_button	**buttons;
-	uint32_t	num_buttons;
 	t_surface	**surfaces;
 	t_surface	**down_surfaces;
-	SDL_Surface	*tmp_surface;
 
-	num_buttons = 4;
-	options[0] = "Room";
-	options[1] = "Start";
-	options[2] = "Enemy";
-	options[3] = "Clear";
-	error_check(!(buttons = malloc(sizeof(t_button*) * num_buttons)),
-		"Failed to malloc buttons in menu creation");
-	error_check(!(surfaces = malloc(sizeof(t_surface*) * num_buttons)),
-		"Failed to malloc surfaces in menu creation");
-	error_check(!(down_surfaces = malloc(sizeof(t_surface*) * num_buttons)),
-		"Failed to malloc down_surfaces in menu creation");
+	error_check(!(buttons = malloc(sizeof(t_button*) * 4)), "!Merr");
+	error_check(!(surfaces = malloc(sizeof(t_surface*) * 4)), "!Merr");
+	error_check(!(down_surfaces = malloc(sizeof(t_surface*) * 4)), "!Merr");
 	i = -1;
-	while (++i < (int32_t)num_buttons)
+	while (++i < 4)
 	{
-		tmp_surface = surface_from_font(app->window,
-			(t_text_params){.text = options[i], .blend_ratio = 1.0,
-			.text_color = (SDL_Color){255, 0, 0, 255}}, app->window->main_font);
-		surfaces[i] = convert_sdl_surface_to_t_surface(tmp_surface);
-		SDL_FreeSurface(tmp_surface);
-		tmp_surface = surface_from_font(app->window,
-			(t_text_params){.text = options[i], .blend_ratio = 1.0,
-			.text_color = (SDL_Color){255, 255, 255, 255}},  app->window->main_font);
-		down_surfaces[i] = convert_sdl_surface_to_t_surface(tmp_surface);
-		SDL_FreeSurface(tmp_surface);
+		set_menu_button_surfaces(app,
+			(const char*[4]){"Room", "Start", "Enemy", "Clear"}[i],
+			&surfaces[i], &down_surfaces[i]);
 		buttons[i] = button_create(app->window, i);
 		button_set_texture(buttons[i], surfaces[i], down_surfaces[i]);
-		button_set_handles(buttons[i],
-			on_menu_button_click, NULL);
+		button_set_handles(buttons[i], on_menu_button_click, NULL);
 		button_set_handle_params(buttons[i], app, NULL);
 	}
-	app->select_menu = button_group_create(buttons, num_buttons);
+	app->select_menu = button_group_create(buttons, 4);
 	button_group_set_space_between(app->select_menu, 5);
-	// Select first feature:
 	button_group_set_selector(app->select_menu, 0);
 	app->select_menu->buttons[0]->on_click(app->select_menu->buttons[0], app);
 	free(surfaces);
 	free(down_surfaces);
 }
 
-void		map_editor_menu_render(t_map_editor *app, t_vec2 pos)
+void				map_editor_menu_render(t_map_editor *app, t_vec2 pos)
 {
 	if (pos[0] != app->select_menu->pos[0] ||
 		pos[1] != app->select_menu->pos[1])

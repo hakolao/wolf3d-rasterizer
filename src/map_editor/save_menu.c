@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 01:37:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:40:12 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:45:56 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ static void			set_save_menu_button_surfaces(t_map_editor *app,
 	SDL_FreeSurface(tmp_surface);
 	tmp_surface = surface_from_font(app->window,
 		(t_text_params){.text = option, .blend_ratio = 1.0,
-		.text_color = (SDL_Color){255, 255, 255, 255}},  app->window->main_font);
+		.text_color = (SDL_Color){255, 255, 255, 255}},
+		app->window->main_font);
 	*down_surface = convert_sdl_surface_to_t_surface(tmp_surface);
 	SDL_FreeSurface(tmp_surface);
 }

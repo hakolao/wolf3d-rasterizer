@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:26:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 23:42:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,57 +74,6 @@ static void		game_input_state_handle(t_wolf3d *app)
 	mouse_state_handle(app);
 	keyboard_state_set(app);
 	keyboard_state_handle(app);
-}
-
-static void		set_objects_shading_opts(t_wolf3d *app, t_shading_opts opts)
-{
-	int32_t	i;
-
-	i = -1;
-	while (++i < (int32_t)app->active_scene->num_objects)
-		l3d_object_set_shading_opts(app->active_scene->objects[i], opts);
-}
-
-/*
-** Handle events that aren't related to menus or game, like exiting or esc
-** or setting to full screen, or disabling debug info
-*/
-
-static void		general_input_events_handle(t_wolf3d *app, SDL_Event event)
-{
-
-	if (event.type == SDL_QUIT)
-		app->is_running = false;
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-	{
-		if (app->active_scene->scene_id == scene_id_main_game)
-			app->active_scene->is_paused = !app->active_scene->is_paused;
-		else
-			app->is_running = false;
-	}
-	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_g)
-		app->is_debug = !app->is_debug;
-	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_n &&
-		app->active_scene->scene_id == scene_id_main_game)
-	{
-		app->is_normal_map = !app->is_normal_map;
-		if (app->is_normal_map)
-			set_objects_shading_opts(app,
-				app->active_scene->objects[0]->material->shading_opts |
-				e_shading_normal_map);
-		else
-			set_objects_shading_opts(app,
-				app->active_scene->objects[0]->material->shading_opts ^
-				e_shading_normal_map);
-	}
-	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_f)
-	{
-		app->window->is_fullscreen = !app->window->is_fullscreen;
-		if (app->window->is_fullscreen)
-			SDL_SetWindowFullscreen(app->window->window, SDL_WINDOW_FULLSCREEN);
-		else
-			SDL_SetWindowFullscreen(app->window->window, 0);
-	}
 }
 
 /*

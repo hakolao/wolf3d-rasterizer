@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:26:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 23:43:38 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void	menu_options_handle(t_wolf3d *app, SDL_Event event)
+static void		menu_options_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.key.keysym.sym == SDLK_UP)
 		app->active_scene->selected_option--;
@@ -26,7 +26,7 @@ static void	menu_options_handle(t_wolf3d *app, SDL_Event event)
 			app->active_scene->menu_option_count - 1;
 }
 
-void 		main_menu_event_handle(t_wolf3d *app, SDL_Event event)
+void			main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_KEYUP)
 	{
@@ -49,7 +49,7 @@ void 		main_menu_event_handle(t_wolf3d *app, SDL_Event event)
 	}
 }
 
-void 		main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event)
+void			main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_KEYUP)
 	{
@@ -69,7 +69,7 @@ void 		main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event)
 	}
 }
 
-void 		main_game_menu_event_handle(t_wolf3d *app, SDL_Event event)
+void			main_game_menu_event_handle(t_wolf3d *app, SDL_Event event)
 {
 	if (event.type == SDL_KEYUP)
 	{

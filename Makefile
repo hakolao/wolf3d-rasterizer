@@ -52,7 +52,8 @@ SOURCES = main.c \
 			events/mouse.c \
 			events/menu_events.c \
 			events/events.c \
-			events/keyboard.c
+			events/keyboard.c \
+			events/general_input_events.c
 
 MAP_EDITOR_NAME = wolf3d_editor
 MAP_EDITOR_SOURCES = map_editor/map_editor.c \

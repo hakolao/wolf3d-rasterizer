@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:26:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 23:37:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void 			mouse_motion_handle(t_wolf3d *app, SDL_Event event)
+static void				mouse_motion_handle(t_wolf3d *app, SDL_Event event)
 {
 	app->player.is_rotating = true;
 	player_rotate_vertical(app, (float)event.motion.yrel * 0.3);
@@ -51,4 +51,3 @@ void					mouse_events_handle(t_wolf3d *app, SDL_Event event)
 	else
 		app->player.is_rotating = false;
 }
-

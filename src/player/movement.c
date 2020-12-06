@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 17:16:02 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/12/05 22:55:05 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 15:09:30 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void		player_rotate(t_wolf3d *app)
 	ml_matrix4_mul_vec3(rotation, (t_vec3){0, 0, -1}, app->player.forward);
 	ml_matrix4_mul_vec3(rotation, (t_vec3){1, 0, 0}, app->player.sideways);
 	ml_matrix4_inverse(rotation, app->player.inv_rotation);
+	update_camera(app);
 }
 
 void			player_rotate_vertical(t_wolf3d *app, float angle)
@@ -69,4 +70,5 @@ void			player_move(t_wolf3d *app, t_move dir, float speed)
 	ml_matrix4_inverse(app->player.translation, app->player.inv_translation);
 	pos_to_grid_pos(app->player.pos, app->player.grid_pos, app->unit_size);
 	player_update_aabb(&app->player);
+	update_camera(app);
 }

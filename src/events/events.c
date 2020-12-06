@@ -6,7 +6,7 @@
 /*   By: ohakola+veilo <ohakola+veilo@student.hi    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 13:00:27 by ohakola+vei       #+#    #+#             */
-/*   Updated: 2020/11/29 20:24:22 by ohakola+vei      ###   ########.fr       */
+/*   Updated: 2020/12/06 15:09:00 by ohakola+vei      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,15 @@ static void		game_input_state_handle(t_wolf3d *app)
 	keyboard_state_handle(app);
 }
 
+static void		set_objects_shading_opts(t_wolf3d *app, t_shading_opts opts)
+{
+	int32_t	i;
+
+	i = -1;
+	while (++i < (int32_t)app->active_scene->num_objects)
+		l3d_object_set_shading_opts(app->active_scene->objects[i], opts);
+}
+
 /*
 ** Handle events that aren't related to menus or game, like exiting or esc
 ** or setting to full screen, or disabling debug info
@@ -83,7 +92,6 @@ static void		game_input_state_handle(t_wolf3d *app)
 
 static void		general_input_events_handle(t_wolf3d *app, SDL_Event event)
 {
-	int32_t	i;
 
 	if (event.type == SDL_QUIT)
 		app->is_running = false;
@@ -101,21 +109,13 @@ static void		general_input_events_handle(t_wolf3d *app, SDL_Event event)
 	{
 		app->is_normal_map = !app->is_normal_map;
 		if (app->is_normal_map)
-		{
-			i = -1;
-			while (++i < (int32_t)app->active_scene->num_objects)
-				l3d_object_set_shading_opts(app->active_scene->objects[i],
-					app->active_scene->objects[i]->material->shading_opts |
-						e_shading_normal_map);
-		}
+			set_objects_shading_opts(app,
+				app->active_scene->objects[0]->material->shading_opts |
+				e_shading_normal_map);
 		else
-		{
-			i = -1;
-			while (++i < (int32_t)app->active_scene->num_objects)
-				l3d_object_set_shading_opts(app->active_scene->objects[i],
-					app->active_scene->objects[i]->material->shading_opts ^
-						e_shading_normal_map);
-		}
+			set_objects_shading_opts(app,
+				app->active_scene->objects[0]->material->shading_opts ^
+				e_shading_normal_map);
 	}
 	if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_f)
 	{

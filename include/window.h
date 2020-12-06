@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:26:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 23:37:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct				s_info
 	uint64_t				performance_end;
 }							t_info;
 
-typedef struct						s_window
+typedef struct				s_window
 {
 	SDL_Renderer			*renderer;
 	SDL_Texture				*frame;
@@ -62,24 +62,23 @@ typedef struct						s_window
 	uint32_t				window_id;
 	t_bool					is_hidden;
 	t_bool					is_fullscreen;
-}									t_window;
+}							t_window;
 
-
-typedef struct						s_mouse
+typedef struct				s_mouse
 {
 	int32_t				x;
 	int32_t				y;
 	uint32_t			state;
-}									t_mouse;
+}							t_mouse;
 
-typedef struct						s_keyboard
+typedef struct				s_keyboard
 {
 	const uint8_t		*state;
-}									t_keyboard;
+}							t_keyboard;
 
-typedef struct s_button				t_button;
+typedef struct s_button		t_button;
 
-struct								s_button
+struct						s_button
 {
 	uint32_t				id;
 	t_vec2					pos;
@@ -96,7 +95,7 @@ struct								s_button
 	t_window				*window;
 };
 
-typedef struct						s_button_group
+typedef struct				s_button_group
 {
 	t_vec2					pos;
 	t_button				**buttons;
@@ -105,7 +104,7 @@ typedef struct						s_button_group
 	t_bool					is_horizontal;
 	t_bool					is_selector;
 	uint32_t				selected_index;
-}									t_button_group;
+}							t_button_group;
 
 /*
 ** Window
@@ -128,7 +127,8 @@ void						window_text_render(t_window *window,
 								t_text_params params, TTF_Font *font);
 void						window_text_render_centered(t_window *window,
 								t_text_params params, TTF_Font *font);
-SDL_Surface					*surface_from_font(t_window *window, t_text_params params,
+SDL_Surface					*surface_from_font(t_window *window,
+								t_text_params params,
 								TTF_Font *font);
 /*
 ** Utils
@@ -167,11 +167,13 @@ void						button_group_render(t_button_group *button_group);
 void						button_group_set_space_between(
 								t_button_group *button_group,
 								int32_t space_between);
-void						button_group_events_handle(t_button_group *button_group,
+void						button_group_events_handle(
+								t_button_group *button_group,
 								t_mouse mouse, SDL_Event event);
 void						button_events_handle(t_button *button,
 								t_mouse mouse, SDL_Event event);
-void						button_group_set_selector(t_button_group *button_group,
+void						button_group_set_selector(
+								t_button_group *button_group,
 								int32_t	selected_index);
 
 #endif

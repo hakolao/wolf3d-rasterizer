@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:31:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/06 23:36:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define NUM_ASSETS 64
 # define TEMP_OBJECT_EXPIRE_SEC 100
 
-typedef enum						e_move
+typedef enum				e_move
 {
 	move_forward,
 	move_backward,
@@ -51,25 +51,25 @@ typedef enum						e_move
 	move_strafe_right,
 	move_down,
 	move_up,
-}									t_move;
+}							t_move;
 
-typedef enum						e_scene_id
+typedef enum				e_scene_id
 {
 	scene_id_main_menu,
 	scene_id_main_menu_settings,
 	scene_id_main_game,
-}									t_scene_id;
+}							t_scene_id;
 
-typedef struct						s_camera
+typedef struct				s_camera
 {
 	t_vec3					origin;
 	float					near_clip;
 	float					far_clip;
 	t_plane					viewplanes[6];
 	t_plane					screen;
-}									t_camera;
+}							t_camera;
 
-typedef struct						s_player
+typedef struct				s_player
 {
 	t_vec3					pos;
 	t_vec3					forward;
@@ -91,9 +91,9 @@ typedef struct						s_player
 	t_mat4					translation;
 	t_mat4					inv_translation;
 	t_box3d					aabb;
-}									t_player;
+}							t_player;
 
-typedef struct						s_wolf3d_map
+typedef struct				s_wolf3d_map
 {
 	int32_t					size;
 	float					render_size;
@@ -101,9 +101,9 @@ typedef struct						s_wolf3d_map
 	float					cell_render_size;
 	t_hash_table			*map_images;
 	uint32_t				*grid;
-}									t_wolf3d_map;
+}							t_wolf3d_map;
 
-typedef struct						s_scene_data
+typedef struct				s_scene_data
 {
 	int						level;
 	t_scene_id				scene_id;
@@ -116,9 +116,9 @@ typedef struct						s_scene_data
 	char					*model_files[NUM_ASSETS];
 	uint32_t				asset_keys[NUM_ASSETS];
 	uint32_t				num_assets_to_load;
-}									t_scene_data;
+}							t_scene_data;
 
-typedef struct						s_scene
+typedef struct				s_scene
 {
 	t_wolf3d_map			*map;
 	t_3d_object				*objects[MAX_NUM_OBJECTS];
@@ -139,9 +139,9 @@ typedef struct						s_scene
 	t_hash_table			*models;
 	t_surface				*skybox_textures[6];
 	t_3d_object				*skybox[6];
-}									t_scene;
+}							t_scene;
 
-typedef struct						s_wolf3d
+typedef struct				s_wolf3d
 {
 	t_bool					is_running;
 	t_bool					is_debug;
@@ -159,28 +159,27 @@ typedef struct						s_wolf3d
 	float					unit_size;
 	t_bool					is_minimap_largened;
 	int32_t					triangles_in_view;
-}									t_wolf3d;
+}							t_wolf3d;
 
 /*
 ** Map features used to draw the map in map editor
 */
 
-typedef enum						e_map_features
+typedef enum				e_map_features
 {
 	m_clear = 0,
 	m_room = 1,
 	m_start = 1 << 2,
 	m_enemy = 1 << 7,
-}									t_map_features;
+}							t_map_features;
 
 /*
 ** Cell features saved into map & read from map file
+** First bit determines if one is a room or not.
 */
 
-typedef enum						e_cell_features
+typedef enum				e_cell_features
 {
-	// Save first bit for whether cell is room or not. If not, nothing else
-	// can exist there (see update_map_cell_features)
 	c_floor = 1 << 1,
 	c_floor_start = 1 << 2,
 	c_wall_up = 1 << 3,
@@ -197,8 +196,7 @@ typedef enum						e_cell_features
 	c_corner_sw = 1 << 14,
 	c_ceiling = 1 << 15,
 	c_ceiling_window = 1 << 16,
-}									t_cell_features;
-
+}							t_cell_features;
 
 /*
 ** Combination of cell features that form pieces based on neighbor
@@ -206,20 +204,20 @@ typedef enum						e_cell_features
 ** corner block pieces are added separately (c_block_nw...)
 */
 
-typedef enum						e_map_prefabs
+typedef enum				e_map_prefabs
 {
 	p_corr_vert = c_floor | c_wall_right | c_wall_left,
 	p_corr_horz = c_floor | c_wall_up | c_wall_down,
 	p_dead_up = c_floor | c_wall_left | c_wall_up | c_wall_right |
-		c_corner_ne | c_corner_ne,
+	c_corner_ne | c_corner_ne,
 	p_dead_right = c_floor | c_wall_up | c_wall_right | c_wall_down |
-		c_corner_se | c_corner_ne,
+	c_corner_se | c_corner_ne,
 	p_dead_down = c_floor | c_wall_right | c_wall_down | c_wall_left |
-		c_corner_se | c_corner_sw,
+	c_corner_se | c_corner_sw,
 	p_dead_left = c_floor | c_wall_down | c_wall_left | c_wall_up |
-		c_corner_sw | c_corner_nw,
+	c_corner_sw | c_corner_nw,
 	p_dead_all = c_floor | c_wall_up | c_wall_right | c_wall_down |
-		c_wall_left | c_corner_se | c_corner_ne | c_corner_sw | c_corner_nw,
+	c_wall_left | c_corner_se | c_corner_ne | c_corner_sw | c_corner_nw,
 	p_wall_up = c_floor | c_wall_up,
 	p_wall_right = c_floor | c_wall_right,
 	p_wall_down = c_floor | c_wall_down,
@@ -232,10 +230,10 @@ typedef enum						e_map_prefabs
 	p_ceiling = c_floor | c_ceiling,
 	p_ceiling_window = c_floor | c_ceiling_window,
 	p_all = p_dead_all | c_block_nw | c_block_ne | c_block_se |
-		c_block_sw | p_ceiling,
-}									t_map_prefabs;
+	c_block_sw | p_ceiling,
+}							t_map_prefabs;
 
-typedef struct						s_map_editor
+typedef struct				s_map_editor
 {
 	t_bool					is_running;
 	t_info					info;
@@ -249,18 +247,18 @@ typedef struct						s_map_editor
 	t_vec2					mouse_grid_pos;
 	t_map_features			selected_feature;
 	char					*filename;
-}									t_map_editor;
+}							t_map_editor;
 
 /*
 ** For parallelization
 */
 
-typedef struct						s_render_work
+typedef struct				s_render_work
 {
 	t_wolf3d				*app;
 	t_sub_framebuffer		*sub_buffer;
 	t_tri_vec				*render_triangles;
-}									t_render_work;
+}							t_render_work;
 
 void						wolf3d_run(t_wolf3d *app);
 
@@ -272,7 +270,8 @@ void						pos_to_grid_pos(t_vec3 pos, t_vec2 grid_pos,
 void						player_init(t_wolf3d *app, t_vec3 pos);
 void						player_move(t_wolf3d *app, t_move dir, float speed);
 void						player_rotate_vertical(t_wolf3d *app, float angle);
-void						player_rotate_horizontal(t_wolf3d *app, float angle);
+void						player_rotate_horizontal(t_wolf3d *app,
+								float angle);
 void						player_apply_gravity(t_wolf3d *app);
 void						collision_limit_player(t_wolf3d *app, t_vec3 add);
 void						player_update_aabb(t_player *player);
@@ -289,13 +288,12 @@ void						mouse_state_handle(t_wolf3d *app);
 void						player_shoot(t_wolf3d *app,
 								uint32_t curr_time);
 void						keyboard_state_handle(t_wolf3d *app);
-void 						main_menu_event_handle(t_wolf3d *app,
+void						main_menu_event_handle(t_wolf3d *app,
 								SDL_Event event);
-void 						main_menu_settings_event_handle(t_wolf3d *app,
+void						main_menu_settings_event_handle(t_wolf3d *app,
 								SDL_Event event);
-void 						main_game_menu_event_handle(t_wolf3d *app,
+void						main_game_menu_event_handle(t_wolf3d *app,
 								SDL_Event event);
-
 
 /*
 ** Camera

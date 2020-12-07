@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:21:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:30:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,24 @@ static void		set_side_plane_normals(t_wolf3d *app, t_camera *camera,
 ** cross product nearby corners to get plane normals.
 */
 
-static void set_camera_viewbox(t_wolf3d *app, t_camera *camera)
+static void		set_camera_viewbox(t_wolf3d *app, t_camera *camera)
 {
 	t_vec3	dirs[4];
 	t_vec3	corners[4];
 	t_vec3	screen_origin;
 	t_vec3	add;
+	float	dims[2];
 
+	dims[0] = app->window->framebuffer->width / 2.0;
+	dims[1] = app->window->framebuffer->height / 2.0;
 	ml_vector3_copy(app->player.forward, camera->viewplanes[0].normal);
-	ml_vector3_mul(app->player.forward, ml_vector3_mag(camera->screen.origin),
-		add);
+	ml_vector3_mul(app->player.forward,
+		ml_vector3_mag(camera->screen.origin), add);
 	ml_vector3_add(app->player.pos, add, screen_origin);
-	ml_vector3_mul(app->player.up,
-		app->window->framebuffer->height / 2.0, dirs[0]);
-	ml_vector3_mul(app->player.sideways,
-		app->window->framebuffer->width / 2.0, dirs[1]);
-	ml_vector3_mul(app->player.up,
-		-app->window->framebuffer->height / 2.0, dirs[2]);
-	ml_vector3_mul(app->player.sideways,
-		-app->window->framebuffer->width / 2.0, dirs[3]);
+	ml_vector3_mul(app->player.up, dims[1], dirs[0]);
+	ml_vector3_mul(app->player.sideways, dims[0], dirs[1]);
+	ml_vector3_mul(app->player.up, -dims[1], dirs[2]);
+	ml_vector3_mul(app->player.sideways, -dims[0], dirs[3]);
 	ml_vector3_add(screen_origin, dirs[0], corners[0]);
 	ml_vector3_add(corners[0], dirs[1], corners[0]);
 	ml_vector3_add(screen_origin, dirs[1], corners[1]);
@@ -96,7 +95,7 @@ void			update_camera(t_wolf3d *app)
 	set_camera_viewbox(app, camera);
 }
 
-t_camera		*new_camera()
+t_camera		*new_camera(void)
 {
 	t_camera	*camera;
 

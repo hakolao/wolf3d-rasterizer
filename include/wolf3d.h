@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:24:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:28:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,7 +302,7 @@ void						general_input_events_handle(t_wolf3d *app,
 /*
 ** Camera
 */
-t_camera					*new_camera();
+t_camera					*new_camera(void);
 void						update_camera(t_wolf3d *app);
 
 /*
@@ -367,7 +367,7 @@ void						scene_normal_maps_destroy(t_scene *scene);
 */
 void						wolf3d_debug_info_render(t_wolf3d *app);
 void						wolf3d_debug_info_capture(t_wolf3d *app);
-uint64_t					wolf3d_performance_counter_start();
+uint64_t					wolf3d_performance_counter_start(void);
 void						wolf3d_performance_counter_end(uint64_t start_time,
 								char *task_name, float delta_limit);
 

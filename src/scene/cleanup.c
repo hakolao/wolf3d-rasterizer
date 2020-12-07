@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:21:14 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,4 @@ void		scene_objects_destroy(t_scene *scene)
 	i = -1;
 	while (++i < (int)scene->num_objects)
 		l3d_3d_object_destroy(scene->objects[i]);
-}
-
-void		scene_camera_destroy(t_scene *scene)
-{
-	if (scene->main_camera)
-	{
-		free(scene->main_camera);
-		scene->main_camera = NULL;
-	}
 }

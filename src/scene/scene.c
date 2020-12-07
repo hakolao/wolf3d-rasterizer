@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:24:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:21:57 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_scene			*scene_new(t_scene_data *data)
 	ft_memset(scene, 0, sizeof(*scene));
 	scene->scene_id = data->scene_id;
 	ft_memcpy(scene->menu_options, data->menu_options,
-		sizeof(char*)*data->menu_option_count);
+		sizeof(char*) * data->menu_option_count);
 	scene->menu_option_count = data->menu_option_count;
 	scene->selected_option = 0;
 	scene->main_camera = data->main_camera;

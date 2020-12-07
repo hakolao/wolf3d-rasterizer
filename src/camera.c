@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:24:13 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:21:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,13 @@ t_camera		*new_camera()
 		return (NULL);
 	ml_vector3_set_all(camera->origin, 0);
 	return (camera);
+}
+
+void			scene_camera_destroy(t_scene *scene)
+{
+	if (scene->main_camera)
+	{
+		free(scene->main_camera);
+		scene->main_camera = NULL;
+	}
 }

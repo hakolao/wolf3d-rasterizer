@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:24:58 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:24:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,6 @@ static void				set_scene_collision_tree(t_scene *scene)
 	}
 }
 
-static void				place_player(t_wolf3d *app, float unit_size, int32_t xy_rot[3])
-{
-	player_init(app,
-		(t_vec3){(float)xy_rot[1] * (2 * unit_size), 0,
-		-(float)xy_rot[0] * (2 * unit_size)});
-	player_rotate_horizontal(app, xy_rot[2]);
-}
-
 static void				instantiate_cell_features(t_wolf3d *app,
 							uint32_t cell, int32_t *obj_i, int32_t xy[2])
 {
@@ -93,8 +85,7 @@ static void				instantiate_cell_features(t_wolf3d *app,
 ** Models are copied and instantiated.
 */
 
-void			scene_objects_generate(t_wolf3d *app,
-						t_scene *scene)
+void					scene_objects_generate(t_wolf3d *app, t_scene *scene)
 {
 	int32_t			x;
 	int32_t			y;
@@ -112,7 +103,8 @@ void			scene_objects_generate(t_wolf3d *app,
 			if (!(cell & m_room))
 				continue;
 			if ((cell & m_start))
-				place_player(app, app->unit_size, (int32_t[3]){x, y, 0});
+				place_player_to_grid(app, app->unit_size,
+					(int32_t[3]){x, y, 0});
 			instantiate_cell_features(app, cell, &obj_i, (int32_t[2]){x, y});
 		}
 	}
@@ -122,7 +114,7 @@ void			scene_objects_generate(t_wolf3d *app,
 	player_move(app, move_forward, 0.0);
 }
 
-void				scene_map_init(t_scene *scene)
+void					scene_map_init(t_scene *scene)
 {
 	t_file_contents	*file;
 	char			header[4];

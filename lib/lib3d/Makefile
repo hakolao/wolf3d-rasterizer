@@ -70,7 +70,7 @@ $(DIR_OBJ):
 	@mkdir -p temp
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
-	@$(CC) $(FLAGS) $(INCLUDES) -c -o $@ $<
+	@$(CC) $(FLAGS) -c -o $@ $<  $(INCLUDES)
 
 clean:
 	@/bin/rm -f $(OBJS)

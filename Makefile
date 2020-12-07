@@ -6,15 +6,16 @@ LIBSDL2 = ./lib/SDL2
 LIBFT = ./lib/libft
 LIB3D = ./lib/lib3d
 LIBGMATRIX = ./lib/libgmatrix
-
 LIBFTFLAGS = -L$(LIBFT) -lft
 LIB3DFLAGS = -L$(LIB3D) -l3d
 LIBGMATRIXFLAGS = -L$(LIBGMATRIX) -lgmatrix
+# Linux and MacOS specific includes & libs
+# Linux requires sdl2 installed
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
-	SDL_FLAGS = `sdl2-config --cflags --libs` \
-				`pkg-config sdl2_image --cflags --libs` \
-				`pkg-config sdl2_ttf --cflags --libs`
+	SDL_FLAGS = `sdl2-config --cflags --libs` -lSDL2 -lSDL2_image -lSDL2_ttf
+	LIB_MATH = -lm
+	LIB_PTHRTEAD = -lpthread
 else
 	SDL_FLAGS = -rpath $(LIBSDL2) \
 					-framework SDL2 -F$(LIBSDL2)/ \
@@ -24,7 +25,7 @@ else
 			-I$(LIBSDL2)/SDL2_image.framework/Headers \
 			-I$(LIBSDL2)/SDL2_ttf.framework/Headers
 endif
-LIBS = $(LIBFTFLAGS) $(LIB3DFLAGS) $(LIBGMATRIXFLAGS) $(SDL_FLAGS)
+LIBS = $(LIB3DFLAGS) $(LIBGMATRIXFLAGS) $(LIBFTFLAGS) $(SDL_FLAGS) $(LIB_MATH) $(LIB_PTHRTEAD)
 
 INCLUDES = -I ./include \
 		-I$(LIBFT)/include \
@@ -100,7 +101,7 @@ all: $(DIR_OBJ) $(NAME)
 $(NAME): $(OBJS)
 	@make libs
 	@printf "\033[32;1mCompiling app...\n\033[0m"
-	$(CC) $(FLAGS) $(LIBS) -o $@ $^
+	$(CC) -o $@ $^ $(LIBS) $(FLAGS)
 	@printf "\033[32;1mDone. Run: ./$(NAME)\n\033[0m"
 
 libs:
@@ -114,7 +115,7 @@ map_editor: $(DIR_OBJ) $(MAP_EDITOR_NAME)
 $(MAP_EDITOR_NAME): $(MAP_EDITOR_OBJS)
 	@make libs
 	@printf "\033[32;1mCompiling map_editor...\n\033[0m"
-	$(CC) $(FLAGS) $(LIBS) -o $@ $^
+	$(CC) -o $@ $^ $(LIBS) $(FLAGS)
 	@printf "\033[32;1mDone. Run: ./$(MAP_EDITOR_NAME)\n\033[0m"
 
 $(DIR_OBJ):

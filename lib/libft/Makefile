@@ -156,7 +156,7 @@ $(DIR_OBJ):
 	@mkdir -p temp/thread_pool
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.c
-	@$(CC) $(FLAGS) $(INC) -c -o $@ $<
+	@$(CC) -c -o $@ $< $(FLAGS) $(INC)
 
 DIR_TESTS = ./tests
 TEST_SRCS =$(wildcard $(DIR_TESTS)/*.c)

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:15:47 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:15:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 21:13:06 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # define MAX_FD 65536
 # define FILE_READ_BUF 65536
 
-# include <string.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>

@@ -53,8 +53,7 @@ make && ./wolf3d
 
 ### External libraries:
 
-- SDL: Window management, fonts, events and presenting the framebuffer
-  - No other SDL functionality is allowed, except for bonus features
+- SDL: Window management, fonts, events, time and presenting the framebuffer
   - All graphics are software rendered
 - Libc:
   - `pthreads.h` for parallelization

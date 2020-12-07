@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prepare_utils.c                                    :+:      :+:    :+:   */
+/*   prepare_utils1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:10:42 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 16:54:45 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,30 +105,43 @@ void			prepare_skybox_render_triangle(t_wolf3d *app,
 	r_triangle->clipped = false;
 }
 
-/*
-** origin is adjusted somewhat behind player to account for some objects
-** not being visible when they should. ToDo: Fix
-*/
-
 t_bool			object_inside_viewbox(t_wolf3d *app, t_3d_object *obj)
 {
 	int32_t	i;
-	int32_t	is_inside;
-	t_vec3	origin_to_aabb[2];
+	t_vec3	origin_to_corner[6];
 	t_vec3	add;
 	t_vec3	origin;
 
-	ml_vector3_mul(app->player.forward, -2 * app->unit_size, add);
+	ml_vector3_mul(app->player.forward, NEAR_CLIP_DIST, add);
 	ml_vector3_add(app->player.pos, add, origin);
-	is_inside = true;
 	i = -1;
 	while (++i < 5)
 	{
-		ml_vector3_sub(obj->aabb.xyz_min, origin, origin_to_aabb[0]);
-		ml_vector3_sub(obj->aabb.xyz_max, origin, origin_to_aabb[1]);
-		if (ml_vector3_dot(origin_to_aabb[0],
+		ml_vector3_sub(obj->aabb.xyz_min, origin, origin_to_corner[0]);
+		ml_vector3_sub(obj->aabb.xyz_max, origin, origin_to_corner[1]);
+		ml_vector3_sub((t_vec3){
+			obj->aabb.xyz_max[0], obj->aabb.xyz_min[1], obj->aabb.xyz_min[2]
+		}, origin, origin_to_corner[2]);
+		ml_vector3_sub((t_vec3){
+			obj->aabb.xyz_min[0], obj->aabb.xyz_max[1], obj->aabb.xyz_max[2]
+		}, origin, origin_to_corner[3]);
+		ml_vector3_sub((t_vec3){
+			obj->aabb.xyz_min[0], obj->aabb.xyz_min[1], obj->aabb.xyz_max[2]
+		}, origin, origin_to_corner[4]);
+		ml_vector3_sub((t_vec3){
+			obj->aabb.xyz_max[0], obj->aabb.xyz_max[1], obj->aabb.xyz_min[2]
+		}, origin, origin_to_corner[5]);
+		if (ml_vector3_dot(origin_to_corner[0],
 			app->active_scene->main_camera->viewplanes[i].normal) < 0 &&
-			ml_vector3_dot(origin_to_aabb[1],
+			ml_vector3_dot(origin_to_corner[1],
+			app->active_scene->main_camera->viewplanes[i].normal) < 0 &&
+			ml_vector3_dot(origin_to_corner[2],
+			app->active_scene->main_camera->viewplanes[i].normal) < 0 &&
+			ml_vector3_dot(origin_to_corner[3],
+			app->active_scene->main_camera->viewplanes[i].normal) < 0 &&
+			ml_vector3_dot(origin_to_corner[4],
+			app->active_scene->main_camera->viewplanes[i].normal) < 0 &&
+			ml_vector3_dot(origin_to_corner[5],
 			app->active_scene->main_camera->viewplanes[i].normal) < 0)
 			return (false);
 	}

@@ -178,8 +178,7 @@ void			ft_sort_int_tab(int *tab, unsigned int size, int dir);
 long double		ft_abs_long_double(long double nb);
 int				ft_match(char *s1, char *s2);
 void			ft_strrev(char *str);
-size_t			get_num_len(long long unsigned int nb,
-				long long unsigned int base);
+size_t			get_num_len(uint64_t nb, uint64_t base);
 void			ft_capitalize(char *str);
 void			ft_uncapitalize(char *str);
 long double		ft_powl(long double nb, int pow);

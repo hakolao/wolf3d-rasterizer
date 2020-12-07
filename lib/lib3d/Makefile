@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC = clang
+CC = gcc
 NAME = lib3d.a
 LIBFT = ../libft
 LIBGMATRIX = ../libgmatrix

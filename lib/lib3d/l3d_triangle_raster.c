@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:24:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 14:55:36 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,13 @@ static void		scan_line(t_sub_framebuffer *buffers,
 	y = floor(limits[2]);
 	x = floor(limits[0]);
 	end_x = floor(limits[1]);
-	while (x < end_x)
+	while (x < end_x && (x + buffers->x_offset < buffers->width))
 	{
 		if (x + buffers->x_offset < 0)
 		{
 			x = -buffers->x_offset;
 			continue ;
 		}
-		else if (x + buffers->x_offset >= buffers->width)
-			break ;
 		l3d_raster_draw_pixel(buffers, (int32_t[2]){x, y}, triangle);
 		x++;
 	}
@@ -44,15 +42,13 @@ static void		raster_upper(t_sub_framebuffer *bufs,
 	float		end_x;
 
 	y = data->y1;
-	while (y < data->y2)
+	while (y < data->y2 && (y + bufs->y_offset < bufs->height))
 	{
 		if (y + bufs->y_offset < 0)
 		{
 			y = -bufs->y_offset;
 			continue ;
 		}
-		else if (y + bufs->y_offset >= bufs->height)
-			break ;
 		x = data->x2 + data->slope_ab * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)
@@ -71,15 +67,13 @@ static void		raster_lower(t_sub_framebuffer *bufs,
 	float		end_x;
 
 	y = data->y2;
-	while (y < data->y3)
+	while (y < data->y3 && (y + bufs->y_offset < bufs->height))
 	{
 		if (y + bufs->y_offset < 0)
 		{
 			y = -bufs->y_offset;
 			continue ;
 		}
-		else if (y + bufs->y_offset >= bufs->height)
-			break ;
 		x = data->x2 + data->slope_bc * (y - data->y2);
 		end_x = data->x1 + data->slope_ac * (y - data->y1);
 		if (x < end_x)

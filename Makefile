@@ -23,7 +23,7 @@ INCLUDES = -I ./include \
 		-I$(LIBSDL2)/SDL2_image.framework/Headers \
 		-I$(LIBSDL2)/SDL2_ttf.framework/Headers
 
-FLAGS = -Wall -Wextra -Werror -O3
+FLAGS = -Wall -Wextra -Werror -O3 -flto
 SOURCES = main.c \
 			wolf3d.c \
 			player/player.c \

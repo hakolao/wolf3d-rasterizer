@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 02:09:05 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:18:15 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 15:02:08 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,22 @@ static void		render_work(void *params)
 	draw_buffers(work);
 	free(work);
 }
+
+/*
+** This is the main render function containing the "flow" of the render pipeline
+** 1. Update camera (view boxes)
+** 2. Prepare render triangles, it basically outputs a vector of triangles
+** to be rendered. A small subset filtered out of all scene object triangles.
+** Some triangles are clipped if they intersect with near plane. Those clipped
+** triangles are separately allocated in the render triangles. Profiling has
+** shown that the preparation is rather fast despite allocation. Most work is
+** in rasterization.
+** 3. Each sub buffer gets a reference to the render triangles and rasterizes
+** those triangles. A sub buffer is a portion of pixels in the screen.
+** Render work clears sub buffers, rasterizes and lastly draws onto the main
+** framebuffer.
+** 4. Parallel work is waited to finish and render triangles are destroyed.
+*/
 
 static void		render_work_parallel(t_wolf3d *app)
 {

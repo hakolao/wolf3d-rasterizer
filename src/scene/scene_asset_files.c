@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 14:40:47 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 14:45:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void		main_scene_model_files_set(t_scene_data *data)
 	data->model_files[12] = "assets/models/room_models/corner_filler_se.obj";
 	data->model_files[13] = "assets/models/room_models/corner_filler_sw.obj";
 	data->model_files[14] = "assets/models/room_models/ceiling.obj";
-	data->model_files[15] = "assets/models/room_models/hole_in_ceiling_lp.obj";
+	data->model_files[15] = "assets/models/room_models/hole_in_ceiling.obj";
 }
 
 /*

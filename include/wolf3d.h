@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:38:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:13:18 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,6 +329,12 @@ void						prepare_skybox_render_triangle(t_wolf3d *app,
 void						prepare_render_triangle(t_wolf3d *app,
 								t_triangle *r_triangle,
 								t_triangle *triangle, t_vertex *vtc);
+t_bool						object_inside_viewbox(t_wolf3d *app,
+								t_3d_object *obj);
+void						ui_main_game_render(t_wolf3d *app);
+void						framebuffer_dark_overlay(
+								t_framebuffer *framebuffer,
+								int32_t width, int32_t height, t_vec2 pos);
 
 /*
 ** Scene

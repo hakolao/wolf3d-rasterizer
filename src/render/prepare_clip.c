@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:37 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:06:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void			clip_and_add_to_render_triangles(t_wolf3d *app,
 	{
 		screen_intersection(app, triangle);
 		update_triangle_vertex_zvalues(triangle, app->unit_size);
-		l3d_triangle_vec_push(render_triangles, l3d_triangle_copy(triangle, true));
+		l3d_triangle_vec_push(render_triangles,
+			l3d_triangle_copy(triangle, true));
 	}
 }
-

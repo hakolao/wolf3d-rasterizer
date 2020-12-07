@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:24 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:51:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static t_bool	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 	if (triangle->vtc[0]->pos[2] > camera->near_clip &&
 		triangle->vtc[1]->pos[2] > camera->near_clip &&
 		triangle->vtc[2]->pos[2] > camera->near_clip)
-			return (true);
+		return (true);
 	return (false);
 }
 
@@ -51,7 +51,8 @@ t_bool			is_rendered(t_wolf3d *app, t_triangle *triangle)
 
 	if (triangle_behind_camera(triangle, app->active_scene->main_camera))
 		return (false);
-	ml_vector3_sub(triangle->center, app->active_scene->main_camera->origin, dir);
+	ml_vector3_sub(triangle->center,
+		app->active_scene->main_camera->origin, dir);
 	if (!is_triangle_facing(triangle, dir))
 		return (false);
 	return (true);

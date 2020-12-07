@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wolf3d.c                                           :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:22:26 by ohakola          ###   ########.fr       */
+/*   Created: 2020/12/07 02:09:05 by ohakola           #+#    #+#             */
+/*   Updated: 2020/12/07 02:18:15 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,21 @@ static void		draw_buffers(t_render_work *work)
 {
 	t_sub_framebuffer	*sub_buffer;
 	t_framebuffer		*framebuffer;
+	t_surface			frame;
+	t_surface			sub_frame;
+	int32_t				xy[0];
 
 	sub_buffer = work->sub_buffer;
 	framebuffer = work->app->window->framebuffer;
-	l3d_image_place(
-		&(t_surface){.h = framebuffer->height, .w = framebuffer->width,
-			.pixels = framebuffer->buffer},
-		&(t_surface){.h = sub_buffer->height, .w = sub_buffer->width,
-			.pixels = sub_buffer->buffer},
-		(int32_t[2]){sub_buffer->x_start, sub_buffer->y_start}, 1.0);
+	frame.w = framebuffer->width;
+	frame.h = framebuffer->height;
+	frame.pixels = framebuffer->buffer;
+	sub_frame.w = sub_buffer->width;
+	sub_frame.h = sub_buffer->height;
+	sub_frame.pixels = sub_buffer->buffer;
+	xy[0] = sub_buffer->x_start;
+	xy[1] = sub_buffer->y_start;
+	l3d_image_place(&frame, &sub_frame, xy, 1.0);
 }
 
 static void		render_work(void *params)
@@ -57,7 +63,7 @@ static void		render_work(void *params)
 static void		render_work_parallel(t_wolf3d *app)
 {
 	int32_t				i;
-	t_render_work 		*work;
+	t_render_work		*work;
 	t_tri_vec			*render_triangles;
 
 	update_camera(app);

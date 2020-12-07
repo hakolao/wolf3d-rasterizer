@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 01:52:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,3 @@ void			rasterize_triangles(t_render_work *work)
 		l3d_triangle_raster(sub_buffer, triangle);
 	}
 }
-

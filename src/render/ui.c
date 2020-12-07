@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:17 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:14:25 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,21 @@ static void		ui_title_render(t_wolf3d *app)
 				FONT_SIZE * 2 + 10},
 			.text_color = (SDL_Color){255, 0, 0, 255}},
 			app->window->title_font);
+}
+
+void			framebuffer_dark_overlay(t_framebuffer *framebuffer,
+					int32_t width, int32_t height, t_vec2 pos)
+{
+	uint32_t	dark[width * height];
+	int32_t		i;
+
+	i = -1;
+	while (++i < width * height)
+		dark[i] = 0x000000FF;
+	l3d_image_place(&(t_surface){.pixels = framebuffer->buffer,
+			.h = framebuffer->height, .w = framebuffer->width},
+		&(t_surface){.pixels = dark, .w = width, .h = height},
+		(int32_t[2]){pos[0], pos[1]}, 0.5);
 }
 
 static void		ui_menu_render(t_wolf3d *app)
@@ -45,91 +60,8 @@ static void		ui_menu_render(t_wolf3d *app)
 			app->window->main_font);
 }
 
-static void		framebuffer_dark_overlay(t_framebuffer *framebuffer,
-					int32_t width, int32_t height, t_vec2 pos)
-{
-	uint32_t	dark[width * height];
-	int32_t		i;
-
-	i = -1;
-	while (++i < width * height)
-		dark[i] = 0x000000FF;
-	l3d_image_place(&(t_surface){.pixels = framebuffer->buffer,
-			.h = framebuffer->height, .w = framebuffer->width},
-		&(t_surface){.pixels = dark, .w = width, .h = height},
-		(int32_t[2]){pos[0], pos[1]}, 0.5);
-}
-
-static void		minimap_render(t_wolf3d *app)
-{
-	if (app->is_minimap_largened)
-	{
-		framebuffer_dark_overlay(app->window->framebuffer,
-			app->window->framebuffer->width,
-			app->window->framebuffer->height, (t_vec2){0, 0});
-		map_minimap_render_full(app->active_scene->map,
-			app->window->framebuffer, &app->player);
-	}
-	else
-		map_minimap_render_partial(app->active_scene->map,
-			app->window->framebuffer,
-			app->window->framebuffer->height * 0.3,
-			&app->player);
-}
-
-static void		crosshair_render(t_wolf3d *app, int32_t offset, int32_t length,
-					uint32_t color)
-{
-	l3d_line_draw(app->window->framebuffer->buffer,
-		(uint32_t[2]){app->window->framebuffer->width,
-			app->window->framebuffer->height},
-		(int32_t[2][2]){{app->window->framebuffer->width / 2 +
-			offset, app->window->framebuffer->height / 2},
-		{app->window->framebuffer->width / 2 + (offset + length),
-			app->window->framebuffer->height / 2}}, color);
-	l3d_line_draw(app->window->framebuffer->buffer,
-		(uint32_t[2]){app->window->framebuffer->width,
-			app->window->framebuffer->height},
-		(int32_t[2][2]){{app->window->framebuffer->width / 2,
-			app->window->framebuffer->height / 2 - (offset + length)},
-		{app->window->framebuffer->width / 2,
-			app->window->framebuffer->height / 2 - offset}}, color);
-	l3d_line_draw(app->window->framebuffer->buffer,
-		(uint32_t[2]){app->window->framebuffer->width,
-			app->window->framebuffer->height},
-		(int32_t[2][2]){{app->window->framebuffer->width / 2 -
-			(offset + length), app->window->framebuffer->height / 2},
-		{app->window->framebuffer->width / 2 - offset,
-			app->window->framebuffer->height / 2}}, color);
-	l3d_line_draw(app->window->framebuffer->buffer,
-		(uint32_t[2]){app->window->framebuffer->width,
-			app->window->framebuffer->height},
-		(int32_t[2][2]){{app->window->framebuffer->width / 2,
-			app->window->framebuffer->height / 2 + (offset + length)},
-		{app->window->framebuffer->width / 2,
-			app->window->framebuffer->height / 2 + offset}}, color);
-}
-
-static void		ui_main_game_render(t_wolf3d *app)
-{
-	int32_t	offset;
-	int32_t	length;
-
-	offset = 0;
-	length = 10;
-	if (app->player.is_moving)
-		offset += 5;
-	if (app->player.is_running)
-		offset += 5;
-	if (app->player.is_shooting)
-		offset += 5;
-	crosshair_render(app, offset, length, 0xffffffff);
-	minimap_render(app);
-}
-
 void			ui_render(t_wolf3d *app)
 {
-
 	if (app->active_scene->scene_id == scene_id_main_menu ||
 		app->active_scene->scene_id == scene_id_main_menu_settings)
 		ui_menu_render(app);

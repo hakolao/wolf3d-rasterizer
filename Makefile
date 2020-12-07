@@ -48,6 +48,7 @@ SOURCES = main.c \
 			render/prepare_clip.c \
 			render/render_utils.c \
 			render/ui.c \
+			render/ui_main_game.c \
 			window/text.c \
 			window/window.c \
 			window/utils.c \

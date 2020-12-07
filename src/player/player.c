@@ -81,7 +81,8 @@ void			player_shoot(t_wolf3d *app, uint32_t curr_time)
 	{
 		l3d_get_closest_hit(hits, &closest_triangle_hit);
 		if (closest_triangle_hit != NULL)
-			;
+		{
+		}
 		l3d_delete_hits(&hits);
 	}
 }

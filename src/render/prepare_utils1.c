@@ -15,12 +15,10 @@
 t_bool			triangle_inside_viewbox(t_wolf3d *app,
 					t_triangle *triangle)
 {
-	int32_t		is_inside;
 	t_vec3		player_to_corner[3];
 	int32_t		i;
 	int32_t		j;
 
-	is_inside = true;
 	i = -1;
 	while (++i < 5)
 	{

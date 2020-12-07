@@ -15,9 +15,16 @@
 
 # include "libft.h"
 # include "lib3d.h"
-# include <SDL.h>
-# include <SDL_image.h>
-# include <SDL_ttf.h>
+# ifdef __APPLE__
+#  include <SDL.h>
+#  include <SDL_image.h>
+#  include <SDL_ttf.h>
+# endif
+# ifdef __linux__
+#  include <SDL2/SDL.h>
+#  include <SDL2/SDL_image.h>
+#  include <SDL2/SDL_ttf.h>
+# endif
 
 # define PIXEL_FORMAT SDL_PIXELFORMAT_RGBA8888
 # define GAME_FONT "assets/fonts/wolfenstein.ttf"

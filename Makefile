@@ -10,18 +10,27 @@ LIBGMATRIX = ./lib/libgmatrix
 LIBFTFLAGS = -L$(LIBFT) -lft
 LIB3DFLAGS = -L$(LIB3D) -l3d
 LIBGMATRIXFLAGS = -L$(LIBGMATRIX) -lgmatrix
-SDL_FLAGS = -rpath $(LIBSDL2) \
-				-framework SDL2 -F$(LIBSDL2)/ \
-				-framework SDL2_image -F$(LIBSDL2)/ \
-				-framework SDL2_ttf -F$(LIBSDL2)/
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
+	SDL_FLAGS = `sdl2-config --cflags --libs` \
+				`pkg-config sdl2_image --cflags --libs` \
+				`pkg-config sdl2_ttf --cflags --libs`
+else
+	SDL_FLAGS = -rpath $(LIBSDL2) \
+					-framework SDL2 -F$(LIBSDL2)/ \
+					-framework SDL2_image -F$(LIBSDL2)/ \
+					-framework SDL2_ttf -F$(LIBSDL2)/
+	SDL_INCLUDES = -I$(LIBSDL2)/SDL2.framework/Headers \
+			-I$(LIBSDL2)/SDL2_image.framework/Headers \
+			-I$(LIBSDL2)/SDL2_ttf.framework/Headers
+endif
 LIBS = $(LIBFTFLAGS) $(LIB3DFLAGS) $(LIBGMATRIXFLAGS) $(SDL_FLAGS)
+
 INCLUDES = -I ./include \
 		-I$(LIBFT)/include \
 		-I$(LIB3D)/include \
 		-I$(LIBGMATRIX)/include \
-		-I$(LIBSDL2)/SDL2.framework/Headers \
-		-I$(LIBSDL2)/SDL2_image.framework/Headers \
-		-I$(LIBSDL2)/SDL2_ttf.framework/Headers
+		$(SDL_INCLUDES)
 
 FLAGS = -Wall -Wextra -Werror -O3 -flto
 SOURCES = main.c \

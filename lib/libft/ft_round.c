@@ -15,14 +15,12 @@
 double		ft_ceil(double num)
 {
 	long long int		int_part;
-	double				fraction;
 	t_float_dissector	fd;
 
 	if (num == 0)
 		return (num);
 	fd.f = num;
 	int_part = (long long int)num;
-	fraction = num - int_part;
 	return (fd.b.sign ? int_part : int_part + 1);
 }
 

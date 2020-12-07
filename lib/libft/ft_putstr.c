@@ -23,5 +23,7 @@ void	ft_putstr(char const *str)
 	if (!str)
 		return ;
 	len = ft_strlen(str);
-	write(1, str, len);
+	if (write(1, str, len))
+	{
+	}
 }

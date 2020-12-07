@@ -39,7 +39,9 @@ int						ft_dprintf(int fd, const char *format, ...)
 	if (!parse_input(&data, (char*)format))
 		return (false);
 	va_end(data.variables);
-	write(data.fd, data.buffer, data.len);
+	if (write(data.fd, data.buffer, data.len))
+	{
+	}
 	ft_strdel(&data.buffer);
 	return (data.len);
 }
@@ -83,7 +85,9 @@ int						ft_printf(const char *format, ...)
 	if (!parse_input(&data, (char*)format))
 		return (false);
 	va_end(data.variables);
-	write(data.fd, data.buffer, data.len);
+	if (write(data.fd, data.buffer, data.len))
+	{
+	}
 	ft_strdel(&data.buffer);
 	return (data.len);
 }

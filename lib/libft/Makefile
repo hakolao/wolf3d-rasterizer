@@ -141,7 +141,7 @@ SOURCES = ft_atoi.c \
 SRCS = $(addprefix $(DIR_SRC)/,$(SOURCES))
 OBJS = $(addprefix $(DIR_OBJ)/,$(SOURCES:.c=.o))
 INC=-I./include/
-FLAGS = -Wall -Wextra -O3 -flto
+FLAGS = -Wall -Wextra -Werror -O3 -flto
 
 all: $(DIR_OBJ) $(NAME)
 

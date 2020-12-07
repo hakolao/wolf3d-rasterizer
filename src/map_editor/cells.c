@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:09:18 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 20:49:43 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,15 @@ static void		update_ceiling(uint32_t *cell)
 
 	window_p = l3d_rand_d();
 	if (window_p < 0.2)
+	{
+		*cell ^= (c_ceiling & *cell);
 		*cell |= c_ceiling_window;
+	}
 	else
+	{
+		*cell ^= (c_ceiling_window & *cell);
 		*cell |= c_ceiling;
+	}
 }
 
 void			update_map_cell_features(t_map_editor *app)

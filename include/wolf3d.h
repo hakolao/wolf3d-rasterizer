@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:28:23 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 17:08:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,6 +337,8 @@ void						ui_main_game_render(t_wolf3d *app);
 void						framebuffer_dark_overlay(
 								t_framebuffer *framebuffer,
 								int32_t width, int32_t height, t_vec2 pos);
+void						set_aabb_origin_to_corners(t_3d_object *obj,
+								t_vec3 origin, t_vec3 origin_to_corner[8]);
 
 /*
 ** Scene

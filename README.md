@@ -15,6 +15,7 @@ Features:
 - AABB collision (player)
 - AABB viewbox occulsion
 - Skybox
+- Minimap
 
 ![Gameplay](assets/img/screenshot1.png)
 

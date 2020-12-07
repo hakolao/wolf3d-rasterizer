@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_utils.c                                     :+:      :+:    :+:   */
+/*   prepare_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 15:46:32 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 15:49:18 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,8 @@ t_bool			screen_intersection(t_wolf3d *app, t_triangle *triangle)
 		if (!(l3d_plane_ray_hit(&app->active_scene->main_camera->screen,
 			&rays[k], hits[k])))
 		{
-			ft_printf("Error in screen_intersection: ray from triangle\n"
-						"didn't intersect with screen plane or did in too\n"
-						"small an angle. Pointo of hit set to default 0.\n"
-						"Might happen due to degenerate or badly defined\n"
-						"triangles.\n");
+			ft_dprintf(2, "Error in screen_intersection:"
+					"Degenerate or badly defined triangles.\n");
 			ml_vector3_set_all(hits[k], 0);
 		}
 	}

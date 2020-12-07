@@ -43,10 +43,10 @@ SOURCES = main.c \
 			map/minimap_player.c \
 			render/render.c \
 			render/prepare.c \
-			render/prepare_utils.c \
+			render/prepare_utils1.c \
+			render/prepare_utils2.c \
 			render/rasterize.c \
 			render/prepare_clip.c \
-			render/render_utils.c \
 			render/ui.c \
 			render/ui_main_game.c \
 			window/text.c \

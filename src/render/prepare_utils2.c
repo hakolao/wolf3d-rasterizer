@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:51:54 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 15:46:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,6 @@ static void		calculate_2d_points(t_vec2 *points_2d, t_vec3 *hits)
 		points_2d[i][1] = hits[i][1];
 	}
 }
-
-/*
-** Checks if any of triangle vertices are behind near clip distance so the
-** perspective projection does not get distorted and nothing "behind" camera
-** are drawn. Edit NEAR_CLIP_DIST if needed and you notice that current value
-** is not enough.
-*/
 
 static t_bool	triangle_behind_camera(t_triangle *triangle, t_camera *camera)
 {

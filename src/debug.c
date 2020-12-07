@@ -6,28 +6,28 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:27:49 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 03:06:51 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
+/*
+** If you need to debug how many triangles are passed to rasterizer:
+** ft_sprintf(debug_info, "fps: %u\ndelta time: %u\n"
+** "scene triangles: %d\n"
+** "triangles for rasterizer: %d",
+** app->info.fps, app->info.delta_time,
+** app->active_scene->num_triangles +
+** 	app->active_scene->skybox[0]->num_triangles * 6,
+** app->triangles_in_view);
+*/
+
 void			wolf3d_debug_info_render(t_wolf3d *app)
 {
 	char	debug_info[1024];
 
-	if (app->active_scene->scene_id == scene_id_main_game)
-	{
-		ft_sprintf(debug_info, "fps: %u\ndelta time: %u\n"
-		"scene triangles: %d\n"
-		"triangles for rasterizer: %d",
-		app->info.fps, app->info.delta_time,
-		app->active_scene->num_triangles +
-			app->active_scene->skybox[0]->num_triangles * 6,
-		app->triangles_in_view);
-	}
-	else
-		ft_sprintf(debug_info, "fps: %u\ndelta time: %u",
+	ft_sprintf(debug_info, "fps: %u\ndelta time: %u",
 		app->info.fps, app->info.delta_time);
 	window_text_render(app->window, (t_text_params){
 		.text = debug_info, .blend_ratio = 1.0, .xy = (int[2]){5, 5},

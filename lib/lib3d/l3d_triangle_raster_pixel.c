@@ -6,13 +6,13 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 18:15:15 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:27:41 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 03:04:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib3d.h"
 
-static int32_t	l3d_get_shaded_pixel(t_triangle *triangle, t_vec2 uv,
+static uint32_t	l3d_get_shaded_pixel(t_triangle *triangle, t_vec2 uv,
 					float z_val)
 {
 	uint32_t	pixel;
@@ -22,7 +22,7 @@ static int32_t	l3d_get_shaded_pixel(t_triangle *triangle, t_vec2 uv,
 		pixel = l3d_sample_texture(triangle->material->texture, uv);
 	if ((triangle->material->shading_opts & e_shading_zero_alpha) &&
 		(pixel & 255) == 0)
-		return (-1);
+		return (UINT32_MAX);
 	if (triangle->material->shading_opts & e_shading_normal_map)
 		pixel = l3d_pixel_normal_shaded(pixel, triangle, uv);
 	if (triangle->material->shading_opts & e_shading_depth)
@@ -48,8 +48,7 @@ void			l3d_raster_draw_pixel(t_sub_framebuffer *buffers, int32_t xy[2],
 	{
 		l3d_interpolate_uv(triangle, baryc, uv);
 		l3d_clamp_uv(uv);
-		pixel = l3d_get_shaded_pixel(triangle, uv, z_val);
-		if ((int32_t)pixel == -1)
+		if ((pixel = l3d_get_shaded_pixel(triangle, uv, z_val)) == UINT32_MAX)
 			return ;
 		l3d_pixel_plot(buffers->buffer, (uint32_t[2]){buffers->width,
 				buffers->height}, offset_xy, pixel);

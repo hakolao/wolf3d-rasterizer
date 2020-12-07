@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:25:01 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:55:29 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		scene_main_game_data_set(t_scene_data *data)
 	data->menu_options[1] = "Exit Game";
 	data->menu_option_count = 2;
 	data->main_camera = new_camera();
-	data->map_filename = ft_strdup("maps/bigone");
+	data->map_filename = ft_strdup("maps/level1");
 	main_scene_data_asset_files_set(data);
 }
 

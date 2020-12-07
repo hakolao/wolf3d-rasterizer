@@ -52,7 +52,7 @@ void						l3d_bounding_box_hit_record_set(float t[8],
 	t_hit	hit;
 	t_vec3	add;
 
-	if (t < 0)
+	if (t[6] < 0)
 		return ;
 	ft_memset(&hit, 0, sizeof(t_hit));
 	hit.t = t[6];

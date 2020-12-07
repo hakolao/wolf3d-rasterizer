@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 20:43:07 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 20:51:00 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,6 @@ static void		main_scene_model_files_set(t_scene_data *data)
 	data->model_files[14] = "assets/models/room_models/ceiling.obj";
 	data->model_files[15] = "assets/models/room_models/hole_in_ceiling.obj";
 }
-
-/*
-** Fill assets here (3d model & texture pairs) and their corresponding
-** feature keys.
-** set_main_scene_assets sets these to the scene into a hashmap that the
-** procedural generator can then access & copy from.
-*/
 
 void			main_scene_data_asset_files_set(t_scene_data *data)
 {

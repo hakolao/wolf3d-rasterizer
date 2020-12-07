@@ -16,7 +16,7 @@ Features:
 - AABB viewbox occulsion
 - Skybox
 
-![Gameplay](assets/img/screenshot1)
+![Gameplay](assets/img/screenshot1.png)
 
 ### Install (Mac)
 
@@ -29,7 +29,7 @@ make && ./wolf3d
 
 A simple map editor to generate levels for wolf3d.
 
-![Mapeditor](assets/img/screenshot1)
+![Mapeditor](assets/img/screenshot2.png)
 
 ```sh
 make map_editor && ./wolf3d_editor #default size of 15x15

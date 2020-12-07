@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:24:45 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:37:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,42 +26,38 @@ void			button_group_set_space_between(t_button_group *button_group,
 }
 
 void			button_group_set_selector(t_button_group *button_group,
-					int32_t	selected_index)
+					int32_t selected_index)
 {
 	button_group->is_selector = true;
 	button_group->selected_index = selected_index;
 }
 
-void			button_group_update_position(t_button_group *button_group,
+void			button_group_update_position(t_button_group *group,
 					t_vec2 pos)
 {
 	int32_t		i;
 	t_vec2		button_pos;
-	int32_t		width_sum;
-	int32_t		height_sum;
+	int32_t		dim_sum[2];
 
-	ml_vector2_copy(pos, button_group->pos);
+	ml_vector2_copy(pos, group->pos);
 	i = -1;
-	width_sum = 0;
-	height_sum = 0;
-	while (++i < (int32_t)button_group->num_buttons)
+	dim_sum[0] = 0;
+	dim_sum[1] = 0;
+	while (++i < (int32_t)group->num_buttons)
 	{
-		if (button_group->is_horizontal)
+		if (group->is_horizontal)
 		{
-			width_sum +=button_group->buttons[i]->width +
-				button_group->space_between;
-			ml_vector2_add(button_group->pos,
-				(t_vec2){button_group->pos[0] + width_sum,
-				button_group->pos[1]}, button_pos);
+			dim_sum[0] += group->buttons[i]->width + group->space_between;
+			ml_vector2_add(group->pos, (t_vec2){group->pos[0] +
+				dim_sum[0], group->pos[1]}, button_pos);
 		}
 		else
 		{
-			height_sum +=button_group->buttons[i]->height +
-				button_group->space_between;
-			ml_vector2_add(button_group->pos, (t_vec2){button_group->pos[0],
-				button_group->pos[1] + height_sum}, button_pos);
+			dim_sum[1] += group->buttons[i]->height + group->space_between;
+			ml_vector2_add(group->pos, (t_vec2){group->pos[0],
+				group->pos[1] + dim_sum[1]}, button_pos);
 		}
-		button_update_position(button_group->buttons[i], button_pos);
+		ml_vector2_copy(button_pos, group->buttons[i]->pos);
 	}
 }
 

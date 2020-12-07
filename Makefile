@@ -51,6 +51,7 @@ SOURCES = main.c \
 			render/ui_main_game.c \
 			window/text.c \
 			window/window.c \
+			window/frame.c \
 			window/utils.c \
 			events/mouse.c \
 			events/menu_events.c \
@@ -71,8 +72,10 @@ MAP_EDITOR_SOURCES = map_editor/map_editor.c \
 			map/render.c \
 			window/text.c \
 			window/window.c \
+			window/frame.c \
 			window/utils.c	\
 			window/buttons/button_events.c \
+			window/buttons/button_group_events.c \
 			window/buttons/button_group_utils.c \
 			window/buttons/button_group.c \
 			window/buttons/button_utils.c \

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:24:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:33:10 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ void				window_text_render(t_window *window,
 	SDL_Surface	*surface;
 
 	surface = surface_from_font(window, params, font);
-	l3d_image_place(&(t_surface){.h =
-				window->framebuffer->height,
-		.w =  window->framebuffer->width,
+	l3d_image_place(&(t_surface){.h = window->framebuffer->height,
+		.w = window->framebuffer->width,
 		.pixels = window->framebuffer->buffer
 		},
 		&(t_surface){.h = surface->h,
@@ -51,9 +50,8 @@ void				window_text_render_centered(t_window *window,
 	SDL_Surface	*surface;
 
 	surface = surface_from_font(window, params, font);
-	l3d_image_place(&(t_surface){.h =
-			window->framebuffer->height,
-		.w =  window->framebuffer->width,
+	l3d_image_place(&(t_surface){.h = window->framebuffer->height,
+		.w = window->framebuffer->width,
 		.pixels = window->framebuffer->buffer},
 		&(t_surface){.h = surface->h,
 		.w = surface->w,

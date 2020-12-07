@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:24:36 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:41:41 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,12 @@ void			button_update_position(t_button *button, t_vec2 pos)
 
 void			button_render(t_button *button)
 {
+	int32_t		pos[2];
+
 	if (!button->texture)
 		return ;
+	pos[0] = button->pos[0];
+	pos[1] = button->pos[1];
 	if (button->is_down)
 		l3d_image_place(
 			&(t_surface){
@@ -58,15 +62,12 @@ void			button_render(t_button *button)
 				.w = button->window->framebuffer->width,
 				.pixels = button->window->framebuffer->buffer},
 			button->texture_down ? button->texture_down : button->texture,
-			(int32_t[2]){button->pos[0], button->pos[1]},
-				button->is_hovered ? 0.5 : 1.0);
+			pos, button->is_hovered ? 0.5 : 1.0);
 	else
 		l3d_image_place(
 			&(t_surface){
 				.h = button->window->framebuffer->height,
 				.w = button->window->framebuffer->width,
 				.pixels = button->window->framebuffer->buffer},
-			button->texture,
-			(int32_t[2]){button->pos[0], button->pos[1]},
-			button->is_hovered ? 0.5 : 1.0);
+			button->texture, pos, button->is_hovered ? 0.5 : 1.0);
 }

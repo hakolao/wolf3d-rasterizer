@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:37:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/07 02:45:54 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,5 +175,13 @@ void						button_events_handle(t_button *button,
 void						button_group_set_selector(
 								t_button_group *button_group,
 								int32_t	selected_index);
+t_bool						button_is_clicked(t_button *button, t_mouse mouse,
+								SDL_Event event);
+t_bool						button_is_down(t_button *button, t_mouse mouse,
+								SDL_Event event);
+t_bool						button_is_hovered(t_button *button, t_mouse mouse,
+								SDL_Event event);
+void						button_state_handle(t_button *button, t_mouse mouse,
+								SDL_Event event);
 
 #endif

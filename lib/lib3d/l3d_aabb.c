@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:22:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/08 18:06:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,22 +78,22 @@ t_bool				l3d_aabb_collides(t_box3d *left, t_box3d *right)
 			left->xyz_max[2] > right->xyz_min[2]));
 }
 
-void				l3d_get_aabb_hit_record(t_box3d *origin, t_box3d *target,
-						t_hit **hit)
+t_hit				*l3d_get_aabb_hit_record(t_box3d *origin, t_box3d *target)
 {
 	t_vec3		dir;
 	t_ray		ray;
 	t_hits		*hits;
+	t_hit		*hit;
 
 	ml_vector3_sub(target->center, origin->center, dir);
 	l3d_ray_set(dir, origin->center, &ray);
 	hits = NULL;
 	if (l3d_bounding_box_ray_hit(target, &ray, &hits))
 	{
-		error_check(!(*hit = malloc(sizeof(t_hit))), "Failed to malloc hit");
-		ft_memcpy(*hit, ((t_hit*)hits->content), sizeof(t_hit));
+		error_check(!(hit = malloc(sizeof(t_hit))), "Failed to malloc hit");
+		ft_memcpy(hit, ((t_hit*)hits->content), sizeof(t_hit));
 		l3d_delete_hits(&hits);
+		return (hit);
 	}
-	else
-		*hit = NULL;
+	return (NULL);
 }

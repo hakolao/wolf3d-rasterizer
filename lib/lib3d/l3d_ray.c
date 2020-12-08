@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 17:23:21 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/08 18:05:16 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ void						l3d_bounding_box_hit_record_set(float t[8],
 	t_hit	hit;
 	t_vec3	add;
 
-	if (t[6] < 0)
-		return ;
 	ft_memset(&hit, 0, sizeof(t_hit));
 	hit.t = t[6];
 	ml_vector3_mul(ray->dir, hit.t, add);

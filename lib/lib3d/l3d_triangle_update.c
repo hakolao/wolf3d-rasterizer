@@ -51,6 +51,14 @@ static void			calculate_tangent(t_triangle *triangle, float fraction,
 		ml_vector3_set_all(triangle->tangent, 1.0);
 }
 
+static void			set_deltas(t_triangle *triangle, float *deltas)
+{
+	deltas[0] = triangle->uvs[1][0] - triangle->uvs[0][0];
+	deltas[1] = triangle->uvs[2][0] - triangle->uvs[0][0];
+	deltas[2] = triangle->uvs[1][1] - triangle->uvs[0][1];
+	deltas[3] = triangle->uvs[2][1] - triangle->uvs[0][1];
+}
+
 void				l3d_triangle_tangent_update(t_triangle *triangle)
 {
 	t_vec3	temptangent;
@@ -59,10 +67,8 @@ void				l3d_triangle_tangent_update(t_triangle *triangle)
 	float	fraction;
 	float	div;
 
-	deltas[0] = triangle->uvs[1][0] - triangle->uvs[0][0];
-	deltas[1] = triangle->uvs[2][0] - triangle->uvs[0][0];
-	deltas[2] = triangle->uvs[1][1] - triangle->uvs[0][1];
-	deltas[3] = triangle->uvs[2][1] - triangle->uvs[0][1];
+	ml_vector3_set_all(tempnormal, 0.0);
+	set_deltas(triangle, deltas);
 	if ((div = (deltas[0] * deltas[3] - deltas[1] * deltas[2])) > L3D_EPSILON)
 		fraction = 1.0 / div;
 	else

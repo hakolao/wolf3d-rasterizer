@@ -66,6 +66,7 @@ uint32_t		l3d_pixel_normal_shaded(uint32_t pixel, t_triangle *triangle,
 	t_vec3 light_vector;
 
 	ml_vector3_set(light_vector, 0.0, 0.0, -1.0);
+	ml_vector3_set(frag_normal, 0.0, 0.0, -1.0);
 	calc_bumped_normal(triangle, uv, frag_normal);
 	return (fragment_shade_normal(light_vector, frag_normal, pixel));
 }

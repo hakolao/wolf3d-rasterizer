@@ -25,14 +25,20 @@ static void			save_map(t_map_editor *app)
 	if ((fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1 &&
 		ft_dprintf(2, "Failed to open file %s\n", filename))
 		exit(EXIT_FAILURE);
-	write(fd, "MAP\0", 4);
+	if (write(fd, "MAP\0", 4))
+	{
+	}
 	ft_memcpy(bytes, &app->map->size, sizeof(uint32_t));
-	write(fd, &bytes, sizeof(uint32_t));
+	if (write(fd, &bytes, sizeof(uint32_t)))
+	{
+	}
 	i = -1;
 	while (++i < app->map->size * app->map->size)
 	{
 		ft_memcpy(bytes, &app->map->grid[i], sizeof(uint32_t));
-		write(fd, &bytes, sizeof(uint32_t));
+		if (write(fd, &bytes, sizeof(uint32_t)))
+		{
+		}
 	}
 	ft_printf("Saved %s\n", filename);
 	if ((fd = close(fd)) == -1 &&

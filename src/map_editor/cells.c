@@ -76,7 +76,8 @@ void			update_map_cell_features(t_map_editor *app)
 				rooms) || modify_corridor_pattern(cell,
 				rooms) || modify_wall_pattern(cell,
 				rooms) || modify_surround_pattern(cell, rooms))
-				;
+			{
+			}
 			update_ceiling(cell);
 		}
 	}

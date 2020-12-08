@@ -22,11 +22,12 @@ Features:
 ### Install (Mac)
 
 ```sh
-git clone (repo-url) && cd (repo-folder)
+git clone https://github.com/hakolao/wolf3d-rasterizer && cd wolf3d-rasterizer
 make && ./wolf3d
 ```
 
 ### WSL
+
 ```
 sudo apt update
 sudo apt-get install xorg-dev # make sure x11 related stuff is installed
@@ -38,11 +39,12 @@ sudo apt-get install libsdl2-image-dev
 export DISPLAY=:0
 export LIBGL_ALWAYS_INDIRECT=1
 # run wolf3d
-git clone (repo-url) && cd (repo-folder)
+git clone https://github.com/hakolao/wolf3d-rasterizer && cd wolf3d-rasterizer
 make && ./wolf3d
 ```
 
 ### Install (Linux)
+
 Install SDL2, SDL_image, SDL_ttf on linux.
 
 ```sh
@@ -53,8 +55,9 @@ sudo apt-get install libsdl2-image-dev
 ```
 
 Then play the game :)
+
 ```sh
-git clone (repo-url) && cd (repo-folder)
+git clone https://github.com/hakolao/wolf3d-rasterizer && cd wolf3d-rasterizer
 make && ./wolf3d
 ```
 

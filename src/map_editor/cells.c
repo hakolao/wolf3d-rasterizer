@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 20:49:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/08 03:40:12 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,27 +55,26 @@ static void		update_ceiling(uint32_t *cell)
 
 void			update_map_cell_features(t_map_editor *app)
 {
-	int32_t		y;
-	int32_t		x;
+	int32_t		xy[2];
 	uint32_t	*cell;
 	int32_t		rooms[9];
 
-	y = -1;
-	while (++y < app->map->size)
+	xy[1] = -1;
+	while (++xy[1] < app->map->size)
 	{
-		x = -1;
-		while (++x < app->map->size)
+		xy[0] = -1;
+		while (++xy[0] < app->map->size)
 		{
-			cell = app->map->grid + y * app->map->size + x;
+			cell = app->map->grid + xy[1] * app->map->size + xy[0];
 			if (!(*cell & m_room))
 				continue ;
-			get_neighbor_rooms(app, (int32_t[2]){x, y}, rooms, cell);
+			get_neighbor_rooms(app, xy, rooms, cell);
 			*cell ^= (p_all & *cell);
-			if (modify_dead_end_pattern(cell,
-				rooms) || modify_corner_pattern(cell,
-				rooms) || modify_corridor_pattern(cell,
-				rooms) || modify_wall_pattern(cell,
-				rooms) || modify_surround_pattern(cell, rooms))
+			if (modify_dead_end_pattern(cell, rooms) ||
+				modify_corner_pattern(cell, rooms) ||
+				modify_corridor_pattern(cell, rooms) ||
+				modify_wall_pattern(cell, rooms) ||
+				modify_surround_pattern(cell, rooms))
 			{
 			}
 			update_ceiling(cell);

@@ -6,41 +6,47 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 01:37:13 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 01:45:56 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/08 03:44:35 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void			save_map(t_map_editor *app)
+static void			write_map(int32_t fd, t_wolf3d_map *map, char *filename)
 {
-	int				fd;
-	char			new_filename[64];
-	char			filename[128];
 	char			bytes[4];
 	int32_t			i;
+
+	if (write(fd, "MAP\0", 4))
+	{
+	}
+	ft_memcpy(bytes, &map->size, sizeof(uint32_t));
+	if (write(fd, &bytes, sizeof(uint32_t)))
+	{
+	}
+	i = -1;
+	while (++i < map->size * map->size)
+	{
+		ft_memcpy(bytes, &map->grid[i], sizeof(uint32_t));
+		if (write(fd, &bytes, sizeof(uint32_t)))
+		{
+		}
+	}
+	ft_printf("Saved %s\n", filename);
+}
+
+static void			save_map(t_map_editor *app)
+{
+	int32_t			fd;
+	char			new_filename[64];
+	char			filename[128];
 
 	ft_sprintf(new_filename, "maps/wolf3d_map_t%u", SDL_GetTicks());
 	ft_sprintf(filename, "%s", app->filename ? app->filename : new_filename);
 	if ((fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1 &&
 		ft_dprintf(2, "Failed to open file %s\n", filename))
 		exit(EXIT_FAILURE);
-	if (write(fd, "MAP\0", 4))
-	{
-	}
-	ft_memcpy(bytes, &app->map->size, sizeof(uint32_t));
-	if (write(fd, &bytes, sizeof(uint32_t)))
-	{
-	}
-	i = -1;
-	while (++i < app->map->size * app->map->size)
-	{
-		ft_memcpy(bytes, &app->map->grid[i], sizeof(uint32_t));
-		if (write(fd, &bytes, sizeof(uint32_t)))
-		{
-		}
-	}
-	ft_printf("Saved %s\n", filename);
+	write_map(fd, app->map, filename);
 	if ((fd = close(fd)) == -1 &&
 		ft_dprintf(2, "Failed to close file %s\n", filename))
 		exit(EXIT_FAILURE);

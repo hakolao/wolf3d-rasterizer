@@ -26,24 +26,30 @@ git clone (repo-url) && cd (repo-folder)
 make && ./wolf3d
 ```
 
+### WSL
+```
+sudo apt update
+sudo apt-get install xorg-dev # make sure x11 related stuff is installed
+# install sdl
+sudo apt-get install libsdl2-dev
+sudo apt-get install libsdl2-ttf-dev
+sudo apt-get install libsdl2-image-dev
+# install vcxsrv on windows side & run it
+export DISPLAY=:0
+export LIBGL_ALWAYS_INDIRECT=1
+# run wolf3d
+git clone (repo-url) && cd (repo-folder)
+make && ./wolf3d
+```
+
 ### Install (Linux)
-Install SDL2, SDL_image, SDL_ttf on linux. Easy way:
+Install SDL2, SDL_image, SDL_ttf on linux.
+
 ```sh
 sudo apt update
 sudo apt-get install libsdl2-dev
 sudo apt-get install libsdl2-ttf-dev
 sudo apt-get install libsdl2-image-dev
-```
-If above fails, install by hand. Hard way:
-https://www.libsdl.org/download-2.0.php
-https://www.libsdl.org/projects/SDL_ttf/ (needed `sudo apt-get install libfreetype6-dev` on my system)
-https://www.libsdl.org/projects/SDL_image/
-
-For each downloaded source code folder above
-```sh
-./configure
-make
-sudo make install
 ```
 
 Then play the game :)

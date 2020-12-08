@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:55:29 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/08 23:36:55 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ void		scene_main_menu_data_set(t_scene_data *data)
 
 void		scene_settings_menu_data_set(t_scene_data *data)
 {
-	data->menu_options[0] = "1280x720";
-	data->menu_options[1] = "1920x1080";
-	data->menu_options[2] = "Back";
-	data->menu_option_count = 3;
+	data->menu_options[0] = "960x540";
+	data->menu_options[1] = "1280x720";
+	data->menu_options[2] = "1920x1080";
+	data->menu_options[3] = "Back";
+	data->menu_option_count = 4;
 }

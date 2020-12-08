@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:43:38 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/08 23:36:48 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,12 @@ void			main_menu_settings_event_handle(t_wolf3d *app, SDL_Event event)
 		if (event.key.keysym.sym == SDLK_RETURN)
 		{
 			if (app->active_scene->selected_option == 0)
-				window_resize(app->window, 1280, 720);
+				window_resize(app->window, 960, 540);
 			else if (app->active_scene->selected_option == 1)
-				window_resize(app->window, 1920, 1080);
+				window_resize(app->window, 1280, 720);
 			else if (app->active_scene->selected_option == 2)
+				window_resize(app->window, 1920, 1080);
+			else if (app->active_scene->selected_option == 3)
 			{
 				app->next_scene_id = scene_id_main_menu;
 				scene_next_select(app);

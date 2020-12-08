@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:14:25 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/08 23:38:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void		ui_menu_render(t_wolf3d *app)
 
 	ui_title_render(app);
 	row_height = 2 * FONT_SIZE;
-	y = app->window->framebuffer->height / 1.5 - row_height;
+	y = app->window->framebuffer->height / 1.75 - row_height;
 	selected_option = app->active_scene->selected_option;
 	i = -1;
 	while (++i < app->active_scene->menu_option_count)

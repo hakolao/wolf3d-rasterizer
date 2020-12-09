@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 15:42:09 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 17:44:01 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,9 @@ static void				mouse_motion_handle(t_wolf3d *app,
 
 void					mouse_state_handle(t_wolf3d *app)
 {
-	int32_t	prev_x;
-	int32_t	prev_y;
 	int32_t	xrel;
 	int32_t	yrel;
 
-	prev_x = app->mouse.x;
-	prev_y = app->mouse.y;
 	SDL_GetRelativeMouseState(&xrel, &yrel);
 	app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 	if (app->active_scene->scene_id != scene_id_main_game)

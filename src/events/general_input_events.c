@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:40:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 13:58:11 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 18:17:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,10 @@ static void		set_objects_shading_opts(t_wolf3d *app, t_shading_opts opts)
 		l3d_object_set_shading_opts(app->active_scene->objects[i], opts);
 }
 
-static void		handle_general_keyup_events(t_wolf3d *app, SDL_Event event)
+static void		handle_main_game_general_keyup_events(t_wolf3d *app,
+					SDL_Event event)
 {
-	if (event.key.keysym.sym == SDLK_g)
-		app->is_debug = !app->is_debug;
-	if (event.key.keysym.sym == SDLK_n &&
-		app->active_scene->scene_id == scene_id_main_game)
+	if (event.key.keysym.sym == SDLK_n)
 	{
 		app->is_normal_map = !app->is_normal_map;
 		if (app->is_normal_map)
@@ -38,6 +36,17 @@ static void		handle_general_keyup_events(t_wolf3d *app, SDL_Event event)
 				app->active_scene->objects[0]->material->shading_opts ^
 				e_shading_normal_map);
 	}
+	if (event.key.keysym.sym == SDLK_p &&
+		app->active_scene->scene_id == scene_id_main_game)
+		app->active_scene->is_paused = !app->active_scene->is_paused;
+}
+
+static void		handle_general_keyup_events(t_wolf3d *app, SDL_Event event)
+{
+	if (app->active_scene->scene_id == scene_id_main_game)
+		handle_main_game_general_keyup_events(app, event);
+	if (event.key.keysym.sym == SDLK_g)
+		app->is_debug = !app->is_debug;
 	if (event.key.keysym.sym == SDLK_f)
 	{
 		app->window->is_fullscreen = !app->window->is_fullscreen;
@@ -58,12 +67,7 @@ void			general_input_events_handle(t_wolf3d *app, SDL_Event event)
 	if (event.type == SDL_QUIT)
 		app->is_running = false;
 	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-	{
-		if (app->active_scene->scene_id == scene_id_main_game)
-			app->active_scene->is_paused = !app->active_scene->is_paused;
-		else
-			app->is_running = false;
-	}
+		app->is_running = false;
 	if (event.type == SDL_KEYUP)
 		handle_general_keyup_events(app, event);
 }

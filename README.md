@@ -19,7 +19,21 @@ Features:
 
 ![Gameplay](assets/img/screenshot1.png)
 
-### Install (Mac)
+### Controls
+
+```
+WASD: Move
+Mouse: Rotate
+n: toggle normal maps
+p: pause game
+f: set full screen mode
+esc: quit
+Arrows+Enter: In menus, move and select
+```
+
+## Install
+
+### Mac
 
 ```sh
 git clone https://github.com/hakolao/wolf3d-rasterizer && cd wolf3d-rasterizer
@@ -43,7 +57,7 @@ git clone https://github.com/hakolao/wolf3d-rasterizer && cd wolf3d-rasterizer
 make && ./wolf3d
 ```
 
-### Install (Linux)
+### Linux
 
 Install SDL2, SDL_image, SDL_ttf on linux.
 

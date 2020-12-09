@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 17:08:16 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 13:52:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ void						player_apply_gravity(t_wolf3d *app);
 void						collision_limit_player(t_wolf3d *app, t_vec3 add);
 void						player_update_aabb(t_player *player);
 void						position_limit_player(t_wolf3d *app, t_vec3 add);
-void						place_player_to_grid(t_wolf3d *app, float unit_size,
+void						place_player(t_wolf3d *app, float unit_size,
 								int32_t xy_rot[3]);
 
 /*

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:24:59 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 13:52:30 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,11 @@ void					scene_objects_generate(t_wolf3d *app, t_scene *scene)
 	int32_t			y;
 	uint32_t		cell;
 	int32_t			obj_i;
+	t_bool			player_placed;
 
 	y = -1;
 	obj_i = 0;
+	player_placed = false;
 	while (++y < scene->map->size)
 	{
 		x = -1;
@@ -102,16 +104,14 @@ void					scene_objects_generate(t_wolf3d *app, t_scene *scene)
 			cell = scene->map->grid[y * scene->map->size + x];
 			if (!(cell & m_room))
 				continue;
-			if ((cell & m_start))
-				place_player_to_grid(app, app->unit_size,
-					(int32_t[3]){x, y, 0});
+			if ((cell & m_start) || (!player_placed && (player_placed = true)))
+				place_player(app, app->unit_size, (int32_t[3]){x, y, 0});
 			instantiate_cell_features(app, cell, &obj_i, (int32_t[2]){x, y});
 		}
 	}
 	scene->num_objects = obj_i;
 	set_scene_collision_tree(scene);
 	l3d_skybox_create(scene->skybox, scene->skybox_textures, app->unit_size);
-	player_move(app, move_forward, 0.0);
 }
 
 void					scene_map_init(t_scene *scene)

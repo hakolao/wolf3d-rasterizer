@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:21:57 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 13:53:03 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void		select_scene(void *app_ptr)
 	if (app->active_scene->map)
 	{
 		scene_objects_generate(app, app->active_scene);
+		player_move(app, move_forward, 0.0);
 		scene_minimap_init(app);
 	}
 	if (app->active_scene->main_camera)

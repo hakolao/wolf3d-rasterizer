@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 15:32:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 15:42:23 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void			events_handle(t_wolf3d *app)
 
 	if (!app->active_scene->is_paused)
 	{
+		SDL_PumpEvents();
 		mouse_state_handle(app);
 		keyboard_state_handle(app);
 	}

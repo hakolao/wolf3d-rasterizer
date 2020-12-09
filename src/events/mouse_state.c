@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse.c                                            :+:      :+:    :+:   */
+/*   mouse_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 15:26:27 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 15:42:09 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void					mouse_state_handle(t_wolf3d *app)
 	int32_t	xrel;
 	int32_t	yrel;
 
-	SDL_PumpEvents();
 	prev_x = app->mouse.x;
 	prev_y = app->mouse.y;
 	SDL_GetRelativeMouseState(&xrel, &yrel);

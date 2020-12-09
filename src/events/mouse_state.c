@@ -6,29 +6,40 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:37:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 15:26:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void				mouse_motion_handle(t_wolf3d *app, SDL_Event event)
+static void				mouse_motion_handle(t_wolf3d *app,
+							int32_t xrel, int32_t yrel)
 {
-	app->player.is_rotating = true;
-	player_rotate_vertical(app, (float)event.motion.yrel * 0.3);
-	player_rotate_horizontal(app, -(float)event.motion.xrel * 0.3);
-}
-
-void					mouse_state_set(t_wolf3d *app)
-{
-	SDL_PumpEvents();
-	app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
+	if (xrel != 0 || yrel != 0)
+	{
+		app->player.is_rotating = true;
+		player_rotate_vertical(app, (float)yrel * 0.3);
+		player_rotate_horizontal(app, -(float)xrel * 0.3);
+	}
+	else
+		app->player.is_rotating = false;
 }
 
 void					mouse_state_handle(t_wolf3d *app)
 {
+	int32_t	prev_x;
+	int32_t	prev_y;
+	int32_t	xrel;
+	int32_t	yrel;
+
+	SDL_PumpEvents();
+	prev_x = app->mouse.x;
+	prev_y = app->mouse.y;
+	SDL_GetRelativeMouseState(&xrel, &yrel);
+	app->mouse.state = SDL_GetMouseState(&app->mouse.x, &app->mouse.y);
 	if (app->active_scene->scene_id != scene_id_main_game)
 		return ;
+	mouse_motion_handle(app, xrel, yrel);
 	if (!app->player.is_shooting && (app->mouse.state & SDL_BUTTON_LMASK))
 	{
 		app->player.is_shooting = true;
@@ -40,14 +51,4 @@ void					mouse_state_handle(t_wolf3d *app)
 	}
 	if (app->player.is_shooting)
 		player_shoot(app, SDL_GetTicks());
-}
-
-void					mouse_events_handle(t_wolf3d *app, SDL_Event event)
-{
-	if (app->active_scene->scene_id != scene_id_main_game)
-		return ;
-	if (event.type == SDL_MOUSEMOTION)
-		mouse_motion_handle(app, event);
-	else
-		app->player.is_rotating = false;
 }

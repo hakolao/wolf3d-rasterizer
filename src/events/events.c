@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:42:43 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 15:32:19 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,8 @@ static void		main_game_input_events_handle(t_wolf3d *app, SDL_Event event)
 			app->is_minimap_largened = !app->is_minimap_largened;
 			minimap_size_update(app);
 		}
-		mouse_events_handle(app, event);
 	}
 }
-
-/*
-** Handle events that are SDL input events (system events)
-*/
 
 static void		game_input_events_handle(t_wolf3d *app, SDL_Event event)
 {
@@ -64,20 +59,12 @@ static void		game_input_events_handle(t_wolf3d *app, SDL_Event event)
 }
 
 /*
-** Handle events and behavior that's dependent on keyboard or mouse state
-** (what buttons are down, what buttons are up)
-*/
-
-static void		game_input_state_handle(t_wolf3d *app)
-{
-	mouse_state_set(app);
-	mouse_state_handle(app);
-	keyboard_state_set(app);
-	keyboard_state_handle(app);
-}
-
-/*
 ** Main API for event handling in wolf3d
+** 1. Poll state and handle keyboard & mouse state (in-game actions mostly
+** where there should not be any lag)
+** 2. General input events, e.g. debug mode, set normal map shading, set
+** full screen etc.
+** 3. Game input events: menu options, pausing, etc.
 */
 
 void			events_handle(t_wolf3d *app)
@@ -85,7 +72,10 @@ void			events_handle(t_wolf3d *app)
 	SDL_Event	event;
 
 	if (!app->active_scene->is_paused)
-		game_input_state_handle(app);
+	{
+		mouse_state_handle(app);
+		keyboard_state_handle(app);
+	}
 	while (SDL_PollEvent(&event))
 	{
 		general_input_events_handle(app, event);

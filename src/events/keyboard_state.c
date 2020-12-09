@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keyboard.c                                         :+:      :+:    :+:   */
+/*   keyboard_state.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 23:26:20 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 15:34:27 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void		keyboard_state_set(t_wolf3d *app)
+static void		keyboard_state_set(t_wolf3d *app)
 {
 	SDL_PumpEvents();
 	app->keyboard.state = SDL_GetKeyboardState(NULL);
 }
 
-void		keyboard_state_handle(t_wolf3d *app)
+void			keyboard_state_handle(t_wolf3d *app)
 {
 	float	speed;
 
+	keyboard_state_set(app);
 	if (app->active_scene->scene_id == scene_id_main_game)
 	{
-		speed = (app->player.is_running ?
-			app->player.speed * 1.5 : app->player.speed) *
-				app->info.delta_time;
+		speed = (app->player.is_running ? app->player.speed * 1.5 :
+			app->player.speed) * app->info.delta_time;
 		if (app->keyboard.state[SDL_SCANCODE_W])
 			player_move(app, move_forward, speed);
 		if (app->keyboard.state[SDL_SCANCODE_A])

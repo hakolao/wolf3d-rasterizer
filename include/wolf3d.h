@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 13:52:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 15:27:52 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,10 +282,7 @@ void						place_player(t_wolf3d *app, float unit_size,
 /*
 ** Events
 */
-void						mouse_events_handle(t_wolf3d *app, SDL_Event event);
 void						events_handle(t_wolf3d *app);
-void						keyboard_state_set(t_wolf3d *app);
-void						mouse_state_set(t_wolf3d *app);
 void						mouse_state_handle(t_wolf3d *app);
 void						player_shoot(t_wolf3d *app,
 								uint32_t curr_time);

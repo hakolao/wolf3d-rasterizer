@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/08 18:05:55 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 14:26:26 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void			collision_limit_player(t_wolf3d *app, t_vec3 add)
 			hit = l3d_get_aabb_hit_record(&future_player.aabb, &obj->aabb);
 			if (hit != NULL)
 			{
-				limit_movement_add_by_collision(hit->normal, add);
+				if (!obj->aabb.is_trigger)
+					limit_movement_add_by_collision(hit->normal, add);
 				free(hit);
 			}
 		}

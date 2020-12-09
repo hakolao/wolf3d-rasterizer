@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 13:52:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 14:35:46 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,35 @@ static void				set_scene_collision_tree(t_scene *scene)
 	}
 }
 
+/*
+** (1 << i) corresponds to model keys. ToDo: Refactor scene to contain list of
+** model keys to iterate over.
+*/
+
 static void				instantiate_cell_features(t_wolf3d *app,
 							uint32_t cell, int32_t *obj_i, int32_t xy[2])
 {
 	t_3d_object		*model;
 	int32_t			i;
-	uint32_t		key;
+	t_3d_object		*obj;
 
 	i = -1;
 	while (++i < (int32_t)sizeof(uint32_t) * 8)
 	{
-		key = 1 << i;
-		if ((cell & key))
+		if ((cell & (1 << i)))
 		{
-			if ((model = hash_map_get(app->active_scene->models, key)))
+			if ((model = hash_map_get(app->active_scene->models, 1 << i)))
 			{
 				app->active_scene->objects[*obj_i] =
-					l3d_object_instantiate(model, app->unit_size);
-				l3d_3d_object_rotate(app->active_scene->objects[*obj_i],
-					90, 90, 0);
-				l3d_3d_object_translate(app->active_scene->objects[*obj_i],
-					(float)xy[1] * (2 * app->unit_size), app->unit_size,
-						-(float)xy[0] * (2 * app->unit_size));
-				l3d_object_set_shading_opts(app->active_scene->objects[*obj_i],
-					e_shading_depth);
+					l3d_object_instantiate(model, app->unit_size,
+					(1 << i) == c_block_ne || (1 << i) == c_block_nw ||
+					(1 << i) == c_block_se || (1 << i) == c_block_sw);
+				obj = app->active_scene->objects[*obj_i];
+				l3d_3d_object_rotate(obj, 90, 90, 0);
+				l3d_3d_object_translate(obj,
+					(float)xy[1] * (2 * app->unit_size),
+						app->unit_size, -(float)xy[0] * (2 * app->unit_size));
+				l3d_object_set_shading_opts(obj, e_shading_depth);
 				(*obj_i)++;
 			}
 		}

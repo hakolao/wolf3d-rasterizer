@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/08 17:51:26 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 14:24:47 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ typedef struct				s_box3d
 	t_vec3			size;
 	float			xyz_min[3];
 	float			xyz_max[3];
+	t_bool			is_trigger;
 }							t_box3d;
 
 /*
@@ -511,7 +512,7 @@ void						l3d_skybox_create(t_3d_object *skybox[6],
 												float unit_size);
 t_3d_object					*l3d_plane_create(t_surface	*texture);
 t_3d_object					*l3d_object_instantiate(t_3d_object *model,
-								float unit_size);
+								float unit_size, t_bool is_trigger);
 void						l3d_temp_objects_add(t_temp_objects **temp_objects,
 								t_3d_object *object, uint32_t creation_time);
 void						l3d_temp_objects_destroy(

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 17:22:07 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/06 18:26:30 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 14:26:59 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,12 @@ void				l3d_skybox_create(t_3d_object *skybox[6],
 */
 
 t_3d_object			*l3d_object_instantiate(t_3d_object *model,
-						float unit_size)
+						float unit_size, t_bool is_trigger)
 {
 	t_3d_object	*new_obj;
 
 	new_obj = l3d_3d_object_copy(model);
 	l3d_3d_object_scale(new_obj, unit_size, unit_size, unit_size);
+	new_obj->aabb.is_trigger = is_trigger;
 	return (new_obj);
 }

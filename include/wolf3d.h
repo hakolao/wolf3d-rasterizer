@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 15:27:52 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 19:45:05 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ typedef enum				e_map_prefabs
 	p_corr_vert = c_floor | c_wall_right | c_wall_left,
 	p_corr_horz = c_floor | c_wall_up | c_wall_down,
 	p_dead_up = c_floor | c_wall_left | c_wall_up | c_wall_right |
-	c_corner_ne | c_corner_ne,
+	c_corner_ne | c_corner_nw,
 	p_dead_right = c_floor | c_wall_up | c_wall_right | c_wall_down |
 	c_corner_se | c_corner_ne,
 	p_dead_down = c_floor | c_wall_right | c_wall_down | c_wall_left |

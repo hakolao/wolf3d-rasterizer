@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:40:54 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/09 13:42:34 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 13:58:11 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static void		handle_general_keyup_events(t_wolf3d *app, SDL_Event event)
 			SDL_SetWindowFullscreen(app->window->window, SDL_WINDOW_FULLSCREEN);
 		else
 			SDL_SetWindowFullscreen(app->window->window, 0);
-		app->is_first_render = true;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 02:26:19 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/09 13:58:32 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void		wolf3d_resize_dependent_recreate(t_wolf3d *app)
 		window_frame_recreate(app->window);
 		if (app->active_scene->map)
 			minimap_size_update(app);
+		app->is_first_render = true;
 	}
 }
 

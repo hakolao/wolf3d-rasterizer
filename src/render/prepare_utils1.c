@@ -6,7 +6,7 @@
 /*   By: ohakola <ohakola@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/06 23:22:26 by ohakola           #+#    #+#             */
-/*   Updated: 2020/12/07 17:07:48 by ohakola          ###   ########.fr       */
+/*   Updated: 2020/12/15 00:06:22 by ohakola          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,28 @@ t_bool			triangle_inside_viewbox(t_wolf3d *app,
 					t_triangle *triangle)
 {
 	t_vec3		player_to_corner[3];
-	int32_t		i;
-	int32_t		j;
+	int32_t		ij[2];
+	t_bool		is_outside;
+	t_vec3		add;
+	t_vec3		origin;
 
-	i = -1;
-	while (++i < 5)
+	ml_vector3_mul(app->player.forward, NEAR_CLIP_DIST, add);
+	ml_vector3_add(app->player.pos, add, origin);
+	ij[0] = -1;
+	while (++ij[0] < 5)
 	{
-		j = -1;
-		while (++j < 3)
-			ml_vector3_sub(triangle->vtc[j]->pos, app->player.pos,
-				player_to_corner[j]);
-		if (ml_vector3_dot(player_to_corner[0],
-				app->active_scene->main_camera->viewplanes[i].normal) < 0 &&
-			ml_vector3_dot(player_to_corner[1],
-				app->active_scene->main_camera->viewplanes[i].normal) < 0 &&
-			ml_vector3_dot(player_to_corner[2],
-				app->active_scene->main_camera->viewplanes[i].normal) < 0)
+		is_outside = true;
+		ij[1] = -1;
+		while (++ij[1] < 3)
+		{
+			ml_vector3_sub(origin, triangle->vtc[ij[1]]->pos,
+				player_to_corner[ij[1]]);
+			if (ml_vector3_dot(player_to_corner[ij[1]],
+				app->active_scene->main_camera->viewplanes[ij[0]].normal) < 0
+				&& is_outside)
+				is_outside = false;
+		}
+		if (is_outside)
 			return (false);
 	}
 	return (true);
@@ -110,23 +116,27 @@ void			prepare_skybox_render_triangle(t_wolf3d *app,
 
 t_bool			object_inside_viewbox(t_wolf3d *app, t_3d_object *obj)
 {
-	int32_t	i;
-	int32_t	j;
-	t_vec3	origin_to_corner[8];
-	t_vec3	add;
-	t_vec3	origin;
+	int32_t		ij[2];
+	t_vec3		origin_to_corner[8];
+	t_bool		is_outside;
+	t_vec3		add;
+	t_vec3		origin;
 
 	ml_vector3_mul(app->player.forward, NEAR_CLIP_DIST, add);
 	ml_vector3_add(app->player.pos, add, origin);
 	set_aabb_origin_to_corners(obj, origin, origin_to_corner);
-	i = -1;
-	while (++i < 5)
+	ij[0] = -1;
+	while (++ij[0] < 5)
 	{
-		j = -1;
-		while (++j < 8)
-			if (ml_vector3_dot(origin_to_corner[0],
-				app->active_scene->main_camera->viewplanes[i].normal) >= 0)
-				return (true);
+		is_outside = true;
+		ij[1] = -1;
+		while (++ij[1] < 8)
+			if (ml_vector3_dot(origin_to_corner[ij[1]],
+				app->active_scene->main_camera->viewplanes[ij[0]].normal) < 0
+				&& is_outside)
+				is_outside = false;
+		if (is_outside)
+			return (false);
 	}
-	return (false);
+	return (true);
 }
